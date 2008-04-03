@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-Classified
 Plugin URI: http://forgani.com/index.php/tools/wpclassiefied-plugins/
-Description: A Classifieds for WordPress
+Description: The WP-Classified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
 Version: 1.0  (initial version)
 Requires at least: 2.3.x

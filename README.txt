@@ -11,7 +11,7 @@ Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 == Description ==
 
-This plugin allows you to add a simple classified page in to your wordpress blog.
+This plugin allows you to add a simple classified page in to your wordpress blog. 
 
 The plugin has been create and successfully tested on Wordpress version 2.3.2 with 
 default and unchanged Permalink structure.
@@ -22,11 +22,11 @@ default and unchanged Permalink structure.
 1) Extract files
 2) Upload 'wpClassified/' folder to your './wp-content/plugins/' directory
 3) Login to the administration and go to "admin panel/plugins" and activate the plugin
-4) Go to the "Manage" tab of your WP. You have now there a new tab called "WP-Classified Admin".
-to configure the plugin.
+4) Go to the "Manage" tab of your WP. 
+You have now there a new tab called "WP-Classified Admin" to configure the plugin.
 
 
-Make sure the folders avatars and images have the correct writing permissions.
+Make sure the folder images have the correct writing permissions.
 Set the permission of the directory "wp-content/plugins/wpClassified/images" to 777. 
 
 
