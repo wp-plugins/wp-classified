@@ -234,13 +234,16 @@ function wpClassified_display_search(){
 		wpClassified_footer();
 		return;
 	}
+#
+# fixed by Matt Gibson
+# 07-Apr-2008
+#
 	$results = $wpdb->get_results("SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id
 			 FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users 
-			 WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id 
-			 AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id 
-			 AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author 
-			 AND (subject like '%".$wpdb->escape($_REQUEST['search_terms'])."%' OR post like '%".$wpdb->escape($_REQUEST['search_terms'])."%') 
-			 ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC");
+ WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id 
+ AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id 
+ AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author 
+ AND (subject like '%".$wpdb->escape($_REQUEST['search_terms'])."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($_REQUEST['search_terms'])."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC");
 
 	if(! $results)
 		echo "<P>No posts matched your search terms.</P>";
