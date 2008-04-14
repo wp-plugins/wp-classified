@@ -235,7 +235,7 @@ function wpClassified_process(){
 		<?php
 	} else {
 		?>
-		<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wpClassified/includes/wpClassified.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 		<?php
 	}
 
@@ -567,7 +567,7 @@ function adm_structure_process(){
 		<td><input type=text size=50 name="wpClassified_data[name]" value="<?php echo $categoryinfo['name'];?>"></td>
 		</tr>
 		<th align="right"><?php echo __("Category Photo");?></th>
-		<td><input type=text size=50 name="wpClassified_data[photo]" value="<?php echo $categoryinfo['photo'];?>"><br><small>images from plugins/wpClassified/images directory: e.g: 'images/default.gif' </small></td>
+		<td><input type=text size=50 name="wpClassified_data[photo]" value="<?php echo $categoryinfo['photo'];?>"><br><small>images from plugins/wp-classified/images directory: e.g: 'images/default.gif' </small></td>
 		</tr>
 			<tr>
 				<th></th>
@@ -869,7 +869,7 @@ function adm_utilities_process(){
 			$wpdb->query("DELETE FROM " . $table_prefix . "OPTIONS WHERE OPTION_NAME='wpClassified_data'");
 			$wpdb->query("DELETE FROM " . $table_prefix . "posts WHERE post_title = '[[WP_CLASSIFIED]]'");
 			$_table = "";
-			$deactivate_url = 'plugins.php?action=deactivate&amp;plugin=wpClassified/wpClassified.php';
+			$deactivate_url = 'plugins.php?action=deactivate&amp;plugin=wp-classified/wpClassified.php';
 			if(function_exists('wp_nonce_url')) { 
 				$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_wpclassified/wpClassiefied.php');
 			}

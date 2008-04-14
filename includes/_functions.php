@@ -74,7 +74,7 @@ function wpClassified_display_index(){
 			<td class="subcat" width="50px" height="80px">
 			<?php 
 			$img = get_bloginfo('wpurl');
-			echo '<img src="/wp-content/plugins/wpClassified/' . $category->photo . '">';
+			echo '<img src="/wp-content/plugins/wp-classified/' . $category->photo . '">';
 			?>
 			</td>
 			<td class="subcat" valign="top"><strong><?php echo $category->name;?></strong></td>
@@ -88,9 +88,9 @@ function wpClassified_display_index(){
 				<div class="list_ads">
 				<?php
 					if ($rlists[$tfs[$i]->lists_id]=='y' && $user_ID*1>0){
-						echo "<img align=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wpClassified/images/unread.gif\" alt=\"There are unread posts in this classified.\" height=15 width=15>";
+						echo "<img align=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" alt=\"There are unread posts in this classified.\" height=15 width=15>";
 					} else {
-						echo "<img align=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wpClassified/images/read.gif\" alt=\"You have read all the posts in this classified.\" height=15 width=15>";
+						echo "<img align=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" alt=\"You have read all the posts in this classified.\" height=15 width=15>";
 					}
 					echo create_wpClassified_link("classified", array("name"=>$tfs[$i]->name, "name"=>$tfs[$i]->name, "lists_id"=>$tfs[$i]->lists_id));
 					?>
@@ -190,7 +190,7 @@ function wpClassified_display_list(){
 	for ($x=0; $x<count($ads); $x++){
 		$ad = $ads[$x];
 		if (!@in_array($ad->ads_subjects_id, $read) && _is_usr_loggedin()){
-			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wpClassified/images/unread.gif\" height=15 width=15 lign=absmiddle alt=\"".__("Unread Posts In This List")."\"> ";
+			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" height=15 width=15 lign=absmiddle alt=\"".__("Unread Posts In This List")."\"> ";
 		} else {$rour = "";}
 		$pstart = 0;
 		$pstart = $ad->ads-($ad->ads%$wpcSettings["wpClassified_ads_per_page"]);
@@ -200,7 +200,7 @@ function wpClassified_display_list(){
 		<?php
 			echo $rour;
 			if ($ad->sticky=='y'){
-				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wpClassified/images/sticky.gif\" height=15 width=15 align=absmiddle alt=\"".__("Sticky")."\"> ";
+				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/sticky.gif\" height=15 width=15 align=absmiddle alt=\"".__("Sticky")."\"> ";
 			}
 			echo create_wpClassified_link("ads_subject", array("name"=>$ad->subject, "lists_id"=>$_GET["lists_id"], "ads_subjects_id"=>$ad->ads_subjects_id));
 			?></strong>
@@ -208,7 +208,7 @@ function wpClassified_display_list(){
 		<td align="right" valign="middle" class="ads_subject">
 		<?php
 			if ($wpcSettings["wpClassified_display_last_post_link"]=='y'){
-				echo create_wpClassified_link("lastAds", array("name"=>"<img align=\"middle\" src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wpClassified/images/lastpost.gif"."\" border=\"0\">", "lists_id"=>$_GET["lists_id"], "ads_subjects_id"=>$ad->ads_subjects_id, "start"=>$pstart));
+				echo create_wpClassified_link("lastAds", array("name"=>"<img align=\"middle\" src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/lastpost.gif"."\" border=\"0\">", "lists_id"=>$_GET["lists_id"], "ads_subjects_id"=>$ad->ads_subjects_id, "start"=>$pstart));
 			}
 		?>
 		</td>
@@ -307,7 +307,7 @@ function wpClassified_edit_ads(){
 					$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 					$content = @fread($fp, $_FILES['image_file']['size']);
 					@fclose($fp);
-					$fp = fopen(ABSPATH."wp-content/plugins/wpClassified/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+					$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
 					@fwrite($fp, $content);
 					@fclose($fp);
 					@chmod(dirname(__FILE__)."/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
@@ -472,7 +472,7 @@ function wpClassified_display_ads_subject(){
 		}
 				
 		if (file_exists(dirname(__FILE__)."/images/".$post->image_file) && $post->image_file!=""){
-				$post->image_file = get_bloginfo('wpurl')."/wp-content/plugins/wpClassified/images/".$post->image_file;
+				$post->image_file = get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/".$post->image_file;
 				$heightwidth = "";
 		}
 

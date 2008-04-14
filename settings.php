@@ -20,8 +20,8 @@ $wpClassified_link_name = 'wpClassified';
 $wpClassified_adm_page_name = 'wpClassified Admin';
 $wpClassified_pageinfo = false;
 
-define('TOP', 'wp-content/plugins/wpClassified');
-define('INC', 'wp-content/plugins/wpClassified/includes');
+define('TOP', 'wp-content/plugins/wp-classified');
+define('INC', 'wp-content/plugins/wp-classified/includes');
 
 require_once(ABSPATH . INC . '/_functions.php');
 require_once(ABSPATH . TOP . '/admin.php');
