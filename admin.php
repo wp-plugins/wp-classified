@@ -228,15 +228,18 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 function wpClassified_process(){
 	global $_GET, $_POST, $user_level, $wpClassified_user_info, $table_prefix, $wpdb;
 	$wpcSettings = get_option('wpClassified_data');
-	if (file_exists(TEMPLATEPATH."/wpClassified.css")){
+
+	if (!file_exists(ABSPATH . INC . "/wpClassified.css")){
 		?>
 		<link rel="stylesheet" href="<?php bloginfo('stylesheet_directory');?>/wpClassified.css" type="text/css" media="screen" />
 		<?php
 	} else {
 		?>
-		<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wpClassified/wpClassified.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wpClassified/includes/wpClassified.css" type="text/css" media="screen" />
 		<?php
 	}
+
+	
 	switch ($_GET['wpClassified_action']){
 		default:
 		case "classified": wpClassified_display_index();

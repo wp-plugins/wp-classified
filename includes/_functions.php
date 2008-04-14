@@ -476,10 +476,10 @@ function wpClassified_display_ads_subject(){
 				$heightwidth = "";
 		}
 
-		if (!file_exists(TEMPLATEPATH."/wpClassified_ads_template.php")){ 
+		if (!file_exists(ABSPATH . INC . "/wpClassified_ads_template.php")){ 
 			include(dirname(__FILE__)."/wpClassified_ads_template.php");
 		} else {
-			include(TEMPLATEPATH."/wpClassified_ads_template.php");
+			include(ABSPATH . INC . "/wpClassified_ads_template.php");
 		}
 		if ($i==0){
 			echo stripslashes($wpcSettings['wpClassified_banner_code']);
