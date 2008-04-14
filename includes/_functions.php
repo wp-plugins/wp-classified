@@ -244,7 +244,7 @@ function wpClassified_read_not_allowed(){
 
 function wpClassified_footer(){
 	$wpClassified_settings = get_option('wpClassified_data');
-	$wpcSettings['credit_line'] = 'wpClassified plugins Powered By <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
+	$wpcSettings['credit_line'] = 'wpClassified plugins powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 
 	if ($wpClassified_settings['wpClassified_show_credits']=='y'){
 		echo "<p></p><p><hr>" . stripslashes($wpcSettings['credit_line']);

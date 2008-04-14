@@ -460,7 +460,7 @@ function wpClassified_install(){
 		$wpcSettings['wpClassified_last_ads_subject_num'] = 5;
 		$wpcSettings['wpClassified_excerpt_length'] = 100;
 		$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
-		$wpcSettings['credit_line'] = 'wpClassified plugins Powered By <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
+		$wpcSettings['credit_line'] = 'wpClassified plugins powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 	}
 	update_option('wpClassified_data', $wpcSettings);
 }
