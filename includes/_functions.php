@@ -76,10 +76,11 @@ function wpc_index(){
 			$category = $categories[$x];
 	        	$cnt++;
 			?>
+		<table width=100%>
+		<tr><td>
+		<div >
 			<table width=100%>
-			<tr>
-			<div >
-			<td class="subcat" width="50px" height="80px">
+			<td class="subcat" width="90px" height="60px" valign="top">
 			<?php 
 			$img = get_bloginfo('wpurl');
 			echo '<img src="/wp-content/plugins/wp-classified/' . $category->photo . '">';
@@ -88,11 +89,14 @@ function wpc_index(){
 			<td class="subcat" valign="top"><strong><?php echo $category->name;?></strong></td>
 			</div>
 			</tr>
+			</table>
+		</td></tr>
+		<tr><td>
 			<?php
 			$tfs = $lists[$category->categories_id];
 			for ($i=0; $i<count($tfs); $i++){
 				?>
-				<tr><td></td><td>
+				<tr><td>
 				<div class="list_ads">
 				<?php
 					if ($rlists[$tfs[$i]->lists_id]=='y' && $user_ID*1>0){
