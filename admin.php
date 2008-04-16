@@ -23,8 +23,8 @@ if ($_REQUEST["wpClassified_action"]){
 
 $adm_links = array(
 		array(name=>'List Settings',arg=>'wpcSettings'),
-		array(name=>'List Structure',arg=>'wpcStructure'),
-		array(name=>'List Ads/Ads Admin',arg=>'wpcAdssubjects_posts'),
+		array(name=>'Add/Edit Categories',arg=>'wpcStructure'),
+		array(name=>'Edit/Remove Ads',arg=>'wpcAdssubjects_posts'),
 		array(name=>'Users Admin',arg=>'wpcUsers'),
 		array(name=>'Utilities',arg=>'wpcUtilities'),
 		);
