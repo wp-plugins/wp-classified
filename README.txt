@@ -25,14 +25,14 @@ This section describes how to install the plugin and get it working.
 e.g.
 
 1) Extract files
-2) Upload 'wpClassified/' folder to your './wp-content/plugins/' directory
+2) Upload 'wp-classified/' folder to your './wp-content/plugins/' directory
 3) Login to the administration and go to "admin panel/plugins" and activate the plugin
 4) Go to the "Manage" tab of your WP. 
 You have now there a new tab called "wpClassified Admin" to configure the plugin.
 
 
 Make sure the folder images have the correct writing permissions.
-Set the permission of the directory "wp-content/plugins/wpClassified/images" to 777. 
+Set the permission of the directory "wp-content/plugins/wp-classified/images" to 777. 
 
 
 
