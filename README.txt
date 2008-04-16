@@ -1,9 +1,9 @@
 
-=lassified ===
+=== wp-classified ===
 name: wpClassified Wordpress plugins version 1.0.2
 Contributors: Mohammad Forgani
 Requires at least: 2.3.x
-Tested up to: 2.3.2
+Tested up to: 2.3
 Stable tag: 1.0
 Tags: comments, spam
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
@@ -19,6 +19,10 @@ default and unchanged Permalink structure.
 
 
 == Installation ==
+
+This section describes how to install the plugin and get it working.
+
+e.g.
 
 1) Extract files
 2) Upload 'wpClassified/' folder to your './wp-content/plugins/' directory
