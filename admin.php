@@ -112,7 +112,9 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 	<?
 		 return null;
 	};
-	if ($wpcSettings['wpClassified_page_url'] == "") $wpcSettings['wpClassified_page_url']=$selfpage;
+
+	$url = ($wp_rewrite->get_page_permastruct()=="")?"<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=wpClassified\">".get_bloginfo('wpurl')."/index.php?pagename=wpClassified</a>":"<a href=\"".get_bloginfo('wpurl')."/wpClassified/\">".get_bloginfo('wpurl')."/wpClassified/</a>";
+    
 	?>
 	<p>
 	<form method="post" id="cat_form_post" name="cat_form_post" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=savesettings">
@@ -132,8 +134,8 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 			<th align="right"><?php echo __("Classified Description:");?></th>
 				<td><input type="text" size=60 name="wpClassified_data[wpClassified_description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['wpClassified_description']));?>"></td>
 			<tr>
-			<th align="right"><?php echo __("wpClassified URL: ");?> </th>
-				<td><input type="text" size=60 name="wpClassified_data[wpClassified_page_url]" value="<?php echo $wpcSettings['wpClassified_page_url'];?>"></td>
+			<th align="right"><?php echo __("wpClassified URL: ");?></th>
+				<td><?php echo $url;?></td>
 			</tr>
 			<tr>
 				<th align="right"></th>
@@ -331,8 +333,8 @@ function activate_ads_subject($id){
 }
 
 function wpcAdmpage(){
-	global $wpClassified_user_level, $wpc_admin_pagename;
-	add_management_page($wpc_admin_pagename, $wpc_admin_pagename, $wpClassified_user_level, 'wpClassified', 'wpClassified_adm_page');
+	global $wpc_user_level, $wpc_admin_pagename;
+	add_management_page($wpc_admin_pagename, $wpc_admin_pagename, $wpc_user_level, 'wpClassified', 'wpClassified_adm_page');
 }
 
 
@@ -361,11 +363,13 @@ function delete_ads_subject($id){
 }
 
 function wpClassified_adm_page(){
-	global $_GET, $_POST, $PHP_SELF, $user_level, $wpdb, $adm_links, $wpClassified_user_level, $wp_version;
+	global $_GET, $_POST, $PHP_SELF, $user_level, $wpdb, $adm_links, $wp_version;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
-
-	wpClassified_install();
+	if ($wpcSettings['wpClassified_installed']!='y'){
+	    wpClassified_install();
+	}
+	
 	?>
 	<div class="wrap">
 		<ul id="<?php echo "submenu"; ?>">

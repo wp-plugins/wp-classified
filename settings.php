@@ -12,7 +12,7 @@ if (!$table_prefix){
 }
 
 // user level
-$wpClassified_user_level = 8;
+$wpc_user_level = 8;
 $wpClassified_version = '1.0.1';
 $wp_version = false;  // wordpress version 2.x
 $wpClassified_user_field = false;
