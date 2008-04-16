@@ -10,14 +10,14 @@ add_filter("the_title", "wpClassified_page_handle_title");
 add_filter("wp_list_pages", "wpClassified_page_handle_titlechange");
 add_filter("single_post_title", "wpClassified_page_handle_pagetitle");
 
-//add_filter('rewrite_rules_array','wpClassified_rewrite_rules');
+//add_filter('rewrite_rules_array','wpc_general_rewrite_rules');
 
 if (function_exists('add_action')) {
 	add_action('admin_menu', 'wpcAdmpage');
 }
 
 if ($_REQUEST["wpClassified_action"]){
-	$_SERVER["REQUEST_URI"] = dirname(dirname($_SERVER["PHP_SELF"]))."/wpClassified/";
+	$_SERVER["REQUEST_URI"] = dirname(dirname($_SERVER["PHP_SELF"]))."/wp-classified/";
 	$_SERVER["REQUEST_URI"] = stripslashes($_SERVER["REQUEST_URI"]);
 }
 
@@ -30,13 +30,13 @@ $adm_links = array(
 		);
 
 
-function wpClassified_rewrite_rules(&$rules){
-	global $wordpress_version;
+function wpc_general_rewrite_rules(&$rules){
+	global $wp_version;
 	return $rules;
 }
 
 
-function wpClassified_mod_rewrite_rules($wp_rewrite){
+function wpc_mod_rewrite_rules($wp_rewrite){
 	global $wp_rewrite;
 	$wpcSettings = get_option('wpClassified_data');
 	$wpClassified_slug = $wpClassified_settings['wpClassified_slug'];
@@ -49,7 +49,6 @@ function wpClassified_mod_rewrite_rules($wp_rewrite){
 // wpClassified settings 
 function wpcSettings_process(){
 	global $_GET, $_POST, $wp_rewrite, $PHP_SELF, $wpdb, $table_prefix, $user_level, $wpClassified_version, $wp_version;
-	
 
 	switch ($_GET['adm_action']){
 		case "savesettings":
@@ -74,7 +73,7 @@ function wpcSettings_process(){
 	}
 
 	$selflink = 
-	($wp_rewrite->get_page_permastruct()=="")?"<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=wpClassified\">".get_bloginfo('wpurl')."/index.php?pagename=wpClassified</a>":"<a href=\"".get_bloginfo('wpurl')."/wpClassified/\">".get_bloginfo('wpurl')."/wpClassified/</a>";
+	($wp_rewrite->get_page_permastruct()=="")?"<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=wpClassified\">".get_bloginfo('wpurl')."/index.php?pagename=wpClassified</a>":"<a href=\"".get_bloginfo('wpurl')."/wp-classified/\">".get_bloginfo('wpurl')."/wp-classified/</a>";
 
 	if ($msg!=''){
 		?>
@@ -120,17 +119,25 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 		<input type=hidden name="wpClassified_data[wpClassified_version]" value="<?php echo $wpClassified_version;?>">
 		<table border=0 class="editform"><tr>
 			<th align="right"><?php echo __("wpClassified Version:");?> </th>
-				<td><?php echo $wpClassified_version;?></td>
-			</tr><tr>
-			<th align="right"><?php echo __("wpClassified Announcement (optional):");?></th>
-				<td><textarea cols=65 rows=5 name="wpClassified_data[wpClassified_announcement]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['wpClassified_announcement']));?></textarea>
+			<td><?php echo $wpClassified_version;?></td>
+			</tr>
+		    <th align="right"><?php echo __("Wordpress Version:");?> </th>
+			<td><?php echo $wp_version;?></td>
+			</tr>
+			<tr>
+				<th align="right"><?php echo __("Classified Top Image:");?> </th>
+				<td><input type=text size=25 name="wpClassified_data[wpClassified_top_image]" value="<?php echo ($wpcSettings['wpClassified_top_image']);?>"></td>
+			</tr>
+		    <tr>
+			<th align="right"><?php echo __("Classified Description (optional):");?></th>
+				<td><textarea cols=65 rows=1 name="wpClassified_data[wpClassified_description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['wpClassified_description']));?></textarea>
 			<tr>
 			<th align="right"><?php echo __("wpClassified URL: ");?> </th>
 				<td><input type="text" size=60 name="wpClassified_data[wpClassified_page_url]" value="<?php echo $wpcSettings['wpClassified_page_url'];?>"></td>
 			</tr>
 			<tr>
 				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[wpClassified_show_credits]" value="y"<?php echo ($wpcSettings['wpClassified_show_credits']=='y')?" checked":"";?>> <?php echo __("Display wpClassified credit line at the bottom of classified pages");?></td>
+				<td><input type=checkbox name="wpClassified_data[disply_credits]" value="y"<?php echo ($wpcSettings['wpClassified_show_credits']=='y')?" checked":"";?>> <?php echo __("Display wpClassified credit line at the bottom of classified pages");?></td>
 			</tr>
 			<tr>
 				<th align="right"><?php echo __("wpClassified Page Link Name: ");?></th>
@@ -145,20 +152,16 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 				<td><input type=text size=11 name="wpClassified_data[wpClassified_image_alignment]" value="<?php echo ($wpcSettings['wpClassified_image_alignment']);?>"></td>
 			</tr>
 			<tr>
-				<th align="right"><?php echo __("Classifieds Top Image:");?> </th>
-				<td><input type=text size=25 name="wpClassified_data[wpClassified_top_image]" value="<?php echo ($wpcSettings['wpClassified_top_image']);?>"></td>
+				<th align="right"></th>
+				<td><input type=checkbox name="wpClassified_data[must_registered_user]" value="y"<?php echo ($wpcSettings['must_registered_user']=='y')?" checked":"";?>> <?php echo __("Unregistered visitors cannot post.");?></td>
 			</tr>
 			<tr>
 				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[wpClassified_ads_must_register]" value="y"<?php echo ($wpcSettings['wpClassified_ads_must_register']=='y')?" checked":"";?>> <?php echo __("Unregistered visitors cannot post.");?></td>
-			</tr>
-			<tr>
-				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[wpClassified_view_must_register]" value="y"<?php echo ($wpcSettings['wpClassified_view_must_register']=='y')?" checked":"";?>> <?php echo __("Unregistered visitors cannot view.");?></td>
+				<td><input type=checkbox name="wpClassified_data[view_must_register]" value="y"<?php echo ($wpcSettings['view_must_register']=='y')?" checked":"";?>> <?php echo __("Unregistered visitors cannot view.");?></td>
 			</tr>
 			<tr>
 			<th align="right"></th>
-			<td><input type=checkbox name="wpClassified_data[wpClassified_unregistered_display_ip]" value="y"<?php echo ($wpcSettings['wpClassified_unregistered_display_ip']=='y')?" checked":"";?>> <?php echo __("Display first 3 octets of unregistered visitors ip (ie - 192.168.0.***).");?></td>
+			<td><input type=checkbox name="wpClassified_data[display_unregistered_ip]" value="y"<?php echo ($wpcSettings['display_unregistered_ip']=='y')?" checked":"";?>> <?php echo __("Display first 3 octets of unregistered visitors ip (ie - 192.168.0.***).");?></td>
 			</tr>
 			<tr>
 				<th align="right"></th>
@@ -169,13 +172,9 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 			<td><input type=checkbox name="wpClassified_data[wpClassified_filter_posts]" value="y"<?php echo ($wpcSettings['wpClassified_filter_posts']=='y')?" checked":"";?>> <?php echo __("Apply WP Ads/comment filters to classified posts.");?></td>
 			</tr>
 			<tr>
-				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[wpClassified_display_last_ads_subject]" value="y"<?php echo ($wpcSettings['wpClassified_display_last_ads_subject']=='y')?" checked":"";?>> <?php echo __("Display Last Ads Info In List.");?></td>
-			</tr>
-			<tr>
 				<th align="right"><?php echo __("Posting Style: ");?></th>
-				<td><select name="wpClassified_data[wpClassified_ads_style]">
-					<option value="tinymce"<?php echo ($wpcSettings["wpClassified_ads_style"]=="tinymce")?" selected":"";?>>HTML with TinyMCE (inline wysiwyg)</option>
+				<td><select name="wpClassified_data[wpc_edit_style]">
+					<option value="tinymce"<?php echo ($wpcSettings["wpc_edit_style"]=="tinymce")?" selected":"";?>>HTML with TinyMCE (inline wysiwyg)</option>
 					<option value="plain">No HTML, No BBCode</option>
 					</select></td>
 			</tr>
@@ -183,25 +182,13 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 				<th align="right"></th>
 				<td><input type=checkbox name="wpClassified_data[editor_toolbar_basic]" value="y"<?php echo ($wpcSettings['editor_toolbar_basic']=='y')?" checked":"";?>> <?php echo __("Use basic toolbars in editor.");?></td>
 			</tr>
-			<tr>
-				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[wpClassified_display_last_post_link]" value="y"<?php echo ($wpcSettings['wpClassified_display_last_post_link']=='y')?" checked":"";?>> <?php echo __("Display Link To Last Ads In List.");?></td>
-			</tr>
-			<tr>
+			<!--tr>
 				<th align="right"><?php echo __("Number Of 'Last Ads'");?></th>
 				<td><input type=text size=4 name="wpClassified_data[wpClassified_last_ads_subject_num]" value="<?php echo ($wpcSettings['wpClassified_last_ads_subject_num']);?>" onchange="this.value=this.value*1;"></td>
-			</tr>
-			<tr>
-				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[wpClassified_last_ads_subjects_author]" value="y"<?php echo ($wpcSettings['wpClassified_last_ads_subjects_author']=='y')?" checked":"";?>> <?php echo __("Display 'Last Ads' Author.");?></td>
-			</tr>
+			</tr-->
 			<tr>
 				<th align="right"><?php echo __("Excerpt Length");?></th>
 				<td><input type=text size=4 name="wpClassified_data[wpClassified_excerpt_length]" value="<?php echo ($wpcSettings['wpClassified_excerpt_length']);?>" onchange="this.value=this.value*1;"></td>
-			</tr>
-			<tr>
-				<th align="right"><?php echo __("Ads Per Page");?></th>
-				<td><input type=text size=4 name="wpClassified_data[wpClassified_ads_subjects_per_page]" value="<?php echo ($wpcSettings['wpClassified_ads_subjects_per_page']);?>" onchange="this.value=this.value*1;"></td>
 			</tr>
 			<tr>
 				<th align="right"><?php echo __("Ads Per Page");?></th>
@@ -242,11 +229,11 @@ function wpClassified_process(){
 	
 	switch ($_GET['wpClassified_action']){
 		default:
-		case "classified": wpClassified_display_index();
+		case "classified": wpc_index();
 		break;
 		case "search": wpClassified_display_search();
 		break;
-		case "viewList": wpClassified_display_list();
+		case "viewList": get_wpc_list();
 		break;
 		case "postAds":	wpClassified_ads_subject();
 		break;
@@ -344,8 +331,8 @@ function activate_ads_subject($id){
 }
 
 function wpcAdmpage(){
-	global $wpClassified_user_level, $wpClassified_adm_page_name;
-	add_management_page($wpClassified_adm_page_name, $wpClassified_adm_page_name, $wpClassified_user_level, 'wpClassified', 'wpClassified_adm_page');
+	global $wpClassified_user_level, $wpc_admin_pagename;
+	add_management_page($wpc_admin_pagename, $wpc_admin_pagename, $wpClassified_user_level, 'wpClassified', 'wpClassified_adm_page');
 }
 
 
@@ -374,7 +361,7 @@ function delete_ads_subject($id){
 }
 
 function wpClassified_adm_page(){
-	global $_GET, $_POST, $PHP_SELF, $user_level, $wpdb, $adm_links, $wpClassified_user_level, $wordpress_version;
+	global $_GET, $_POST, $PHP_SELF, $user_level, $wpdb, $adm_links, $wpClassified_user_level, $wp_version;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 
@@ -441,13 +428,12 @@ function wpClassified_install(){
 		$wpcSettings['userfield'] = get_wpc_user_field();
 		$wpcSettings['wpClassified_show_credits'] = 'y';
 		$wpcSettings['wpClassified_slug'] = 'Classifieds';
-		$wpcSettings['wpClassified_ads_must_register'] = 'n';
-		$wpcSettings['wpClassified_view_must_register'] = 'n';
-		$wpcSettings['wpClassified_unregistered_display_ip'] = 'y';
+		$wpcSettings['must_registered_user'] = 'n';
+		$wpcSettings['view_must_register'] = 'n';
+		$wpcSettings['display_unregistered_ip'] = 'y';
 		$wpcSettings['wpClassified_display_titles'] = 'y';
 		$wpcSettings['editor_toolbar_basic'] = 'y';
 		$wpcSettings['wpClassified_filter_posts'] = 'y';
-		$wpcSettings['wpClassified_ads_subjects_per_page'] = 10;
 		$wpcSettings['wpClassified_ads_per_page'] = 10;
 		$wpcSettings['wpClassified_image_width'] = 150;
 		$wpcSettings['wpClassified_image_height'] = 200;
@@ -1050,7 +1036,7 @@ function adm_adssubjects_process(){
 					&& {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
 				 ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
 					    {$table_prefix}wpClassified_ads_subjects.date DESC
-				 LIMIT ".($_GET['start']*1).", ".($wpcSettings['wpClassified_ads_subjects_per_page']*1)." ");
+				 LIMIT ".($_GET['start']*1).", ".($wpcSettings['wpClassified_ads_per_page']*1)." ");
 
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lists_id']*1)."'
 							&& status != 'deleted'");
@@ -1059,13 +1045,13 @@ function adm_adssubjects_process(){
 <a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>"><?php echo __("Back To Lists List");?></a>
 <?php
 
-if ($numAds>$wpcSettings['wpClassified_ads_subjects_per_page']){
+if ($numAds>$wpcSettings['wpClassified_ads_per_page']){
 	echo "Pages: ";
-	for ($i=0; $i<$numAds/$wpcSettings['wpClassified_ads_subjects_per_page']; $i++){
-		if ($i*$wpcSettings['wpClassified_ads_subjects_per_page']==$_GET['start']){
+	for ($i=0; $i<$numAds/$wpcSettings['wpClassified_ads_per_page']; $i++){
+		if ($i*$wpcSettings['wpClassified_ads_per_page']==$_GET['start']){
 			echo " <b>".($i+1)."</b> ";
 		} else {
-			echo " <a href=\"".$PHP_SELF."?page=wpClassified&adm_arg=".$_GET['adm_arg']."&lists_id=".$_GET['lists_id']."&start=".($i*$wpcSettings['wpClassified_ads_subjects_per_page'])."\">".($i+1)."</a> ";
+			echo " <a href=\"".$PHP_SELF."?page=wpClassified&adm_arg=".$_GET['adm_arg']."&lists_id=".$_GET['lists_id']."&start=".($i*$wpcSettings['wpClassified_ads_per_page'])."\">".($i+1)."</a> ";
 		}
 	}
 }
@@ -1173,8 +1159,5 @@ function wpClassified_page_handle_titlechange($title){
 	$wpcSettings = get_option('wpClassified_data');
 	return str_replace("[[WP_CLASSIFIED]]", $wpcSettings["wpClassified_slug"], $title);
 }
-
-
-
 
 ?>

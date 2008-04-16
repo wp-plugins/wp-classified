@@ -9,29 +9,37 @@
 if (!$_SESSION) session_start();
 
 // fix me
-function wpClassified_header(){
+function wpc_header(){
 	$wpClassified_settings = get_option('wpClassified_data');
+
+	if ($wpcSettings['wpClassified_ads_per_page'] < 1) { 
+		$wpcSettings['wpClassified_ads_per_page'] = 10;
+	}
+	
 	if ($wpClassified_settings['wpClassified_top_image']!=''){
 		echo "<img src=\"".$wpClassified_settings['wpClassified_top_image']."\">";
 	}
-	if ($wpClassified_settings['wpClassified_announcement']!=''){
-		echo "<p class=\"wp_announcement\">".$wpClassified_settings['wpClassified_announcement']."</p>";
+	if ($wpClassified_settings['wpClassified_description']!=''){
+		echo "<p class=\"wp_announcement\">".$wpClassified_settings['wpClassified_description']."</p>";
 	}
+
+	if ($lnks==""){$lnks = get_wpc_header_link();}
+	echo $lnks;
 }
 
 
 
 
-function wpClassified_display_index(){
+function wpc_index(){
 	global $_GET, $_POST, $user_level, $user_ID, $wpClassified_user_info, $table_prefix, $wpdb;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
-	wpClassified_header();
+	wpc_header();
 
-	if ($wpcSettings['wpClassified_view_must_register']=="y" && !_is_usr_loggedin()){
-		 wpClassified_read_not_allowed();
-		wpClassified_footer();
+	if ($wpcSettings['view_must_register']=="y" && !_is_usr_loggedin()){
+		wpc_read_not_allowed();
+		wpc_footer();
 		return;
 	}
 	
@@ -66,7 +74,7 @@ function wpClassified_display_index(){
 				echo "<tr><td width=50%>";
 			} else echo "</td><td width=50%>";
 			$category = $categories[$x];
-	        $cnt++;
+	        	$cnt++;
 			?>
 			<table width=100%>
 			<tr>
@@ -110,12 +118,12 @@ function wpClassified_display_index(){
 		</table>	
 		<?php
 	} 
-	wpClassified_footer();
+	wpc_footer();
 }
 
 
 // display classified
-function wpClassified_display_list(){
+function get_wpc_list(){
 	global $_GET, $_POST, $user_level, $user_ID, $wpClassified_user_info, $table_prefix, $wpdb, $quicktags;
 
 	$listId = get_query_var("lists_id");
@@ -126,11 +134,16 @@ function wpClassified_display_list(){
 
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
+
+	if ($wpcSettings['wpClassified_ads_per_page'] < 1) { 
+		$wpcSettings['wpClassified_ads_per_page'] = 10;
+	}
+
 	$userfield = get_wpc_user_field();
 
 	
 	//update_views($_GET['lists_id']);
-	wpClassified_header();
+	wpc_header();
 	
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 
@@ -151,18 +164,18 @@ function wpClassified_display_list(){
 		GROUP BY ads_subjects_id
 		ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
 		{$table_prefix}wpClassified_ads_subjects.date DESC
-		LIMIT ".($start*1).", ".($wpcSettings['wpClassified_ads_subjects_per_page']*1)." ");
+		LIMIT ".($start*1).", ".($wpcSettings['wpClassified_ads_per_page']*1)." ");
 
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lists_id']*1)."'	&& status != 'deleted'");
 
-	if ($numAds>$wpcSettings['wpClassified_ads_subjects_per_page']){
+	if ($numAds>$wpcSettings['wpClassified_ads_per_page']){
 		echo "<div align=\"left;\">";
 		echo __("Pages: ");
-		for ($i=0; $i<$numAds/$wpcSettings['wpClassified_ads_subjects_per_page']; $i++){
-			if ($i*$wpcSettings['wpClassified_ads_subjects_per_page']==$start){
+		for ($i=0; $i<$numAds/$wpcSettings['wpClassified_ads_per_page']; $i++){
+			if ($i*$wpcSettings['wpClassified_ads_per_page']==$start){
 				echo " <b>".($i+1)."</b> ";
 			} else {
-				echo " ".create_wpClassified_link("classified", array("name"=>($i+1), "lists_id"=>$lists["lists_id"], 	"name"=>$lists["name"], "start"=>($i*$wpcSettings['wpClassified_ads_subjects_per_page'])))." ";
+				echo " ".create_wpClassified_link("classified", array("name"=>($i+1), "lists_id"=>$lists["lists_id"], 	"name"=>$lists["name"], "start"=>($i*$wpcSettings['wpClassified_ads_per_page'])))." ";
 			}
 		}
 		echo "</div>";
@@ -170,8 +183,8 @@ function wpClassified_display_list(){
 	?>
 	<table width="100%" class="cat">
 	<tr>
-		<?php echo $wpcSettings["wpClassified_ads_must_register"];
-		if ($wpcSettings["wpClassified_ads_must_register"]=="y" && !_is_usr_loggedin() ) { 
+		<?php echo $wpcSettings["must_registered_user"];
+		if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
 			?><td colspan="3" align=right><b><?php echo create_wpClassified_link("postAds", array("name"=>"Post New Ads", "lists_id"=>$_GET["lists_id"], "name"=>"Add New Ads"));?></b></td><?php
 		} else {
 			?><td colspan="3" align=right><b><?php echo create_wpClassified_link("postAds", array("name"=>"Post New Ads", "lists_id"=>$_GET["lists_id"], "name"=>"Add New Ads"));?></b></td><?php
@@ -223,16 +236,15 @@ function wpClassified_display_list(){
 	?>
 	</table>
 	<?php
-	wpClassified_footer();
+	wpc_footer();
 }
 
 
 
-function wpClassified_read_not_allowed(){
+function wpc_read_not_allowed(){
 	global $user_level;
 	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
-	$tpl = new Template();
 
 	$tpl->assign('user_level', "<!--".($user_level*1)."-->");
 	$tpl->assign('access_denied', __("Read Access Denied", 'wpClassified'));
@@ -242,7 +254,7 @@ function wpClassified_read_not_allowed(){
 
 //fix me
 
-function wpClassified_footer(){
+function wpc_footer(){
 	$wpClassified_settings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 
@@ -331,7 +343,7 @@ function wpClassified_edit_ads(){
 		}
 	} 
 	if ($displayform==true){
-		wpClassified_header();
+		wpc_header();
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			 LEFT JOIN {$table_prefix}users
 			 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
@@ -364,7 +376,7 @@ function wpClassified_edit_ads(){
 		</tr><tr><td></td><td><input type=submit value="<?php echo __("Save Post");?>" id="sub"></td>
 		</tr></form></table>
 		<?php
-		wpClassified_footer();
+		wpc_footer();
 	}
 }
 
@@ -377,9 +389,9 @@ function wpClassified_display_ads_subject(){
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	
-	if ($wpcSettings["wpClassified_view_must_register"]=="y" && !_is_usr_loggedin()){
-		 wpClassified_read_not_allowed();
-		wpClassified_footer();
+	if ($wpcSettings["view_must_register"]=="y" && !_is_usr_loggedin()){
+		 wpc_read_not_allowed();
+		wpc_footer();
 		return;
 	}
 	
@@ -410,7 +422,7 @@ function wpClassified_display_ads_subject(){
 				 WHERE {$table_prefix}wpClassified_ads.ads_ads_subjects_id = '".(int)$_GET['ads_subjects_id']."'
 					 && {$table_prefix}wpClassified_ads.status = 'active'
 				 ORDER BY {$table_prefix}wpClassified_ads.date ASC");
-	wpClassified_header();
+	wpc_header();
 
 ?>
 
@@ -476,10 +488,10 @@ function wpClassified_display_ads_subject(){
 				$heightwidth = "";
 		}
 
-		if (!file_exists(ABSPATH . INC . "/wpClassified_ads_template.php")){ 
-			include(dirname(__FILE__)."/wpClassified_ads_template.php");
+		if (!file_exists(ABSPATH . INC . "/body_tpl.php")){ 
+			include(dirname(__FILE__)."/body_tpl.php");
 		} else {
-			include(ABSPATH . INC . "/wpClassified_ads_template.php");
+			include(ABSPATH . INC . "/body_tpl.php");
 		}
 		if ($i==0){
 			echo stripslashes($wpcSettings['wpClassified_banner_code']);
@@ -501,12 +513,12 @@ function wpClassified_display_ads_subject(){
 	if (count($setasread)>0){
 		$wpdb->query("INSERT INTO {$table_prefix}wpClassified_read_ads (read_ads_user_id, read_ads_ads_subjects_id, read_ads_id) VALUES ".@implode(", ", $setasread));
 	}
-	if ($wpcSettings['wpClassified_ads_must_register']!="y" || _is_usr_loggedin()){
+	if ($wpcSettings['must_registered_user']!="y" || _is_usr_loggedin()){
 
 ?>
 <?php
 	}
-	wpClassified_footer();
+	wpc_footer();
 }
 
 
@@ -517,10 +529,10 @@ function wpClassified_display_search(){
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
-	wpClassified_header();
-	if ($wpcSettings['wpClassified_view_must_register']=="y" && !_is_usr_loggedin()){
-		wpClassified_read_not_allowed();
-		wpClassified_footer();
+	wpc_header();
+	if ($wpcSettings['view_must_register']=="y" && !_is_usr_loggedin()){
+		wpc_read_not_allowed();
+		wpc_footer();
 		return;
 	}
 #
@@ -588,7 +600,7 @@ function wpClassified_display_search(){
 	</div>
 	<?
 	} 
-	wpClassified_footer();
+	wpc_footer();
 }
 
 

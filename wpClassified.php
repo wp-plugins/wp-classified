@@ -62,9 +62,9 @@ function wpClassified_search_highlight($keywords,$post,$bgcolors='yellow'){
 
 function create_post_html($post){
 	global $_GET, $_POST, $user_login, $userdata, $user_level, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb;
-	$wpClassified_adm_settings = get_option('wpClassified_data');
+	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
-	switch ($wpClassified_adm_settings["wpClassified_ads_style"]){
+	switch ($wpcSettings["wpc_edit_style"]){
 		case "plain":
 		default:
 			$post->post = nl2br(str_replace("<", "&lt;", $post->post));
@@ -76,11 +76,11 @@ function create_post_html($post){
 			break;
 	}
 
-	if ($wpClassified_adm_settings['wpClassified_filter_posts']=='y'){
+	if ($wpcSettings['wpClassified_filter_posts']=='y'){
 		$post->post = apply_filters('comment_text', nl2br($post->post));
 	}
 	$keyword = explode(" ",$_GET['search_words']);
-	$colors[0]=$wpClassified_adm_settings['wpClassified_highlight_color'];
+	$colors[0]=$wpcSettings['wpClassified_highlight_color'];
 	$post->post = wpClassified_search_highlight($keyword,$post->post,$colors);
 	return $post->post;
 
@@ -109,7 +109,7 @@ function update_views($lists_id, $sign="+"){
 
 function get_last_ads_subjects(){
 	global $wpdb, $table_prefix;
-	$wpClassified_adm_settings = get_option('wpClassified_data');
+	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 
 	$ads = $wpdb->get_results("SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects
@@ -119,15 +119,15 @@ function get_last_ads_subjects(){
 			 ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author
 			 WHERE {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
 			 ORDER BY {$table_prefix}wpClassified_ads_subjects.date DESC
-			 LIMIT 0, ".((int)$wpClassified_adm_settings['wpClassified_last_ads_subject_num'])." ");
+			 LIMIT 0, ".((int)$wpcSettings['wpClassified_last_ads_subject_num'])." ");
 
 	$htmlout = "<ul>";
 	if (is_array($ads)){
 		foreach ($ads as $ad){	
 			$pstart = $wpdb->get_row("SELECT count(*) as count FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".$ad->ads_subjects_id."'", ARRAY_A);
 
-			$pstart = $pstart['count']/$wpClassified_adm_settings['wpClassified_ads_per_page'];
-			$pstart = (ceil($pstart)*$wpClassified_adm_settings['wpClassified_ads_per_page'])-$wpClassified_adm_settings['wpClassified_ads_per_page'];
+			$pstart = $pstart['count']/$wpcSettings['wpClassified_ads_per_page'];
+			$pstart = (ceil($pstart)*$wpcSettings['wpClassified_ads_per_page'])-$wpcSettings['wpClassified_ads_per_page'];
 
 			$name = $wpdb->get_row("SELECT name FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".$ad->ads_subjects_list_id."'", ARRAY_A);
 
@@ -138,8 +138,8 @@ function get_last_ads_subjects(){
 					"ads_subjects_id" => $ad->ads_subjects_id,
 					"start" => $pstart,
 			));
-			if ($wpClassified_adm_settings['wpClassified_last_ads_subjects_author']=='y'){
-				$wpClassified_adm_settings['wpClassified_announcement'] = '';
+			if ($wpcSettings['wpClassified_last_ads_subjects_author']=='y'){
+				$wpcSettings['wpClassified_description'] = '';
 				if 	($ad->last_author>0){
 					$htmlout .= "<br />".$ad->lastuser;
 				} else {
@@ -155,7 +155,7 @@ function get_last_ads_subjects(){
 
 function get_last_adssubjects_content(){
 	global $wpdb, $table_prefix;
-	$wpClassified_adm_settings = get_option('wpClassified_data');
+	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	$ads = $wpdb->get_results("SELECT {$table_prefix}wpClassified_lists.*, {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects
 				 LEFT JOIN {$table_prefix}users
@@ -167,7 +167,7 @@ function get_last_adssubjects_content(){
 				 WHERE {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
 				  && {$table_prefix}wpClassified_ads_subjects.status != 'inactive'
 				 ORDER BY {$table_prefix}wpClassified_ads_subjects.date DESC
-				 LIMIT 0, ".($wpClassified_adm_settings['wpClassified_last_ads_subject_num']*1)." ");
+				 LIMIT 0, ".($wpcSettings['wpClassified_last_ads_subject_num']*1)." ");
 
 	$htmlout = "<ul>";
 	if (is_array($ads)){
@@ -185,8 +185,8 @@ function get_last_adssubjects_content(){
 
 		foreach ($ads as $ad){
 			$pstart = $wpdb->get_row("SELECT count(*) as count FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".$ad->ads_subjects_id."'", ARRAY_A);
-			$pstart = $pstart['count']/$wpClassified_adm_settings['wpClassified_ads_per_page'];
-			$pstart = (ceil($pstart)*$wpClassified_adm_settings['wpClassified_ads_per_page'])-$wpClassified_adm_settings['wpClassified_ads_per_page'];
+			$pstart = $pstart['count']/$wpcSettings['wpClassified_ads_per_page'];
+			$pstart = (ceil($pstart)*$wpcSettings['wpClassified_ads_per_page'])-$wpcSettings['wpClassified_ads_per_page'];
 			$htmlout .= "<li>".create_wpClassified_link("lastAds", array(
 					"name" => $ad->subject,
 					"lists_id" => $ad->ads_subjects_list_id,
@@ -200,7 +200,7 @@ function get_last_adssubjects_content(){
 				$htmlout .= "<br />".rawurldecode($ad->last_author_name)." (Guest): ";
 			}
 
-			$htmlout .=wpClassified_excerpt_text($wpClassified_adm_settings['wpClassified_excerpt_length'],$postinfo[$ad->ads_subjects_id]);
+			$htmlout .=wpClassified_excerpt_text($wpcSettings['wpClassified_excerpt_length'],$postinfo[$ad->ads_subjects_id]);
 			$htmlout .= "</li>";
 		}
 	}
@@ -219,17 +219,17 @@ function wpClassified_excerpt_text($length, $text){
 // function that echo's the textarea/whatever for post input
 function create_ads_input($content=""){
 	global $wpdb, $table_prefix;
-	$wpClassified_adm_settings = get_option('wpClassified_data');
-	switch ($wpClassified_adm_settings["wpClassified_ads_style"]){
+	$wpcSettings = get_option('wpClassified_data');
+	switch ($wpcSettings["wpc_edit_style"]){
 		case "plain":
 		default:
 			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='40' rows='7'>".str_replace("<", "&lt;", $content)."</textarea>";
 		break;
 		case "tinymce":
 			 $mode="advanced";
-			 if ($wpClassified_adm_settings['editor_toolbar_basic']=='y') $mode="simple";
+			 if ($wpcSettings['editor_toolbar_basic']=='y') $mode="simple";
 			?>
-			<script language="javascript" type="text/javascript" src="<?php echo dirname($_SERVER["PHP_SELF"]);?>/wp-content/plugins/wpClassified/includes/tinymce/tiny_mce.js"></script>
+			<script language="javascript" type="text/javascript" src="<?php echo dirname($_SERVER["PHP_SELF"]);?>/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce.js"></script>
 			<script language="javascript" type="text/javascript">
 			tinyMCE.init({
 			mode : "textareas",

@@ -6,8 +6,6 @@
  **/
 
 
-
-
 function wpClassified_ads_subject(){
 	global $_GET, $_POST, $user_login, $userdata, $wpClassified_user_info, $fckhtml, $user_level, 
 		$user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb, $quicktags;
@@ -23,7 +21,7 @@ function wpClassified_ads_subject(){
 	$displayform = true;
 
 	if ($_POST['wpClassified_ads_subject']=='yes'){
-		if ($wpcSettings['wpClassified_ads_must_register']=='y' && !_is_usr_loggedin()){
+		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 			die("You can't post without logging in.");
 		} else {
 			$makepost = true;
@@ -55,7 +53,7 @@ function wpClassified_ads_subject(){
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['image_file']['size']);
 						@fclose($fp);
-						$fp = fopen(ABSPATH."wp-content/plugins/wpClassified/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+						$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
 						@fwrite($fp, $content);
 						@fclose($fp);
 						@chmod(dirname(__FILE__)."/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
@@ -94,8 +92,8 @@ function wpClassified_ads_subject(){
 	}
 
 	if ($displayform==true){
-		wpClassified_header();
-		if ($wpcSettings['wpClassified_ads_must_register']=='y' && !_is_usr_loggedin()){
+		wpc_header();
+		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 			?>
 			<br><br><?php echo __("Sorry, you must be registered and logged in to post in these classifieds.");?><br><br>
 			<a href="<?php echo get_bloginfo('wpurl');?>/wp-register.php"><?php echo __("Register Here");?></a><br><br>- <?php echo __("OR");?> -<br><br>
@@ -147,7 +145,7 @@ function wpClassified_ads_subject(){
 			<?php
 
 		}
-		wpClassified_footer();
+		wpc_footer();
 	}
 }
 
@@ -192,28 +190,23 @@ function create_wpClassified_link($action, $vars){
 	}
 }
 
+
 function wpClassified_permission_denied(){
 	echo __("Sorry, it seems that you do not have permission to perform the requested action.");
 	return;
 
 }
 
-
 function create_ads_author($ad){
 	$wpcSettings = get_option('wpClassified_data');
-
 	$userfield = get_wpc_user_field();
-
 	$out = "";
-
 	if ($ad->author==0){
 		$out .= $ad->author_name;
 	} else {
 		$out .= $ad->$userfield;
 	}
-
 	return $out;
-
 }
 
 function wpClassified_last_octet($ip){
@@ -228,7 +221,7 @@ function get_post_author($post){
 	$out = "";
 	if ($post->author==0){
 		$out .= $post->author_name." (guest)";
-		if ($wpcSettings['wpClassified_unregistered_display_ip']=='y'){
+		if ($wpcSettings['display_unregistered_ip']=='y'){
 			$out .= " - ".wpClassified_last_octet($post->author_ip);
 		}
 		$out .= "";
@@ -263,19 +256,19 @@ function wpClassified_commment_quote($post){
 	$wpClassified_ads_text = str_replace("&amp;gt;", ">", $wpClassified_ads_text);
 	$wpClassified_ads_text = str_replace("&gt;", ">", $wpClassified_ads_text);
 	$wpClassified_ads_text = str_replace("&amp;", "&", $wpClassified_ads_text);
-	if ($wpcSettings["wpClassified_ads_style"]=="plain"){
+	if ($wpcSettings["wpc_edit_style"]=="plain"){
 		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
 		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
 	}
-	if ($wpcSettings["wpClassified_ads_style"]=="bbcode"){
+	if ($wpcSettings["wpc_edit_style"]=="bbcode"){
 		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
 		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
 	}
-		if ($wpcSettings["wpClassified_ads_style"]=="html"){
+		if ($wpcSettings["wpc_edit_style"]=="html"){
 		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
 		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
 	}
-		if ($wpcSettings["wpClassified_ads_style"]=="quicktags"){
+		if ($wpcSettings["wpc_edit_style"]=="quicktags"){
 		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
 		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
 	}
