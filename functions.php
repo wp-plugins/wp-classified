@@ -209,11 +209,7 @@ function create_ads_author($ad){
 	return $out;
 }
 
-function wpClassified_last_octet($ip){
-	$ip = explode(".", $ip);
-	$ip[count($ip)-1] = "***";
-	return @implode(".", $ip);
-}
+
 
 function get_post_author($post){
 	$wpcSettings = get_option('wpClassified_data');

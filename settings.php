@@ -209,4 +209,12 @@ function get_wpc_header_link(){
 	}
 }
 
+
+function wpClassified_last_octet($ip){
+	$ip = explode(".", $ip);
+	$ip[count($ip)-1] = "***";
+	return @implode(".", $ip);
+}
+
+
 ?>
