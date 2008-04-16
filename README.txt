@@ -5,7 +5,7 @@ Contributors: Mohammad Forgani
 Requires at least: 2.3.x
 Tested up to: 2.3
 Stable tag: 1.0
-Tags: comments, spam
+Tags: ads, adsense, classifieds
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 
