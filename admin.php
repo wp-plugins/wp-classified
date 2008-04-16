@@ -129,8 +129,8 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 				<td><input type=text size=25 name="wpClassified_data[wpClassified_top_image]" value="<?php echo ($wpcSettings['wpClassified_top_image']);?>"></td>
 			</tr>
 		    <tr>
-			<th align="right"><?php echo __("Classified Description (optional):");?></th>
-				<td><textarea cols=65 rows=1 name="wpClassified_data[wpClassified_description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['wpClassified_description']));?></textarea>
+			<th align="right"><?php echo __("Classified Description:");?></th>
+				<td><input type="text" size=60 name="wpClassified_data[wpClassified_description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['wpClassified_description']));?>"></td>
 			<tr>
 			<th align="right"><?php echo __("wpClassified URL: ");?> </th>
 				<td><input type="text" size=60 name="wpClassified_data[wpClassified_page_url]" value="<?php echo $wpcSettings['wpClassified_page_url'];?>"></td>
@@ -428,6 +428,7 @@ function wpClassified_install(){
 		$wpcSettings['userfield'] = get_wpc_user_field();
 		$wpcSettings['show_credits'] = 'y';
 		$wpcSettings['wpClassified_slug'] = 'Classifieds';
+		$wpcSettings['wpClassified_description'] = '';
 		$wpcSettings['must_registered_user'] = 'n';
 		$wpcSettings['view_must_register'] = 'n';
 		$wpcSettings['display_unregistered_ip'] = 'y';
