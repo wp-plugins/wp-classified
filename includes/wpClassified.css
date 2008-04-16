@@ -16,8 +16,10 @@ padding: 2px;
 .wp_announcement {
 display: block;
 border: 1px solid #eee;
+font-size: 16px;
 background: url(/wp-content/plugins/wp-classified/images/announcement.jpg) no-repeat 5px 5px;
-padding: 5px 5px 15px 45px;
+padding: 5px 5px 5px 45px;
+margin-bottom: 20px; 
 }
 
 .title_menu {

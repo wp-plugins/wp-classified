@@ -137,7 +137,7 @@ If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> 
 			</tr>
 			<tr>
 				<th align="right"></th>
-				<td><input type=checkbox name="wpClassified_data[disply_credits]" value="y"<?php echo ($wpcSettings['wpClassified_show_credits']=='y')?" checked":"";?>> <?php echo __("Display wpClassified credit line at the bottom of classified pages");?></td>
+				<td><input type=checkbox name="wpClassified_data[show_credits]" value="y"<?php echo ($wpcSettings['show_credits']=='y')?" checked":"";?>> <?php echo __("Display wpClassified credit line at the bottom of classified pages");?></td>
 			</tr>
 			<tr>
 				<th align="right"><?php echo __("wpClassified Page Link Name: ");?></th>
@@ -426,7 +426,7 @@ function wpClassified_install(){
 	if ($wpcSettings['wpClassified_installed']!='y'){
 		$wpcSettings['wpClassified_installed'] = 'y';
 		$wpcSettings['userfield'] = get_wpc_user_field();
-		$wpcSettings['wpClassified_show_credits'] = 'y';
+		$wpcSettings['show_credits'] = 'y';
 		$wpcSettings['wpClassified_slug'] = 'Classifieds';
 		$wpcSettings['must_registered_user'] = 'n';
 		$wpcSettings['view_must_register'] = 'n';

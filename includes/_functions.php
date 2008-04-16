@@ -10,17 +10,17 @@ if (!$_SESSION) session_start();
 
 // fix me
 function wpc_header(){
-	$wpClassified_settings = get_option('wpClassified_data');
+	$wpcSettings = get_option('wpClassified_data');
 
 	if ($wpcSettings['wpClassified_ads_per_page'] < 1) { 
 		$wpcSettings['wpClassified_ads_per_page'] = 10;
 	}
 	
-	if ($wpClassified_settings['wpClassified_top_image']!=''){
-		echo "<img src=\"".$wpClassified_settings['wpClassified_top_image']."\">";
+	if ($wpcSettings['wpClassified_top_image']!=''){
+		echo "<img src=\"".$wpcSettings['wpClassified_top_image']."\">";
 	}
-	if ($wpClassified_settings['wpClassified_description']!=''){
-		echo "<p class=\"wp_announcement\">".$wpClassified_settings['wpClassified_description']."</p>";
+	if ($wpcSettings['wpClassified_description']!=''){
+		echo "<p class=\"wp_announcement\">".$wpcSettings['wpClassified_description']."</p>";
 	}
 
 	if ($lnks==""){$lnks = get_wpc_header_link();}
@@ -259,10 +259,10 @@ function wpc_read_not_allowed(){
 //fix me
 
 function wpc_footer(){
-	$wpClassified_settings = get_option('wpClassified_data');
+	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 
-	if ($wpClassified_settings['wpClassified_show_credits']=='y'){
+	if ($wpcSettings['show_credits']=='y'){
 		echo "<p></p><p><hr>" . stripslashes($wpcSettings['credit_line']);
 	}
 }
