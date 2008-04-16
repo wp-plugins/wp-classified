@@ -4,22 +4,28 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassiefied-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.0.1  
+Version: 1.0.2  
 Requires at least: 2.3.x
 Author URI: Mohammad Forgani http://www.forgani.com
 
 I create and tested on Wordpress version 2.3.2 
 on default and unchanged Permalink structure.
 
-
-Uninstalling the plugin:
-
-For uninstalling the plugin simply delete the wpClassified directory from the /wp-content/plugins/ directory.
-You even don?t need to deactivate the plugin in the WordPress admin menu.
-And you remove the page and tables, which are installed by the plugins with drop table in phpMyAdmin.
-
-
 demo: http://www.bazarcheh.de/?page_id=92
+
+
+
+Release Notes:
+
+Version 1.0.0 - 1/04/2008
+- Added Uninstall 
+
+Version 1.0.1 - 1/04/2008
+- fix bugs
+- implement a new structure
+
+Version 1.0.2 - 16/03/2008
+- update to display the links to ads at the top of page 
 
 */
 
