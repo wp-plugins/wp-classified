@@ -107,9 +107,8 @@ function wpc_get_top_lnks(){
 			break;
 			case "viewList":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
-						 LEFT JOIN {$table_prefix}wpClassified_categories
-						 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-						 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
+				 LEFT JOIN {$table_prefix}wpClassified_categories
+				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
 				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".$lists['name'];
 			break;
 			case "postAds":
@@ -168,10 +167,9 @@ function get_wpc_header_link(){
 			break;
 			case "viewList":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
-						LEFT JOIN {$table_prefix}wpClassified_categories
-						ON {$table_prefix}wpClassified_categories.categories_id = 
-							 $table_prefix}wpClassified_lists.wpClassified_lists_id
-						WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
+				LEFT JOIN {$table_prefix}wpClassified_categories
+				ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
+				WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
 
 				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".$lists['name'];
 			break;
