@@ -98,15 +98,12 @@ function wpcSettings_process(){
 	</p>
 	</form>
 	<pre>
-	<h3>Or you can create the page manually in 4 steps:</h3>
+	<h3>Or you can create the page manually in 3 steps:</h3>
 
  1- Go to 'WP-Admin -> Write -> Write Page' 
  2- Type in the post's title area [[WP_CLASSIFIED]]
  3- Type '[[WP_CLASSIFIED]]' in the post's content area (without the quotes) 
- 4- Type 'useronline' in the post's slug area (without the quotes) 
- Click 'Publish' 
 
-If you ARE NOT using nice permalinks, you need to go to 'WP-Admin -> Options -> wpClassiefied Admin' and under 'wpClassified URL', you need to fill in the URL to the Classified Page you created above.
 </pre>
 
 	<?
