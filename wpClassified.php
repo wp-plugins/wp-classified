@@ -28,13 +28,11 @@ Version 1.0.2 - 16/03/2008
 - update to display the links to ads at the top of page 
 
 Version 1.1.0 - 12/05/2008
-- update Delete ads function to admin interface.
-- Added Move ads function to admin interface.
-- update edit function for ads to admin interface
-- Fixed some issue which are posted to me.
+- update delete/modify ads function .
+- added Move ads function to admin interface.
+- fixed some issue which are posted to me.
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
--
 
 To support Permalink structure:
 Example for htaccess code to redirect to wpClassified

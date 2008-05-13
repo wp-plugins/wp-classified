@@ -57,10 +57,9 @@ Changelog:
 
 Changes in 1.1.0 - May 12/2008
 
-- update Delete ads function to admin interface.
-- Added Move ads function to admin interface.
-- update edit function for ads to admin interface
-- Fixed some issue which are posted to me.
+- update delete/modify ads function .
+- added Move ads function to admin interface.
+- fixed some issue which are posted to me.
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
 
