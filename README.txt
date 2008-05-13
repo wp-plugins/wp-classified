@@ -1,14 +1,11 @@
-
 === wp-classified ===
-name: wpClassified Wordpress plugins version 1.0.2-d
+name: wpClassified Wordpress plugins version 1.1.0
 Contributors: Mohammad Forgani
-Requires at least: 2.3.x
-Tested up to: 2.3
-Stable tag: 1.0
+Requires at least: 2.5
+Tested up to: 2.5
+Stable tag: 1.1.0
 Tags: ads, adsense, classifieds
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
-
-
 
 == Description ==
 
@@ -24,11 +21,11 @@ This section describes how to install the plugin and get it working.
 
 e.g.
 
-1) Extract files
-2) Upload 'wp-classified/' folder to your './wp-content/plugins/' directory
-3) Login to the administration and go to "admin panel/plugins" and activate the plugin
-4) Go to the "Manage" tab of your WP. 
-You have now there a new tab called "wpClassified Admin" to configure the plugin.
+1. Extract files
+2. Upload 'wp-classified/' folder to your './wp-content/plugins/' directory
+3. Login to the administration and go to "admin panel/plugins" and activate the plugin
+4. Go to the "Manage" tab of your WP. 
+You have now there a new tab called "wpClassified" to configure the plugin.
 
 
 Make sure the folder images have the correct writing permissions.
@@ -50,11 +47,60 @@ which are installed by the plugin with drop table in phpMyAdmin.
 demo: http://www.bazarcheh.de/?page_id=92
 
 
+== History ==
+
+== Changelog ==
+
+Changelog:
 
 
 
+Changes in 1.1.0 - May 12/2008
+
+- update Delete ads function to admin interface.
+- Added Move ads function to admin interface.
+- update edit function for ads to admin interface
+- Fixed some issue which are posted to me.
+- using Permalinks. Example to update .htaccess Rewrite Rules.
+
+
+Changes in 1.0.0 - April 01/2008
+- fix bugs
+- implement a new structure
+- update to display the links to ads at the top of page 
+
+
+
+To support Permalink structure:
+Example for htaccess code to redirect to wpClassified
+
+You need an .htaccess file that is created/modified by wordpress via the Permalink/mod-rewrite option. 
+
+Please edit the .htaccess file in the root folder of your Wordpress.
+You can edit the .htaccess file by FTP.
+You use the default .htaccess file and modify the file as follow:
+The redirect should look something like this
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+##########
+#RewriteRule . /index.php [L]
+##########
+RewriteRule !classified/ /index.php [L]
+RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified&_action=$1&lid=$3&asid=5&aid=$6 [QSA,L,R,NS]
+</IfModule>
+# END WordPress
+
+
+
+
+
+have fun
 Regards from Isfahan ;-)
-
 Mohammad Forgani
-16/03/2008
+May 13/2008
 

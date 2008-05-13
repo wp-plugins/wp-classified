@@ -5,83 +5,107 @@
  *
 */
 
+// user level
+$wpc_user_level = 8;
+$wpClassified_version = '1.1.0';
+$wp_version = false;  // wordpress version 2.x
+$wpc_user_field = false;
+$wpc_public_pagename = 'classified';
+$wpc_admin_menu = 'wpClassified';
+$wpc_page_info = false;
+
+require_once (dirname(__FILE__).'/includes/_functions.php');
+require_once (dirname(__FILE__).'/admin.php');
+
+if (!$_GET)$_GET = $HTTP_GET_VARS;
+if (!$_POST)$_POST = $HTTP_POST_VARS;
+if (!$_SERVER)$_SERVER = $HTTP_SERVER_VARS;
+if (!$_COOKIE)$_COOKIE = $HTTP_COOKIE_VARS;
+
 
 global $table_prefix, $wpdb;
 if (!$table_prefix){
 	$table_prefix = $wpdb->prefix;
 }
 
-// user level
-$wpc_user_level = 8;
-$wpClassified_version = '1.0.1';
-$wp_version = false;  // wordpress version 2.x
-$wpClassified_user_field = false;
-$wpc_public_pagename = 'wpClassified';
-$wpc_admin_pagename = 'wpClassified Admin';
-$wpClassified_pageinfo = false;
+$wpc_user_info = array();
+$adm_links = array(
+	array(name=>'Classified Options',arg=>'wpcOptions'),
+	array(name=>'Add/Edit Categories',arg=>'wpcStructure'),
+	array(name=>'Edit/Remove Ads',arg=>'wpcModify'),
+	array(name=>'Users Admin',arg=>'wpcUsers'),
+	array(name=>'Utilities',arg=>'wpcUtilities'),
+	);
 
-define('TOP', 'wp-content/plugins/wp-classified');
-define('INC', 'wp-content/plugins/wp-classified/includes');
 
-//require_once(ABSPATH . TOP . '/functions.php');
-require_once(ABSPATH . INC . '/_functions.php');
-require_once(ABSPATH . TOP . '/admin.php');
+/*
 
-add_action('generate_rewrite_rules','wpc_mod_rewrite_rules');
-add_action('mod_rewrite_rules', 'wpc_general_rewrite_rules');
-
-// fix me
-$incfile = ABSPATH . 'wp-includes/pluggable.php';
-//echo "---> $incfile";
-//require_once($incfile);
-
-$wpClassified_user_info = array();
+//$wpClassified_slug.'/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?(\([^/\(\)]*\))?/?' => '/'.$wpClassified_slug.'/index.php?pagename='.$wpClassified_slug.'&wpClassified_action=$matches[1]&lists_id=$matches[3]&ads_subjects_id=$matches[5]&ads_id=$matches[6]&start=$matches[8]&amp;pstart=$matches[8]'
+function wpc_mod_rewrite_rules($wp_rewrite){
+	global $wp_rewrite;
+	$wpcSettings = get_option('wpClassified_data');
+	$wpClassified_slug = $wpClassified_settings['wpClassified_slug'];
+	$wpClassified_rules = array(
+	$wpClassified_slug.'/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?(\([^/\(\)]*\))?/?' => '/'.$wpClassified_slug.'/index.php?pagename='.$wpClassified_slug.'&wpClassified_action=$1&lists_id=$3&ads_subjects_id=$5&ads_id=$6&start=$8&pstart=$8'
+	);
+	$wp_rewrite->rules = $wpClassified_rules + $wp_rewrite->rules;
+}
+*/
 
 
 function get_wpClassified_pageinfo(){
-	global $wpdb, $wpClassified_pageinfo, $table_prefix;
-	if ($wpClassified_pageinfo == false){
-		$wpClassified_pageinfo = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
+	global $wpdb, $wpc_page_info, $table_prefix;
+	if ($wpc_page_info == false){
+		$wpc_page_info = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
 			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-		if ($wpClassified_pageinfo["post_title"]!="[[WP_CLASSIFIED]]"){
+		if ($wpc_page_info["post_title"]!="[[WP_CLASSIFIED]]"){
 			return false;
 		}
 	}
-	return $wpClassified_pageinfo;
+	return $wpc_page_info;
+}
+
+function get_user_info(){
+	global $table_prefix, $wpdb, $user_ID, $wpc_user_info;
+	get_currentuserinfo();
+	$wpc_user_info = $wpdb->get_row("SELECT * from {$table_prefix}users
+							LEFT JOIN {$table_prefix}wpClassified_user_info
+							ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
+							WHERE {$table_prefix}users.ID = '".(int)$user_ID."'", ARRAY_A);
 }
 
 function get_wpc_user_field(){
-	global $wpdb, $table_prefix, $wpClassified_user_field, $wp_version;
-	if ($wpClassified_user_field == false){
+	global $wpdb, $table_prefix, $wpc_user_field, $wp_version;
+	if ($wpc_user_field == false){
 		$tcols = $wpdb->get_results("SHOW COLUMNS FROM {$table_prefix}users", ARRAY_A);
 		$cols = array();
 		for ($i=0; $i<count($tcols); $i++){
 			$cols[] = $tcols[$i]['Field'];
 		}
 		if (in_array("display_name", $cols)){
-			$wpClassified_user_field = "display_name";
+			$wpc_user_field = "display_name";
 			$wp_version = "2";
 		} else {
-			$wpClassified_user_field = "user_nickname";
+			$wpc_user_field = "user_nickname";
 			$wp_version = "1";
 		}
 	}
-	return $wpClassified_user_field;
+	return $wpc_user_field;
 }
 
 function _is_usr_admin(){
-	global $wpClassified_user_info;
-	return ($wpClassified_user_info["permission"]=="administrator")?true:false;
+	global $wpc_user_info;
+	return ($wpc_user_info["permission"]=="administrator")?true:false;
 }
 
 function _is_usr_mod($classified=0){
-	global $wpdb, $wpClassified_user_info, $table_prefix;
-	return ($wpClassified_user_info["permission"]=="moderator")?true:false;
+	global $wpdb, $wpc_user_info, $table_prefix;
+	return ($wpc_user_info["permission"]=="moderator")?true:false;
 }
 
 function _is_usr_loggedin(){
-	global $wpClassified_user_info;
-	return ((int)$wpClassified_user_info["ID"])?true:false;
+	global $wpc_user_info;
+	return ((int)$wpc_user_info["ID"])?true:false;
 }
 
 
@@ -92,11 +116,11 @@ function wpc_get_top_lnks(){
 	} else {
 		$wpClassified_settings = get_option('wpClassified_data');
 		if (!$_POST['search_terms']) {
-			$_GET['wpClassified_action'] = $_GET['wpClassified_action'];
+			$_GET['_action'] = $_GET['_action'];
 		} else {
-			$_GET['wpClassified_action'] = "search";
+			$_GET['_action'] = "search";
 		}
-		switch ($_GET['wpClassified_action']){
+		switch ($_GET['_action']){
 			default:
 			case "classified":
 				return "Classified";
@@ -105,39 +129,39 @@ function wpc_get_top_lnks(){
 				$search_title = "Searching For: ".$_POST['search_terms'];
 				return $search_title;
 			break;
-			case "viewList":
+			case "vl":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				 LEFT JOIN {$table_prefix}wpClassified_categories
-				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".$lists['name'];
+				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+				return create_public_link("index", array("name"=>"Classified"))." - ".$lists['name'];
 			break;
-			case "postAds":
+			case "pa":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 					 LEFT JOIN {$table_prefix}wpClassified_categories
 					 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
-					return create_wpClassified_link("index", array("name"=>"Classified"))." - ".create_wpClassified_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lists_id"=>$lists['lists_id']))." - Ads New Ads";
+					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+					return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Ads New Ads";
 			break;
-			case "editAds":
+			case "ea":
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$table_prefix}users
 					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['ads_subjects_id']*1)."'", ARRAY_A);
+					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".create_wpClassified_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lists_id"=>$adsInfo['lists_id']))." <br> ".create_wpClassified_link("ads_subject", array("name"=>$adsInfo["subject"], "ads_subjects_id"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
-				"lists_id"=>$adsInfo['lists_id']))." - Edit Ads";
+				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
+				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
 			break;
-			case "viewAds":
+			case "va":
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$table_prefix}users
 					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['ads_subjects_id']*1)."'", ARRAY_A);
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".create_wpClassified_link("classified", array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
-				"lists_id"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
+					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified", array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
+				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
 			break;
 		}
 	}
@@ -152,11 +176,11 @@ function get_wpc_header_link(){
 	} else {
 		$wpClassified_settings = get_option('wpClassified_data');
 		if (!$_POST['search_terms']) {
-			$_GET['wpClassified_action'] = $_GET['wpClassified_action'];
+			$_GET['_action'] = $_GET['_action'];
 		} else {
-			$_GET['wpClassified_action'] = "search";
+			$_GET['_action'] = "search";
 		}
-		switch ($_GET['wpClassified_action']){
+		switch ($_GET['_action']){
 			default:
 			case "classified":
 				return "Classified";
@@ -165,43 +189,43 @@ function get_wpc_header_link(){
 				$search_title = "Searching For: ".$_POST['search_terms'];
 				return $search_title;
 			break;
-			case "viewList":
+			case "vl":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				LEFT JOIN {$table_prefix}wpClassified_categories
 				ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-				WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
+				WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".$lists['name'];
+				return create_public_link("index", array("name"=>"Classified"))." - ".$lists['name'];
 			break;
-			case "postAds":
+			case "pa":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 					 LEFT JOIN {$table_prefix}wpClassified_categories
 					 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lists_id']*1)."'", ARRAY_A);
+					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".create_wpClassified_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lists_id"=>$lists['lists_id']))." - Ads New Ads";
+				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Ads New Ads";
 			break;
-			case "editAds":
+			case "ea":
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$table_prefix}users
 					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['ads_subjects_id']*1)."'", ARRAY_A);
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".create_wpClassified_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lists_id"=>$adsInfo['lists_id']))." <br> ".create_wpClassified_link("ads_subject", array("name"=>$adsInfo["subject"], "ads_subjects_id"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
-				"lists_id"=>$adsInfo['lists_id']))." - Edit Ads";
+					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
+				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
 			break;
-			case "viewAds":
+			case "va":
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 						 LEFT JOIN {$table_prefix}wpClassified_lists
 						 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 						 LEFT JOIN {$table_prefix}users
 						 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-						 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['ads_subjects_id']*1)."'", ARRAY_A);
+						 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
-				return create_wpClassified_link("index", array("name"=>"Classified"))." - ".create_wpClassified_link("classified",
+				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified",
 						array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
-				"lists_id"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
+				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
 			break;
 		}
 	}

@@ -7,7 +7,7 @@
 
 
 function wpClassified_ads_subject(){
-	global $_GET, $_POST, $user_login, $userdata, $wpClassified_user_info, $fckhtml, $user_level, 
+	global $_GET, $_POST, $user_login, $userdata, $wpc_user_info, $fckhtml, $user_level, 
 		$user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb, $quicktags;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -16,7 +16,7 @@ function wpClassified_ads_subject(){
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				 LEFT JOIN {$table_prefix}wpClassified_categories
 				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".((int)$_GET['lists_id'])."'", ARRAY_A);
+				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".((int)$_GET['lid'])."'", ARRAY_A);
 
 	$displayform = true;
 
@@ -45,19 +45,19 @@ function wpClassified_ads_subject(){
 				$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 				if ($ok==true){
 					$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
-					if ($imginfo[0]>(int)$wpcSettings["wpClassified_image_width"]  ||
-						$imginfo[1]>(int)$wpcSettings["wpClassified_image_height"] || $imginfo[0] == 0){
-						 echo "<h2>Invalid image size. Image must be ".(int)$wpcSettings["wpClassified_image_width"]."x".(int)$wpcSettings["wpClassified_image_height"]." pixels or less. Your image was: ".$imginfo[0]."x".$imginfo[1] . "</h2>";
+					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
+						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
+						 echo "<h2>Invalid image size. Image must be ".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]." pixels or less. Your image was: ".$imginfo[0]."x".$imginfo[1] . "</h2>";
 						$makepost=false;	
 					} else {
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['image_file']['size']);
 						@fclose($fp);
-						$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+						$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
 						@fwrite($fp, $content);
 						@fclose($fp);
-						@chmod(dirname(__FILE__)."/images/".(int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
-						$setImage = (int)$wpClassified_user_info["ID"]."-".$_FILES['image_file']['name'];
+						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
+						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'];
 					}
 				}
 			}
@@ -67,7 +67,7 @@ function wpClassified_ads_subject(){
 
 				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads_subjects
 					(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip) VALUES
-					('".($_GET['lists_id']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['subject']))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."')");
+					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['subject']))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."')");
 
 				$tid = $wpdb->get_var("SELECT last_insert_id()");
 				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
@@ -81,9 +81,9 @@ function wpClassified_ads_subject(){
 				$pid = $wpdb->get_var("select last_insert_id()");
 				if (!$isSpam){
 					update_user_post_count($user_ID);
-					update_ads($_GET['lists_id']);
+					update_ads($_GET['lid']);
 				}
-				$_GET['ads_subjects_id'] = $tid;
+				$_GET['asid'] = $tid;
 				wpClassified_display_ads_subject();
 			} else {
 				$displayform = true;
@@ -107,7 +107,7 @@ function wpClassified_ads_subject(){
 			?>
 			<table width=100% class="editform">
 				<form method="post" id="cat_form_post" name="cat_form_post" enctype="multipart/form-data"
-			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ads...';" action="<?php echo create_wpClassified_link("postAdsForm", array("lists_id"=>$_GET["lists_id"], "name"=>$lists["name"]));?>">
+			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ads...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
 				<input type="hidden" name="wpClassified_ads_subject" value="yes">
 				<tr>
 					<td align=right><?php echo __("Posting Name:");?> </td>
@@ -129,7 +129,7 @@ function wpClassified_ads_subject(){
 				</tr>
 		<tr>
 			<td align=right><?php echo __("Image File: ");?></td>
-			<td><input type=file name="image_file"><br /><small><?php echo __("(maximum:" . (int)$wpcSettings["wpClassified_image_width"]."x".(int)$wpcSettings["wpClassified_image_height"] . " pixel ");?>)</small></td>
+			<td><input type=file name="image_file"><br /><small><?php echo __("(maximum:" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td>
 		</tr>
 				<tr>
 					<td valign=top align=right><?php echo __("Comment:");?> </td>
@@ -137,7 +137,7 @@ function wpClassified_ads_subject(){
 				</tr>
 				<tr>
 					<td></td>
-					<td><input type=submit value="<?php echo __("Post Ads");?>" id="sub"></td>
+					<td><input type=submit value="<?php echo __("Submit");?>" id="sub"></td>
 				</tr>
 				</form>
 			</table>
@@ -150,11 +150,12 @@ function wpClassified_ads_subject(){
 }
 
 
-function create_wpClassified_link($action, $vars){
+function create_public_link($action, $vars){
 	global $wpdb, $table_prefix, $wp_rewrite;
 		
 	$pageinfo = get_wpClassified_pageinfo();
-	$rewrite = ($wp_rewrite->get_page_permastruct()=="")?false:true;
+	// fix me
+	//$rewrite = ($wp_rewrite->get_page_permastruct()=="")?false:true;
 	$starts = (((int)$vars["start"])?"(".$vars["start"].")/":"");
 	if (!$vars['post_jump']) {
 		$lastAds = ($action=="lastAds")?"#lastpost":"";
@@ -164,28 +165,28 @@ function create_wpClassified_link($action, $vars){
 	$action = ($action=="lastAds")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=classified\">".$vars["name"]."</a> ";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">".$vars["name"]."</a> ";
 		break;
 		case "classified":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/viewList/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["lists_id"]."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=viewList&amp;lists_id=".$vars["lists_id"]."&amp;start=".(int)$vars['start']."\">".$vars["name"]."</a> ";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."&start=".(int)$vars['start']."\">".$vars["name"]."</a> ";
 		break;
-		case "postAds":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/postAds/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["lists_id"]."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=postAds&amp;lists_id=".$vars["lists_id"]."\">".$vars["name"]."</a> ";
+		case "pa":
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
-		case "postAdsForm":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/postAds/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["lists_id"]:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=postAds&amp;lists_id=".$vars["lists_id"];
+		case "paForm":
+			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/viewAds/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["lists_id"]."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["ads_subjects_id"]."/".$starts."?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAds."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=viewAds&amp;lists_id=".$vars['lists_id']."&amp;ads_subjects_id=".$vars['ads_subjects_id']."&amp;pstart=".((int)$vars["start"])."&amp;search_words=".$vars['search_words'].$lastAds."\">".$vars['name']."</a>";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/va/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".$starts."?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAds."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&pstart=".((int)$vars["start"])."&search_words=".$vars['search_words'].$lastAds."\">".$vars['name']."</a>";
 		break;
-		case "editAds":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/editAds/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["lists_id"]."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["ads_subjects_id"]."/".((int)$vars["ads_id"])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=editAds&amp;lists_id=".$vars['lists_id']."&amp;ads_subjects_id=".$vars['ads_subjects_id']."&amp;ads_id=".((int)$vars["ads_id"])."\">".$vars['name']."</a> ";
+		case "ea":
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
-		case "editAdsform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/editAds/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["lists_id"]."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars["ads_subjects_id"]."/".((int)$vars["ads_id"]):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=editAds&amp;lists_id=".$vars['lists_id']."&amp;ads_subjects_id=".$vars['ads_subjects_id']."&amp;ads_id=".((int)$vars["ads_id"]);
+		case "eaform":
+			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
 		break;
 		case "searchform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/search/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;wpClassified_action=search";
+			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/search/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=search";
 		break;
 	}
 }
@@ -239,40 +240,40 @@ function update_user_post_count($id){
 }
 
 function wpClassified_commment_quote($post){
-	$wpClassified_ads_text = $post->post;
-	$wpClassified_ads_text = nl2br($wpClassified_ads_text);
+	$txt = $post->post;
+	$txt = nl2br($txt);
 	$wpClassified_ads_charset = get_option('blog_charset');
-	$wpClassified_ads_text = addslashes(htmlspecialchars($wpClassified_ads_text, ENT_COMPAT, $wpClassified_ads_charset));		
-	$wpClassified_ads_text = str_replace(chr(13), "", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace(chr(10), "", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&lt;br /&gt;", "\n", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&lt;", "<", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&amp;lt;", "<", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&gt;", ">", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&amp;gt;", ">", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&gt;", ">", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("&amp;", "&", $wpClassified_ads_text);
+	$txt = addslashes(htmlspecialchars($txt, ENT_COMPAT, $wpClassified_ads_charset));		
+	$txt = str_replace(chr(13), "", $txt);
+	$txt = str_replace(chr(10), "", $txt);
+	$txt = str_replace("&lt;br /&gt;", "\n", $txt);
+	$txt = str_replace("&lt;", "<", $txt);
+	$txt = str_replace("&lt;", "<", $txt);
+	$txt = str_replace("&gt;", ">", $txt);
+	$txt = str_replace("&gt;", ">", $txt);
+	$txt = str_replace("&gt;", ">", $txt);
+	$txt = str_replace("&", "&", $txt);
 	if ($wpcSettings["wpc_edit_style"]=="plain"){
-		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
-		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
+		$txt = str_replace("<p>", "", $txt);
+		$txt = str_replace("</p>", "\r", $txt);
 	}
 	if ($wpcSettings["wpc_edit_style"]=="bbcode"){
-		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
-		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
+		$txt = str_replace("<p>", "", $txt);
+		$txt = str_replace("</p>", "\r", $txt);
 	}
 		if ($wpcSettings["wpc_edit_style"]=="html"){
-		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
-		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
+		$txt = str_replace("<p>", "", $txt);
+		$txt = str_replace("</p>", "\r", $txt);
 	}
 		if ($wpcSettings["wpc_edit_style"]=="quicktags"){
-		$wpClassified_ads_text = str_replace("<p>", "", $wpClassified_ads_text);
-		$wpClassified_ads_text = str_replace("</p>", "\r", $wpClassified_ads_text);
+		$txt = str_replace("<p>", "", $txt);
+		$txt = str_replace("</p>", "\r", $txt);
 	}
-	$wpClassified_ads_text = trim($wpClassified_ads_text);
-	$wpClassified_ads_text = preg_replace("/ *\n */", "\n", $wpClassified_ads_text);
-	$wpClassified_ads_text = preg_replace("/\s{3,}/", "\n\n", $wpClassified_ads_text);
-	$wpClassified_ads_text = str_replace("\n", "\\n", $wpClassified_ads_text);
-	return $wpClassified_ads_text;
+	$txt = trim($txt);
+	$txt = preg_replace("/ *\n */", "\n", $txt);
+	$txt = preg_replace("/\s{3,}/", "\n\n", $txt);
+	$txt = str_replace("\n", "\\n", $txt);
+	return $txt;
 }
 
 ?>
