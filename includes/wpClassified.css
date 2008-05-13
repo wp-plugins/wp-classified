@@ -1,0 +1,91 @@
+.wpClassified_ads_header {
+padding: 2px;
+background-color: #ddd;
+border-bottom: 1px dashed #555;
+}
+
+.wpClassified_ads_container {
+background-color: #e1dbd2;
+border-bottom: 1px solid #222;
+}
+
+.wpClassified_ads_content {
+padding: 2px;
+border: 1px solid #c5b2b3;
+background-color: #f4f1ee;
+}
+
+.wpClassified_ads_body {
+border: 1px solid #c5b2b3;
+background-color: #f4f1ee;
+}
+
+.wp_announcement {
+display: block;
+border: 1px solid #e1dbd2;
+font-size: 16px;
+background: url(/wp-content/plugins/wp-classified/images/announcement.jpg) no-repeat 5px 5px;
+padding: 5px 5px 5px 45px;
+margin-bottom: 20px; 
+}
+
+
+
+.title_menu {
+ display: block;
+ font-weight: bold;
+}
+
+.ads {
+ font-weight: bold;
+}
+
+
+.cat {
+margin: 5px; 
+border:0;
+border: 1px solid #C5B2B3;
+padding: 5px;
+} 
+
+.cat tr {
+border-spacing: 0px;
+} 
+
+.subcat {
+letter-spacing: normal;
+border-spacing: 0;
+padding:0;
+} 
+
+.ads_title tr {
+border:0;
+width:100%;
+}
+
+.ads_subject {
+border-spacing: 0px;
+}
+
+.ads_subject_btn{
+border-spacing: 0px;
+border-bottom: 1px solid #bbb; 
+font-size: 10px;
+margin-top: 20px; 
+}
+
+.editform {
+margin-top: 40px; 
+}
+
+.editform tr {
+width:100%;
+border-spacing: 0px;
+}
+
+.list_ads { 
+border: 1px solid #C5B2B3;
+background-color:#f4f1ee;
+padding: 2px;
+border-spacing: 0px;
+}
