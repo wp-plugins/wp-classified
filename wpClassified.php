@@ -34,29 +34,9 @@ Version 1.1.0 - 12/05/2008
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
 
-To support Permalink structure:
-Example for htaccess code to redirect to wpClassified
-
-You need an .htaccess file that is created/modified by wordpress via the Permalink/mod-rewrite option. 
-
-Please edit the .htaccess file in the root folder of your Wordpress.
-You can edit the .htaccess file by FTP.
-You use the default .htaccess file and modify the file as follow:
-The redirect should look something like this
-
-# BEGIN WordPress
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-##########
-#RewriteRule . /index.php [L]
-##########
-RewriteRule !classified/ /index.php [L]
-RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified&_action=$1&lid=$3&asid=5&aid=$6 [QSA,L,R,NS]
-</IfModule>
-# END WordPress
+Permalink structure:
+You will find an example for .htaccess file that uses to redirect 
+to wpClassified in README file
 
 */
 
