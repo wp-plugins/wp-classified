@@ -11,7 +11,7 @@ Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 This plugin allows you to add a simple classified page in to your wordpress blog. 
 
-The plugin has been create and successfully tested on Wordpress version 2.3.2 with 
+The plugin has been create and successfully tested on Wordpress version 2.5.1 with 
 default and unchanged Permalink structure.
 
 
