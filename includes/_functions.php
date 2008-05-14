@@ -80,17 +80,17 @@ function wpc_index(){
 			<table width=100%>
 			<tr><td>
 			<div >
-				<table width=100%>
-				<td	class="subcat" width="90px" height="60px" valign="top">
-				<?php 
-				$img = get_bloginfo('wpurl');
-				echo '<img src="/wp-content/plugins/wp-classified/' . $category->photo . '">';
-				?>
-				</td>
-				<td class="subcat" valign="top"><strong><?php echo $category->name;?></strong></td>
-				</div>
-				</tr>
-				</table>
+			<table width=100%>
+			<td class="subcat" width="90px" height="60px" valign="top">
+			<?php 
+			$img = get_bloginfo('wpurl');
+			echo "<img src=\"" . $img . "/wp-content/plugins/wp-classified/" . $category->photo . "\">";
+			?>
+			</td>
+			<td class="subcat" valign="top"><strong><?php echo $category->name;?></strong></td>
+			</div>
+			</tr>
+			</table>
 			</td></tr>
 			<tr><td>
 			<?php
