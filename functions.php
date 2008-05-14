@@ -109,42 +109,37 @@ function wpClassified_ads_subject(){
 				<form method="post" id="cat_form_post" name="cat_form_post" enctype="multipart/form-data"
 			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ads...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
 				<input type="hidden" name="wpClassified_ads_subject" value="yes">
-				<tr>
-					<td align=right><?php echo __("Posting Name:");?> </td>
-					<td><?php
-						if (!_is_usr_loggedin()){
-						?>
-							<input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['author_name']));?>"><br>
-							<span style="font-size: 10px;">(<?php echo __("You are not logged in and posting as a guest, click");?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)</span>
-						<?php
-						} else {
-							echo "<b>".$userdata->$userfield."</b>";
-						}
+<tr>
+<td align=right valign=top><?php echo __("Posting Name:");?> </td>
+<td><?php
+if (!_is_usr_loggedin()){
+?>
+<input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['author_name']));?>"><br>
+(<?php echo __("You are not logged in and posting as a guest, click");?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)
+<?php
+} else {
+echo "<b>".$userdata->$userfield."</b>";
+} 
+?></td>
+</tr><tr>
+<td align=right valign=top><?php echo __("Ad Header:");?> </td>
+<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['subject']));?>"></td></tr>
+<tr>
+<td align=right valign=top><?php echo __("Image File: ");?></td>
+<td><input type=file name="image_file"><br /><small><?php echo __("Picture should be less than (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td></tr>
+<tr>
+<td valign=top align=right><?php echo __("Ad Description:");?> </td>
+<td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
+</tr>
+<tr>
+<td></td>
+<td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub"></td>
+</tr>
+</form>
+</table>
 
-						?></td>
-				</tr>
-				<tr>
-					<td align=right><?php echo __("Subject:");?> </td>
-					<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['subject']));?>"></td>
-				</tr>
-		<tr>
-			<td align=right><?php echo __("Image File: ");?></td>
-			<td><input type=file name="image_file"><br /><small><?php echo __("(maximum:" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td>
-		</tr>
-				<tr>
-					<td valign=top align=right><?php echo __("Comment:");?> </td>
-					<td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type=submit value="<?php echo __("Submit");?>" id="sub"></td>
-				</tr>
-				</form>
-			</table>
-
-			<?php
-
-		}
+<?php
+	}
 		wpc_footer();
 	}
 }
