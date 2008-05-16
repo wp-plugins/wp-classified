@@ -7,7 +7,7 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.1.0';
+$wpClassified_version = '1.1.0-b';
 $wpc_user_field = false;
 $wpc_public_pagename = 'classified';
 $wpc_admin_menu = 'wpClassified';
