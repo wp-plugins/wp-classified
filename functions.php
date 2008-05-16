@@ -6,9 +6,8 @@
  **/
 
 
-function wpClassified_ads_subject(){
-	global $_GET, $_POST, $user_login, $userdata, $wpc_user_info, $fckhtml, $user_level, 
-		$user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb, $quicktags;
+function add_ads_subject(){
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
@@ -20,25 +19,25 @@ function wpClassified_ads_subject(){
 
 	$displayform = true;
 
-	if ($_POST['wpClassified_ads_subject']=='yes'){
+	if ($_POST['add_ads_subject']=='yes'){
 		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 			die("You can't post without logging in.");
 		} else {
-			$makepost = true;
+			$addPost = true;
 
 			if (str_replace(" ", "", $_POST['wpClassified_data']['author_name'])=='' && !_is_usr_loggedin()){
 				$msg = "You must provide a posting name!";
-				$makepost = false;
+				$addPost = false;
 			}
 
 			if (str_replace(" ", "", $_POST['wpClassified_data']['subject'])==''){
 				$msg = "You must provide a subject!";
-				$makepost = false;
+				$addPost = false;
 			}
 
 			if (str_replace(" ", "", $_POST['wpClassified_data']['post'])==''){
 				$msg = "You must provide a comment!";
-				$makepost = false;
+				$addPost = false;
 			}
 
 			if ($_FILES['image_file']!=''){
@@ -48,7 +47,7 @@ function wpClassified_ads_subject(){
 					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
 						 echo "<h2>Invalid image size. Image must be ".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]." pixels or less. Your image was: ".$imginfo[0]."x".$imginfo[1] . "</h2>";
-						$makepost=false;	
+						$addPost=false;	
 					} else {
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['image_file']['size']);
@@ -61,7 +60,7 @@ function wpClassified_ads_subject(){
 					}
 				}
 			}
-			if ($makepost==true){
+			if ($addPost==true){
 				$displayform = false;
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data']['subject']), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
@@ -84,7 +83,7 @@ function wpClassified_ads_subject(){
 					update_ads($_GET['lid']);
 				}
 				$_GET['asid'] = $tid;
-				wpClassified_display_ads_subject();
+				get_wpc_list();
 			} else {
 				$displayform = true;
 			}
@@ -106,9 +105,9 @@ function wpClassified_ads_subject(){
 			if ($msg){echo "<h3>".__($msg)."</h3>";}
 			?>
 			<table width=100% class="editform">
-				<form method="post" id="cat_form_post" name="cat_form_post" enctype="multipart/form-data"
+			<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
 			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ads...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
-				<input type="hidden" name="wpClassified_ads_subject" value="yes">
+			<input type="hidden" name="add_ads_subject" value="yes">
 <tr>
 <td align=right valign=top><?php echo __("Posting Name:");?> </td>
 <td><?php
@@ -147,7 +146,7 @@ echo "<b>".$userdata->$userfield."</b>";
 
 function create_public_link($action, $vars){
 	global $wpdb, $table_prefix, $wp_rewrite;
-		
+	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = get_wpClassified_pageinfo();
 	// fix me
 	//$rewrite = ($wp_rewrite->get_page_permastruct()=="")?false:true;
@@ -160,9 +159,13 @@ function create_public_link($action, $vars){
 	$action = ($action=="lastAds")?"ads_subject":$action;
 	switch ($action){
 		case "index":
+
+			
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">".$vars["name"]."</a> ";
 		break;
 		case "classified":
+			
+			
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."&start=".(int)$vars['start']."\">".$vars["name"]."</a> ";
 		break;
 		case "pa":
@@ -194,7 +197,6 @@ function wpClassified_permission_denied(){
 }
 
 function create_ads_author($ad){
-	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	$out = "";
 	if ($ad->author==0){
@@ -235,6 +237,7 @@ function update_user_post_count($id){
 }
 
 function wpClassified_commment_quote($post){
+	$wpcSettings = get_option('wpClassified_data');
 	$txt = $post->post;
 	$txt = nl2br($txt);
 	$wpClassified_ads_charset = get_option('blog_charset');

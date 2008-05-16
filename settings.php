@@ -182,6 +182,9 @@ function get_wpc_header_link(){
 		switch ($_GET['_action']){
 			default:
 			case "classified":
+
+			
+
 				return "Classified";
 			break;
 			case "search":

@@ -10,6 +10,7 @@ if (!$_SESSION) session_start();
 
 // fix me
 function wpc_header(){
+	global $wpdb, $table_prefix;
 	$wpcSettings = get_option('wpClassified_data');
 
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
@@ -26,13 +27,29 @@ function wpc_header(){
 	echo '</td></tr></table>';
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo $lnks;
+	if ($wpcSettings['ad_expiration'] < 0) {
+		$wpcSettings['ad_expiration']=90;
+	}
+	$today = time();
+	$second = $wpcSettings['ad_expiration']*24*60*60; // second
+	$l = $today-$second;
+	$rm_id = $wpdb->get_results("SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects WHERE date < " . $l );
+
+	$cnt = count($rm_id);
+	if ($cnt!=0){
+		for ($x=0; $x<$cnt; $x++){
+		$id = $rm_id[$x];
+		$asid = $id->ads_subjects_id;
+		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+		}
+	}
+
 }
 
 
-
-
 function wpc_index(){
-	global $_GET, $_POST, $user_level, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
+	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -101,9 +118,9 @@ function wpc_index(){
 <div class="list_ads">
 <?php
 	if ($rlists[$catlist[$i]->lists_id]=='y' && $user_ID>0){
-		echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" height=15 width=15>";
+	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" height=15 width=15>";
 	} else {
-		echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" height=15 width=15>";	
+	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" height=15 width=15>";	
 	}
 	echo create_public_link("classified", array("name"=>$catlist[$i]->name, "lid"=>$catlist[$i]->lists_id));
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = " .  $catlist[$i]->lists_id );
@@ -127,7 +144,7 @@ function wpc_index(){
 
 // display classified
 function get_wpc_list(){
-	global $_GET, $_POST, $user_level, $user_ID, $wpc_user_info, $table_prefix, $wpdb, $quicktags;
+	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
 
 	//$listId = get_query_var("lists_id");
 	$listId = get_query_var("lid");
@@ -206,7 +223,7 @@ function get_wpc_list(){
 		$ad = $ads[$x];
 		if (!@in_array($ad->ads_subjects_id, $read) && _is_usr_loggedin()){
 			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" height=15 width=15  valign=absmiddle> ";
-		} else {$rour = "";}
+		} else {$rour = "";} // fix me
 		$pstart = 0;
 		$pstart = $ad->ads-($ad->ads%$wpcSettings["count_ads_per_page"]);
 		?>
@@ -215,7 +232,7 @@ function get_wpc_list(){
 		<?php
 			echo $rour;
 			if ($ad->sticky=='y'){
-				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/sticky.gif\" height=15 width=15 align=absmiddle alt=\"".__("Sticky")."\"> ";
+			echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/sticky.gif\" height=15 width=15 align=absmiddle alt=\"".__("Sticky")."\"> ";
 			}
 			echo create_public_link("ads_subject", array("name"=>$ad->subject, "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
 			?></strong>
@@ -270,7 +287,7 @@ function wpc_footer(){
 
 // edit post function
 function wpClassified_edit_ads(){
-	global $_GET, $_POST, $user_login, $wpc_user_info, $userdata, $user_level, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb, $quicktags;
+	global $_GET, $_POST, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags;
 	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
 		$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
@@ -295,19 +312,19 @@ function wpClassified_edit_ads(){
 		}
 	$displayform = true;
 	if ($_POST['wpClassified_edit_ads']=='yes'){
-		$makepost = true;
+		$addPost = true;
 		if (str_replace(" ", "", $_POST['wpClassified_data']['author_name'])=='' && !_is_usr_loggedin()){
 			$msg = "You must provide a posting name!";
-			$makepost = false;
+			$addPost = false;
 		}
 		if (str_replace(" ", "", $_POST['wpClassified_data']['subject'])==''){
 			$msg = "You must provide a subject!";
-			$makepost = false;
+			$addPost = false;
 		}
 
 		if (str_replace(" ", "", $_POST['wpClassified_data']['post'])==''){
 			$msg = "You must provide a comment!";
-			$makepost = false;
+			$addPost = false;
 		}
 
 		if ($_FILES['image_file']!=''){
@@ -317,7 +334,7 @@ function wpClassified_edit_ads(){
 				if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 					$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
 					 echo "<h2>Invalid image size. Image must be ".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]." pixels or less. Your image was: ".$imginfo[0]."x".$imginfo[1] . "</h2>";
-					$makepost=false;	
+					$addPost=false;	
 				} else {
 					$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 					$content = @fread($fp, $_FILES['image_file']['size']);
@@ -330,7 +347,7 @@ function wpClassified_edit_ads(){
 				}
 			}
 		}
-		if ($makepost==true){
+		if ($addPost==true){
 			$displayform = false;
 			$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 			$wpdb->query("update {$table_prefix}wpClassified_ads
@@ -340,7 +357,7 @@ function wpClassified_edit_ads(){
 			WHERE
 			ads_id = '".(int)$_GET['aid']."' ");
 			do_action('wpClassified_edit_ads', $tid);
-			wpClassified_display_ads_subject();
+			get_wpc_list();
 		} else {
 			$displayform = true;
 		}
@@ -358,7 +375,7 @@ function wpClassified_edit_ads(){
 		echo $quicktags;
 		?>
 		<table width=100% class="editform" border=0>
-		<form method="post" id="cat_form_post" name="cat_form_post" enctype="multipart/form-data"
+		<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
 		onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php echo create_public_link("eaform", array("lid"=>$lists["lists_id"], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$adsInfo["subject"], "aid"=>$_GET['aid']));?>">
 		<input type="hidden" name="wpClassified_edit_ads" value="yes">
 		<tr><td align=right><?php echo __("Posting Name:");?> </td>
@@ -386,9 +403,8 @@ function wpClassified_edit_ads(){
 
 
 
-function wpClassified_display_ads_subject(){
-	global $_GET, $_POST, $user_login, $userdata, $wpc_user_info, $user_level, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb, $quicktags;
-
+function display_ad(){
+	global $_GET, $_POST, $wpc_user_info, $user_ID, $table_prefix, $wpdb;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	
@@ -529,7 +545,7 @@ function wpClassified_display_ads_subject(){
 
 
 function wpClassified_display_search(){
-	global $_GET, $_POST, $user_level, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
+	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();

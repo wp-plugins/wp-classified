@@ -149,11 +149,11 @@ function wpcOptions_process(){
 				<td><input type="text" name="wpClassified_data[wpClassified_slug]" value="<?php echo $wpcSettings['wpClassified_slug'];?>"></td>
 			</tr>
 			<tr>
-				<th align="right"><?php echo __("Max Ads Image Size: ");?></th>
+				<th align="right"><?php echo __("Max. Ad image size: ");?></th>
 				<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><small>example: 100x150</small></td>
 			</tr>
 			<tr>
-				<th align="right"><?php echo __("Ads Image Alignment:");?> </th>
+				<th align="right"><?php echo __("Ads Image Alignment: ");?> </th>
 				<td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><small>choose: left or right</small></td>
 			</tr>
 			<tr>
@@ -188,12 +188,20 @@ function wpcOptions_process(){
 				<td><input type=checkbox name="wpClassified_data[editor_toolbar_basic]" value="y"<?php echo ($wpcSettings['editor_toolbar_basic']=='y')?" checked":"";?>> <?php echo __("Use basic toolbars in editor.");?></td>
 			</tr>
 			<tr>
-				<th align="right"><?php echo __("Ads Per Page");?></th>
+				<th align="right"><?php echo __("Ads displayed per page");?></th>
 				<td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><small>default: 10</small></td>
 			</tr>
 			<tr>
 				<th align="right"><?php echo __("Date Format String");?></th>
 				<td><input type=text size=11 name="wpClassified_data[date_format]" value="<?php echo ($wpcSettings['date_format']);?>"><br><small>example: m-d-Y g:i a</small></td>
+			</tr>
+			<tr>
+				<th align="right"><?php echo __("Ad expiration in days");?></th>
+				<td><input type=text size=11 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><small>default: 90</small></td>
+			</tr>
+			<tr>
+				<th align="right"><?php echo __("Informe the user before the expiration in days");?></th>
+				<td><input type=text size=11 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><small>(is currently not implemented!) example: 7</small></td>
 			</tr>
 			<tr>
 				<th align="right" valign="top"><?php echo __("Banner Code:");?> </th>
@@ -225,11 +233,11 @@ function wpClassified_process(){
 		break;
 		case "vl": get_wpc_list();
 		break;
-		case "pa":	wpClassified_ads_subject();
+		case "pa": add_ads_subject();
 		break;
-		case "ea":	wpClassified_edit_ads();
+		case "ea": wpClassified_edit_ads();
 		break;
-		case "va":	wpClassified_display_ads_subject();
+		case "va": display_ad();
 		break;
 	}
 }
@@ -367,12 +375,13 @@ function wpClassified_install(){
 		$wpcSettings['wpClassified_display_last_post_link'] = 'y';
 		$wpcSettings['wpClassified_last_ads_subject_num'] = 5;
 		$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
+		$wpcSettings['ad_expiration'] = "90";
 	}
 	update_option('wpClassified_data', $wpcSettings);
 }
 
 function wpClassified_check_db(){
-	global $_GET, $_POST, $wpdb, $table_prefix, $wpc_page_info;
+	global $_GET, $_POST, $wpdb, $table_prefix;
 	$t = $table_prefix.'wpClassified';
 	include("wpClassified_db.php");
 	if($_tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
@@ -749,7 +758,7 @@ function adm_users_process(){
 }
 
 function adm_utilities_process(){
-	global $_GET, $_POST, $wpdb, $table_prefix, $wpc_page_info;
+	global $_GET, $_POST, $wpdb, $table_prefix;
       
 	$t = $table_prefix.'wpClassified';
 	$wpcSettings = get_option('wpClassified_data');
