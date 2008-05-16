@@ -11,7 +11,7 @@ Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 This plugin allows you to add a simple classified page in to your wordpress blog. 
 
-The plugin has been create and successfully tested on Wordpress version 2.3.2 with 
+The plugin has been create and successfully tested on Wordpress version 2.5.1 with 
 default and unchanged Permalink structure.
 
 
@@ -54,13 +54,17 @@ demo: http://www.bazarcheh.de/?page_id=92
 Changelog:
 
 
+Changes in 1.1.0-b - May 15/2008
 
-Changes in 1.1.0 - May 12/2008
+- add remove ads that are over x days old 
+- fix some bugs
 
-- update Delete ads function to admin interface.
-- Added Move ads function to admin interface.
-- update edit function for ads to admin interface
-- Fixed some issue which are posted to me.
+
+Changes in 1.1.0-a - May 12/2008
+
+- update delete/modify ads function .
+- added Move ads function to admin interface.
+- fixed some issue which are posted to me.
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
 

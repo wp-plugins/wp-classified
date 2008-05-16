@@ -8,7 +8,6 @@
 // user level
 $wpc_user_level = 8;
 $wpClassified_version = '1.1.0';
-$wp_version = false;  // wordpress version 2.x
 $wpc_user_field = false;
 $wpc_public_pagename = 'classified';
 $wpc_admin_menu = 'wpClassified';
@@ -183,6 +182,9 @@ function get_wpc_header_link(){
 		switch ($_GET['_action']){
 			default:
 			case "classified":
+
+			
+
 				return "Classified";
 			break;
 			case "search":
