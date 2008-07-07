@@ -18,20 +18,25 @@ function wpc_header(){
 	}
 	echo '<table border=0><tr><td>';
 	if ($wpcSettings['wpClassified_top_image']!=''){
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/' . $wpcSettings['wpClassified_top_image']. '">';
+		$img=preg_replace('/\s+/','',$wpcSettings['wpClassified_top_image']);
+		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/' . $img. '">';
 	}
 	echo '</td><td valign=middle>';
 	if ($wpcSettings['description']!=''){
 		echo $wpcSettings['description'] . "&nbsp;";
 	}
 	echo '</td></tr></table>';
+
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo $lnks;
-	if ($wpcSettings['ad_expiration'] < 0) {
-		$wpcSettings['ad_expiration']=90;
+	$expire=365;
+	$expire=$wpcSettings['ad_expiration'];
+	
+	if (!$expire || $expire < 1 ) {
+		$expire=365;
 	}
 	$today = time();
-	$second = $wpcSettings['ad_expiration']*24*60*60; // second
+	$second = $expire*24*60*60; // second
 	$l = $today-$second;
 	$rm_id = $wpdb->get_results("SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects WHERE date < " . $l );
 
@@ -44,10 +49,18 @@ function wpc_header(){
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
 		}
 	}
-
+?>
+	<div style="text-align:right">
+		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
+		<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUEST['search_terms']);?>">
+		<input type="submit" value="Search">
+		</form>
+	</div>
+	<p>&nbsp;</p>		
+<?
 }
 
-
+// index page 
 function wpc_index(){
 	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
 	get_currentuserinfo();
@@ -123,7 +136,7 @@ function wpc_index(){
 	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" height=15 width=15>";	
 	}
 	echo create_public_link("classified", array("name"=>$catlist[$i]->name, "lid"=>$catlist[$i]->lists_id));
-	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = " .  $catlist[$i]->lists_id );
+	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE STATUS = 'open' AND sticky = 'n' AND ads_subjects_list_id = " .  $catlist[$i]->lists_id );
 	echo "&nbsp;<small>(" . $numAds . ")</small>";
 	echo ($catlist[$i]->description!="")?"<br /><small>".$catlist[$i]->description."</small>":"";
 ?> 
@@ -143,7 +156,7 @@ function wpc_index(){
 
 
 // display classified
-function get_wpc_list(){
+function get_wpc_list($msg){
 	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
 
 	//$listId = get_query_var("lists_id");
@@ -187,6 +200,7 @@ function get_wpc_list(){
 
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."'	&& status != 'deleted'");
 
+    if ($msg!='') echo "<p>" . $msg . "</p>";
 	if ($numAds>$wpcSettings['count_ads_per_page']){
 		echo "<div align=\"left;\">";
 		echo __("Pages: ");
@@ -271,19 +285,55 @@ function wpc_read_not_allowed(){
 	$tpl->display('permission_denied.tpl');
 }
 
-//fix me
-
 function wpc_footer(){
 	global $wpClassified_version;
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins (v. '.$wpClassified_version.') powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
+	
+	echo "<p>&nbsp;</p><hr>";
+	if($wpcSettings['rss_feed']=='y'){
+		$rssurl= _rss_url();
+		$out = '<a class="rssIcon" href="'.$rssurl.'"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/rss.png" />&nbsp;</a>';
+	
+		echo $out;
+	}
 
 	if ($wpcSettings['show_credits']=='y'){
-		echo "<p></p><p><hr>" . stripslashes($wpcSettings['credit_line']);
+		echo "&nbsp;&nbsp;" .stripslashes($wpcSettings['credit_line']);
 	}
 }
 
+function rss_filter($text)
+{echo convert_chars(ent2ncr($text));} 
 
+function _rss_url()
+{
+	
+	global $wpdb, $table_prefix;
+
+	
+	$siteurl = trailingslashit(get_option('siteurl')); 
+	$url = $siteurl."?page=wpClassified&wpcfeed=all";
+	return $url;
+} 
+
+function rss_feed()
+{
+	if(isset($_GET['wpcfeed'])) 
+	{
+		include (dirname(__FILE__).'/_rss.php');	
+		exit;
+	
+	}
+
+} 
+
+function create_rss_link($action, $vars){
+	global $wpdb, $table_prefix, $wp_rewrite;
+	$wpcSettings = get_option('wpClassified_data');
+	$pageinfo = get_wpClassified_pageinfo();
+	return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+}
 
 // edit post function
 function wpClassified_edit_ads(){
@@ -402,14 +452,14 @@ function wpClassified_edit_ads(){
 
 
 
-
+// 
 function display_ad(){
 	global $_GET, $_POST, $wpc_user_info, $user_ID, $table_prefix, $wpdb;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	
 	if ($wpcSettings["view_must_register"]=="y" && !_is_usr_loggedin()){
-		 wpc_read_not_allowed();
+		wpc_read_not_allowed();
 		wpc_footer();
 		return;
 	}
@@ -445,23 +495,7 @@ function display_ad(){
 
 ?>
 
-<table width=100% class="cat">
-	<tr>
-		<td width=100% align="right">
-	<div style="text-align:right">
-		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
-			<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUEST['search_terms']);?>">
-			<input type="submit" value="Search">
-		</form>
-	</div>
-		</td>
-	</tr>
-	<tr>
-		<td></td>
-	</tr>
-</table>
 <?php
-
 
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
 		echo __("Pages: ");
@@ -541,9 +575,6 @@ function display_ad(){
 	wpc_footer();
 }
 
-
-
-
 function wpClassified_display_search(){
 	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
 	get_currentuserinfo();
@@ -556,44 +587,31 @@ function wpClassified_display_search(){
 		return;
 	}
 #
-# fixed by Matt Gibson
+# fixed according the post from -gibson
 # 07-Apr-2008
 #
-	$results = $wpdb->get_results("SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id
-		 FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users 
-			WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id 
-			 AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id 
-			 AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author 
-			 AND (subject like '%".$wpdb->escape($_REQUEST['search_terms'])."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($_REQUEST['search_terms'])."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC");
 
-	if(! $results)
+	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($_REQUEST['search_terms'])."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($_REQUEST['search_terms'])."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
+	$results = $wpdb->get_results($sql);
+
+	if(! $results) {
 		echo "<P>No posts matched your search terms.</P>";
-	else {
+		echo '<input type="button" value="back" onClick="history.back();">';
+	} else {
 ?>
 
-<div>
+<p>&nbsp;</p>
 <table width=100% class="cat">
 	<tr>
-		<td colspan="7">
-			<form action="<?php echo create_public_link("searchform", array());?>" method="post">
-				<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUEST['search_terms']);?>">&nbsp;<input type="submit" value="Search">
-			</form>
-		</td>
-	</tr>
-	<tr>
 		<th><p><?php echo __("List");?></p></th>
-		<th>&nbsp;</th>
 		<th><p><?php echo __("Subject");?></p></th>
-		<th>&nbsp;</th>
 		<th><p><?php echo __("Author");?></p></th>
-		<th>&nbsp;</th>
 		<th><p><?php echo __("Date");?></p></th>
 	</tr>
 
 	<?php foreach($results as $result) { ?>
-	<tr>
+	<tr class="list_ads" >
 		<td><?php echo $result->name; ?></td>
-		<td>&nbsp;</td>
 		<td>
 		<?php
 		$re_find = '/RE: /';
@@ -610,17 +628,31 @@ function wpClassified_display_search(){
 		echo create_public_link("lastAds", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$_REQUEST['search_terms']));
 		?>
 		</td>
-		<td>&nbsp;</td>
 		<td><?php echo $result->display_name; ?></td>
-		<td>&nbsp;</td>
 		<td><?php echo @date($wpcSettings['date_format'], $result->date); ?></td>
 	</tr>
 	<?php } ?>
 	</table>
-	</div>
+	<input type="button" value="back" onClick="history.back();">
 	<?
 	} 
 	wpc_footer();
+}
+
+function _filter_nohtml_kses($content){
+	return addslashes (wp_kses(stripslashes($content), array()));
+}
+
+
+function _filter_content($content, $searchvalue) {
+	$content = apply_filters('sf_show_post_content', $content);
+	$content = convert_smilies($content);
+
+	if(empty($searchvalue)) {
+		return $content."\n";
+	}
+	$searchvalue=urldecode($searchvalue);
+	return $content."\n";
 }
 
 

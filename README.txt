@@ -1,11 +1,14 @@
 === wp-classified ===
-name: wpClassified Wordpress plugins version 1.1.0
+
+name: wpClassified Wordpress plugins version 1.1.1
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
 Stable tag: 1.1.0
 Tags: ads, adsense, classifieds
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
+
+
 
 == Description ==
 
@@ -33,6 +36,15 @@ Set the permission of the directory "wp-content/plugins/wp-classified/images" to
 
 
 
+== Upgrade Instructions  ==
+
+   1. Deactivate the plugin from your Wordpress admin panel.
+   2. Backup Database tables *_wpClassified_* and files
+   2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
+   3. Activate the plugin from your Wordpress admin panel.
+   4. Please Note: in ‘Classified Options‘ page in admin interface please check that all the required fields are filled in and save!
+
+
 == Frequently Asked Questions ==
 
 Uninstalling the plugin:
@@ -53,10 +65,18 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
+Changes in 1.1.1 - June 20/2008
+- fix the search function
+- implement RSS Feeds
+- admin email notification
 
 
-Changes in 1.1.0 - May 12/2008
+Changes in 1.1.0-b - May 15/2008
+- add remove ads that are over x days old 
+- fix some bugs
 
+
+Changes in 1.1.0-a - May 12/2008
 - update delete/modify ads function .
 - added Move ads function to admin interface.
 - fixed some issue which are posted to me.
@@ -101,5 +121,5 @@ RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/
 have fun
 Regards from Isfahan ;-)
 Mohammad Forgani
-May 13/2008
+Juli 03/2008
 

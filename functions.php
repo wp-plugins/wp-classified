@@ -77,13 +77,16 @@ function add_ads_subject(){
 					'".$wpdb->escape(stripslashes($setImage))."',
 					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."')");
 				do_action('wpClassified_new_ads', $tid);
+				$out = _email_notifications($user_ID, $_POST['wpClassified_data']['author_name'], 
+					$_GET['lid'], $_POST['wpClassified_data']['subject'], $_POST['wpClassified_data']['post'], $setImage);
+				echo $out;
 				$pid = $wpdb->get_var("select last_insert_id()");
 				if (!$isSpam){
 					update_user_post_count($user_ID);
 					update_ads($_GET['lid']);
 				}
 				$_GET['asid'] = $tid;
-				get_wpc_list();
+				get_wpc_list("New AD Saved ".$out);
 			} else {
 				$displayform = true;
 			}
@@ -272,6 +275,64 @@ function wpClassified_commment_quote($post){
 	$txt = preg_replace("/\s{3,}/", "\n\n", $txt);
 	$txt = str_replace("\n", "\\n", $txt);
 	return $txt;
+}
+
+
+
+# EMAIL ROUTINE 
+function _send_email($mailto, $mailsubject, $mailtext) {
+	$email_sent = array();
+	$email = wp_mail($mailto, $mailsubject, $mailtext);
+	if ($email == false) {
+		$email_sent[0] = false;
+		$email_sent[1] = __('Email Notification Failed', "sforum");
+	} else {
+		$email_sent[0] = true;
+		$email_sent[1] = __('Email Notification Sent', "sforum");
+	}
+	return $email_sent;
+}
+
+
+# NOTIFICATION EMAILS 
+function _email_notifications($userId, $author_name, $listId, $subject, $post, $image) {
+	global $wpdb, $table_prefix;
+
+	$wpcSettings = get_option('wpClassified_data');
+	$lst = $wpdb->get_results("SELECT name FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id=" .$listId);
+	$listName = $lst[0]->name;
+	
+	$out = '';
+	$email_status = array();
+	$eol = "\r\n";
+	
+	# notify admin?
+	if ( ($wpcSettings["notify"]) ) {
+		$msg='';
+		# clean up the content for the plain text email
+		$post_content = html_entity_decode($post, ENT_QUOTES);
+		$post_content = _filter_content($post_content, '');
+		$post_content = _filter_nohtml_kses($post_content);
+		$post_content = stripslashes($post_content);
+		# admin message
+		$msg.= sprintf(__('New classified post on your site %s:', "wpClassified"), get_option('blogname')).$eol.$eol;
+		$msg.= sprintf(__('From: %s', "wpClassified"), $subject).$eol;
+		$msg.= sprintf(__('List: %s', "wpClassified"), $listName).$eol;
+		$msg.= $url.$eol.$eol;
+		$msg.= __('Post:', "wpClassified").$eol.$post_content.$eol.$eol;
+		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review', 'wpClassified'), $subject, $listName).$eol;
+		$msg.= '<a href="'.get_bloginfo('wpurl'). '/index.php?pagename=classified">' . __('Review All Ads', 'wpClassified'). "</a>".$eol;
+		$adminStruct = get_userdata($ADMINID);
+		$email_sent = _send_email(get_option('admin_email'), sprintf(__('[%s] New Forum Post', "wpClassified"), get_bloginfo('name')), $msg);
+		$check = $email_status[1];
+		if($email_status[0] == true) {
+			$out = '- '.__('Notified: Administrator', "wpClassified");
+		} else {
+			$out = '- '.__('Not Notified', "wpClassified");
+			return $check;
+		}
+	}
+	return $out;
 }
 
 ?>

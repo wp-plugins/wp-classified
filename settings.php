@@ -7,7 +7,7 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.1.0-b';
+$wpClassified_version = '1.1.1';
 $wpc_user_field = false;
 $wpc_public_pagename = 'classified';
 $wpc_admin_menu = 'wpClassified';
@@ -15,6 +15,7 @@ $wpc_page_info = false;
 
 require_once (dirname(__FILE__).'/includes/_functions.php');
 require_once (dirname(__FILE__).'/admin.php');
+
 
 if (!$_GET)$_GET = $HTTP_GET_VARS;
 if (!$_POST)$_POST = $HTTP_POST_VARS;
@@ -114,9 +115,7 @@ function wpc_get_top_lnks(){
 		return "[[WP_CLASSIFIED]]";
 	} else {
 		$wpClassified_settings = get_option('wpClassified_data');
-		if (!$_POST['search_terms']) {
-			$_GET['_action'] = $_GET['_action'];
-		} else {
+		if ($_POST['search_terms']) {
 			$_GET['_action'] = "search";
 		}
 		switch ($_GET['_action']){
@@ -174,21 +173,18 @@ function get_wpc_header_link(){
 		return "[[WP_CLASSIFIED]]";
 	} else {
 		$wpClassified_settings = get_option('wpClassified_data');
-		if (!$_POST['search_terms']) {
-			$_GET['_action'] = $_GET['_action'];
-		} else {
+		if ($_POST['search_terms']) {
 			$_GET['_action'] = "search";
+		} else {
+			$_POST['search_terms'] = '';
 		}
 		switch ($_GET['_action']){
 			default:
 			case "classified":
-
-			
-
 				return "Classified";
 			break;
 			case "search":
-				$search_title = "Searching For: ".$_POST['search_terms'];
+				$search_title = "Searching for: ".$_POST['search_terms'];
 				return $search_title;
 			break;
 			case "vl":
