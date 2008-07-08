@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.1.1
+name: wpClassified Wordpress plugins version 1.1.1-a
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -65,7 +65,7 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
-Changes in 1.1.1 - June 20/2008
+Changes in 1.1.1-a - June 20/2008
 - fix the search function
 - implement RSS Feeds
 - admin email notification

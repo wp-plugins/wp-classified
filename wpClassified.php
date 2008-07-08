@@ -32,7 +32,7 @@ Version 1.1.0 - 12/05/2008
 - fixed some issue which are posted to me.
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
-Version in 1.1.1 - June 03/07/2008
+Version 1.1.1 - June 03/07/2008
 - fix the search function
 - implement RSS Feeds
 - add admin email notification
