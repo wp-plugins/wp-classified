@@ -216,7 +216,7 @@ function get_wpc_list($msg){
 	?>
 	<table width="100%" class="cat">
 	<tr>
-		<?php echo $wpcSettings["must_registered_user"];
+		<?php 
 		if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
 			?><td colspan="3" align=right><b><?php echo create_public_link("pa", array("name"=>"Post New Ads", "lid"=>$_GET['lid'], "name"=>"Add New Ads"));?></b></td><?php
 		} else {
