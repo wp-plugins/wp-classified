@@ -367,8 +367,17 @@ function wpClassified_edit_ads(){
 			$msg = "You must provide a posting name!";
 			$addPost = false;
 		}
-		if (str_replace(" ", "", $_POST['wpClassified_data']['subject'])==''){
+		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])==''){
 			$msg = "You must provide a subject!";
+			$addPost = false;
+		}
+		if (str_replace(" ", "", $_POST['wpClassified_data'][email])==''){
+			$msg = "You must provide a e-mail!";
+			$addPost = false;
+		} 
+
+		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
+			$msg = "Please enter a valid e-mail!";
 			$addPost = false;
 		}
 
@@ -397,11 +406,16 @@ function wpClassified_edit_ads(){
 				}
 			}
 		}
+
+		
 		if ($addPost==true){
 			$displayform = false;
 			$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 			$wpdb->query("update {$table_prefix}wpClassified_ads
-			set subject = '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['subject']))."',
+			set subject = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
+			email = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
+			web = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+			phone = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
 			image_file = '".$wpdb->escape(stripslashes($setImage))."',
 			post = '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."'
 			WHERE
@@ -441,6 +455,19 @@ function wpClassified_edit_ads(){
 		<td align=right><?php echo __("Image File: ");?></td>
 		<td><input type=file name="image_file" id="image_file"><br />(<small><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel ");?>)</small></td>
 		</tr>
+		<tr>
+		<td align=right><?php echo __("Email:");?> </td>
+		<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"></td>
+		</tr>
+
+		<tr>
+		<td align=right><?php echo __("Website:");?> </td>
+		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo __("Optional")?></small></td></tr>
+
+		<tr>
+		<td align=right><?php echo __("Phone:");?> </td>
+		<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><small><?php echo __("Optional")?></small></td></tr>
+		
 		<td valign=top align=right><?php echo __("Comment:");?> </td>
 		<td><?php create_ads_input($postinfo->post);?></td>
 		</tr><tr><td></td><td><input type=submit value="<?php echo __("Save Post");?>" id="sub"></td>
@@ -539,7 +566,7 @@ function display_ad(){
 		}
 				
 		if (file_exists(dirname(__FILE__)."/images/".$post->image_file) && $post->image_file!=""){
-				$post->image_file = get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/".$post->image_file;
+			$post->image_file = get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/".$post->image_file;
 		}
 
 		if (!file_exists(ABSPATH . INC . "/body_tpl.php")){ 

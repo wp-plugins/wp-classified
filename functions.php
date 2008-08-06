@@ -25,17 +25,27 @@ function add_ads_subject(){
 		} else {
 			$addPost = true;
 
-			if (str_replace(" ", "", $_POST['wpClassified_data']['author_name'])=='' && !_is_usr_loggedin()){
+			if (str_replace(" ", "", $_POST['wpClassified_data'][author_name])=='' && !_is_usr_loggedin()){
 				$msg = "You must provide a posting name!";
 				$addPost = false;
 			}
 
-			if (str_replace(" ", "", $_POST['wpClassified_data']['subject'])==''){
+			if (str_replace(" ", "", $_POST['wpClassified_data'][subject])==''){
 				$msg = "You must provide a subject!";
 				$addPost = false;
 			}
 
-			if (str_replace(" ", "", $_POST['wpClassified_data']['post'])==''){
+			if (str_replace(" ", "", $_POST['wpClassified_data'][email])==''){
+				$msg = "You must provide a e-mail!";
+				$addPost = false;
+			}
+
+			if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
+				$msg = "Please enter a valid e-mail!";
+				$addPost = false;
+			}
+
+			if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 				$msg = "You must provide a comment!";
 				$addPost = false;
 			}
@@ -62,23 +72,26 @@ function add_ads_subject(){
 			}
 			if ($addPost==true){
 				$displayform = false;
-				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data']['subject']), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
+				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
 				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads_subjects
-					(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip) VALUES
-					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['subject']))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."')");
+					(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, email) VALUES
+					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
+					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
+					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')");
 
 				$tid = $wpdb->get_var("SELECT last_insert_id()");
 				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
 					(ads_ads_subjects_id, date, author, author_name, author_ip, status, subject, image_file, post) VALUES
 					('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', 
 					'".getenv('REMOTE_ADDR')."', 'active', 
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['subject']))."',
+					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
 					'".$wpdb->escape(stripslashes($setImage))."',
 					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."')");
 				do_action('wpClassified_new_ads', $tid);
 				$out = _email_notifications($user_ID, $_POST['wpClassified_data']['author_name'], 
-					$_GET['lid'], $_POST['wpClassified_data']['subject'], $_POST['wpClassified_data']['post'], $setImage);
+					$_GET['lid'], $_POST['wpClassified_data'][subject], $_POST['wpClassified_data']['post'], $setImage);
 				echo $out;
 				$pid = $wpdb->get_var("select last_insert_id()");
 				if (!$isSpam){
@@ -125,11 +138,18 @@ echo "<b>".$userdata->$userfield."</b>";
 ?></td>
 </tr><tr>
 <td align=right valign=top><?php echo __("Ad Header:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['subject']));?>"></td></tr>
+<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"></td></tr>
 <tr>
 <td align=right valign=top><?php echo __("Image File: ");?></td>
 <td><input type=file name="image_file"><br /><small><?php echo __("Picture should be less than (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td></tr>
 <tr>
+<tr>
+<td align=right><?php echo __("Email:");?> </td>
+<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"></td></tr>
+<td align=right><?php echo __("Website:");?> </td>
+<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo __("Optional")?></small></td></tr>
+<td align=right><?php echo __("Phone:");?> </td>
+<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><small><?php echo __("Optional")?></small></td></tr>
 <td valign=top align=right><?php echo __("Ad Description:");?> </td>
 <td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
 </tr>

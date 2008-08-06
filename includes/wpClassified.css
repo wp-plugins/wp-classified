@@ -1,12 +1,17 @@
 .wpClassified_ads_header {
 padding: 2px;
-background-color: #ddd;
-border-bottom: 1px dashed #555;
+background-color: #eee;
+border-bottom: 1px solid #aaa;
+margin: 2px;
+}
+
+.wpClassified_ads_footer {
+padding: 2px;
+margin: 2px;
 }
 
 .wpClassified_ads_container {
-background-color: #e1dbd2;
-border-bottom: 1px solid #222;
+border: 1px solid #ddd;
 }
 
 .wpClassified_ads_content {
@@ -16,8 +21,9 @@ background-color: #f4f1ee;
 }
 
 .wpClassified_ads_body {
-border: 1px solid #c5b2b3;
+border-bottom: 1px solid #aaa;
 background-color: #f4f1ee;
+margin: 2px;
 }
 
 .wp_announcement {

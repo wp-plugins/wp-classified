@@ -45,6 +45,15 @@ CREATE TABLE `{$table_prefix}wpClassified_ads` (
   PRIMARY KEY  (`ads_id`)
 )";	
 
+/* 
+  ALTER TABLE i_wpClassified_ads_subjects add email varchar(64) NOT NULL;
+  ALTER TABLE i_wpClassified_ads_subjects add location varchar(64);
+  ALTER TABLE i_wpClassified_ads_subjects add fax varchar(255);
+  ALTER TABLE i_wpClassified_ads_subjects add web varchar(255);
+  ALTER TABLE i_wpClassified_ads_subjects add phone varchar(255);
+  ALTER TABLE i_wpClassified_ads_subjects add txt varchar(255);
+*/
+
 
 $wpClassified_sql[$table_prefix.'wpClassified_ads_subjects'] = "CREATE TABLE `{$table_prefix}wpClassified_ads_subjects` (
   `ads_subjects_id` int(11) NOT NULL auto_increment,
@@ -54,6 +63,12 @@ $wpClassified_sql[$table_prefix.'wpClassified_ads_subjects'] = "CREATE TABLE `{$
   `author_name` varchar(100) NOT NULL default '',
   `author_ip` varchar(20) NOT NULL default '',
   `subject` varchar(255) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
+  `location` varchar(255) NOT NULL default '',
+  `web` varchar(255) NOT NULL default '',
+  `fax` varchar(255) NOT NULL default '',
+  `phone` varchar(255) NOT NULL default '',
+  `txt` varchar(255) NOT NULL default '',
   `ads` int(11) NOT NULL default '0',
   `views` int(11) NOT NULL default '0',
   `sticky` enum('y','n') NOT NULL default 'n',

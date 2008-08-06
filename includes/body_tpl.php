@@ -48,4 +48,9 @@ if (($i+1)==$hm){
 <div class="wpClassified_ads_body">
 <?php echo create_post_html($post);?>
 </div>
+<div class="wpClassified_ads_footer">
+<?php echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/email.jpg"></a>' ?>
+<?php echo '<a href="' . $adsInfo[web] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/web.jpg"></a>' ?>
+<?php echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/phone.jpg" title="'.$adsInfo[phone].'">' ?>
+</div>
 </div>
