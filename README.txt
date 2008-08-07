@@ -65,6 +65,12 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
+Changes Aug 5/2008
+- update {table_prefix}wpClassified_ads_subjects 
+added some new fields email, web, phone, ...
+- implement the conformaion code (captcha)
+
+
 Changes in 1.1.1-a - June 20/2008
 - fix the search function
 - implement RSS Feeds
