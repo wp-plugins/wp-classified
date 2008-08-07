@@ -5,6 +5,7 @@
  *
  **/
 
+require('captcha_class.php');
 
 function add_ads_subject(){
 	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags;
@@ -45,6 +46,11 @@ function add_ads_subject(){
 				$addPost = false;
 			}
 
+			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
+   				$msg = "The confirmation code didn't matched";
+				$addPost = false;
+  			}
+
 			if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 				$msg = "You must provide a comment!";
 				$addPost = false;
@@ -74,12 +80,14 @@ function add_ads_subject(){
 				$displayform = false;
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
-				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads_subjects
-					(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, email) VALUES
-					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')");
+$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
+	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, email) VALUES
+	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
+	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
+	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
+
+				$wpdb->query($sql);
 
 				$tid = $wpdb->get_var("SELECT last_insert_id()");
 				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
@@ -126,6 +134,14 @@ function add_ads_subject(){
 			<input type="hidden" name="add_ads_subject" value="yes">
 <tr>
 <td align=right valign=top><?php echo __("Posting Name:");?> </td>
+
+<?
+  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+  $oVisualCaptcha = new _captcha($aFonts);
+  $captcha = "images/" . rand(1, 20);
+  $oVisualCaptcha->create($captcha);
+?>
+
 <td><?php
 if (!_is_usr_loggedin()){
 ?>
@@ -138,20 +154,26 @@ echo "<b>".$userdata->$userfield."</b>";
 ?></td>
 </tr><tr>
 <td align=right valign=top><?php echo __("Ad Header:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"></td></tr>
+<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><?php echo __(" *")?></small></td></tr>
 <tr>
 <td align=right valign=top><?php echo __("Image File: ");?></td>
-<td><input type=file name="image_file"><br /><small><?php echo __("Picture should be less than (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td></tr>
+<td><input type=file name="image_file"><br /><small><?php echo __("Optional. The picture should be less than (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td></tr>
 <tr>
 <tr>
 <td align=right><?php echo __("Email:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"></td></tr>
+<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><small><?php echo __(" *")?></small></td></tr>
 <td align=right><?php echo __("Website:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo __("Optional")?></small></td></tr>
+<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo __(" Optional")?></small></td></tr>
 <td align=right><?php echo __("Phone:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><small><?php echo __("Optional")?></small></td></tr>
+<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><small><?php echo __(" Optional")?></small></td></tr>
+<tr>
 <td valign=top align=right><?php echo __("Ad Description:");?> </td>
 <td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
+</tr>
+<tr>
+<td valign=top align=right><?php echo __("Confirmation code:");?> </td>
+<td><img src="<?php echo $captcha; ?>" alt="ConfirmCode" align="middle"/><br>
+<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
 <tr>
 <td></td>
@@ -182,12 +204,10 @@ function create_public_link($action, $vars){
 	$action = ($action=="lastAds")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-
 			
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">".$vars["name"]."</a> ";
 		break;
 		case "classified":
-			
 			
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."&start=".(int)$vars['start']."\">".$vars["name"]."</a> ";
 		break;

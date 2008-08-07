@@ -417,7 +417,7 @@ function wpClassified_edit_ads(){
 			web = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
 			phone = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
 			image_file = '".$wpdb->escape(stripslashes($setImage))."',
-			post = '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."'
+			post = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][post]))."'
 			WHERE
 			ads_id = '".(int)$_GET['aid']."' ");
 			do_action('wpClassified_edit_ads', $tid);
@@ -427,7 +427,15 @@ function wpClassified_edit_ads(){
 		}
 	} 
 	if ($displayform==true){
+
 		wpc_header();
+		require('../captcha_class.php');
+		$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+  		$oVisualCaptcha = new _captcha($aFonts);
+  		$captcha = "../images/" . rand(1, 20);
+  		$oVisualCaptcha->create($captcha);
+
+		
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			 LEFT JOIN {$table_prefix}users
 			 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
@@ -462,16 +470,25 @@ function wpClassified_edit_ads(){
 
 		<tr>
 		<td align=right><?php echo __("Website:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo __("Optional")?></small></td></tr>
+		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo __(" Optional")?></small></td></tr>
 
 		<tr>
 		<td align=right><?php echo __("Phone:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><small><?php echo __("Optional")?></small></td></tr>
-		
+		<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><small><?php echo __(" Optional")?></small></td></tr>
+		<tr>
 		<td valign=top align=right><?php echo __("Comment:");?> </td>
 		<td><?php create_ads_input($postinfo->post);?></td>
-		</tr><tr><td></td><td><input type=submit value="<?php echo __("Save Post");?>" id="sub"></td>
-		</tr></form></table>
+		</tr>
+
+		<tr>
+		<td valign=top align=right><?php echo __("Confirmation code:");?> </td>
+		<td><img src="<?php echo $captcha; ?>" alt="ConfirmCode" align="middle"/><br>
+		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
+		</tr>
+
+		<tr><td></td><td><input type=submit value="<?php echo __("Save Post");?>" id="sub"></td></tr>
+
+		</form></table>
 		<?php
 		wpc_footer();
 	}
