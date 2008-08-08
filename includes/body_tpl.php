@@ -49,8 +49,16 @@ if (($i+1)==$hm){
 <?php echo create_post_html($post);?>
 </div>
 <div class="wpClassified_ads_footer">
-<?php echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/email.jpg"></a>' ?>
-<?php echo '<a href="' . $adsInfo[web] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/web.jpg"></a>' ?>
-<?php echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/phone.jpg" title="'.$adsInfo[phone].'">' ?>
+<?php 
+if ($adsInfo[email]) {
+	echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/email.jpg"></a>';
+}
+if ($adsInfo[web]) {
+	echo '<a href="' . $adsInfo[web] . '" target=_blank><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/web.jpg"></a>';
+}
+if ($adsInfo[phone]) {
+	echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/phone.jpg" title="'.$adsInfo[phone].'">';
+}
+?>
 </div>
 </div>

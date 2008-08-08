@@ -11,7 +11,7 @@ margin: 2px;
 }
 
 .wpClassified_ads_container {
-border: 1px solid #ddd;
+border: 1px solid #aaa;
 }
 
 .wpClassified_ads_content {
@@ -99,35 +99,27 @@ border-spacing: 0px;
 
 .rssCell,
 .rssCell a{
-	
 color: #000000;
-	
 margin: 0;
-	
 padding: 0 5px 0 0;
-	
 text-align: right;
-	
 vertical-align: middle;
-	
 font-size: 90%;
-	
 font-weight: bold;
 } 
-
 
 .rssIcon, .rssIcon a,
 .rssIcon p,
 .rssIcon img {
-	
 color: #000000 !important;
-	
 border: none;
-	
 font-weight: bold;
-	
 text-decoration: none;
-	
 vertical-align: middle;
 } 
 
+
+.smallRed{
+color: red; 
+font-size: small;
+}

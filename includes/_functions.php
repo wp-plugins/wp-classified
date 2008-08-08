@@ -429,11 +429,11 @@ function wpClassified_edit_ads(){
 	if ($displayform==true){
 
 		wpc_header();
-		require('../captcha_class.php');
-		$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-  		$oVisualCaptcha = new _captcha($aFonts);
-  		$captcha = "../images/" . rand(1, 20);
-  		$oVisualCaptcha->create($captcha);
+
+  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+  $oVisualCaptcha = new _captcha($aFonts);
+  $captcha = rand(1, 20) . ".png";
+  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/" . $captcha);
 
 		
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
@@ -482,7 +482,7 @@ function wpClassified_edit_ads(){
 
 		<tr>
 		<td valign=top align=right><?php echo __("Confirmation code:");?> </td>
-		<td><img src="<?php echo $captcha; ?>" alt="ConfirmCode" align="middle"/><br>
+		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 		</tr>
 

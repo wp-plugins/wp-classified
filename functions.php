@@ -138,8 +138,8 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 <?
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
-  $captcha = "images/" . rand(1, 20);
-  $oVisualCaptcha->create($captcha);
+  $captcha = rand(1, 20) . ".png";
+  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/" . $captcha);
 ?>
 
 <td><?php
@@ -154,14 +154,14 @@ echo "<b>".$userdata->$userfield."</b>";
 ?></td>
 </tr><tr>
 <td align=right valign=top><?php echo __("Ad Header:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><?php echo __(" *")?></small></td></tr>
+<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo __(" *")?></span></td></tr>
 <tr>
 <td align=right valign=top><?php echo __("Image File: ");?></td>
 <td><input type=file name="image_file"><br /><small><?php echo __("Optional. The picture should be less than (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td></tr>
 <tr>
 <tr>
 <td align=right><?php echo __("Email:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><small><?php echo __(" *")?></small></td></tr>
+<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo __(" *")?></span></td></tr>
 <td align=right><?php echo __("Website:");?> </td>
 <td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo __(" Optional")?></small></td></tr>
 <td align=right><?php echo __("Phone:");?> </td>
@@ -172,7 +172,7 @@ echo "<b>".$userdata->$userfield."</b>";
 </tr>
 <tr>
 <td valign=top align=right><?php echo __("Confirmation code:");?> </td>
-<td><img src="<?php echo $captcha; ?>" alt="ConfirmCode" align="middle"/><br>
+<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
 <tr>
