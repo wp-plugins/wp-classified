@@ -41,10 +41,10 @@ function add_ads_subject(){
 				$addPost = false;
 			}
 
-			if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
-				$msg = "Please enter a valid e-mail!";
-				$addPost = false;
-			}
+		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])) {
+			$msg = "Please enter a valid e-mail!";
+			$addPost = false;
+		}
 
 			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    				$msg = "The confirmation code didn't matched";

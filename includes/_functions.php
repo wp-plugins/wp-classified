@@ -158,34 +158,23 @@ function wpc_index(){
 // display classified
 function get_wpc_list($msg){
 	global $_GET, $_POST, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
-
 	//$listId = get_query_var("lists_id");
 	$listId = get_query_var("lid");
 	$start = get_query_var("start");
 	$start = ereg_replace("[^0-9]", "", $g_pstart);
-
 	if (!$start){$start = 0;}
-
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
-
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
-
 	$userfield = get_wpc_user_field();
 	//update_views($_GET['lid']);
 	wpc_header();
-	
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
-
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
-						 LEFT JOIN {$table_prefix}wpClassified_categories
-						 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-						 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
-						
+		LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id	 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
 	$read = (_is_usr_loggedin())?$wpdb->get_col("SELECT read_ads_subjects_id FROM {$table_prefix}wpClassified_read WHERE read_user_id = ".$wpc_user_info["ID"]):array();
-
 	$ads = $wpdb->get_results("SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects
 		LEFT JOIN {$table_prefix}users
 		ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
@@ -197,7 +186,6 @@ function get_wpc_list($msg){
 		ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
 		{$table_prefix}wpClassified_ads_subjects.date DESC
 		LIMIT ".($start).", ".($wpcSettings['count_ads_per_page'])." ");
-
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."'	&& status != 'deleted'");
 
     if ($msg!='') echo "<p>" . $msg . "</p>";
@@ -381,7 +369,12 @@ function wpClassified_edit_ads(){
 			$addPost = false;
 		}
 
-		if (str_replace(" ", "", $_POST['wpClassified_data']['post'])==''){
+		if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
+   			$msg = "The confirmation code didn't matched";
+			$addPost = false;
+  		}
+
+		if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 			$msg = "You must provide a comment!";
 			$addPost = false;
 		}
@@ -409,22 +402,22 @@ function wpClassified_edit_ads(){
 
 		
 		if ($addPost==true){
-			$displayform = false;
-			$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
-			$wpdb->query("update {$table_prefix}wpClassified_ads
-			set subject = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
-			email = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
-			web = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
-			phone = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-			image_file = '".$wpdb->escape(stripslashes($setImage))."',
-			post = '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][post]))."'
-			WHERE
-			ads_id = '".(int)$_GET['aid']."' ");
-			do_action('wpClassified_edit_ads', $tid);
-			get_wpc_list();
-		} else {
-			$displayform = true;
-		}
+		$displayform = false;
+		$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
+	$sql = "update {$table_prefix}wpClassified_ads
+	set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
+	email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
+	web='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+	phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
+	image_file='".$wpdb->escape(stripslashes($setImage))."',
+	post='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][post]))."'
+	WHERE ads_id='".(int)$_GET['aid']."' ";
+	$wpdb->query($sql);
+	do_action('wpClassified_edit_ads', $tid);
+	get_wpc_list("Update successfully completed");
+	} else {
+		$displayform = true;
+	}
 	} 
 	if ($displayform==true){
 
@@ -437,8 +430,10 @@ function wpClassified_edit_ads(){
 
 		
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
-			 LEFT JOIN {$table_prefix}users
-			 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
+			 LEFT JOIN {$table_prefix}users ON 
+			{$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
+			 LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON 
+			ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id
 			 WHERE ads_id = '".(int)$_GET['aid']."'");
 		$postinfo = $postinfo[0];
 		?>
@@ -457,16 +452,14 @@ function wpClassified_edit_ads(){
 		</tr>
 		<tr>
 		<td align=right><?php echo __("Subject:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"></td>
-		</tr>
+		<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo __(" *")?></span></td>		</tr>
 		<tr>
 		<td align=right><?php echo __("Image File: ");?></td>
-		<td><input type=file name="image_file" id="image_file"><br />(<small><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel ");?>)</small></td>
+		<td><input type=file name="image_file" id="image_file"><br /><small><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel ");?>)</small></td>
 		</tr>
 		<tr>
 		<td align=right><?php echo __("Email:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"></td>
-		</tr>
+		<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"><span class="smallRed"><?php echo __(" *")?></span></td></tr>
 
 		<tr>
 		<td align=right><?php echo __("Website:");?> </td>
