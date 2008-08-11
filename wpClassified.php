@@ -46,6 +46,7 @@ and added some new fields email, web, phone, ...
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
+
 */
 
 require_once('settings.php');

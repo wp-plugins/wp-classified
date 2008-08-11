@@ -211,3 +211,15 @@ padding: 2px 0 0 2px;
 	color: green;
 	font-weight: bold;
 }
+
+.sendInput{
+width: 258px;
+}
+
+.sendTd{
+background-color: #ffffff;
+border: 1px solid #777777;
+width: 260px;
+margin: 1px 0 2px 0;
+float: left;
+}

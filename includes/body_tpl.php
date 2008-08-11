@@ -70,7 +70,7 @@ echo '</span>';
 
 
 echo '<span class="rightCellNorm">';
-$sendAd = "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=sndad&aid=".$post->ads_id."\">Send this to a friend</a>"; 
+$sendAd = '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/send.jpg" class="imgMiddle"><a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=sndad&aid='.$post->ads_id.'">Send this to a friend</a>'; 
 echo $sendAd;
 echo '</span>';
 
