@@ -1,11 +1,10 @@
 <?php
 
-/*
+/**
  * _functions.php
  *
-Author: M. Forgani
-Author URI: http://forgani.com/
-*/
+ **/
+
 
 if (!$_SESSION) session_start();
 
@@ -68,13 +67,13 @@ function wpc_index(){
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	wpc_header();
-
+	
 	if ($wpcSettings['view_must_register']=="y" && !_is_usr_loggedin()){
 		wpc_read_not_allowed();
 		wpc_footer();
 		return;
 	}
-	
+	echo '<div class="wpClassified_ads_container">';
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
 	$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists WHERE status != 'inactive' ORDER BY position ASC");
@@ -152,6 +151,7 @@ function wpc_index(){
 		</table>	
 		<?php
 	} 
+	echo "</div>";
 	wpc_footer();
 }
 

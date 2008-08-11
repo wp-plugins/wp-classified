@@ -15,7 +15,7 @@ if (($i+1)==$hm){
 	}
 ?>
 <div>
-<strong><? echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a></strong><br /><small><?php echo __("Posted By:");?> <strong><?php echo get_post_author($post);?></strong> on <?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?></small>
+<strong><? echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a></strong><br /><small><?php echo __("Posted By:");?><img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/user.gif" class="imgMiddle"><strong><?php echo get_post_author($post);?></strong> on<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/cal.gif" class="imgMiddle"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?></small>
 	<?php
 	if ($post->author>0){
 		echo "<br /><span class=\"edit\">".$editlink."</span><span class=\"delete\">". $deletelink . "</span>";

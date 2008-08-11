@@ -257,9 +257,9 @@ function get_post_author($post){
 	$userfield = get_wpc_user_field();
 	$out = "";
 	if ($post->author==0){
-		$out .= $post->author_name." (guest)";
+		$out .= $post->author_name."(guest)";
 		if ($wpcSettings['display_unregistered_ip']=='y'){
-			$out .= " - ".wpClassified_last_octet($post->author_ip);
+			$out .= "-".wpClassified_last_octet($post->author_ip);
 		}
 		$out .= "";
 	} else {
