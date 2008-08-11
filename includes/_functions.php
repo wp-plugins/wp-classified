@@ -171,6 +171,7 @@ function get_wpc_list($msg){
 	$userfield = get_wpc_user_field();
 	//update_views($_GET['lid']);
 	wpc_header();
+	echo "<div class=\"wpClassified_ads_container\">";
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 		LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id	 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
@@ -262,6 +263,7 @@ function get_wpc_list($msg){
 	}
 	?>
 	</table>
+	</div>
 	<?php
 	wpc_footer();
 }
