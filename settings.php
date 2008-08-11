@@ -7,12 +7,12 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.1.1';
+$wpClassified_version = '1.2.0';
 $wpc_user_field = false;
-$wpc_public_pagename = 'classified';
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
 
+//require_once (dirname(__FILE__).'/captcha_class.php');
 require_once (dirname(__FILE__).'/includes/_functions.php');
 require_once (dirname(__FILE__).'/admin.php');
 
@@ -131,14 +131,14 @@ function wpc_get_top_lnks(){
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				 LEFT JOIN {$table_prefix}wpClassified_categories
 				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
-				return create_public_link("index", array("name"=>"Classified"))." - ".$lists['name'];
+				return create_public_link("index", array("name"=>"Classified"))." ".$lists['name'];
 			break;
 			case "pa":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 					 LEFT JOIN {$table_prefix}wpClassified_categories
 					 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
-					return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Ads New Ads";
+					return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Ads New Ads";
 			break;
 			case "ea":
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
@@ -148,7 +148,7 @@ function wpc_get_top_lnks(){
 					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
-				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
+				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
 			break;
 			case "va":
@@ -158,7 +158,7 @@ function wpc_get_top_lnks(){
 					 LEFT JOIN {$table_prefix}users
 					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
-				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified", array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
+				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
 			break;
 		}
@@ -169,6 +169,7 @@ function wpc_get_top_lnks(){
 
 function get_wpc_header_link(){
 	global $_GET, $_POST, $user_level, $table_prefix, $wpdb, $_SERVER;
+	$pageinfo = get_wpClassified_pageinfo();
 	if (basename($_SERVER['PHP_SELF'])!='index.php'){
 		return "[[WP_CLASSIFIED]]";
 	} else {
@@ -181,7 +182,7 @@ function get_wpc_header_link(){
 		switch ($_GET['_action']){
 			default:
 			case "classified":
-				return "Classified";
+				return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a>";
 			break;
 			case "search":
 				$search_title = "Searching for: ".$_POST['search_terms'];
@@ -193,7 +194,7 @@ function get_wpc_header_link(){
 				ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 				WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-				return create_public_link("index", array("name"=>"Classified"))." - ".$lists['name'];
+				return create_public_link("index", array("name"=>"Classified"))." ".$lists['name'];
 			break;
 			case "pa":
 				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
@@ -201,7 +202,7 @@ function get_wpc_header_link(){
 					 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Ads New Ads";
+				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Add a new Ad in this category";
 			break;
 			case "ea":
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
@@ -210,7 +211,7 @@ function get_wpc_header_link(){
 					 LEFT JOIN {$table_prefix}users
 					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
-				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
+				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
 			break;
 			case "va":
@@ -221,7 +222,7 @@ function get_wpc_header_link(){
 						 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 						 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
-				return create_public_link("index", array("name"=>"Classified"))." - ".create_public_link("classified",
+				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified",
 						array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
 			break;

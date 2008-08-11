@@ -130,7 +130,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			?>
 			<table width=100% class="editform">
 			<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
-			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ads...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
+			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ad...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
 			<input type="hidden" name="add_ads_subject" value="yes">
 <tr>
 <td align=right valign=top><?php echo __("Posting Name:");?> </td>
@@ -175,10 +175,7 @@ echo "<b>".$userdata->$userfield."</b>";
 <td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
-<tr>
-<td></td>
-<td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub"></td>
-</tr>
+<tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub"></td></tr>
 </form>
 </table>
 
@@ -197,18 +194,16 @@ function create_public_link($action, $vars){
 	//$rewrite = ($wp_rewrite->get_page_permastruct()=="")?false:true;
 	$starts = (((int)$vars["start"])?"(".$vars["start"].")/":"");
 	if (!$vars['post_jump']) {
-		$lastAds = ($action=="lastAds")?"#lastpost":"";
+		$lastAd = ($action=="lastAd")?"#lastpost":"";
 	} else {
-		$lastAds = ($action=="lastAds")?"#".$vars['post_jump']:"";
+		$lastAd = ($action=="lastAd")?"#".$vars['post_jump']:"";
 	}
-	$action = ($action=="lastAds")?"ads_subject":$action;
+	$action = ($action=="lastAd")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">".$vars["name"]."</a> ";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/arrow.gif\" class=\"imgMiddle\">";
 		break;
 		case "classified":
-			
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."&start=".(int)$vars['start']."\">".$vars["name"]."</a> ";
 		break;
 		case "pa":
@@ -218,10 +213,13 @@ function create_public_link($action, $vars){
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/va/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".$starts."?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAds."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&pstart=".((int)$vars["start"])."&search_words=".$vars['search_words'].$lastAds."\">".$vars['name']."</a>";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/va/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".$starts."?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAd."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&pstart=".((int)$vars["start"])."&search_words=".$vars['search_words'].$lastAd."\">".$vars['name']."</a>";
 		break;
 		case "ea":
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+		break;
+		case "da":
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/da/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "eaform":
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);

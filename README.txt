@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.1.1-a
+name: wpClassified Wordpress plugins version 1.2
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -42,7 +42,20 @@ Set the permission of the directory "wp-content/plugins/wp-classified/images" to
    2. Backup Database tables *_wpClassified_* and files
    2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
    3. Activate the plugin from your Wordpress admin panel.
-   4. Please Note: in ‘Classified Options‘ page in admin interface please check that all the required fields are filled in and save!
+   4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
+
+== Database Upgrade ==
+
+Upgrading wpClassified tables from version 1.1.x to 1.2.x
+
+Using phpMyAdmin (or other database manager) run these sql queries on your existing database.
+
+- So first start the phpMyAdmin console...
+- Select the right Database
+- Click on "Export" tab
+
+	upgrade1_1to1_2.sql
+
 
 
 == Frequently Asked Questions ==
@@ -65,13 +78,15 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
-Changes Aug 5/2008
+Changes August 10/2008
 - update {table_prefix}wpClassified_ads_subjects 
-added some new fields email, web, phone, ...
+and added some new fields email, web, phone, ...
 - implement the conformaion code (captcha)
+- add sent to his friend's button
 
 
-Changes in 1.1.1-a - June 20/2008
+
+Changes in 1.1.1 - June 20/2008
 - fix the search function
 - implement RSS Feeds
 - admin email notification

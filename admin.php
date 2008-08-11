@@ -1,24 +1,25 @@
 <?php
-
-/**
- * admin.php
- *
- **/
+/*
+* WP-Classified Ad                                      
+* Redesigned by Mohammad Forgani                      
+* Find it or report problems at www.forgani.com 
+* @version 1.2
+*/
 
 function wpClassified_spam_filter($name, $email, $subject, $post, $userID){
 	global $ksd_api_host, $ksd_api_port;
 
 	$spamcheck = array(
-		"user_ip"		=> $_SERVER['REMOTE_ADDR'],
-		"user_agent"		=> $_SERVER['HTTP_USER_AGENT'],
-		"referrer"		=> $_SERVER['HTTP_REFERER'],
-		"blog"			=> get_option('home'),
-		"comment_author"	=> rawurlencode($name),
-		"comment_author_email"	=> rawurlencode($email),
-		"comment_author_url"	=> "http://",
-		"comment_content"	=> str_replace("%20", "+", rawurlencode($subject))."+".str_replace("%20", "+", rawurlencode($post)),
-		"comment_type"		=> "",
-		"user_ID"		=> $userID
+		"user_ip"=> $_SERVER['REMOTE_ADDR'],
+		"user_agent"=> $_SERVER['HTTP_USER_AGENT'],
+		"referrer"=> $_SERVER['HTTP_REFERER'],
+		"blog"=> get_option('home'),
+		"comment_author"=> rawurlencode($name),
+		"comment_author_email"=> rawurlencode($email),
+		"comment_author_url"=> "http://",
+		"comment_content"=> str_replace("%20", "+", rawurlencode($subject))."+".str_replace("%20", "+", rawurlencode($post)),
+		"comment_type"=> "",
+		"user_ID"=> $userID
 		);
 
 	$query_string = '';
@@ -283,11 +284,11 @@ function delete_ad(){
 		return true;
 	} else {
 	?>
-	<h3><?php echo __("Ads Deletion Confirmation");?></h3>
+	<h3><?php echo __("Confirmation to delete");?></h3>
 	<form method="post" id="cat_form_post" name="cat_form_post" action="<?php echo $linkb;?>">
 	<strong>
 		<input type="hidden" name="deleteid" value="<?php echo $_GET['aid'];?>">
-		<?php echo __("Are you sure you want to delete this post?");?><br />
+		<?php echo __("Are you sure you want to delete this ad?");?><br />
 		<input type=submit value="<?php echo __("Yes");?>"> <input type=button value="<?php echo __("No");?>" onclick="history.go(-1);">
 	</strong>
 	</form>
@@ -324,7 +325,7 @@ function delete_ad_subject(){
 		return true;
 	} else {
 		?>
-		<h3><?php echo __("Ads Deletion Confirmation");?></h3>
+		<h3><?php echo __("Ad Deletion Confirmation");?></h3>
 		<form method="post" id="ead_form" name="ead_form" action="<?php echo $url;?>">
 		<strong>
 			<input type="hidden" name="deleteid" value="<?php echo $_GET['asid'];?>">

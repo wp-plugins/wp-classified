@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassiefied-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.1.1-a
+Version: 1.2.0-a
 Requires at least: 2.3.x
 Author URI: Mohammad Forgani http://www.forgani.com
 
@@ -23,20 +23,25 @@ Version 1.0.1 - 1/04/2008
 - fix bugs
 - implement a new structure
 
-Version 1.0.2 - 16/03/2008
+Version 1.0.2 - March 16/2008
 - update to display the links to ads at the top of page 
 
-Version 1.1.0 - 12/05/2008
+Version 1.1.0 - May 12/2008
 - update delete/modify ads function .
 - added Move ads function to admin interface.
 - fixed some issue which are posted to me.
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
-Version 1.1.1 - June 03/07/2008
+Version 1.1.1 - June 03/2008
 - fix the search function
 - implement RSS Feeds
 - add admin email notification
 
+Version 1.2.0 - Augst 10/08/2008
+Changes August 10/2008
+- update {table_prefix}wpClassified_ads_subjects 
+and added some new fields email, web, phone, ...
+- implement the conformaion code (captcha)
 
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
@@ -157,7 +162,7 @@ function wpcOptions_process(){
 			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><small>example: 100x150</small></td>
 		</tr>
 		<tr>
-			<th align="right"><?php echo __("Ads Image Alignment: ");?> </th>
+			<th align="right"><?php echo __("Ad Image Alignment: ");?> </th>
 			<td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><small>choose: left or right</small></td>
 		</tr>
 		<tr>
@@ -178,7 +183,7 @@ function wpcOptions_process(){
 		</tr>
 		<tr>
 			<th align="right"></th>
-			<td><input type=checkbox name="wpClassified_data[wpClassified_filter_posts]" value="y"<?php echo ($wpcSettings['wpClassified_filter_posts']=='y')?" checked":"";?>> <?php echo __("Apply WP Ads/comment filters to classified posts.");?></td>
+			<td><input type=checkbox name="wpClassified_data[wpClassified_filter_posts]" value="y"<?php echo ($wpcSettings['wpClassified_filter_posts']=='y')?" checked":"";?>> <?php echo __("Apply WP Ad/comment filters to classified posts.");?></td>
 		</tr>
 
 		<tr>
@@ -257,15 +262,21 @@ function wpClassified_process(){
 		default:
 		case "classified": wpc_index();
 		break;
-		case "search": wpClassified_display_search();
+		case "search": display_search();
 		break;
 		case "vl": get_wpc_list($msg);
 		break;
 		case "pa": add_ads_subject();
 		break;
-		case "ea": wpClassified_edit_ads();
+		case "ea": _edit_ad();
 		break;
-		case "va": display_ad();
+		case "da": _delete_ad();
+		break;
+		case "va": _display_ad();
+		break;
+		case "prtad": _print_ad();
+		break;
+		case "sndad": _send_ad();
 		break;
 	}
 }
@@ -591,7 +602,7 @@ function adm_structure_process(){
 	<tr>
 		<th></th>
 		<th align=left colspan=2><?php echo __("Category/List");?></th>
-		<th align=right width=100><?php echo __("Ads");?></th>
+		<th align=right width=100><?php echo __("Ad");?></th>
 		<th align=right width=100><?php echo __("List");?></th>
 		<th align=right width=100><?php echo __("Views");?></th>
 	</tr>
@@ -989,7 +1000,7 @@ function get_last_ads_subjects(){
 
 			$name = $wpdb->get_row("SELECT name FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".$ad->ads_subjects_list_id."'", ARRAY_A);
 
-			$htmlout .= "<li>".create_public_link("lastAds", array(
+			$htmlout .= "<li>".create_public_link("lastAd", array(
 					"name" => $ad->subject,
 					"lid"=> $ad->ads_subjects_list_id,
 					"name" => $name['name'],
