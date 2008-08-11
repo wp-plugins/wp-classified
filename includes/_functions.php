@@ -1,10 +1,11 @@
 <?php
 
-/**
+/*
  * _functions.php
  *
- **/
-
+Author: M. Forgani
+Author URI: http://forgani.com/
+*/
 
 if (!$_SESSION) session_start();
 

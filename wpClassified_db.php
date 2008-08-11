@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * wpClassified_db.php
+ *
+Author: M. Forgani
+Author URI: http://forgani.com/
+*/
+
 
 function wpClassified_db(){
 global $wpdb, $table_prefix, $wpClassified_version;

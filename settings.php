@@ -1,9 +1,12 @@
 <?php
 
-/**
+/*
  * settings.php
  *
+Author: M. Forgani
+Author URI: http://forgani.com/
 */
+
 
 // user level
 $wpc_user_level = 8;
