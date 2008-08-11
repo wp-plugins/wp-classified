@@ -622,24 +622,23 @@ function _send_ad(){
 		if ($sendMsg){echo "<p class=\"error\">".__($sendMsg)."</p>";}
 		?>
 		<div class="wpClassified_ads_container">
-		<div class="wpClassified_ads_body">
 		<div class="wpClassified_ads_header">
 		<b>Send this advertisement to a friend</b><br><br>You can send the ad No <?php echo $aid;?>
 		<b><?php echo $post->subject;?></b> to a friend :<br /><br />
 		</div>
+		<p>&nbsp;</p>
 		<form method="post" enctype="multipart/form-data" id="sndad" name="sndad" action="<?php echo $link_snd;?>">
 		<table width='99%' cellspacing='1'>
-		<tr><td width='30%'>Your Name: </td><td class="sendTd"><input class="sendInput"  type="text" name="wpClassified_data[yourname]" /></td></tr>
-		<tr><td>Your Email(*): </td><td class="sendTd"><input class="sendInput" type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
+		<tr><td class="sendTd">Your Name: </td><td><input size=30 type="text" name="wpClassified_data[yourname]" /></td></tr>
+		<tr><td class="sendTd">Your Email(*): </td><td><input size=30 type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
 		<tr><td></td><td><hr></td></tr>
-		<tr><td>Friend's Name: </td><td class="sendTd"><input class="sendInput"  type="text" name="wpClassified_data[fname]" /></td></tr>
-		<tr><td>Friend's Email(*): </td><td class="sendTd"><input class="sendInput"  type="text" name="wpClassified_data[mailto]" /></td></tr>
+		<tr><td class="sendTd">Friend's Name: </td><td><input size=30 type="text" name="wpClassified_data[fname]" /></td></tr>
+		<tr><td class="sendTd">Friend's Email(*): </td><td><input size=30 type="text" name="wpClassified_data[mailto]" /></td></tr>
 		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
-		<tr><td>Confirmation code(*): </td><td class="sendTd"><input class="sendInput" type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
+		<tr><td class="sendTd">Confirmation code(*): </td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
 		<input type="hidden" name="wpClassified_send_ad" value="yes">
 		<tr><td></td><td><input type=submit value="<?php echo __("Send Email");?>"></td></tr>
 		</form></table>
-		</div>
 		</div>
 		<?
 		wpc_footer();
