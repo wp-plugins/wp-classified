@@ -128,6 +128,8 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			<?php
 			if ($msg){echo "<h3>".__($msg)."</h3>";}
 			?>
+		<div class="wpClassified_ads_container">
+		<div class="wpClassified_ads_body">
 			<table width=100% class="editform">
 			<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
 			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ad...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
@@ -178,6 +180,8 @@ echo "<b>".$userdata->$userfield."</b>";
 <tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub"></td></tr>
 </form>
 </table>
+</div>
+</div>
 
 <?php
 	}
