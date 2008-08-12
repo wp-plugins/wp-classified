@@ -10,28 +10,25 @@ if (!$_SESSION) session_start();
 
 // fix me
 function wpc_header(){
-	global $wpdb, $table_prefix;
+	global $wpdb, $table_prefix, $lang;
 	$wpcSettings = get_option('wpClassified_data');
-
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
 	echo '<table border=0><tr><td>';
 	if ($wpcSettings['wpClassified_top_image']!=''){
 		$img=preg_replace('/\s+/','',$wpcSettings['wpClassified_top_image']);
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/' . $img. '">';
+		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/' .$img. '">';
 	}
 	echo '</td><td valign=middle>';
 	if ($wpcSettings['description']!=''){
 		echo $wpcSettings['description'] . "&nbsp;";
 	}
 	echo '</td></tr></table>';
-
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo $lnks;
 	$expire=365;
 	$expire=$wpcSettings['ad_expiration'];
-	
 	if (!$expire || $expire < 1 ) {
 		$expire=365;
 	}
@@ -52,8 +49,8 @@ function wpc_header(){
 ?>
 	<div style="text-align:right">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
-		<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUEST['search_terms']);?>">
-		<input type="submit" value="Search">
+		<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUIREDUEST['search_terms']);?>">
+		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
 		</form>
 	</div>
 	<p>&nbsp;</p>		
@@ -158,7 +155,7 @@ function wpc_index(){
 
 // display classified
 function get_wpc_list($msg){
-	global $_GET, $wpc_user_info, $table_prefix, $wpdb;
+	global $_GET, $wpc_user_info, $table_prefix, $wpdb, $lang;
 	//$listId = get_query_var("lists_id");
 	$listId = get_query_var("lid");
 	$start = get_query_var("start");
@@ -207,14 +204,15 @@ function get_wpc_list($msg){
 	<table width="100%" class="cat">
 	<tr>
 		<?php 
+		
 		if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
 			
 		echo '<td colspan="3" class="rightCell"><img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/addtopic.jpg" class="imgMiddle"><b>';
-		echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>" Add a new Ad in this category"));?></b></td><?php
+		echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
 		} else {
 			
 		echo '<td colspan="3" class="rightCell"><img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/addtopic.jpg" class="imgMiddle"><b>';
-		echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>" Add a new Ad in this category"));?></b></td><?php
+		echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
 		} 
 		
 
@@ -224,15 +222,15 @@ function get_wpc_list($msg){
 	<br><br>
 	<table class="ads_title" width=100%>
 	<tr>
-		<td class="ads"><?php echo __("Ads");?></td>
-		<td class="ads" align=right><?php echo __("Views");?></td>
-		<td class="ads" align=right><?php echo __("Last Post");?></td>
+		<td class="ads"><?php $lang['_ADS'];?></td>
+		<td class="ads" align=right><?php echo $lang['_VIEWS']?></td>
+		<td class="ads" align=right><?php echo $lang['_LAST'];?></td>
 	</tr>
 	<?php
 	for ($x=0; $x<count($ads); $x++){
 		$ad = $ads[$x];
 		if (!@in_array($ad->ads_subjects_id, $read) && _is_usr_loggedin()){
-			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" height=15 width=15  valign=absmiddle> ";
+			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" valign=absmiddle> ";
 		} else {$rour = "";} // fix me
 		$pstart = 0;
 		$pstart = $ad->ads-($ad->ads%$wpcSettings["count_ads_per_page"]);
@@ -256,7 +254,7 @@ function get_wpc_list($msg){
 		</td>
 		</tr>
 		<tr>
-			<td align=left class="ads_subject_btn"><?php echo __("By:");?> <?php echo create_ads_author($ad);?></td>
+			<td align=left class="ads_subject_btn"><?php echo $lang['_FROM'];?> <?php echo create_ads_author($ad);?></td>
 			<td align=right class="ads_subject_btn"><?php echo $ad->views;?></td>
 			<td align=right class="ads_subject_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></td>
 		</tr>
@@ -313,7 +311,6 @@ function rss_feed() {
 	if(isset($_GET['wpcfeed'])) {
 		include (dirname(__FILE__).'/_rss.php');	
 		exit;
-	
 	}
 } 
 
@@ -325,23 +322,23 @@ function create_rss_link($action, $vars) {
 }
 
 function _delete_ad(){
-	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
+	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang;
 	$pageinfo = get_wpClassified_pageinfo();
 	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=da&lid=".$_GET['lid']."&asid=".$_GET['asid'];
 
 	if ($_POST['subject_id']>0){
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$_POST['subject_id'])."'");
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".((int)$_POST['subject_id'])."'");
-		get_wpc_list("The ad has been deleted");
+		get_wpc_list($lang['_ANNDEL']);
 		return true;
 	} else {
 	?>
-	<h3><?php echo __("Confirmation to delete");?></h3>
+	<h3><?php echo $lang['_CONFDEL'];?></h3>
 	<form method="post" id="delete_ad_conform" name="delete_ad_conform" action="<?php echo $link_del;?>">
 	<strong>
 		<input type="hidden" name="subject_id" value="<?php echo $_GET['asid'];?>">
-		<?php echo __("Are you sure you want to delete this ad?");?><br />
-		<input type=submit value="<?php echo __("Yes");?>"> <input type=button value="<?php echo __("No");?>" onclick="history.go(-1);">
+		<?php echo $lang['_SURDELANN'];?><br />
+		<input type=submit value="<?php $lang['_YES'];?>"> <input type=button value="<?php $lang['_NO'];?>" onclick="history.go(-1);">
 	</strong>
 	</form>
 	<?php
@@ -351,7 +348,7 @@ function _delete_ad(){
 
 // edit post function
 function _edit_ad(){
-	global $_GET, $_POST, $wpc_user_info, $table_prefix, $wpdb, $quicktags;
+	global $_GET, $_POST, $wpc_user_info, $table_prefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
 		$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
@@ -378,30 +375,30 @@ function _edit_ad(){
 	if ($_POST['wpClassified_edit_ad']=='yes'){
 		$addPost = true;
 		if (str_replace(" ", "", $_POST['wpClassified_data']['author_name'])=='' && !_is_usr_loggedin()){
-			$msg = "You must provide a posting name!";
+			$msg = $lang['_INVALIDNAME'];
 			$addPost = false;
 		}
 		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])==''){
-			$msg = "You must provide a subject!";
+			$msg = $lang['_INVALIDSUBJECT'];
 			$addPost = false;
 		}
 		if (str_replace(" ", "", $_POST['wpClassified_data'][email])==''){
-			$msg = "You must provide a e-mail!";
+			$msg = $lang['_INVALIDEMAIL'];
 			$addPost = false;
 		} 
 
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
-			$msg = "Please enter a valid e-mail!";
+			$msg = $lang['_INVALIDEMAIL2'];
 			$addPost = false;
 		}
 
 		if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   			$msg = "The confirmation code didn't matched.";
+   			$msg = $lang['_INVALIDCONFIRM'];
 			$addPost = false;
   		}
 
 		if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
-			$msg = "You must provide a comment!";
+			$msg = $lang['_INVALIDCOMMENT'];
 			$addPost = false;
 		}
 
@@ -411,7 +408,7 @@ function _edit_ad(){
 				$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
 				if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 					$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
-					 echo "<h2>Invalid image size. Image must be ".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]." pixels or less. Your image was: ".$imginfo[0]."x".$imginfo[1] . "</h2>";
+					 echo "<h2>" .$lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1] . "</h2>";
 					$addPost=false;	
 				} else {
 					$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
@@ -444,7 +441,7 @@ function _edit_ad(){
 	$wpdb->query($sql);
 
 	do_action('wpClassified_edit_ad', $id);
-	get_wpc_list("Update successfully completed");
+	get_wpc_list($lang['_UPDATE']);
 	} else {
 		$displayform = true;
 	}
@@ -474,39 +471,37 @@ function _edit_ad(){
 		<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
 		onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php echo create_public_link("eaform", array("lid"=>$lists["lists_id"], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$adsInfo["subject"], "aid"=>$_GET['aid']));?>">
 		<input type="hidden" name="wpClassified_edit_ad" value="yes">
-		<tr><td align=right><?php echo __("Posting Name:");?> </td>
-		<td><?php
-		echo get_post_author($postinfo);
-		?></td>
+		<tr><td align=right><?php echo $lang['_AUTHOR']; ?>:</td>
+		<td><?php echo get_post_author($postinfo); ?></td>
 		</tr>
 		<tr>
-		<td align=right><?php echo __("Subject:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo __(" *")?></span></td>		</tr>
+		<td align=right><?php echo $lang['_TITLE']; ?></td>
+		<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td>		</tr>
 		<tr>
-		<td align=right><?php echo __("Image File: ");?></td>
-		<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>"><small>&nbsp;<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?><br /><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)  </small></td>
+		<td align=right valign=top><?php echo $lang['_PIC']; ?></td>
+		<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>"><small>&nbsp;<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?><br /><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)</small></td>
 		</tr>
 		<tr>
-		<td align=right><?php echo __("Email:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"><span class="smallRed"><?php echo __(" *")?></span></td></tr>
+		<td align=right><?php echo $lang['_EMAIL']; ?></td>
+		<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
 
 		<tr>
-		<td align=right><?php echo __("Website:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo __(" Optional")?></small></td></tr>
+		<td align=right><?php echo $lang['_WEB']; ?></td>
+		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
 
 		<tr>
-		<td align=right><?php echo __("Phone:");?> </td>
-		<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><small><?php echo __(" Optional")?></small></td></tr>
+		<td align=right><?php echo $lang['_TEL']; ?></td>
+		<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
 		<tr>
-		<td valign=top align=right><?php echo __("Comment:");?> </td>
+		<td valign=top align=right><?php echo $lang['_DESC']; ?></td>
 		<td><?php create_ads_input($postinfo->post);?></td>
 		</tr>
 
 		<tr>
-		<td valign=top align=right><?php echo __("Confirmation code:");?> </td>
+		<td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
 		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
-		</tr><tr><td></td><td><input type=submit value="<?php echo __("Save Post");?>" id="sub"></td></tr>
+		</tr><tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub"></td></tr>
 		</form></table>
 		<?php
 		wpc_footer();
@@ -514,7 +509,7 @@ function _edit_ad(){
 }
 
 function _print_ad(){
-	global $_GET, $table_prefix, $wpdb;
+	global $_GET, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	$pageinfo = get_wpClassified_pageinfo();
@@ -535,23 +530,23 @@ function _print_ad(){
     	echo "<body bgcolor=\"#FFFFFF\" text=\"#000000\">";
 	echo "<table border=0><tr><td><table border=0 width=100% cellpadding=0 cellspacing=1 bgcolor=\"#000000\"><tr><td>";
     	echo "<table border=0 width=100% cellpadding=15 cellspacing=1 bgcolor=\"#FFFFFF\"><tr><td>";
-	echo "<br /><br /><table width=99% border=0><tr><td>Classified Ads : (No. $aid ) <br />Submitted by $submitter <br /><br />";
-	echo " <b>Titel :</b> <i>$subject</i><br />";
+	echo "<br /><br /><table width=99% border=0><tr><td>".$lang['_CLASSIFIED_AD']."(No. $aid)<br />" .$lang['_FROM']. "<br /><br />";
+	echo " <b>" . $lang['_TITLE']. "</b> <i>" .$subject. "</i><br />";
 	
 	if ($photo) {     
 		echo "<tr><td><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" .$photo."\" border=0>";
 	}
-	echo "</td></tr><tr><td><b>Description :</b><br /><br /><div style=\"text-align:justify;\">$desctext</div><p>";
+	echo "</td></tr><tr><td><b>".$lang['_DESC']."</b><br /><br /><div style=\"text-align:justify;\">".$desctext."</div><p>";
 	if ($phone) {
-		echo "<br /><b>Telephone :</b>" . $phone . "<br />";
+		echo "<br /><b>".$lang['_TEL']."</b>" . $phone . "<br />";
 	}
 	if ($web) {
-		echo"<b>Website :</b> ". $web ;
+		echo"<b>".$lang['_WEB']."</b> ". $web ;
 	}
 	echo "<hr />";
 	echo "To contact by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address.";
 	echo "<br /><a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a><br />";
-	echo "<br /><br />This Classified Ad was added $subject<br /><br />";
+	echo "<br /><br />".$lang['_ADSADDED'].$subject."<br /><br />";
 	echo "</td></tr></table>";
 	echo "<br /><br /></td></tr></table></td></tr></table>";
     	echo "<br /><br /><center>This advertisement is from the classified ads section on the website  ";
@@ -562,7 +557,7 @@ function _print_ad(){
 
 
 function _send_ad(){
-    global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
+    global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	$pageinfo = get_wpClassified_pageinfo();
@@ -584,27 +579,27 @@ function _send_ad(){
 		$mailfrom=$_POST['wpClassified_data'][mailfrom];
 		$mailto=$_POST['wpClassified_data'][mailto];
 		//$message .= $name . "just filled in your comments form. They said:\n" . $msg . "\n\n";
-		$message .= "\nThis mail was sent using our Send-to-Friend service.\n\n";
-		$message .= "Ad Details:\n" . $msg . "\n\n";
+		$message .= "\n" .$lang['_FRIENDTITLE']. "\n\n";
+		$message .= $lang['_ADDETAIL']."\n" . $msg . "\n\n";
 		$message .= "View Photo and More Details: <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a>";
 
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$",   $_POST['wpClassified_data'][mailto])){
-			$sendMsg = "Please enter a valid e-mail!";
+			$sendMsg = $lang['_INVALIDEMAIL'];
 			$sendAd = false;
 		}
 
 		if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   			$sendMsg = "The confirmation code didn't matched.";
+   			$sendMsg = $lang['_INVALIDCONFIRM'];
 			$sendAd = false;
   		}
 		
 		if ($sendAd == true) {
 			$displayform = false;
-			if (mail($mailto, $subject, $message,"From: $mailfrom\n")) {
-				do_action('wpClassified_send_ad', $aid);
-				get_wpc_list("Your email has been sent. Thank you.");
+			$filter = rss_filter($message);
+			if (mail($mailto, $subject, $filter,"From: $mailfrom\n")) {
+				get_wpc_list($lang['_SEND']);
 			} else {
-				$sendMsg = "There was a problem sending the mail. Please check that you filled in the form correctly.";
+				$sendMsg = $lang['_SENDERR'];
 				$sendAd = false;
 			}
 			return true;	
@@ -624,21 +619,21 @@ function _send_ad(){
 		?>
 		<div class="wpClassified_ads_container">
 		<div class="wpClassified_ads_header">
-		<b>Send this advertisement to a friend</b><br><br>You can send the ad No <?php echo $aid;?>
-		<b><?php echo $post->subject;?></b> to a friend :<br /><br />
+		<?php echo $lang['_FRIENDSEND']; ?><?php echo $aid;?>
+		<b><?php echo $post->subject;?></b><?php echo $lang['_TOAFRIEND']; ?><br /><br />
 		</div>
 		<p>&nbsp;</p>
 		<form method="post" enctype="multipart/form-data" id="sndad" name="sndad" action="<?php echo $link_snd;?>">
 		<table width='99%' cellspacing='1'>
-		<tr><td class="sendTd">Your Name: </td><td><input size=30 type="text" name="wpClassified_data[yourname]" /></td></tr>
-		<tr><td class="sendTd">Your Email(*): </td><td><input size=30 type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
+		<tr><td class="sendTd">Your Name: </td><td><input size=35 type="text" name="wpClassified_data[yourname]" /></td></tr>
+		<tr><td class="sendTd"><?php echo $lang['_YOUREMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
 		<tr><td></td><td><hr></td></tr>
-		<tr><td class="sendTd">Friend's Name: </td><td><input size=30 type="text" name="wpClassified_data[fname]" /></td></tr>
-		<tr><td class="sendTd">Friend's Email(*): </td><td><input size=30 type="text" name="wpClassified_data[mailto]" /></td></tr>
+		<tr><td class="sendTd">Friend's Name: </td><td><input size=35 type="text" name="wpClassified_data[fname]" /></td></tr>
+		<tr><td class="sendTd"><?php echo $lang['_FEMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
 		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
-		<tr><td class="sendTd">Confirmation code(*): </td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
+		<tr><td class="sendTd"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
 		<input type="hidden" name="wpClassified_send_ad" value="yes">
-		<tr><td></td><td><input type=submit value="<?php echo __("Send Email");?>"></td></tr>
+		<tr><td></td><td><input type=submit value="<?php echo $lang['_SENDEMAIL']; ?>"></td></tr>
 		</form></table>
 		</div>
 		<?
@@ -744,7 +739,6 @@ function _display_ad(){
 		if ($i==0){
 			echo stripslashes($wpcSettings['banner_code']);
 		}
-
 	}
 
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
@@ -770,7 +764,7 @@ function _display_ad(){
 }
 
 function display_search(){
-	global $_GET, $table_prefix, $wpdb;
+	global $_GET, $table_prefix, $wpdb, $lang;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -785,22 +779,22 @@ function display_search(){
 # 07-Apr-2008
 #
 
-	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($_REQUEST['search_terms'])."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($_REQUEST['search_terms'])."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
+	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($_REQUIREDUEST['search_terms'])."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($_REQUIREDUEST['search_terms'])."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
 	$results = $wpdb->get_results($sql);
 
 	if(! $results) {
 		echo "<P>No posts matched your search terms.</P>";
-		echo '<input type="button" value="back" onClick="history.back();">';
+		echo '<input type="button" value="' .$lang['_BACK']. '" onClick="history.back();">';
 	} else {
 ?>
 
 <p>&nbsp;</p>
 <table width=100% class="cat">
 	<tr>
-		<th><p><?php echo __("List");?></p></th>
-		<th><p><?php echo __("Subject");?></p></th>
-		<th><p><?php echo __("Author");?></p></th>
-		<th><p><?php echo __("Date");?></p></th>
+		<th><p><?php echo $lang['_LIST']; ?></p></th>
+		<th><p><?php echo $lang['_SUBJET']; ?></p></th>
+		<th><p><?php echo $lang['_AUTHOR']; ?></p></th>
+		<th><p><?php echo $lang['_DATE']; ?></p></th>
 	</tr>
 
 	<?php foreach($results as $result) { ?>
@@ -819,7 +813,7 @@ function display_search(){
 		} else {
 			$post_pstart = (ceil($post_pstart)*$wpcSettings['count_ads_per_page'])-$wpcSettings['count_ads_per_page'];
 		}
-		echo create_public_link("lastAd", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$_REQUEST['search_terms']));
+		echo create_public_link("lastAd", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$_REQUIREDUEST['search_terms']));
 		?>
 		</td>
 		<td><?php echo $result->display_name; ?></td>
@@ -827,7 +821,7 @@ function display_search(){
 	</tr>
 	<?php } ?>
 	</table>
-	<input type="button" value="back" onClick="history.back();">
+	<input type="button" value="<?php echo $lang['_BACK']; ?>" onClick="history.back();">
 	<?
 	} 
 	wpc_footer();
@@ -837,17 +831,14 @@ function _filter_nohtml_kses($content){
 	return addslashes (wp_kses(stripslashes($content), array()));
 }
 
-
 function _filter_content($content, $searchvalue) {
 	$content = apply_filters('sf_show_post_content', $content);
 	$content = convert_smilies($content);
-
 	if(empty($searchvalue)) {
 		return $content."\n";
 	}
 	$searchvalue=urldecode($searchvalue);
 	return $content."\n";
 }
-
 
 ?>

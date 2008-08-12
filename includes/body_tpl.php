@@ -1,4 +1,5 @@
 <?php
+global $lang;
 $wpcSettings = get_option('wpClassified_data');
 if (($i+1)==$hm){ 
 	echo "<a name='$post->ads_id'></a><a name='lastpost'></a>"; 
@@ -54,7 +55,7 @@ if (($i+1)==$hm){
 
 echo '<span class="leftCell">';
 if ($adsInfo[email]) {
-	echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/email.jpg" class="imgMiddle">Reply to Post</a>&nbsp;&nbsp;&nbsp;';
+	echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/email.jpg" class="imgMiddle">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
 }
 if ($adsInfo[web]) {
 	echo '<a href="' . $adsInfo[web] . '" target=_blank><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/web.jpg" class="imgMiddle"></a>';
@@ -70,7 +71,7 @@ echo '</span>';
 
 
 echo '<span class="rightCellNorm">';
-$sendAd = '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/send.jpg" class="imgMiddle"><a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=sndad&aid='.$post->ads_id.'">Send this to a friend</a>'; 
+$sendAd = '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/send.jpg" class="imgMiddle"><a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=sndad&aid='.$post->ads_id.'">'.$lang['_SENDTOF'].'</a>'; 
 echo $sendAd;
 echo '</span>';
 

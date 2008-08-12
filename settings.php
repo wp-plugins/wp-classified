@@ -1,12 +1,9 @@
 <?php
 
-/*
+/**
  * settings.php
  *
-Author: M. Forgani
-Author URI: http://forgani.com/
 */
-
 
 // user level
 $wpc_user_level = 8;
@@ -15,7 +12,16 @@ $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
 
-//require_once (dirname(__FILE__).'/captcha_class.php');
+// include 
+
+$locale = get_locale(); 
+$languageFile = dirname(__FILE__).'/language/lang_'. $locale . '.php';
+if (file_exists($languageFile)) {
+	require_once($languageFile);
+} else {
+	require_once(dirname(__FILE__).'/language/lang_en.php');
+}
+
 require_once (dirname(__FILE__).'/includes/_functions.php');
 require_once (dirname(__FILE__).'/admin.php');
 
@@ -39,22 +45,6 @@ $adm_links = array(
 	array(name=>'Users Admin',arg=>'wpcUsers'),
 	array(name=>'Utilities',arg=>'wpcUtilities'),
 	);
-
-
-/*
-
-//$wpClassified_slug.'/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?(\([^/\(\)]*\))?/?' => '/'.$wpClassified_slug.'/index.php?pagename='.$wpClassified_slug.'&wpClassified_action=$matches[1]&lists_id=$matches[3]&ads_subjects_id=$matches[5]&ads_id=$matches[6]&start=$matches[8]&amp;pstart=$matches[8]'
-function wpc_mod_rewrite_rules($wp_rewrite){
-	global $wp_rewrite;
-	$wpcSettings = get_option('wpClassified_data');
-	$wpClassified_slug = $wpClassified_settings['wpClassified_slug'];
-	$wpClassified_rules = array(
-	$wpClassified_slug.'/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?(\([^/\(\)]*\))?/?' => '/'.$wpClassified_slug.'/index.php?pagename='.$wpClassified_slug.'&wpClassified_action=$1&lists_id=$3&ads_subjects_id=$5&ads_id=$6&start=$8&pstart=$8'
-	);
-	$wp_rewrite->rules = $wpClassified_rules + $wp_rewrite->rules;
-}
-*/
-
 
 function get_wpClassified_pageinfo(){
 	global $wpdb, $wpc_page_info, $table_prefix;

@@ -82,7 +82,8 @@ Changes August 10/2008
 - update {table_prefix}wpClassified_ads_subjects 
 and added some new fields email, web, phone, ...
 - implement the conformaion code (captcha)
-- add sent to his friend's button
+- added sent to his friend's button
+- added language file
 
 
 

@@ -8,7 +8,7 @@
 require('captcha_class.php');
 
 function add_ads_subject(){
-	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags;
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
@@ -22,37 +22,37 @@ function add_ads_subject(){
 
 	if ($_POST['add_ads_subject']=='yes'){
 		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
-			die("You can't post without logging in.");
+			die($lang['_MUSTLOGIN']);
 		} else {
 			$addPost = true;
 
 			if (str_replace(" ", "", $_POST['wpClassified_data'][author_name])=='' && !_is_usr_loggedin()){
-				$msg = "You must provide a posting name!";
+				$msg = $lang['_INVALIDNAME'];
 				$addPost = false;
 			}
 
 			if (str_replace(" ", "", $_POST['wpClassified_data'][subject])==''){
-				$msg = "You must provide a subject!";
+				$msg = $lang['_INVALIDSUBJECT'];
 				$addPost = false;
 			}
 
 			if (str_replace(" ", "", $_POST['wpClassified_data'][email])==''){
-				$msg = "You must provide a e-mail!";
+				$msg = $lang['_INVALIDEMAIL'];
 				$addPost = false;
 			}
 
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])) {
-			$msg = "Please enter a valid e-mail!";
+			$msg = $lang['_INVALIDEMAIL'];
 			$addPost = false;
 		}
 
 			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   				$msg = "The confirmation code didn't matched";
+   				$msg = $lang['_INVALIDCONFIRM'];
 				$addPost = false;
   			}
 
 			if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
-				$msg = "You must provide a comment!";
+				$msg = $lang['_INVALIDCOMMENT'];
 				$addPost = false;
 			}
 
@@ -62,7 +62,7 @@ function add_ads_subject(){
 					$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
 					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
-						 echo "<h2>Invalid image size. Image must be ".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]." pixels or less. Your image was: ".$imginfo[0]."x".$imginfo[1] . "</h2>";
+						 echo "<h2>" .$lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1] . "</h2>";
 						$addPost=false;	
 					} else {
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
@@ -107,7 +107,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 					update_ads($_GET['lid']);
 				}
 				$_GET['asid'] = $tid;
-				get_wpc_list("New AD Saved ".$out);
+				get_wpc_list($lang['_SAVE'].$out."<br>".$lang['_THANKS']);
 			} else {
 				$displayform = true;
 			}
@@ -147,7 +147,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 if (!_is_usr_loggedin()){
 ?>
 <input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['author_name']));?>"><br>
-(<?php echo __("You are not logged in and posting as a guest, click");?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)
+(<?php echo $lang['_GUEST']; ?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)
 <?php
 } else {
 echo "<b>".$userdata->$userfield."</b>";
@@ -155,24 +155,25 @@ echo "<b>".$userdata->$userfield."</b>";
 ?></td>
 </tr><tr>
 <td align=right valign=top><?php echo __("Ad Header:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo __(" *")?></span></td></tr>
+<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 <tr>
-<td align=right valign=top><?php echo __("Image File: ");?></td>
-<td><input type=file name="image_file"><br /><small><?php echo __("Optional. The picture should be less than (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel ");?>)</small></td></tr>
+<td align=right valign=top><?php echo $lang['_PIC']; ?></td>
+<td><input type=file name="image_file"><br /><small>
+<?php echo $lang['_OPTIONAL'].$lang['_INVALIDMSG4']." (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel )"; ?></small></td></tr>
 <tr>
 <tr>
-<td align=right><?php echo __("Email:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo __(" *")?></span></td></tr>
-<td align=right><?php echo __("Website:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo __(" Optional")?></small></td></tr>
-<td align=right><?php echo __("Phone:");?> </td>
-<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><small><?php echo __(" Optional")?></small></td></tr>
+<td align=right><?php echo $lang['_EMAIL']; ?></td>
+<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
+<td align=right><?php echo $lang['_WEB']; ?></td>
+<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo $lang['_OPTIONAL'];?></small></td></tr>
+<td align=right><?php echo $lang['_TEL']; ?></td>
+<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
 <tr>
-<td valign=top align=right><?php echo __("Ad Description:");?> </td>
+<td valign=top align=right><?php echo $lang['_DESC']; ?></td>
 <td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
 </tr>
 <tr>
-<td valign=top align=right><?php echo __("Confirmation code:");?> </td>
+<td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
 <td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
@@ -234,7 +235,8 @@ function create_public_link($action, $vars){
 
 
 function wpClassified_permission_denied(){
-	echo __("Sorry, it seems that you do not have permission to perform the requested action.");
+	global $lang;
+	echo $lang['_SORRY'];
 	return;
 
 }
@@ -249,8 +251,6 @@ function create_ads_author($ad){
 	}
 	return $out;
 }
-
-
 
 function get_post_author($post){
 	$wpcSettings = get_option('wpClassified_data');
@@ -321,14 +321,15 @@ function wpClassified_commment_quote($post){
 
 # EMAIL ROUTINE 
 function _send_email($mailto, $mailsubject, $mailtext) {
+	global $lang;
 	$email_sent = array();
 	$email = wp_mail($mailto, $mailsubject, $mailtext);
 	if ($email == false) {
 		$email_sent[0] = false;
-		$email_sent[1] = __('Email Notification Failed', "sforum");
+		$email_sent[1] = $lang['_SENDNOTFAIL'];
 	} else {
 		$email_sent[0] = true;
-		$email_sent[1] = __('Email Notification Sent', "sforum");
+		$email_sent[1] = $lang['_SENDNOT'];
 	}
 	return $email_sent;
 }
@@ -336,7 +337,7 @@ function _send_email($mailto, $mailsubject, $mailtext) {
 
 # NOTIFICATION EMAILS 
 function _email_notifications($userId, $author_name, $listId, $subject, $post, $image) {
-	global $wpdb, $table_prefix;
+	global $wpdb, $table_prefix, $lang;
 
 	$wpcSettings = get_option('wpClassified_data');
 	$lst = $wpdb->get_results("SELECT name FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id=" .$listId);
@@ -361,7 +362,7 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 		$msg.= $url.$eol.$eol;
 		$msg.= __('Post:', "wpClassified").$eol.$post_content.$eol.$eol;
 		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review', 'wpClassified'), $subject, $listName).$eol;
-		$msg.= '<a href="'.get_bloginfo('wpurl'). '/index.php?pagename=classified">' . __('Review All Ads', 'wpClassified'). "</a>".$eol;
+		$msg.= '<a href="'.get_bloginfo('wpurl'). '/index.php?pagename=classified">' .$lang['_VIEWALLADS']. "</a>".$eol;
 		$adminStruct = get_userdata($ADMINID);
 		$email_sent = _send_email(get_option('admin_email'), sprintf(__('[%s] New Forum Post', "wpClassified"), get_bloginfo('name')), $msg);
 		$check = $email_status[1];
