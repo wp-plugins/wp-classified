@@ -111,7 +111,7 @@ function wpc_index(){
 			<td class="subcat" width="90px" height="60px" valign="top">
 			<?php 
 			$img = get_bloginfo('wpurl');
-			echo "<img src=\"" . $img . "/wp-content/plugins/wp-classified/" . $category->photo . "\">";
+			echo "<img src=\"" . $img . "/wp-content/plugins/wp-classified/" . $category->photo . "\"  class=\"imgMiddle\">";
 			?>
 			</td>
 			<td class="subcat" valign="top"><strong><?php echo $category->name;?></strong></td>
@@ -128,9 +128,9 @@ function wpc_index(){
 <div class="list_ads">
 <?php
 	if ($rlists[$catlist[$i]->lists_id]=='y' && $user_ID>0){
-	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" height=15 width=15>";
+	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" class=\"imgMiddle\">";
 	} else {
-	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" height=15 width=15>";	
+	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" class=\"imgMiddle\">";	
 	}
 	echo create_public_link("classified", array("name"=>$catlist[$i]->name, "lid"=>$catlist[$i]->lists_id));
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE STATUS = 'open' AND sticky = 'n' AND ads_subjects_list_id = " .  $catlist[$i]->lists_id );
@@ -230,7 +230,7 @@ function get_wpc_list($msg){
 	for ($x=0; $x<count($ads); $x++){
 		$ad = $ads[$x];
 		if (!@in_array($ad->ads_subjects_id, $read) && _is_usr_loggedin()){
-			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" valign=absmiddle> ";
+			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" class=\"imgMiddle\"> ";
 		} else {$rour = "";} // fix me
 		$pstart = 0;
 		$pstart = $ad->ads-($ad->ads%$wpcSettings["count_ads_per_page"]);
@@ -240,7 +240,7 @@ function get_wpc_list($msg){
 		<?php
 			echo $rour;
 			if ($ad->sticky=='y'){
-			echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/sticky.gif\" height=15 width=15 align=absmiddle alt=\"".__("Sticky")."\"> ";
+			echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/sticky.gif\" class=\"imgMiddle\" alt=\"".__("Sticky")."\"> ";
 			}
 			echo create_public_link("ads_subject", array("name"=>$ad->subject, "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
 			?></strong>
@@ -248,7 +248,7 @@ function get_wpc_list($msg){
 		<td align="right" valign="middle" class="ads_subject">
 		<?php
 			if ($wpcSettings["wpClassified_display_last_post_link"]=='y'){
-				echo create_public_link("lastAd", array("name"=>"<img align=\"middle\" src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/lastpost.gif"."\" border=\"0\">", "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id, "start"=>$pstart));
+				echo create_public_link("lastAd", array("name"=>"<img class=\"imgMiddle\"  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/lastpost.gif"."\" border=\"0\">", "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id, "start"=>$pstart));
 			}
 		?>
 		</td>
