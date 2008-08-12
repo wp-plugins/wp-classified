@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassiefied-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.2.0-a
+Version: 1.2.0-b
 Requires at least: 2.3.x
 Author URI: Mohammad Forgani http://www.forgani.com
 
@@ -42,6 +42,7 @@ Changes August 10/2008
 - update {table_prefix}wpClassified_ads_subjects 
 and added some new fields email, web, phone, ...
 - implement the conformaion code (captcha)
+- implement language files (The Work is Not Finished!)
 
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 

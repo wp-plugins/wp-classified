@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.2
+name: wpClassified Wordpress plugins version 1.2.0-b
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -78,14 +78,12 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
-Changes August 10/2008
+Changes n 1.2.x - August 10/2008
 - update {table_prefix}wpClassified_ads_subjects 
 and added some new fields email, web, phone, ...
 - implement the conformaion code (captcha)
 - added sent to his friend's button
-- added language file
-
-
+- added language file (The Work is Not Finished!)
 
 Changes in 1.1.1 - June 20/2008
 - fix the search function
