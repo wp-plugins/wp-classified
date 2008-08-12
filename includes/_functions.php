@@ -670,7 +670,12 @@ function _send_ad(){
 			$message .= "View Photo and More Details: <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a><HR>";
 
   			$txt = html2text($message); 
-			if (mail($mailto, $subject, $txt,"From: $mailfrom\n")) {
+			$from = "From: ". $yourname . "<" .$mailfrom. ">";
+			$from .= "Bcc: email3@domain.de\n";
+			//$from .= "Content-Type: text/html";
+
+
+			if (mail($mailto, $subject, $txt, $from ."\n")) {
 				get_wpc_list($lang['_SEND']);
 			} else {
 				$sendMsg = $lang['_SENDERR'];
