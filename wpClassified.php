@@ -1035,9 +1035,9 @@ function create_ads_input($content=""){
 			 $mode="advanced";
 			 if ($wpcSettings['editor_toolbar_basic']=='y') $mode="simple";
 	
-			echo '<script language="javascript" type="text/javascript" src="' . get_bloginfo('wpurl').  '/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce.js"></script>';
+			echo '<script language="javascript" type="text/javascript" src="' .get_bloginfo('wpurl').  '/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce.js"></script>';
 		?>
-			<script language="javascript" type="text/javascript" src="get_bloginfo('wpurl')}/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce_gzip.php"></script>
+			<script language="javascript" type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce_gzip.php"></script>
 
 			<script language="javascript" type="text/javascript">
 			tinyMCE.init({
