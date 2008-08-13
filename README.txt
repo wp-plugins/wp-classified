@@ -52,7 +52,7 @@ Using phpMyAdmin (or other database manager) run these sql queries on your exist
 
 - So first start the phpMyAdmin console...
 - Select the right Database
-- Click on "Export" tab
+- Click on "Import" tab
 
 	upgrade1_1to1_2.sql
 
