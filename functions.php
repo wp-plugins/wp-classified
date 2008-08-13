@@ -1,9 +1,11 @@
 <?php
 
-/**
- * functions.php
- *
- **/
+/*
+* functions.php
+*
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
+*/
 
 require('captcha_class.php');
 

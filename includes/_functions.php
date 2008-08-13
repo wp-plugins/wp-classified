@@ -1,10 +1,11 @@
 <?php
 
-/**
- * _functions.php
- *
- **/
-
+/*
+* _function.php
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
+* @version 1.2
+*/
 
 if (!$_SESSION) session_start();
 
@@ -47,7 +48,7 @@ function wpc_header(){
 		}
 	}
 ?>
-	<div style="text-align:right">
+	<div style="text-align:right; float:right;">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUIREDUEST['search_terms']);?>">
 		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
@@ -220,9 +221,9 @@ function get_wpc_list($msg){
 	</tr>
 	</table>
 	<br><br>
-	<table class="ads_title" width=100%>
+	<table class="table_ads">
 	<tr>
-		<td class="ads"><?php $lang['_ADS'];?></td>
+		<td class="ads"><?php echo $lang['_ADS'];?></td>
 		<td class="ads" align=right><?php echo $lang['_VIEWS']?></td>
 		<td class="ads" align=right><?php echo $lang['_LAST'];?></td>
 	</tr>
@@ -283,11 +284,11 @@ function wpc_footer(){
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins (Version '.$wpClassified_version.') powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 	
-	echo "<p>&nbsp;</p><p>&nbsp;</p><hr><p class=\"leftCell\">";
+	echo "<p>&nbsp;</p><hr><p class=\"leftCell\">";
 	if($wpcSettings['rss_feed']=='y'){
 		$rssurl= _rss_url();
 		$out = '<a class="rssIcon" href="'.$rssurl.'"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/rss.png" /> ' . $wpcSettings['wpClassified_slug'] . ' RSS&nbsp;</a>';
-		echo $out;
+		echo "<p>" .$out. "</p>";
 	}
 
 	if ($wpcSettings['show_credits']=='y'){
@@ -338,7 +339,7 @@ function _delete_ad(){
 	<strong>
 		<input type="hidden" name="subject_id" value="<?php echo $_GET['asid'];?>">
 		<?php echo $lang['_SURDELANN'];?><br />
-		<input type=submit value="<?php $lang['_YES'];?>"> <input type=button value="<?php $lang['_NO'];?>" onclick="history.go(-1);">
+		<input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
 	</strong>
 	</form>
 	<?php

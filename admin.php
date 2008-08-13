@@ -1,8 +1,8 @@
 <?php
 /*
-* WP-Classified Ad                                      
-* Redesigned by Mohammad Forgani                      
-* Find it or report problems at www.forgani.com 
+* admin.php
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
 * @version 1.2
 */
 

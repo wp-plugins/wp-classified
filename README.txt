@@ -83,7 +83,7 @@ Changes n 1.2.x - August 10/2008
 and added some new fields email, web, phone, ...
 - implement the conformaion code (captcha)
 - added sent to his friend's button
-- added language file (The Work is Not Finished!)
+- added language file (The work is Not Finished!)
 
 Changes in 1.1.1 - June 20/2008
 - fix the search function
