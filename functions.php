@@ -5,7 +5,7 @@
 *
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2.0-d
+* @version 1.2.0-e
 */
 
 require('captcha_class.php');

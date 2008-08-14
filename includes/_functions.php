@@ -4,7 +4,7 @@
 * _function.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2.0-d
+* @version 1.2.0-e
 */
 
 if (!$_SESSION) session_start();
@@ -365,10 +365,11 @@ function _edit_ad(){
 			 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
 			 WHERE ads_id = '".(int)$_GET['aid']."'");
 		$postinfo = $postinfo[0];
-		if ($wpc_user_info["ID"]!=$postinfo->author && !_is_usr_admin() && !_is_usr_mod()){
-			wpClassified_permission_denied();
-			return;
-		} elseif (!_is_usr_loggedin()){
+
+		echo "---> " . getenv('REMOTE_ADDR') . "--->" . $postinfo->author_ip;
+		if ($wpc_user_info["ID"]!=$postinfo->author &&	
+		!_is_usr_admin() && !_is_usr_mod() &&
+		(!_is_usr_loggedin() && getenv('REMOTE_ADDR')!=$postinfo->author_ip)){
 			wpClassified_permission_denied();
 			return;
 		}
@@ -442,8 +443,6 @@ function _edit_ad(){
 	WHERE ads_subjects_id='".(int)$_GET['asid']."' ";
 
 	$wpdb->query($sql);
-
-	do_action('wpClassified_edit_ad', $id);
 	get_wpc_list($lang['_UPDATE']);
 	} else {
 		$displayform = true;
@@ -811,8 +810,8 @@ function _display_ad(){
 
 	for ($i=$_GET['pstart']; $i<$hm; $i++){
 		$post = $posts[$i];
-		
 		if (_is_usr_admin() || _is_usr_mod() || 
+			(!_is_usr_loggedin() && getenv('REMOTE_ADDR')==$post->author_ip) ||
 			($post->author==$wpc_user_info["ID"] && _is_usr_loggedin())){
 			$editlink = " ".create_public_link("ea", array("name"=>"EDIT AD", "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>"Edit Your Ad", "aid"=>$post->ads_id))." ";
 

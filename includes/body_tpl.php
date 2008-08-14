@@ -1,4 +1,12 @@
 <?php
+
+/*
+* body__tpl template
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
+* @version 1.2.0-e
+*/
+
 global $lang;
 $wpcSettings = get_option('wpClassified_data');
 if (($i+1)==$hm){ 
@@ -18,13 +26,14 @@ if (($i+1)==$hm){
 <div>
 <strong><? echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a></strong><br /><small><?php echo __("Posted By:");?><img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/user.gif" class="imgMiddle"><strong><?php echo get_post_author($post);?></strong> on<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/cal.gif" class="imgMiddle"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?></small>
 	<?php
-	if ($post->author>0){
-		echo "<br /><span class=\"edit\">".$editlink."</span><span class=\"delete\">". $deletelink . "</span>";
+	if ( $post->author>0 ||
+		(!_is_usr_loggedin() && getenv('REMOTE_ADDR')==$post->author_ip) ){
+		echo "<p><span  class=\"edit\">".$editlink."</span><span class=\"delete\">". $deletelink . "</p>";
 		if ($wpcSettings['wpClassified_display_titles']=='y'){
-			echo "<br /><small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
+			echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
 		}
 	} else {
-		echo "<br /><span class=\"edit\">".$editlink."</span>";
+		echo "<p class=\"edit\">".$editlink."</p>";
 	}
 	?>
 </div>
