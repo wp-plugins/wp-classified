@@ -366,7 +366,6 @@ function _edit_ad(){
 			 WHERE ads_id = '".(int)$_GET['aid']."'");
 		$postinfo = $postinfo[0];
 
-		echo "---> " . getenv('REMOTE_ADDR') . "--->" . $postinfo->author_ip;
 		if ($wpc_user_info["ID"]!=$postinfo->author &&	
 		!_is_usr_admin() && !_is_usr_mod() &&
 		(!_is_usr_loggedin() && getenv('REMOTE_ADDR')!=$postinfo->author_ip)){
