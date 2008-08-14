@@ -98,10 +98,19 @@
 	$lang['_ACTIVE'] = "Active";
 	$lang['_INACTIVE'] = "Inactive";
 
-	$lang['_FRIENDTITLE'] = "Informieren Sie einem Freund über diese Annonce";
+	$lang['_FRIENDTITLE'] = "Send this advertisement to a friend";
 	$lang['_ADDETAIL'] = "Ad Details:";
 	$lang['_SENDTOF'] = "Send this to a friend";
 	$lang['_REPLY'] = "Reply to Post";
+
+//// from 1.2.0-d
+
+	$lang['_HOW_LONG'] = "How long do you want to shown:";
+	$lang['_DAY'] = " days";
+	$lang['_CONTACTBY'] = "Contact me by:";
+	$lang['_CONTACT_BY_EMAIL'] = "E-mail only";
+	$lang['_CONTACT_BY_BOTH'] = "Both E-mail or Phone";
+	$lang['_CONTACT_BY_PHONE'] = "phone only";
 
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";

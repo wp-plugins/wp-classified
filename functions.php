@@ -5,6 +5,7 @@
 *
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
+* @version 1.2.0-d
 */
 
 require('captcha_class.php');
@@ -83,10 +84,11 @@ function add_ads_subject(){
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
 $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
-	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, email) VALUES
+	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
 	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
+	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
 
 				$wpdb->query($sql);
@@ -174,8 +176,23 @@ echo "<b>".$userdata->$userfield."</b>";
 <td valign=top align=right><?php echo $lang['_DESC']; ?></td>
 <td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
 </tr>
+
 <tr>
-<td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
+<td valign=top><?php echo $lang['_HOW_LONG']; ?></td>
+<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php echo (int)$wpcSettings["ad_expiration"]; ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
+</tr>
+
+<tr>
+<td><?php echo $lang['_CONTACTBY']; ?></td>
+<td>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_EMAIL']; ?>"/><?php echo $lang['_CONTACT_BY_EMAIL']; ?></option>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_PHONE']; ?>"/><?php echo $lang['_CONTACT_BY_PHONE']; ?></option>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_BOTH']; ?>" checked/><?php echo $lang['_CONTACT_BY_BOTH']; ?></option>
+</td></tr>
+
+
+<tr>
+<td valign=top><?php echo $lang['_CONFIRM']; ?></td>
 <td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>

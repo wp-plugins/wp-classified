@@ -3,7 +3,7 @@
 * admin.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2
+* @version 1.2.0-c
 */
 
 function wpClassified_spam_filter($name, $email, $subject, $post, $userID){

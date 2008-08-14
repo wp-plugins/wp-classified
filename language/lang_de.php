@@ -95,15 +95,14 @@
 	$lang['_SENDTOF'] = "Informieren Sie einem Freund über diese Annonce";
 	$lang['_REPLY'] = "Inserenten kontaktieren";
 
-	//$lang['_RETURNANN'] = "Return classified ads listing";
-	//$lang['_DU'] = "added on";   
-	//$lang['_SENDBY'] = "Added by :";
-	//$lang['_NUMANNN'] = "Classified Artikel No. :";	
-	//$lang['_MESSAGE'] = "thinks this Classified Artikel might interest you and has sent you this message.";
-	//$lang['_INTERESS'] = "Other Classified Artikels can be seen at ";
-	//$lang['_BYMAIL'] = "Email :";
-	//$lang['_DISPO'] = "expires on";
-	//$lang['_NOMAIL'] = "We do not give out users email addresses, to contact them by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address. ";
+//// from 1.2.0-d
+	$lang['_HOW_LONG'] = "How long do you want to shown:";
+	$lang['_DAY'] = " days";
+	$lang['_CONTACTBY'] = "Contact me by:";
+	$lang['_CONTACT_BY_EMAIL'] = "E-mail only";
+	$lang['_CONTACT_BY_BOTH'] = "Both E-mail or Phone";
+	$lang['_CONTACT_BY_PHONE'] = "phone only";
+
 
 	
 ?>

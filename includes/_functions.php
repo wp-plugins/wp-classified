@@ -4,7 +4,7 @@
 * _function.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2
+* @version 1.2.0-d
 */
 
 if (!$_SESSION) session_start();
@@ -437,8 +437,10 @@ function _edit_ad(){
 	set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
 	email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
 	web='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
-	phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."'
+	phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
+	txt='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."'
 	WHERE ads_subjects_id='".(int)$_GET['asid']."' ";
+
 	$wpdb->query($sql);
 
 	do_action('wpClassified_edit_ad', $id);
@@ -463,6 +465,10 @@ function _edit_ad(){
 			ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id
 			 WHERE ads_id = '".(int)$_GET['aid']."'");
 		$postinfo = $postinfo[0];
+
+		// split
+		list ($adExpire, $contactBy) = split('###', $postinfo->txt);
+		
 		?>
 		<?php
 		if ($msg){echo "<p class=\"error\">".__($msg)."</p>";}
@@ -498,11 +504,27 @@ function _edit_ad(){
 		<td><?php create_ads_input($postinfo->post);?></td>
 		</tr>
 
+<tr>
+<td valign=top><?php echo $lang['_HOW_LONG']; ?></td>
+<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
+</tr>
+
+<tr>
+<td><?php echo $lang['_CONTACTBY']; ?></td>
+<td>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_EMAIL']; ?>" 
+<?php if ($contactBy==$lang['_CONTACT_BY_EMAIL']) { ?>checked<?php } ?>/><?php echo $lang['_CONTACT_BY_EMAIL']; ?></option>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_PHONE']; ?>" 
+<?php if ($contactBy==$lang['_CONTACT_BY_PHONE']) { ?>checked<?php } ?>/><?php echo $lang['_CONTACT_BY_PHONE']; ?></option>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_BOTH']; ?>" 
+<?php if (!$contactBy || $contactBy==$lang['_CONTACT_BY_BOTH']) { echo " checked"; } ?>/><?php echo $lang['_CONTACT_BY_BOTH']; ?></option>
+</td></tr>
 		<tr>
-		<td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
+		<td valign=top><?php echo $lang['_CONFIRM']; ?></td>
 		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
-		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
-		</tr><tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub"></td></tr>
+		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
+		</tr>
+		<tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub"></td></tr>
 		</form></table>
 		<?php
 		wpc_footer();
