@@ -217,3 +217,7 @@ background-color: #ffffff;
 text-align: right;
 vertical-align: top;
 }
+
+.smallTxt{
+font-size:70%;
+}
