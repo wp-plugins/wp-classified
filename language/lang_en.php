@@ -31,7 +31,6 @@
 	$lang['_DESC'] = "Description:";
 	$lang['_PRINT'] = "Print this Classified Ad";
 	$lang['_EMAIL'] = "Email:";
-	$lang['_FEMAIL'] = "Friend's Email:";
 	$lang['_TEL'] = "Telephone:";
 	$lang['_WEB'] = "WebSite:";
 	$lang['_CONFIRM'] = "Confirmation code:";
@@ -112,6 +111,12 @@
 	$lang['_NO_CONTACT'] = "No";
 	$lang['_TERM'] = "Terms of Use Agreement:";
 	
+	$lang['_FRIENDNAME'] = "Friend's Name:";
+	$lang['_FRIENDMAIL'] = "Friend's Email:";
+
+	$lang['_FRIENDBTN1'] = "To see view photo and more details, click on the following link or copy and paste it to the address window in you browser.<br><br>";
+
+	$lang['_FRIENDBTN2'] = "<BR><hr>Free classified ads with photos.";
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   

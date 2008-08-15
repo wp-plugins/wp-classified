@@ -695,8 +695,6 @@ function _send_ad(){
 		$yourname=$_POST['wpClassified_data'][yourname];
 		$mailfrom=$_POST['wpClassified_data'][mailfrom];
 		$mailto=$_POST['wpClassified_data'][mailto];
-		//$message .= $name . "just filled in your comments form. They said:\n" . $msg . "\n\n";
-		$message .= "<BR>" .$lang['_FRIENDTITLE']. "<br><br>";
 
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$",   $_POST['wpClassified_data'][mailto])){
 			$sendMsg = $lang['_INVALIDEMAIL'];
@@ -711,16 +709,19 @@ function _send_ad(){
 		if ($sendAd == true) {
 			$displayform = false;
 
-			$message = $lang['_ADDETAIL']."<BR>" . $msg . "<BR><BR>";
-			$message .= "View Photo and More Details: <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a><HR>";
-
+		$message = "Dear " . $_POST['wpClassified_data'][fname]. "<br>";
+		$message .= "your friend " . $yourname . " sent you information about " . $subject . "<br><br>";
+		$message .= $lang['_ADDETAIL']. "<BR>" . $msg . "<BR><BR>";
+		$message .= $lang['_FRIENDBTN1'];
+		$message .= get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"]) . "<BR><BR><BR>";
+		$message .= $yourname . $lang['_FRIENDBTN2'];
+		
   			$txt = html2text($message); 
 			$from = "From: ". $yourname . "<" .$mailfrom. ">";
-			//$from .= "Bcc: email3@domain.de\n";
 			//$from .= "Content-Type: text/html";
+			$sub = "your friend " . $yourname . " sent you information";
 
-
-			if (mail($mailto, $subject, $txt, $from ."\n")) {
+			if (mail($mailto, $sub, $txt, $from ."\n")) {
 				get_wpc_list($lang['_SEND']);
 			} else {
 				$sendMsg = $lang['_SENDERR'];
@@ -749,11 +750,11 @@ function _send_ad(){
 		<p>&nbsp;</p>
 		<form method="post" enctype="multipart/form-data" id="sndad" name="sndad" action="<?php echo $link_snd;?>">
 		<table width='99%' cellspacing='1'>
-		<tr><td class="sendTd">Your Name: </td><td><input size=35 type="text" name="wpClassified_data[yourname]" /></td></tr>
+		<tr><td class="sendTd"><?php echo $lang['_YOURNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[yourname]" /></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_YOUREMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
 		<tr><td></td><td><hr></td></tr>
-		<tr><td class="sendTd">Friend's Name: </td><td><input size=35 type="text" name="wpClassified_data[fname]" /></td></tr>
-		<tr><td class="sendTd"><?php echo $lang['_FEMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
+		<tr><td class="sendTd"><?php echo $lang['_FRIENDNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[fname]" /></td></tr>
+		<tr><td class="sendTd"><?php echo $lang['_FRIENDMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
 		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
 		<tr><td class="sendTd"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
 		<input type="hidden" name="wpClassified_send_ad" value="yes">

@@ -28,8 +28,6 @@
 	$lang['_DESC'] = "Anzeigendetails:";
 	$lang['_PRINT'] = "Die Annonce Drucken";
 	$lang['_EMAIL'] = "Email:";
-	$lang['_FEMAIL'] = "E-Mail Ihres Freundes:";
-	$lang['_FNAME'] = "Name Ihres Freundes:";
 	$lang['_TEL'] = "Telephone:";
 	$lang['_WEB'] = "Homepage::";
 	$lang['_CONFIRM'] = "Sicherheitscode:";
@@ -103,5 +101,11 @@
 	$lang['_NO_CONTACT'] = "Nein";
 	$lang['_TERM'] = "Zustimmung zu den Geschäftsbedingungen:";
 
+	$lang['_FRIENDNAME'] = "Name Ihres Freundes:";
+	$lang['_FRIENDMAIL'] = "E-Mail Ihres Freundes:";
+
+	$lang['_FRIENDBTN1'] = "To see view photo and more details, click on the following link or copy and paste it to the address window in you browser.<br><br>";
+
+	$lang['_FRIENDBTN2'] = "<BR><hr>Free classified ads with photos.";
 	
 ?>
