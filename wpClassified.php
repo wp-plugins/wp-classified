@@ -190,7 +190,7 @@ function wpcOptions_process(){
 		<tr>
 			<th align="right" valign="top"><?php echo __("Banner Code:");?> </th>
 			<td><textarea cols=50 rows=2 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
-		</tr>			
+		</tr>	
 	</table>
 </fieldset>
 </td><td>
@@ -222,7 +222,7 @@ function wpcOptions_process(){
 			<td><input type=text size=11 name="wpClassified_data[date_format]" value="<?php echo ($wpcSettings['date_format']);?>"><br><small>example: m-d-Y g:i a</small></td>
 		</tr>
 		<tr>
-			<th align="right"><?php echo __("Ad expiration in days");?></th>
+			<th align="right"><?php echo __("Defult value for number of days before expiration");?></th>
 			<td><input type=text size=11 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><small>default: 90</small></td>
 		</tr>
 		<tr>

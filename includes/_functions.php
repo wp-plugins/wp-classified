@@ -4,7 +4,7 @@
 * _function.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2.0-e
+* @version 1.2.0-f
 */
 
 if (!$_SESSION) session_start();
@@ -28,6 +28,26 @@ function wpc_header(){
 	echo '</td></tr></table>';
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo $lnks;
+
+	$today = time();
+	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
+	$rmRecords = $wpdb->get_results($sql);
+	foreach ($rmRecords as $rmRecord) { 
+		list ($adExpire, $contactBy) = split('###', $rmRecord->txt);
+		if (!$adExpire) { $adExpire=$wpcSettings['ad_expiration']; };
+		if (!$adExpire || $adExpire < 1 ) {
+			$adExpire=365;
+		}
+		$second = $adExpire*24*60*60; // second
+		$l = $today-$second;
+		if ($rmRecord->date < $l) {
+			$asid = $rmRecord->ads_subjects_id;
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+		}
+	}
+
+/*	
 	$expire=365;
 	$expire=$wpcSettings['ad_expiration'];
 	if (!$expire || $expire < 1 ) {
@@ -47,6 +67,7 @@ function wpc_header(){
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
 		}
 	}
+*/
 ?>
 	<div style="text-align:right; float:right;">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
