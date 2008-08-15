@@ -716,7 +716,7 @@ function _send_ad(){
 
   			$txt = html2text($message); 
 			$from = "From: ". $yourname . "<" .$mailfrom. ">";
-			$from .= "Bcc: email3@domain.de\n";
+			//$from .= "Bcc: email3@domain.de\n";
 			//$from .= "Content-Type: text/html";
 
 
