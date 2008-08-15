@@ -23,18 +23,15 @@ if (($i+1)==$hm){
 		echo "<div style='float: left; padding: 3px;'><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" .$post->image_file."\"></div>";
 	} 
 ?>
-<div>
 <strong><? echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a></strong><br /><span class="smallTxt"><?php echo __("Posted By:");?><img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/user.gif" class="imgMiddle"><strong><?php echo get_post_author($post);?></strong> on<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/cal.gif" class="imgMiddle"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?></span>
 	<?php
-	if ( $post->author>0 ||
-		(!_is_usr_loggedin() && getenv('REMOTE_ADDR')==$post->author_ip) ){
+	if ($post->author>0 && $editlink){
 		echo '<p class="smallTxt"><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</span></p>';
 		if ($wpcSettings['wpClassified_display_titles']=='y'){
 			echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
 		}
 	}  
 	?>
-</div>
 </div>
 
 <script language="javascript" type="text/javascript">
@@ -60,8 +57,9 @@ if (($i+1)==$hm){
 <div class="wpClassified_ads_footer">
 <?php 
 
+list ($adExpire, $contactBy) = split('###', $adsInfo[txt]);
 echo '<span class="leftCell">';
-if ($adsInfo[email]) {
+if ($adsInfo[email] && $contactBy==$lang['_YES_CONTACT']) {
 	echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/email.jpg" class="imgMiddle">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
 }
 if ($adsInfo[web]) {

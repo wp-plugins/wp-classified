@@ -477,8 +477,10 @@ function _edit_ad(){
 		<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
 		onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php echo create_public_link("eaform", array("lid"=>$lists["lists_id"], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$adsInfo["subject"], "aid"=>$_GET['aid']));?>">
 		<input type="hidden" name="wpClassified_edit_ad" value="yes">
-		<tr><td align=right><?php echo $lang['_AUTHOR']; ?>:</td>
-		<td><?php echo get_post_author($postinfo); ?></td>
+		<tr><td align=right><?php echo $lang['_AUTHOR']; ?></td>
+		<td><?php echo get_post_author($postinfo); ?>
+		<input type="hidden" name="wpClassified_data[author_name]" value="<?php echo get_post_author($postinfo); ?>">
+		</td>
 		</tr>
 		<tr>
 		<td align=right><?php echo $lang['_TITLE']; ?></td>
@@ -490,6 +492,16 @@ function _edit_ad(){
 		<tr>
 		<td align=right><?php echo $lang['_EMAIL']; ?></td>
 		<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
+
+<tr>
+<td align=right><?php echo $lang['_CONTACTBY']; ?></td>
+<td>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" 
+<?php if ($contactBy==$lang['_YES_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_YES_CONTACT']; ?></option>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_NO_CONTACT']; ?>" 
+<?php if (!$contactBy || $contactBy==$lang['_No_COTACT']) { echo " checked"; } ?>/><?php echo $lang['_NO_CONTACT']; ?></option>
+</td></tr>
+
 
 		<tr>
 		<td align=right><?php echo $lang['_WEB']; ?></td>
@@ -504,22 +516,12 @@ function _edit_ad(){
 		</tr>
 
 <tr>
-<td valign=top><?php echo $lang['_HOW_LONG']; ?></td>
+<td valign=top align=right><?php echo $lang['_HOW_LONG']; ?></td>
 <td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
 </tr>
 
-<tr>
-<td><?php echo $lang['_CONTACTBY']; ?></td>
-<td>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_EMAIL']; ?>" 
-<?php if ($contactBy==$lang['_CONTACT_BY_EMAIL']) { ?>checked<?php } ?>/><?php echo $lang['_CONTACT_BY_EMAIL']; ?></option>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_PHONE']; ?>" 
-<?php if ($contactBy==$lang['_CONTACT_BY_PHONE']) { ?>checked<?php } ?>/><?php echo $lang['_CONTACT_BY_PHONE']; ?></option>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_BOTH']; ?>" 
-<?php if (!$contactBy || $contactBy==$lang['_CONTACT_BY_BOTH']) { echo " checked"; } ?>/><?php echo $lang['_CONTACT_BY_BOTH']; ?></option>
-</td></tr>
 		<tr>
-		<td valign=top><?php echo $lang['_CONFIRM']; ?></td>
+		<td align=right valign=top><?php echo $lang['_CONFIRM']; ?></td>
 		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
 		</tr>

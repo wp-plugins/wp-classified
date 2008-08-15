@@ -44,10 +44,10 @@ function add_ads_subject(){
 				$addPost = false;
 			}
 
-		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])) {
-			$msg = $lang['_INVALIDEMAIL'];
-			$addPost = false;
-		}
+			if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])) {
+				$msg = $lang['_INVALIDEMAIL'];
+				$addPost = false;
+			}
 
 			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    				$msg = $lang['_INVALIDCONFIRM'];
@@ -138,7 +138,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ad...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
 			<input type="hidden" name="add_ads_subject" value="yes">
 <tr>
-<td align=right valign=top><?php echo __("Posting Name:");?> </td>
+<td align=right valign=top><?php echo $lang['_AUTHOR']; ?></td>
 
 <?
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
@@ -150,15 +150,16 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 <td><?php
 if (!_is_usr_loggedin()){
 ?>
-<input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['author_name']));?>"><br>
+<input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][author_name]));?>"><br>
 (<?php echo $lang['_GUEST']; ?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)
 <?php
 } else {
 echo "<b>".$userdata->$userfield."</b>";
+echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userdata->$userfield.'">';
 } 
 ?></td>
 </tr><tr>
-<td align=right valign=top><?php echo __("Ad Header:");?> </td>
+<td align=right valign=top><?php echo $lang['_TITLE']; ?></td>
 <td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 <tr>
 <td align=right valign=top><?php echo $lang['_PIC']; ?></td>
@@ -168,6 +169,17 @@ echo "<b>".$userdata->$userfield."</b>";
 <tr>
 <td align=right><?php echo $lang['_EMAIL']; ?></td>
 <td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
+
+<tr>
+<td align=right><?php echo $lang['_CONTACTBY']; ?>:</td>
+<td>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" checked/>
+<?php echo $lang['_YES_CONTACT']; ?></option>
+<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_NO_CONTACT']; ?>" />
+<?php echo $lang['_NO_CONTACT']; ?></option>
+</td></tr>
+
+
 <td align=right><?php echo $lang['_WEB']; ?></td>
 <td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo $lang['_OPTIONAL'];?></small></td></tr>
 <td align=right><?php echo $lang['_TEL']; ?></td>
@@ -178,21 +190,17 @@ echo "<b>".$userdata->$userfield."</b>";
 </tr>
 
 <tr>
-<td valign=top><?php echo $lang['_HOW_LONG']; ?></td>
+<td valign=top align=right><?php echo $lang['_HOW_LONG']; ?></td>
 <td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php echo (int)$wpcSettings["ad_expiration"]; ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
 </tr>
 
 <tr>
-<td><?php echo $lang['_CONTACTBY']; ?></td>
-<td>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_EMAIL']; ?>"/><?php echo $lang['_CONTACT_BY_EMAIL']; ?></option>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_PHONE']; ?>"/><?php echo $lang['_CONTACT_BY_PHONE']; ?></option>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_CONTACT_BY_BOTH']; ?>" checked/><?php echo $lang['_CONTACT_BY_BOTH']; ?></option>
-</td></tr>
-
+<td valign=top align=right><?php echo $lang['_TERM']; ?></td>
+<td><input value="1" type="checkbox" name="wpClassified_data[term]"/></td>
+</tr>
 
 <tr>
-<td valign=top><?php echo $lang['_CONFIRM']; ?></td>
+<td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
 <td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>

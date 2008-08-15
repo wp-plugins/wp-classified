@@ -36,8 +36,8 @@
 	$lang['_PIC'] = "Bild:";
 	$lang['_TITLE'] = "Title:"; // subject
 	$lang['_SUBJET'] = "Subject"; //posting name
-	$lang['_AUTHOR'] = "Author";
-	$lang['_TEL'] = "Telephon:";
+	$lang['_AUTHOR'] = "Ihr Name / Firmenname";
+	$lang['_TEL'] = "Telefon(e) / Mobil(e):";
 	$lang['_DATE'] = "Datum";
 	$lang['_LIST'] = "List";
 	$lang['_VIEWS'] = "Listenansicht";
@@ -96,13 +96,12 @@
 	$lang['_REPLY'] = "Inserenten kontaktieren";
 
 //// from 1.2.0-d
-	$lang['_HOW_LONG'] = "How long do you want to shown:";
-	$lang['_DAY'] = " days";
-	$lang['_CONTACTBY'] = "Contact me by:";
-	$lang['_CONTACT_BY_EMAIL'] = "E-mail only";
-	$lang['_CONTACT_BY_BOTH'] = "Both E-mail or Phone";
-	$lang['_CONTACT_BY_PHONE'] = "phone only";
-
+	$lang['_HOW_LONG'] = "wie lange Ihre Anzeige angezeigt werden soll:";
+	$lang['_DAY'] = " Tage";
+	$lang['_CONTACTBY'] = "Soll Ihre Email-Adresse angezeigt werden:";
+	$lang['_YES_CONTACT'] = "Ja";
+	$lang['_NO_CONTACT'] = "Nein";
+	$lang['_TERM'] = "Zustimmung zu den Geschäftsbedingungen:";
 
 	
 ?>

@@ -38,8 +38,8 @@
 	$lang['_PIC'] = "Image:";
 	$lang['_TITLE'] = "Title:"; // subject
 	$lang['_SUBJET'] = "Subject"; //posting name
-	$lang['_AUTHOR'] = "Author";
-	$lang['_TEL'] = "Telephone:";
+	$lang['_AUTHOR'] = "Your name/company name:";
+	$lang['_TEL'] = "Phone(s)/mobile(s):";
 	$lang['_DATE'] = "Date";
 	$lang['_LIST'] = "List";
 	$lang['_VIEWS'] = "Views";
@@ -107,11 +107,11 @@
 
 	$lang['_HOW_LONG'] = "How long do you want to shown:";
 	$lang['_DAY'] = " days";
-	$lang['_CONTACTBY'] = "Contact me by:";
-	$lang['_CONTACT_BY_EMAIL'] = "E-mail only";
-	$lang['_CONTACT_BY_BOTH'] = "Both E-mail or Phone";
-	$lang['_CONTACT_BY_PHONE'] = "phone only";
-
+	$lang['_CONTACTBY'] = "Show Your Email Address:";
+	$lang['_YES_CONTACT'] = "Yes";
+	$lang['_NO_CONTACT'] = "No";
+	$lang['_TERM'] = "Terms of Use Agreement:";
+	
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   

@@ -18,7 +18,7 @@ margin: 2px;
 
 .wpClassified_ads_container {
 border: 1px solid #c5b2b3;
-padding: 3px;
+padding: 2px 2px 50px 2px;
 }
 
 .wpClassified_ads_content {
@@ -132,7 +132,7 @@ background-color: transparent;
 background-image: url(/wp-content/plugins/wp-classified/images/delete.gif);
 background-repeat: no-repeat;
 vertical-align: middle;
-padding-left: 20px;
+padding: 0 2px 4px 20px;
 float: right;
 border: none;
 font-size: 90%;
@@ -142,7 +142,7 @@ font-size: 90%;
 background-color: transparent;
 background-image: url(/wp-content/plugins/wp-classified/images/edit.gif);
 background-repeat: no-repeat;
-padding-left: 20px;
+padding: 0 2px 4px 20px;
 float: left;
 vertical-align: middle;
 border: none;
@@ -168,7 +168,7 @@ padding: 0 2px 0 2px;
 
 
 .rightCell{
-	margin: 0;
+	margin-top: 4x;
 	padding: 8px 5px 2px 0;
 	float: right;
 	text-align: right;
@@ -178,7 +178,7 @@ padding: 0 2px 0 2px;
 }
 
 .leftCell{
-	margin: 0;
+	margin-top: 4px;
 	padding: 8px 5px 2px 0;
 	vertical-align: middle;
 	float: left;
@@ -186,7 +186,7 @@ padding: 0 2px 0 2px;
 }
 
 .rightCellNorm{
-	margin: 0;
+	margin-top: 4px;
 	padding: 8px 5px 2px 0;
 	vertical-align: middle;
 	float: right;
@@ -219,5 +219,5 @@ vertical-align: top;
 }
 
 .smallTxt{
-font-size:70%;
+font-size:80%;
 }
