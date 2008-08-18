@@ -428,9 +428,11 @@ function _edit_ad(){
 		$displayform = false;
 		$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 	$sql = "update {$table_prefix}wpClassified_ads
-	set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
-	image_file='".$wpdb->escape(stripslashes($setImage))."',
-	post='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][post]))."'
+	set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',";
+	if ($_FILES['image_file'] =='') {
+		$sql .= "image_file='".$wpdb->escape(stripslashes($setImage))."',";
+	}
+	$sql .= "post='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][post]))."'
 	WHERE ads_id='".(int)$_GET['aid']."' ";
 	$wpdb->query($sql);
 
@@ -439,7 +441,7 @@ function _edit_ad(){
 	email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
 	web='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
 	phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-	txt='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."'
+	txt='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$_POST['wpClassified_data'][contactBy]."'
 	WHERE ads_subjects_id='".(int)$_GET['asid']."' ";
 
 	$wpdb->query($sql);
@@ -457,21 +459,20 @@ function _edit_ad(){
   $captcha = rand(1, 20) . ".png";
   $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/" . $captcha);
 
-		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
+		$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			 LEFT JOIN {$table_prefix}users ON 
 			{$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
 			 LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON 
 			ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id
 			 WHERE ads_id = '".(int)$_GET['aid']."'");
-		$postinfo = $postinfo[0];
+		$postinfo = $postinfos[0];
 
-		// split
-		list ($adExpire, $contactBy) = split('###', $postinfo->txt);
-		
 		?>
 		<?php
 		if ($msg){echo "<p class=\"error\">".__($msg)."</p>";}
 		echo $quicktags;
+
+		// split
 		?>
 		<table width=100% class="editform" border=0>
 		<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
