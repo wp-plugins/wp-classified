@@ -730,7 +730,7 @@ function _send_ad(){
 		<p>&nbsp;</p>
 		<form method="post" enctype="multipart/form-data" id="sndad" name="sndad" action="<?php echo $link_snd;?>">
 		<table width='99%' cellspacing='1'>
-		<tr><td class="sendTd"><?php echo $lang['_YOURNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[yourname]" /></td></tr>
+		<tr><td class="sendTd"><?php echo $lang['_YOURNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[yourname]"  value="<?php echo $yourname; ?>"/></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_YOUREMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
 		<tr><td></td><td><hr></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_FRIENDNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[fname]" /></td></tr>
