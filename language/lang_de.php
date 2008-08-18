@@ -119,4 +119,6 @@
 	$lang['_ADMAXLIMIT'] = "Body length limit for standard ads:";
 	$lang['_ADMAXLIMITTXT'] = "Maximum characters to allow in classified ad body.";
 
+	$lang['_AUTHORSEARCH'] = "Name";
+
 ?>

@@ -675,8 +675,8 @@ function _send_ad(){
 		$mailfrom=$_POST['wpClassified_data'][mailfrom];
 		$mailto=$_POST['wpClassified_data'][mailto];
 
-		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$",   $_POST['wpClassified_data'][mailto])){
-			$sendMsg = $lang['_INVALIDEMAIL'];
+		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][mailto])){
+			$sendMsg = $lang['_INVALIDEMAIL2'];
 			$sendAd = false;
 		}
 

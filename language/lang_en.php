@@ -12,7 +12,7 @@
 	$lang['_RETURN'] = "Return";
 		
 	$lang['_INVALIDEMAIL'] = "Email is required.";
-	$lang['_INVALIDEMAIL'] = "Please enter a valid e-mail!";
+	$lang['_INVALIDEMAIL2'] = "Please enter a valid e-mail!";
 	$lang['_INVALIDNAME'] = "You must provide a name!";
 	$lang['_INVALIDSUBJECT'] = "You must provide a subject!";
 	$lang['_INVALIDCOMMENT'] = "Description is required.";
