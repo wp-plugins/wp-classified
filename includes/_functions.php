@@ -4,7 +4,7 @@
 * _function.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2.0-f
+* @version 1.2.0-g
 */
 
 if (!$_SESSION) session_start();
@@ -17,9 +17,9 @@ function wpc_header(){
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
 	echo '<table border=0><tr><td>';
-	if ($wpcSettings['wpClassified_top_image']!=''){
-		$img=preg_replace('/\s+/','',$wpcSettings['wpClassified_top_image']);
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/' .$img. '">';
+	if ($wpcSettings['classified_top_image']!=''){
+		$img=preg_replace('/\s+/','',$wpcSettings['cpClassified_top_image']);
+		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/' .$img. '">';
 	}
 	echo '</td><td valign=middle>';
 	if ($wpcSettings['description']!=''){

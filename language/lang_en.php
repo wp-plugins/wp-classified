@@ -115,8 +115,18 @@
 	$lang['_FRIENDMAIL'] = "Friend's Email:";
 
 	$lang['_FRIENDBTN1'] = "To see view photo and more details, click on the following link or copy and paste it to the address window in you browser.<br><br>";
-
 	$lang['_FRIENDBTN2'] = "<BR><hr>Free classified ads with photos.";
+
+//// from 1.2.0-g
+	$lang['_NEWADDURATION'] = "Ad Duration and Expiration";
+	$lang['_NEWADDEFAULT'] = "New ad default duration (days):";
+	$lang['_SENDREMIDE'] = "Send reminder emails to advertisers before the expiration in days:";
+	$lang['_NOTMESSAGE'] = "Notification messages:";
+	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
+	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";
+
+	$lang['_ADMAXLIMIT'] = "Body length limit for standard ads:";
+	$lang['_ADMAXLIMITTXT'] = "Maximum characters to allow in classified ad body.";
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
