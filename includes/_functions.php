@@ -205,13 +205,13 @@ function get_wpc_list($msg){
 	<table width="100%" class="cat">
 	<tr>
 		<?php 
-		
+		$addtopicImg = '<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg" class="imgMiddle">';
 		if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
-			$addtopicImg = 	'<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg" class="imgMiddle">';
+			
 			echo '<td colspan="3" class="rightCell">' . $addtopicImg . '<b>';
 			echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
 		} else {
-			echo '<td colspan="3" class="rightCell"><img src="' . $addtopicImg . '<b>';
+			echo '<td colspan="3" class="rightCell">' . $addtopicImg . '<b>';
 			echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
 		} 
 		
