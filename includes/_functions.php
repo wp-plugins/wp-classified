@@ -19,7 +19,7 @@ function wpc_header(){
 	echo '<table border=0><tr><td>';
 	if ($wpcSettings['classified_top_image']!=''){
 		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/' .$img. '">';
+		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '">';
 	}
 	echo '</td><td valign=middle>';
 	if ($wpcSettings['description']!=''){
@@ -129,9 +129,9 @@ function wpc_index(){
 <div class="list_ads">
 <?php
 	if ($rlists[$catlist[$i]->lists_id]=='y' && $user_ID>0){
-	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" class=\"imgMiddle\">";
+	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/unread.gif\" class=\"imgMiddle\">";
 	} else {
-	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/read.gif\" class=\"imgMiddle\">";	
+	echo "<img valign=absmiddle src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/read.gif\" class=\"imgMiddle\">";	
 	}
 	echo create_public_link("classified", array("name"=>$catlist[$i]->name, "lid"=>$catlist[$i]->lists_id));
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE STATUS = 'open' AND sticky = 'n' AND ads_subjects_list_id = " .  $catlist[$i]->lists_id );
@@ -207,13 +207,12 @@ function get_wpc_list($msg){
 		<?php 
 		
 		if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
-			
-		echo '<td colspan="3" class="rightCell"><img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/addtopic.jpg" class="imgMiddle"><b>';
-		echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
+			$addtopicImg = 	'<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg" class="imgMiddle">';
+			echo '<td colspan="3" class="rightCell">' . $addtopicImg . '<b>';
+			echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
 		} else {
-			
-		echo '<td colspan="3" class="rightCell"><img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/addtopic.jpg" class="imgMiddle"><b>';
-		echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
+			echo '<td colspan="3" class="rightCell"><img src="' . $addtopicImg . '<b>';
+			echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?></b></td><?php
 		} 
 		
 
@@ -231,7 +230,7 @@ function get_wpc_list($msg){
 	for ($x=0; $x<count($ads); $x++){
 		$ad = $ads[$x];
 		if (!@in_array($ad->ads_subjects_id, $read) && _is_usr_loggedin()){
-			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/unread.gif\" class=\"imgMiddle\"> ";
+			$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/unread.gif\" class=\"imgMiddle\"> ";
 		} else {$rour = "";} // fix me
 		$pstart = 0;
 		$pstart = $ad->ads-($ad->ads%$wpcSettings["count_ads_per_page"]);
@@ -241,7 +240,7 @@ function get_wpc_list($msg){
 		<?php
 			echo $rour;
 			if ($ad->sticky=='y'){
-			echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/sticky.gif\" class=\"imgMiddle\" alt=\"".__("Sticky")."\"> ";
+			echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/sticky.gif\" class=\"imgMiddle\" alt=\"".__("Sticky")."\"> ";
 			}
 			echo create_public_link("ads_subject", array("name"=>$ad->subject, "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
 			?></strong>
@@ -249,7 +248,7 @@ function get_wpc_list($msg){
 		<td align="right" valign="middle" class="ads_subject">
 		<?php
 			if ($wpcSettings["wpClassified_display_last_post_link"]=='y'){
-				echo create_public_link("lastAd", array("name"=>"<img class=\"imgMiddle\"  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/lastpost.gif"."\" border=\"0\">", "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id, "start"=>$pstart));
+				echo create_public_link("lastAd", array("name"=>"<img class=\"imgMiddle\"  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/lastpost.gif"."\" border=\"0\">", "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id, "start"=>$pstart));
 			}
 		?>
 		</td>
@@ -287,7 +286,7 @@ function wpc_footer(){
 	echo "<p>&nbsp;</p><hr><p class=\"leftCell\">";
 	if($wpcSettings['rss_feed']=='y'){
 		$rssurl= _rss_url();
-		$out = '<a class="rssIcon" href="'.$rssurl.'"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/rss.png" /> ' . $wpcSettings['wpClassified_slug'] . ' RSS&nbsp;</a>';
+		$out = '<a class="rssIcon" href="'.$rssurl.'"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/rss.png" /> ' . $wpcSettings['wpClassified_slug'] . ' RSS&nbsp;</a>';
 		echo "<p>" .$out. "</p>";
 	}
 
@@ -457,8 +456,7 @@ function _edit_ad(){
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
   $captcha = rand(1, 20) . ".png";
-  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/" . $captcha);
-
+  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 		$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			 LEFT JOIN {$table_prefix}users ON 
 			{$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
@@ -523,7 +521,7 @@ function _edit_ad(){
 
 		<tr>
 		<td align=right valign=top><?php echo $lang['_CONFIRM']; ?></td>
-		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
+		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
 		</tr>
 		<tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub"></td></tr>
@@ -719,7 +717,7 @@ function _send_ad(){
 		$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
 		$oVisualCaptcha = new _captcha($aFonts);
 		$captcha = rand(1, 20) . ".png";
-		$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/" . $captcha);
+		$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 		if ($sendMsg){echo "<p class=\"error\">".__($sendMsg)."</p>";}
 		?>
 		<div class="wpClassified_ads_container">
@@ -735,7 +733,7 @@ function _send_ad(){
 		<tr><td></td><td><hr></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_FRIENDNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[fname]" /></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_FRIENDMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
-		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
+		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
 		<tr><td class="sendTd"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
 		<input type="hidden" name="wpClassified_send_ad" value="yes">
 		<tr><td></td><td><input type=submit value="<?php echo $lang['_SENDEMAIL']; ?>"></td></tr>

@@ -279,14 +279,14 @@ function wpcOptions_process(){
 	</tr>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>
-			<td><input type=text size=11 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">(is currently not implemented!) example: 7 days</span></td>
+			<td><input type=text size=11 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">(is currently not implemented!) example:7 days</span></td>
 	</tr>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_NOTMESSAGE'];?></th>
 			<td><?php echo $lang['_NOTMESSAGESUBJECT'];?>
 			<textarea cols=70 rows=5 name="wpClassified_data[not_message]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['not_message']));?>!sitename reminder: classified ads expiring soon!</textarea></td></tr><tr><td align="right" colspan=2>
 			<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span></td></tr>
-			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=70 rows=5 name="wpClassified_data[not_message]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['not_message']));?>One or more of your classified ads on !sitename (!siteurl) are expiring soon.  Please sign in and visit !user_ads_url to check your ads.</textarea></td>
+			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=70 rows=5 name="wpClassified_data[not_message]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['not_message']));?>One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</textarea></td>
 	</tr>
 </table>
 </fieldset>

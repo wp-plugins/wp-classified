@@ -144,7 +144,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
   $captcha = rand(1, 20) . ".png";
-  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/" . $captcha);
+  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
 
 <td><?php
@@ -201,7 +201,7 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 
 <tr>
 <td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
-<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
+<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
 <tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub"></td></tr>

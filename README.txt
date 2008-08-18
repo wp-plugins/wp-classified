@@ -84,6 +84,7 @@ and added some new fields email, web, phone, ...
 - implement the conformaion code (captcha)
 - added sent to his friend's button
 - added language file (The work is Not Finished!)
+- modify admin classified setting 
 
 Changes in 1.1.1 - June 20/2008
 - fix the search function
