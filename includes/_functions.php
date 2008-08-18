@@ -486,7 +486,7 @@ function _edit_ad(){
 		<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td>		</tr>
 		<tr>
 		<td align=right valign=top><?php echo $lang['_PIC']; ?></td>
-		<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>"><small>&nbsp;<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?><br /><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)</small></td>
+		<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>">&nbsp;&nbsp;<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $postinfo->image_file; ?>" class="imgMiddle"><br /><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)</small></td>
 		</tr>
 		<tr>
 		<td align=right><?php echo $lang['_EMAIL']; ?></td>
