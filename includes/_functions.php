@@ -472,6 +472,10 @@ function _edit_ad(){
 
 		// split
 		?>
+		<div class="wpClassified_ads_container">
+		<div class="wpClassified_ads_header">
+			<?php echo "<b>". $adsInfo["subject"] . "</b>"; ?>
+		</div>
 		<table width=100% class="editform" border=0>
 		<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
 		onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php echo create_public_link("eaform", array("lid"=>$lists["lists_id"], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$adsInfo["subject"], "aid"=>$_GET['aid']));?>">
@@ -526,6 +530,7 @@ function _edit_ad(){
 		</tr>
 		<tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub"></td></tr>
 		</form></table>
+		</div>
 		<?php
 		wpc_footer();
 	}
