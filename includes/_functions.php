@@ -11,14 +11,14 @@ if (!$_SESSION) session_start();
 
 // fix me
 function wpc_header(){
-	global $wpdb, $table_prefix, $lang;
+	global $_GET, $_POST, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
 	echo '<table border=0><tr><td>';
 	if ($wpcSettings['classified_top_image']!=''){
-		$img=preg_replace('/\s+/','',$wpcSettings['cpClassified_top_image']);
+		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
 		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/' .$img. '">';
 	}
 	echo '</td><td valign=middle>';
@@ -47,35 +47,14 @@ function wpc_header(){
 		}
 	}
 
-/*	
-	$expire=365;
-	$expire=$wpcSettings['ad_expiration'];
-	if (!$expire || $expire < 1 ) {
-		$expire=365;
-	}
-	$today = time();
-	$second = $expire*24*60*60; // second
-	$l = $today-$second;
-	$rm_id = $wpdb->get_results("SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects WHERE date < " . $l );
-
-	$cnt = count($rm_id);
-	if ($cnt!=0){
-		for ($x=0; $x<$cnt; $x++){
-		$id = $rm_id[$x];
-		$asid = $id->ads_subjects_id;
-		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
-		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
-		}
-	}
-*/
 ?>
 	<div style="text-align:right; float:right;">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
-		<input type="text" name="search_terms" VALUE="<?php echo str_replace('"', "&quot;", $_REQUIREDUEST['search_terms']);?>">
+		<input type="text" name="search_terms" VALUE="">
 		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
 		</form>
 	</div>
-	<p>&nbsp;</p>		
+	<p>&nbsp;</p>
 <?
 }
 
@@ -888,8 +867,8 @@ function _display_ad(){
 	wpc_footer();
 }
 
-function display_search(){
-	global $_GET, $table_prefix, $wpdb, $lang;
+function display_search($term){
+	global $_GET, $_POST, $table_prefix, $wpdb, $lang;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -903,8 +882,8 @@ function display_search(){
 # fixed according the post from -gibson
 # 07-Apr-2008
 #
+	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($term)."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($term)."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
 
-	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($_REQUIREDUEST['search_terms'])."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($_REQUIREDUEST['search_terms'])."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
 	$results = $wpdb->get_results($sql);
 
 	if(! $results) {
@@ -918,7 +897,7 @@ function display_search(){
 	<tr>
 		<th><p><?php echo $lang['_LIST']; ?></p></th>
 		<th><p><?php echo $lang['_SUBJET']; ?></p></th>
-		<th><p><?php echo $lang['_AUTHOR']; ?></p></th>
+		<th><p><?php echo $lang['_AUTHORSEARCH']; ?></p></th>
 		<th><p><?php echo $lang['_DATE']; ?></p></th>
 	</tr>
 
@@ -938,7 +917,7 @@ function display_search(){
 		} else {
 			$post_pstart = (ceil($post_pstart)*$wpcSettings['count_ads_per_page'])-$wpcSettings['count_ads_per_page'];
 		}
-		echo create_public_link("lastAd", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$_REQUIREDUEST['search_terms']));
+		echo create_public_link("lastAd", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$wpcSettings['search_terms']));
 		?>
 		</td>
 		<td><?php echo $result->display_name; ?></td>

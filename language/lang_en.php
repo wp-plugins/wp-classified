@@ -37,7 +37,7 @@
 	$lang['_PIC'] = "Image:";
 	$lang['_TITLE'] = "Title:"; // subject
 	$lang['_SUBJET'] = "Subject"; //posting name
-	$lang['_AUTHOR'] = "Your name/company name:";
+	$lang['_AUTHOR'] = "Your name/Company name:";
 	$lang['_TEL'] = "Phone(s)/mobile(s):";
 	$lang['_DATE'] = "Date";
 	$lang['_LIST'] = "List";
@@ -128,6 +128,7 @@
 	$lang['_ADMAXLIMIT'] = "Body length limit for standard ads:";
 	$lang['_ADMAXLIMITTXT'] = "Maximum characters to allow in classified ad body.";
 
+	$lang['_AUTHORSEARCH'] = "Author";
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
 	//$lang['_SENDBY'] = "Added by :";

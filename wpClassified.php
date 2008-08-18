@@ -310,7 +310,7 @@ function wpClassified_process(){
 		default:
 		case "classified": wpc_index();
 		break;
-		case "search": display_search();
+		case "search": display_search($_POST['search_terms']);
 		break;
 		case "vl": get_wpc_list($msg);
 		break;
