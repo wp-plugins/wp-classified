@@ -138,7 +138,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			echo $quicktags;
 			?>
 			<?php
-			if ($msg){echo "<h3>".__($msg)."</h3>";}
+			if ($msg){echo "<p class=\"error\">".__($msg)."</p>";}
 			?>
 		<div class="wpClassified_ads_container">
 			<table width=100% class="editform">
