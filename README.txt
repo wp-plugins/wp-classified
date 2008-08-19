@@ -95,8 +95,7 @@ User Side
 
 Admin Side
 - send notice that the ad is about to expire
-- Max size in bytes
-
+- implement the maximum character limit
 
 
 Changes in 1.1.1 - June 20/2008
