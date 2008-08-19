@@ -1,10 +1,13 @@
 <?php
 
 /*
+* $Id: *
 * functions.php
 *
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
+* Author Website : forgani.com
+* Licence Type   : GPL
 * @version 1.2.0-e
 */
 
@@ -28,6 +31,11 @@ function add_ads_subject(){
 			die($lang['_MUSTLOGIN']);
 		} else {
 			$addPost = true;
+
+			if (!$_POST['wpClassified_data'][term]){
+				$msg = $lang['_INVALIDTERM'];
+				$addPost = false;
+			}
 
 			if (str_replace(" ", "", $_POST['wpClassified_data'][author_name])=='' && !_is_usr_loggedin()){
 				$msg = $lang['_INVALIDNAME'];
@@ -135,7 +143,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 		<div class="wpClassified_ads_container">
 			<table width=100% class="editform">
 			<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
-			onsubmit="this.sub.disabled=true;this.sub.value='Posting Ad...';" action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
+			action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
 			<input type="hidden" name="add_ads_subject" value="yes">
 <tr>
 <td align=right valign=top><?php echo $lang['_AUTHOR']; ?></td>
@@ -196,7 +204,7 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 
 <tr>
 <td valign=top align=right><?php echo $lang['_TERM']; ?></td>
-<td><input value="1" type="checkbox" name="wpClassified_data[term]"/></td>
+<td><input value="1" type="checkbox" name="wpClassified_data[term]" checked /></td>
 </tr>
 
 <tr>
@@ -204,7 +212,7 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 <td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
-<tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub"></td></tr>
+<tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
 </form>
 </table>
 </div>

@@ -128,7 +128,8 @@
 	$lang['_ADMAXLIMIT'] = "Body length limit for standard ads:";
 	$lang['_ADMAXLIMITTXT'] = "Maximum characters to allow in classified ad body.";
 
-	$lang['_AUTHORSEARCH'] = "Author";
+	$lang['_AUTHORSEARCH'] = "Author";	
+	$lang['_INVALIDTERM'] = "Please check the Terms of Use Agreement";
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
 	//$lang['_SENDBY'] = "Added by :";

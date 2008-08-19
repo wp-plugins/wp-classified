@@ -6,7 +6,7 @@ Description: The wpClassified plugin allows you to add a simple classifieds page
 Author: Mohammad Forgani
 Version: 1.2.0-b
 Requires at least: 2.3.x
-Author URI: Mohammad Forgani http://www.forgani.com
+Author URI: http://www.forgani.com
 
 I create and tested on Wordpress version 2.3.2 
 on default and unchanged Permalink structure.
@@ -240,7 +240,7 @@ function wpcOptions_process(){
 		
 		<tr>
 			<th align="right" valign="top"><?php echo $lang['_ADMAXLIMIT'];?></th>
-			<td><input type=text size=4 name="wpClassified_data[count_ads_max_limit]" value="<?php echo ($wpcSettings['count_ads_max_limit']);?>"></td><tr><td colspan=2><span class="smallTxt"><?php echo $lang['_ADMAXLIMITTXT']; ?></span></td>
+			<td><input type=text size=4 name="wpClassified_data[count_ads_max_limit]" value="<?php echo ($wpcSettings['count_ads_max_limit']);?>"><br/><span class="smallTxt"><?php echo $lang['_ADMAXLIMITTXT']; ?></span></td>
 		</tr>
 		<tr>
 			<th></th>
@@ -452,7 +452,7 @@ function wpClassified_install(){
 		$wpcSettings['rss_feed'] = 'y';
 		$wpcSettings['rss_feed_num'] = 15;
 		$wpcSettings['count_ads_per_page'] = 10;
-		$wpcSettings['count_ads_max_limit'] = 500;
+		$wpcSettings['count_ads_max_limit'] = 100;
 		$wpcSettings['image_width'] = 150;
 		$wpcSettings['image_height'] = 200;
 		$wpcSettings['date_format'] = 'm-d-Y g:i a';
@@ -1114,19 +1114,67 @@ function create_ads_input($content=""){
 			 $mode="advanced";
 			 if ($wpcSettings['editor_toolbar_basic']=='y') $mode="simple";
 	
-			echo '<script language="javascript" type="text/javascript" src="' .get_bloginfo('wpurl').  '/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce.js"></script>';
-		?>
-			<script language="javascript" type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/tinymce/tiny_mce_gzip.php"></script>
+			echo '<script language="javascript" type="text/javascript" src="' .get_bloginfo('wpurl').  '/wp-content/plugins/wp-classified/includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>';
 
-			<script language="javascript" type="text/javascript">
-			tinyMCE.init({
-			mode : "textareas",
-			<?php echo "theme : \"" . $mode ."\"" ?>
-		});
-		</script>
-		<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" cols='60' rows='20' style="width:100%;"><?php echo htmlentities($content);?></textarea>
-		<?php
-		break;
+		?>
+
+<script language="javascript" type="text/javascript">
+	tinyMCE.init({
+    	mode: "exact",
+    	elements : "wpClassified_data[post]",
+    	theme_advanced_toolbar_location : "top",
+    	theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,"
+    	+ "justifyleft,justifycenter,justifyright,justifyfull,formatselect,"
+    	+ "bullist,numlist,outdent,indent",
+    	theme_advanced_buttons2 : "link,unlink,anchor,image,separator,"
+    	+"undo,redo,cleanup,code,separator,sub,sup,charmap",
+    	theme_advanced_buttons3 : "",
+    	onchange_callback: "myCustomOnChangeHandler",
+	<?php echo "theme : \"" . $mode ."\"" ?>
+	});
+
+var maxchars ="<?php echo $wpcSettings['count_ads_max_limit'] ?>";
+
+//declare neccessary global variables
+var textcounter = new Object, textcounterwarning = new Object,textcountercurrentinst,textcounting_maxcharacters=maxchars;
+
+function myCustomOnChangeHandler(inst) {
+    checknumberofcharacters(inst.getBody().innerHTML.length,inst);
+}
+
+function checknumberofcharacters(texttocheck,inst){
+        if(textcounter[inst.editorId]){
+            textcounter[inst.editorId] = texttocheck;
+            if ( textcounter[inst.editorId] >= textcounting_maxcharacters && textcounterwarning[inst.editorId] == false){
+                //set background color to red-ish
+                inst.getWin().document.body.style.backgroundColor='#F6CECC';
+                //set flag that user has been warned
+                textcounterwarning[inst.editorId] = true;
+                //set temp variable holding editor name for alert
+                textcountercurrentinst = inst.editorId;
+                setTimeout("alert('Your element has exceeded the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters. If you add anymore text it may be truncated when saved.')",2);
+            }else if(textcounter[inst.editorId] < textcounting_maxcharacters && textcounterwarning[inst.editorId] == true){
+                //set background color to white
+                inst.getWin().document.body.style.backgroundColor='#FFFFFF';
+                //set flag that warning has been disabled
+                textcounterwarning[inst.editorId] = false;
+                //set temp variable holding editor name for alert
+                textcountercurrentinst = inst.editorId;
+                setTimeout("alert('The number of characters in your element has been reduced below the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters.')",2);
+            }
+        }else{
+            //setup variables
+            textcounter[inst.editorId] = texttocheck;
+            textcounterwarning[inst.editorId]=false;
+            checknumberofcharacters(texttocheck,inst);
+            }
+}
+
+</script>
+<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" cols="80" style="width: 100%" rows='20' tinyMCE_this="true"><?php echo htmlentities($content);?></textarea><br />
+<SPAN class="smallTxt" id="msgCounter">Maximum of <SCRIPT language="javascript">document.write(maxchars);</SCRIPT> characters allowed</SPAN><BR/>
+	<?php
+	break;
 	}
 }
 

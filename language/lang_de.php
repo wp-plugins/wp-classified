@@ -120,5 +120,5 @@
 	$lang['_ADMAXLIMITTXT'] = "Maximum characters to allow in classified ad body.";
 
 	$lang['_AUTHORSEARCH'] = "Name";
-
+	$lang['_INVALIDTERM'] = "Please die Zustimmung von Geschäftsbedingungen";
 ?>

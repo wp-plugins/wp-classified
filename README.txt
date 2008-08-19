@@ -31,8 +31,12 @@ e.g.
 You have now there a new tab called "wpClassified" to configure the plugin.
 
 
-Make sure the folder images have the correct writing permissions.
-Set the permission of the directory "wp-content/plugins/wp-classified/images" to 777. 
+You will need to make the following folders writable (chmod 777) :
+
+/wp-classified/images
+/wp-classified/images/topic
+/wp-classified/images/cpcc
+
 
 
 
@@ -78,13 +82,22 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
-Changes n 1.2.x - August 10/2008
-- update {table_prefix}wpClassified_ads_subjects 
-and added some new fields email, web, phone, ...
+Changes 1.2.1 - August 10/2008
+
+User Side
 - implement the conformaion code (captcha)
 - added sent to his friend's button
-- added language file (The work is Not Finished!)
-- modify admin classified setting 
+- added language file (The work is Not Finished!) 
+- Users can send an Ad to a friend.
+- Fixed search problem
+- Fixed to image showing by editing and setting.
+- added the default value for 
+
+Admin Side
+- send notice that the ad is about to expire
+- Max size in bytes
+
+
 
 Changes in 1.1.1 - June 20/2008
 - fix the search function
