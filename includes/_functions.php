@@ -48,6 +48,7 @@ function wpc_header(){
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
 		}
 	}
+	
 
 ?>
 	<div style="text-align:right; float:right;">
@@ -367,13 +368,13 @@ function _edit_ad(){
 			 WHERE ads_id = '".(int)$_GET['aid']."'");
 		$postinfo = $postinfo[0];
 
-		//echo "------>" . getenv('REMOTE_ADDR') . "---->" . $postinfo->author_ip;
 		if ($wpc_user_info["ID"]!=$postinfo->author &&	
 		!_is_usr_admin() && !_is_usr_mod() &&
 		(!_is_usr_loggedin() && getenv('REMOTE_ADDR')!=$postinfo->author_ip)){
 			wpClassified_permission_denied();
 			return;
 		}
+	list ($adExpire, $contactBy) = split('###',  $adsInfo["txt"]);
 	$displayform = true;
 	if ($_POST['wpClassified_edit_ad']=='yes'){
 		$addPost = true;
@@ -405,6 +406,11 @@ function _edit_ad(){
 			$addPost = false;
 		}
 
+		if ($_POST['wpClassified_data'][count_ads_max] > $wpcSettings['count_ads_max_limit']){
+			$msg = "Classified Text must be less than or equal to ". $wpcSettings['count_ads_max_limit'] . " characters in length";
+			$addPost = false;
+		}
+
 		if ($_FILES['image_file']!=''){
 			$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 			if ($ok==true){
@@ -426,8 +432,8 @@ function _edit_ad(){
 			}
 		}
 		if ($addPost==true) {
-		$displayform = false;
-		$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
+	$displayform = false;
+	$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 	$sql = "update {$table_prefix}wpClassified_ads
 	set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',";
 	if ($_FILES['image_file'] =='') {
@@ -504,9 +510,8 @@ function _edit_ad(){
 <input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" 
 <?php if ($contactBy==$lang['_YES_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_YES_CONTACT']; ?></option>
 <input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_NO_CONTACT']; ?>" 
-<?php if (!$contactBy || $contactBy==$lang['_No_COTACT']) { echo " checked"; } ?>/><?php echo $lang['_NO_CONTACT']; ?></option>
+<?php if ($contactBy==$lang['_NO_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_NO_CONTACT']; ?></option>
 </td></tr>
-
 
 		<tr>
 		<td align=right><?php echo $lang['_WEB']; ?></td>
@@ -530,7 +535,7 @@ function _edit_ad(){
 		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
 		</tr>
-		<tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub"></td></tr>
+		<tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
 		</form></table>
 		</div>
 		<?php

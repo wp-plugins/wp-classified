@@ -1152,7 +1152,9 @@ function checknumberofcharacters(texttocheck,inst){
                 textcounterwarning[inst.editorId] = true;
                 //set temp variable holding editor name for alert
                 textcountercurrentinst = inst.editorId;
-                setTimeout("alert('Your element has exceeded the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters. If you add anymore text it may be truncated when saved.')",2);
+		document.getElementById("wpClassified_data[count_ads_max]").value = textcounter[textcountercurrentinst];
+                setTimeout("alert('Your element has exceeded the '+textcounting_maxcharacters+' character limit. You are currently using '+textcounter[textcountercurrentinst]+' characters. If you add anymore text it may be truncated when saved.')",2);
+		
             }else if(textcounter[inst.editorId] < textcounting_maxcharacters && textcounterwarning[inst.editorId] == true){
                 //set background color to white
                 inst.getWin().document.body.style.backgroundColor='#FFFFFF';
@@ -1160,6 +1162,7 @@ function checknumberofcharacters(texttocheck,inst){
                 textcounterwarning[inst.editorId] = false;
                 //set temp variable holding editor name for alert
                 textcountercurrentinst = inst.editorId;
+		document.getElementById("wpClassified_data[count_ads_max]").value = textcounter[textcountercurrentinst];
                 setTimeout("alert('The number of characters in your element has been reduced below the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters.')",2);
             }
         }else{
@@ -1172,7 +1175,8 @@ function checknumberofcharacters(texttocheck,inst){
 
 </script>
 <textarea name="wpClassified_data[post]" id="wpClassified_data[post]" cols="80" style="width: 100%" rows='20' tinyMCE_this="true"><?php echo htmlentities($content);?></textarea><br />
-<SPAN class="smallTxt" id="msgCounter">Maximum of <SCRIPT language="javascript">document.write(maxchars);</SCRIPT> characters allowed</SPAN><BR/>
+<input size=3 name="wpClassified_data[count_ads_max]" id="wpClassified_data[count_ads_max]" value="" type="hidden"/>
+<SPAN class="smallTxt" id="msgCounter">Maximum of <script language="javascript">document.write(maxchars);</script> characters allowed</SPAN><BR/>
 	<?php
 	break;
 	}

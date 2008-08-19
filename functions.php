@@ -67,6 +67,12 @@ function add_ads_subject(){
 				$addPost = false;
 			}
 
+			if ($_POST['wpClassified_data'][count_ads_max] > $wpcSettings['count_ads_max_limit']){
+				$msg = "Classified Text must be less than or equal to ". $wpcSettings['count_ads_max_limit'] . " characters in length";
+				$addPost = false;
+			}
+
+
 			if ($_FILES['image_file']!=''){
 				$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 				if ($ok==true){
