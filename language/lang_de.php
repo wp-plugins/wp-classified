@@ -32,29 +32,29 @@ fixed by Christoph Zeuch
 	$lang['_SAVEAD'] = "Speichern"; 
 
 	$lang['_DESC'] = "Anzeigendetails:";
-	$lang['_PRINT'] = "Die Annonce drucken";
+	$lang['_PRINT'] = "Diese Anzeige drucken";
 	$lang['_EMAIL'] = "Email:";
-	$lang['_TEL'] = "Telephone:";
+	$lang['_TEL'] = "Telefon:";
 	$lang['_WEB'] = "Homepage:";
 	$lang['_CONFIRM'] = "Sicherheitscode:";
 	$lang['_PIC'] = "Bild:";
 	$lang['_TITLE'] = "Title:"; // subject
-	$lang['_SUBJET'] = "Subject"; //posting name
-	$lang['_AUTHOR'] = "Ihr Name / Firmenname";
+	$lang['_SUBJET'] = "Betreffzeile"; //posting name
+	$lang['_AUTHOR'] = "Deine Name / Firmenname";
 	$lang['_TEL'] = "Telefon(e) / Mobil(e):";
 	$lang['_DATE'] = "Datum";
 	$lang['_LIST'] = "List";
 	$lang['_VIEWS'] = "Listenansicht";
-	$lang['_ADS'] = "Artikels";
-	$lang['_LAST'] = "Letzte Artikel";
-	//$lang['_INFO'] = "Ich möchte NICHT per e-Mail über weitere Kommentare zu diesem Artikel informiert werden.";
+	$lang['_ADS'] = "Einträge";
+	$lang['_LAST'] = "Letzte Einträge";
+	//$lang['_INFO'] = "Ich möchte NICHT per e-Mail über Kommentare informiert werden.";
 	$lang['_UPDATE'] = "Update successfully completed.";
-	$lang['_SEND'] = "Ihre Email wurde gesendet. Danke.";
+	$lang['_SEND'] = "Deine Email wurde gesendet. Danke.";
 	$lang['_SENDNOTFAIL'] = "Die Email notification failed.";
 	$lang['_SENDNOT'] = "Die Email notification wurde gesende.";
-	$lang['_ANNSEND'] = "The Classified Artikel selected wurde gesende.";
-	$lang['_ANNDEL'] = "Die Anzeige wurde gelöscht.";
-	$lang['_ANNMOD2'] = "Classified Artikel selected has been modified.";
+	$lang['_ANNSEND'] = "Deine Hinweis auf den Dorfanzeiger-Beitrag wurde gesendet.";
+	$lang['_ANNDEL'] = "Deine Anzeige wurde gelöscht.";
+	$lang['_ANNMOD2'] = "Deine Anzeige wurde angepasst.";
 	$lang['_SAVE'] = "Die Anzeige wurde gepeichert.";
 	$lang['_THANKS'] = "Thank You for using our Classified Artikels.";
 	$lang['_MUSTLOGIN'] = "Sie müssen sich anmelden um eine Anzeige aufzugeben.";
@@ -62,10 +62,10 @@ fixed by Christoph Zeuch
 	$lang['_SENDEMAIL'] = "Abschicken";
 	$lang['_SENDERR'] = "Email kann nicht gesendet werden. Bitte überprüfen Sie ob alle Felder Korrect ausgefüllt sind.";
 	$lang['_FRIENDSEND'] = "<b>Informieren Sie einem Freund über diese Annonce</b><br>Sie können Annonce No ";
-	$lang['_SORRY'] = "Leider, Sie habem keine Berechtigung.";
-	$lang['_TOAFRIEND'] = " an einen Freund mailen.";
-	$lang['_YOURNAME'] = "Ihr Name:";
-	$lang['_YOUREMAIL'] = "Ihre E-Mail:";
+	$lang['_SORRY'] = "Leider hast du keine Berechtigung.";
+	$lang['_TOAFRIEND'] = " an einen Freund/Bekannten mailen.";
+	$lang['_YOURNAME'] = "Dein Name:";
+	$lang['_YOUREMAIL'] = "Dein E-Mail:";
 	$lang['_SENDFR'] = "Abschicken";
 	
 	$lang['_ADDANNONCE'] = "Annonce in dieser Kategorie aufgeben";
@@ -105,7 +105,7 @@ fixed by Christoph Zeuch
 	$lang['_CONTACTBY'] = "Soll Ihre Email-Adresse angezeigt werden:";
 	$lang['_YES_CONTACT'] = "Ja";
 	$lang['_NO_CONTACT'] = "Nein";
-	$lang['_TERM'] = "Zustimmung zu den Geschäftsbedingungen:";
+	$lang['_TERM'] = "Ja, ich halte mich an die allgemeinen Regeln und mache keinen Unfug:";
 
 	$lang['_FRIENDNAME'] = "Name Ihres Freundes:";
 	$lang['_FRIENDMAIL'] = "E-Mail Ihres Freundes:";
@@ -122,7 +122,7 @@ fixed by Christoph Zeuch
 	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
 	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";
 
-	$lang['_ADMAXLIMIT'] = "Body length limit for standard ads:";
+	$lang['_ADMAXLIMIT'] = "Maximale Anzahl von Zeichen per Anzeige.:";
 	$lang['_ADMAXLIMITTXT'] = "Maximale Anzahl von Zeichen per Anzeige.";
 
 	$lang['_AUTHORSEARCH'] = "Name";
