@@ -5,7 +5,7 @@ Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
 Stable tag: 1.1.0
-Tags: ads, adsense, classifieds
+Tags: ads, adsense, classifieds, classified, wpclassifieds
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 
