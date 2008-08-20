@@ -120,7 +120,7 @@
 //// from 1.2.0-g
 	$lang['_NEWADDURATION'] = "Ad Duration and Expiration";
 	$lang['_NEWADDEFAULT'] = "New ad default duration (days):";
-	$lang['_SENDREMIDE'] = "Send reminder emails to advertisers before the expiration in days:";
+	$lang['_SENDREMIDE'] = "Send reminder emails before the expiration (days):";
 	$lang['_NOTMESSAGE'] = "Notification messages:";
 	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
 	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";

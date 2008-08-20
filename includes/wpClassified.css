@@ -164,6 +164,7 @@ font-size: 90%;
 .imgMiddle{
 vertical-align: middle;
 padding: 0 2px 0 2px;
+border: none;
 }
 
 
@@ -223,11 +224,11 @@ font-size:80%;
 }
 
 .legend  {
-
 padding: 10px;
-display: block;
+color: blue;
 } 
 
-.fieldset {margin-bottom: 1em;
+.fieldset {
+margin-bottom: 1em;
 padding:.5em;
 border: 1px solid #aaa;} 

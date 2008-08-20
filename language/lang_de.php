@@ -94,7 +94,7 @@
 	$lang['_REPLY'] = "Inserenten kontaktieren";
 
 //// from 1.2.0-d
-	$lang['_HOW_LONG'] = "wie lange Ihre Anzeige angezeigt werden soll:";
+	$lang['_HOW_LONG'] = "wie lange soll Ihre Anzeige angezeigt werden:";
 	$lang['_DAY'] = " Tage";
 	$lang['_CONTACTBY'] = "Soll Ihre Email-Adresse angezeigt werden:";
 	$lang['_YES_CONTACT'] = "Ja";
@@ -109,16 +109,16 @@
 	$lang['_FRIENDBTN2'] = "<BR><hr>Free classified ads with photos.";
 
 //// from 1.2.0-g
-	$lang['_NEWADDURATION'] = "Ad Duration and Expiration";
+	$lang['_NEWADDURATION'] = "Ablauf der Anzeigedauer";
 	$lang['_NEWADDEFAULT'] = "New ad default duration (days):";
 	$lang['_SENDREMIDE'] = "Send reminder emails to advertisers before the expiration in days:";
-	$lang['_NOTMESSAGE'] = "Notification messages:";
+	$lang['_NOTMESSAGE'] = "die Hinweis Meldungen:";
 	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
 	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";
 
 	$lang['_ADMAXLIMIT'] = "Body length limit for standard ads:";
-	$lang['_ADMAXLIMITTXT'] = "Maximum characters to allow in classified ad body.";
+	$lang['_ADMAXLIMITTXT'] = "Maximale Anzahl von Zeichen per Anzeige.";
 
 	$lang['_AUTHORSEARCH'] = "Name";
-	$lang['_INVALIDTERM'] = "Please die Zustimmung von Geschäftsbedingungen";
+	$lang['_INVALIDTERM'] = "musst Du den Allgemeinen Geschäftsbedingungen zustimmen.";
 ?>

@@ -181,7 +181,7 @@ function wpcOptions_process(){
 		</tr>		
 	<tr>
 			<th align="right" valign="top"><?php echo __("Classified Description:");?></th>
-			<td><input type="text" size=40 name="wpClassified_data[description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?>"></td>
+			<td><input type="text" size=80 name="wpClassified_data[description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?>"></td>
 		</tr>
 		<tr>
 			<th></th>
@@ -222,7 +222,7 @@ function wpcOptions_process(){
 
 		<tr>
 			<th align="right" valign="top"><?php echo __("Banner Code:");?> </th>
-			<td><textarea cols=40 rows=3 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
+			<td><textarea cols=80 rows=3 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
 		</tr>			
 	</table>
 </fieldset>
@@ -264,7 +264,7 @@ function wpcOptions_process(){
 		</tr>
 		<tr>
 			<th align="right" valign="top"><?php echo __("Number of Recent Posts to feed");?></th>
-			<td><input type=text size=11 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
+			<td><input type=text size=4 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
 			<span class="smallTxt"> example: 15</span></td>
 		</tr>
 </table>
@@ -275,18 +275,19 @@ function wpcOptions_process(){
 <table width="99%"><tr><td>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_NEWADDEFAULT'];?></th>
-			<td><input type=text size=11 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will auto-removed this many days after the ad is created. default:90 days</span></td>
+			<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will auto-removed this many days after the ad is created. default:90 days</span></td>
 	</tr>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>
-			<td><input type=text size=11 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">(is currently not implemented!) example:7 days</span></td>
+			<td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">(is currently not implemented!) example:7 days</span></td>
 	</tr>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_NOTMESSAGE'];?></th>
-			<td><?php echo $lang['_NOTMESSAGESUBJECT'];?>
-			<textarea cols=70 rows=5 name="wpClassified_data[not_message]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['not_message']));?>!sitename reminder: classified ads expiring soon!</textarea></td></tr><tr><td align="right" colspan=2>
-			<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span></td></tr>
-			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=70 rows=5 name="wpClassified_data[not_message]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['not_message']));?>One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</textarea></td>
+			<td><?php echo $lang['_NOTMESSAGESUBJECT'];?><br />
+			<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
+			<textarea cols=80 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
+			<span class="smallTxt">example: !sitename reminder: classified ads expiring soon! </span></td></tr>
+			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=80 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
 	</tr>
 </table>
 </fieldset>
@@ -452,7 +453,7 @@ function wpClassified_install(){
 		$wpcSettings['rss_feed'] = 'y';
 		$wpcSettings['rss_feed_num'] = 15;
 		$wpcSettings['count_ads_per_page'] = 10;
-		$wpcSettings['count_ads_max_limit'] = 100;
+		$wpcSettings['count_ads_max_limit'] = 400;
 		$wpcSettings['image_width'] = 150;
 		$wpcSettings['image_height'] = 200;
 		$wpcSettings['date_format'] = 'm-d-Y g:i a';
@@ -466,6 +467,8 @@ function wpClassified_install(){
 		$wpcSettings['wpClassified_display_last_post_link'] = 'y';
 		$wpcSettings['wpClassified_last_ads_subject_num'] = 5;
 		$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
+		$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
+		$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 		$wpcSettings['ad_expiration'] = "90";
 	//}
 	update_option('wpClassified_data', $wpcSettings);
@@ -566,7 +569,7 @@ function adm_structure_process(){
 	<form method="post" id="admCatStructure" name="admCatStructure" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveCategory&categories_id=<?php echo $_GET['categories_id'];?>">
 		<table border=0 class="editform">
 		<tr><th align="right"><?php echo __("Category Name");?></th>
-		<td><input type=text size=50 name="wpClassified_data[name]" value="<?php echo $categoryinfo['name'];?>"></td>
+		<td><input type=text size=80 name="wpClassified_data[name]" value="<?php echo $categoryinfo['name'];?>"></td>
 		</tr>
 
 	<th align="right" valign="top"><?php echo __("Category Photo");?> </th>
@@ -616,11 +619,11 @@ function adm_structure_process(){
 		<table border=0 class="editform">
 			<tr>
 				<th align="right"><?php echo __("List Name");?></th>
-				<td><input type=text size=50 name="wpClassified_data[name]" value="<?php echo $classifiedinfo['name'];?>"></td>
+				<td><input type=text size=80 name="wpClassified_data[name]" value="<?php echo $classifiedinfo['name'];?>"></td>
 			</tr>
 			<tr>
 				<th align="right"><?php echo __("List Description");?></th>
-				<td><textarea name="wpClassified_data[description]" rows="3" cols="35"><?php echo $classifiedinfo['description'];?></textarea></td>
+				<td><textarea name="wpClassified_data[description]" rows="3" cols="80"><?php echo $classifiedinfo['description'];?></textarea></td>
 			</tr>
 			<tr>
 				<th align="right"><?php echo __("Parent Category");?></th>
@@ -863,7 +866,7 @@ function adm_users_process(){
 			</tr>
 			<tr>
 				<td>Ads Count</td>
-				<td><input type="text" name="wpClassified_user_info[user_info_post_count]" size="10" value="<?php echo str_replace('"', "&quot;", $user["post_count"]);?>" /></td>
+				<td><input type="text" name="wpClassified_user_info[user_info_post_count]" size="4" value="<?php echo str_replace('"', "&quot;", $user["post_count"]);?>" /></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -1152,9 +1155,7 @@ function checknumberofcharacters(texttocheck,inst){
                 textcounterwarning[inst.editorId] = true;
                 //set temp variable holding editor name for alert
                 textcountercurrentinst = inst.editorId;
-		document.getElementById("wpClassified_data[count_ads_max]").value = textcounter[textcountercurrentinst];
-                setTimeout("alert('Your element has exceeded the '+textcounting_maxcharacters+' character limit. You are currently using '+textcounter[textcountercurrentinst]+' characters. If you add anymore text it may be truncated when saved.')",2);
-		
+                setTimeout("alert('Your element has exceeded the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters. If you add anymore text it may be truncated when saved.')",2);
             }else if(textcounter[inst.editorId] < textcounting_maxcharacters && textcounterwarning[inst.editorId] == true){
                 //set background color to white
                 inst.getWin().document.body.style.backgroundColor='#FFFFFF';
@@ -1162,7 +1163,6 @@ function checknumberofcharacters(texttocheck,inst){
                 textcounterwarning[inst.editorId] = false;
                 //set temp variable holding editor name for alert
                 textcountercurrentinst = inst.editorId;
-		document.getElementById("wpClassified_data[count_ads_max]").value = textcounter[textcountercurrentinst];
                 setTimeout("alert('The number of characters in your element has been reduced below the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters.')",2);
             }
         }else{
@@ -1175,8 +1175,7 @@ function checknumberofcharacters(texttocheck,inst){
 
 </script>
 <textarea name="wpClassified_data[post]" id="wpClassified_data[post]" cols="80" style="width: 100%" rows='20' tinyMCE_this="true"><?php echo htmlentities($content);?></textarea><br />
-<input size=3 name="wpClassified_data[count_ads_max]" id="wpClassified_data[count_ads_max]" value="" type="hidden"/>
-<SPAN class="smallTxt" id="msgCounter">Maximum of <script language="javascript">document.write(maxchars);</script> characters allowed</SPAN><BR/>
+<SPAN class="smallTxt" id="msgCounter">Maximum of <SCRIPT language="javascript">document.write(maxchars);</SCRIPT> characters allowed</SPAN><BR/>
 	<?php
 	break;
 	}
