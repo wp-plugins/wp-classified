@@ -88,13 +88,13 @@ User Side
 - implement the conformaion code (captcha)
 - added sent to his friend's button
 - added language file (The work is Not Finished!) 
-- Users can send an Ad to a friend.
-- Fixed search problem
-- Fixed to image showing by editing and setting.
+- users can send an Ad to a friend.
+- fixed search problem
+- fixed to image showing by editing and setting.
 - added the default value for 
 
 Admin Side
-- send notice that the ad is about to expire
+- expiration notice reminders to users (The work is Not Finished!) 
 - implement the maximum character limit
 
 
@@ -153,6 +153,6 @@ RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/
 
 have fun
 Regards from Isfahan ;-)
-Mohammad Forgani
+Mohammad Forgani, Oh Jung Su
 Juli 03/2008
 
