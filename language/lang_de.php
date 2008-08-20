@@ -75,7 +75,7 @@ fixed by Christoph Zeuch
 	$lang['_CANCEL'] = "Abbrechen";
 	$lang['_CONFDEL'] = "Bestätige das Löschen";
 	$lang['_SURDELANN'] = "ACHTUNG: Bist Du dir sicher, dass Du diese Anzeige wirklich löschen möchtest.?";
-	$lang['_ADSADDED'] = "Die Anzeige wurde hinzugefügt.";
+	$lang['_ADSADDED'] = "Die Anzeige wurde hinzugefügt.Danke!";
 	$lang['_FROM'] = "Aufgegeben von ";
 	$lang['_CLASSIFIED_AD'] = "Anzeige:";
 	$lang['_SEARCH'] = "Suche";
@@ -107,8 +107,8 @@ fixed by Christoph Zeuch
 	$lang['_NO_CONTACT'] = "Nein";
 	$lang['_TERM'] = "Ja, ich halte mich an die allgemeinen Regeln und mache keinen Unfug:";
 
-	$lang['_FRIENDNAME'] = "Name Ihres Freundes:";
-	$lang['_FRIENDMAIL'] = "E-Mail Ihres Freundes:";
+	$lang['_FRIENDNAME'] = "Name Deines Freundes:";
+	$lang['_FRIENDMAIL'] = "E-Mail Deines Freundes:";
 
 	$lang['_FRIENDBTN1'] = "To see view photo and more details, click on the following link or copy and paste it to the address window in you browser.<br><br>";
 
