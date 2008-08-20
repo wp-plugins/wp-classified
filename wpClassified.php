@@ -55,6 +55,8 @@ User Side
 
 Admin Side
 - implement the maximum character limit
+- added two directory within the “/images” directory cpcc and topic. 
+You will need to make the folders writable (chmod 777).
 
 
 Permalink structure:

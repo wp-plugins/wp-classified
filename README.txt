@@ -91,7 +91,7 @@ User Side
 - users can send an Ad to a friend.
 - fixed search problem
 - fixed to image showing by editing and setting.
-- added the default value for 
+- added two directory within the “/images” directory cpcc and topic. You will need to make the folders writable (chmod 777).
 
 Admin Side
 - expiration notice reminders to users (The work is Not Finished!) 
