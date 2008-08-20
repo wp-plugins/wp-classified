@@ -60,36 +60,36 @@ fixed by Christoph Zeuch
 	$lang['_MUSTLOGIN'] = "Sie müssen sich anmelden um eine Anzeige aufzugeben.";
 	$lang['_GUEST'] = "Sie sind nicht anmeldet und posting als Gast, klick";
 	$lang['_SENDEMAIL'] = "Abschicken";
-	$lang['_SENDERR'] = "Email kann nicht gesendet werden. Bitte überprüfen Sie ob alle Felder Korrect ausgefüllt sind.";
-	$lang['_FRIENDSEND'] = "<b>Informieren Sie einem Freund über diese Annonce</b><br>Sie können Annonce No ";
+	$lang['_SENDERR'] = "Email kann nicht gesendet werden. Bitte prüfe ob Du alle Felder richtig ausgefüllt hast.";
+	$lang['_FRIENDSEND'] = "<b>Informiere einen Freund/Bekannten über diese Kleinanzeige</b><br>Du kannst Kleinanzeigen No ";
 	$lang['_SORRY'] = "Leider hast du keine Berechtigung.";
 	$lang['_TOAFRIEND'] = " an einen Freund/Bekannten mailen.";
 	$lang['_YOURNAME'] = "Dein Name:";
-	$lang['_YOUREMAIL'] = "Dein E-Mail:";
+	$lang['_YOUREMAIL'] = "Deine E-Mail:";
 	$lang['_SENDFR'] = "Abschicken";
 	
-	$lang['_ADDANNONCE'] = "Annonce in dieser Kategorie aufgeben";
+	$lang['_ADDANNONCE'] = "Kleinanzeige in dieser Kategorie aufgeben";
 	$lang['_YES'] = "Ja";
 	$lang['_NO'] = "Nein";
 	$lang['_BACK'] = "Zurück";
 	$lang['_CANCEL'] = "Abbrechen";
-	$lang['_CONFDEL'] = "Confirmation to delete";
-	$lang['_SURDELANN'] = "ACHTUNG : Sie sind sicher, dass Sie dieses Anzeige löschen möchten.?";
+	$lang['_CONFDEL'] = "Bestätige das Löschen";
+	$lang['_SURDELANN'] = "ACHTUNG: Bist Du dir sicher, dass Du diese Anzeige wirklich löschen möchtest.?";
 	$lang['_ADSADDED'] = "Die Anzeige wurde hinzugefügt.";
 	$lang['_FROM'] = "Aufgegeben von ";
 	$lang['_CLASSIFIED_AD'] = "Anzeige:";
 	$lang['_SEARCH'] = "Suche";
-	$lang['_VIEWALLADS'] = "Ansicht alle Artikels";
+	$lang['_VIEWALLADS'] = "Ansicht aller Beiträge";
 	
-	$lang['_YOURPHONE'] = "Ihre Telephon:";
-	$lang['_YOURMESSAGE'] = "Ihre Beschreibung:";
+	$lang['_YOURPHONE'] = "Deine Telnummer:";
+	$lang['_YOURMESSAGE'] = "Deine Beschreibung:";
 	$lang['_VALIDMESS'] = "Bitte eine Beschreibung eingeben.";
-	$lang['_MESSEND'] = "your message wurde gesende...";
+	$lang['_MESSEND'] = "Deine Nachricht wurde gesendet...";
 	$lang['_CLASSIFIED'] = "Anzeige ";
 	$lang['_VIEW_MY_ADS'] = "Zeige alle Anzeigen von ";
 
 	$lang['_DELETE'] = "Löschen";
-	$lang['_EDIT'] = "Edit";
+	$lang['_EDIT'] = "Editieren";
 	$lang['_SUBMITTER'] = "Name:";
 	$lang['_ADD_LISTING'] = "Add a Listing";
 	$lang['_SUBMIT'] = "Submit";
