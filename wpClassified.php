@@ -180,7 +180,7 @@ function wpcOptions_process(){
 			<span class="smallTxt">images from plugins/wp-classified/images directory</span></td>
 		</tr>		
 	<tr>
-			<th align="right" valign="top"><?php echo __("Classified Description:");?></th>
+			<th align="right" valign="top"><?php echo __("Classifieds Description:");?></th>
 			<td><input type="text" size=80 name="wpClassified_data[description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?>"></td>
 		</tr>
 		<tr>
@@ -251,11 +251,11 @@ function wpcOptions_process(){
 			<td><input type=checkbox name="wpClassified_data[notify]" value="y"<?php echo ($wpcSettings['notify']=='y')?" checked":"";?>> <?php echo __("Notify Admin (email) on new Topic/Post");?></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><?php echo __("Ads displayed per page");?></th>
+			<th align="right" valign="top"><?php echo __("Ads displayed per page:");?></th>
 			<td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><span class="smallTxt">default: 10</span></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><?php echo __("Date Format String");?></th>
+			<th align="right" valign="top"><?php echo __("Date Format String:");?></th>
 			<td><input type=text size=11 name="wpClassified_data[date_format]" value="<?php echo ($wpcSettings['date_format']);?>"><br><span class="smallTxt">example: m-d-Y g:i a</span></td>
 		</tr>
 		<tr>
@@ -263,7 +263,7 @@ function wpcOptions_process(){
 			<td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>> <?php echo __("Allow RSS Feeds");?></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><?php echo __("Number of Recent Posts to feed");?></th>
+			<th align="right" valign="top"><?php echo __("Number of Recent Posts to feed:");?></th>
 			<td><input type=text size=4 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
 			<span class="smallTxt"> example: 15</span></td>
 		</tr>
@@ -271,7 +271,7 @@ function wpcOptions_process(){
 </fieldset>
 </td></tr><tr><td>
 <fieldset class="fieldset">
-<legend class="legend"><strong><?php echo $lang['_NEWADDURATION'];?></strong></legend>
+<legend class="legend"><strong><?php echo $lang['_NEWADDURATION'];?></strong>&nbsp;&nbsp;<span class="smallTxt">(is currently not implemented!)</span></legend>
 <table width="99%"><tr><td>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_NEWADDEFAULT'];?></th>
@@ -279,20 +279,20 @@ function wpcOptions_process(){
 	</tr>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>
-			<td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">(is currently not implemented!) example:7 days</span></td>
+			<td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">example:7 days</span></td>
 	</tr>
 	<tr>
 			<th align="right" valign="top"><?php echo $lang['_NOTMESSAGE'];?></th>
 			<td><?php echo $lang['_NOTMESSAGESUBJECT'];?><br />
 			<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
-			<textarea cols=80 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
+			<textarea cols=60 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
 			<span class="smallTxt">example: !sitename reminder: classified ads expiring soon! </span></td></tr>
-			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=80 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
+			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=60 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
 	</tr>
 </table>
 </fieldset>
 </td></tr></table>
-<p><input type=submit value="<?php echo __("Update wpClassified Settings");?>"></p>
+<p><input type=submit value="<?php echo __("Update wpClassifieds Settings");?>"></p>
 	</form>
 	</p>
 	<?php
@@ -927,7 +927,7 @@ function adm_utilities_process(){
 	</p>
 	<p style="text-align: left; color: red">
 	<strong><?php _e('WARNING:', 'wpClassified'); ?></strong><br />
-	<?php _e('Once uninstalled, this cannot be undone. You should use a database backup of WordPress to back up all the classified data first.', 'wpClassified'); ?>
+	<?php _e('Once uninstalled, this cannot be undone. You should use a database backup of WordPress to back up all the classifieds data first.', 'wpClassified'); ?>
 	</p>
 	<p style="text-align: left; color: red">
 	<strong><?php _e('The following WordPress Options/Tables will be DELETED:', 'wpClassified'); ?></strong><br />
