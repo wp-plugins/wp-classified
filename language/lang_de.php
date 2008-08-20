@@ -40,7 +40,7 @@ fixed by Christoph Zeuch
 	$lang['_PIC'] = "Bild:";
 	$lang['_TITLE'] = "Title:"; // subject
 	$lang['_SUBJET'] = "Betreffzeile"; //posting name
-	$lang['_AUTHOR'] = "Deine Name / Firmenname";
+	$lang['_AUTHOR'] = "Dein Name / Firmenname";
 	$lang['_TEL'] = "Telefon(e) / Mobil(e):";
 	$lang['_DATE'] = "Datum";
 	$lang['_LIST'] = "List";
@@ -49,16 +49,16 @@ fixed by Christoph Zeuch
 	$lang['_LAST'] = "Letzte Einträge";
 	//$lang['_INFO'] = "Ich möchte NICHT per e-Mail über Kommentare informiert werden.";
 	$lang['_UPDATE'] = "Update successfully completed.";
-	$lang['_SEND'] = "Deine Email wurde gesendet. Danke.";
+	$lang['_SEND'] = "Deine Email wurde gesendet. Herzlichen Dank.";
 	$lang['_SENDNOTFAIL'] = "Die Email notification failed.";
 	$lang['_SENDNOT'] = "Die Email notification wurde gesende.";
 	$lang['_ANNSEND'] = "Deine Hinweis auf den Dorfanzeiger-Beitrag wurde gesendet.";
 	$lang['_ANNDEL'] = "Deine Anzeige wurde gelöscht.";
 	$lang['_ANNMOD2'] = "Deine Anzeige wurde angepasst.";
 	$lang['_SAVE'] = "Die Anzeige wurde gepeichert.";
-	$lang['_THANKS'] = "Thank You for using our Classified Artikels.";
-	$lang['_MUSTLOGIN'] = "Sie müssen sich anmelden um eine Anzeige aufzugeben.";
-	$lang['_GUEST'] = "Sie sind nicht anmeldet und posting als Gast, klick";
+	$lang['_THANKS'] = "Herzlichen Dank für die Nutzung des Classifieds.";
+	$lang['_MUSTLOGIN'] = "Bitte melde dich an um eine Kleinanzeige aufzugeben.";
+	$lang['_GUEST'] = "Du bist leider nicht anmeldet und kannst als Gast, klick";
 	$lang['_SENDEMAIL'] = "Abschicken";
 	$lang['_SENDERR'] = "Email kann nicht gesendet werden. Bitte prüfe ob Du alle Felder richtig ausgefüllt hast.";
 	$lang['_FRIENDSEND'] = "<b>Informiere einen Freund/Bekannten über diese Kleinanzeige</b><br>Du kannst Kleinanzeigen No ";
@@ -66,7 +66,7 @@ fixed by Christoph Zeuch
 	$lang['_TOAFRIEND'] = " an einen Freund/Bekannten mailen.";
 	$lang['_YOURNAME'] = "Dein Name:";
 	$lang['_YOUREMAIL'] = "Deine E-Mail:";
-	$lang['_SENDFR'] = "Abschicken";
+	$lang['_SENDFR'] = "Ab die Post";
 	
 	$lang['_ADDANNONCE'] = "Kleinanzeige in dieser Kategorie aufgeben";
 	$lang['_YES'] = "Ja";
@@ -83,7 +83,7 @@ fixed by Christoph Zeuch
 	
 	$lang['_YOURPHONE'] = "Deine Telnummer:";
 	$lang['_YOURMESSAGE'] = "Deine Beschreibung:";
-	$lang['_VALIDMESS'] = "Bitte eine Beschreibung eingeben.";
+	$lang['_VALIDMESS'] = "Bitte gib eine Beschreibung ein.";
 	$lang['_MESSEND'] = "Deine Nachricht wurde gesendet...";
 	$lang['_CLASSIFIED'] = "Anzeige ";
 	$lang['_VIEW_MY_ADS'] = "Zeige alle Anzeigen von ";
@@ -91,18 +91,18 @@ fixed by Christoph Zeuch
 	$lang['_DELETE'] = "Löschen";
 	$lang['_EDIT'] = "Editieren";
 	$lang['_SUBMITTER'] = "Name:";
-	$lang['_ADD_LISTING'] = "Add a Listing";
+	$lang['_ADD_LISTING'] = "Füge einen Eintrag hinzu";
 	$lang['_SUBMIT'] = "Submit";
 
-	$lang['_FRIENDTITLE'] = "Informieren Sie einem Freund über diese Annonce";
+	$lang['_FRIENDTITLE'] = "Informiere einen Freund/Bekannten über diese Kleinanzeige";
 	$lang['_ADDETAIL'] = "Anzeigedetails:";
-	$lang['_SENDTOF'] = "Informieren Sie einem Freund über diese Annonce";
+	$lang['_SENDTOF'] = "Informieren einen Freund/Bekannten über diese Anzeige";
 	$lang['_REPLY'] = "Inserenten kontaktieren";
 
 //// from 1.2.0-d
-	$lang['_HOW_LONG'] = "wie lange soll Ihre Anzeige angezeigt werden:";
+	$lang['_HOW_LONG'] = "wie lange Deine Anzeige angezeigt werden soll:";
 	$lang['_DAY'] = " Tage";
-	$lang['_CONTACTBY'] = "Soll Ihre Email-Adresse angezeigt werden:";
+	$lang['_CONTACTBY'] = "Soll Deine Email-Adresse angezeigt werden:";
 	$lang['_YES_CONTACT'] = "Ja";
 	$lang['_NO_CONTACT'] = "Nein";
 	$lang['_TERM'] = "Ja, ich halte mich an die allgemeinen Regeln und mache keinen Unfug:";
