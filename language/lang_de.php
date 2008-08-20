@@ -115,10 +115,11 @@ fixed by Christoph Zeuch
 	$lang['_FRIENDBTN2'] = "<BR><hr>Free classified ads with photos.";
 
 //// from 1.2.0-g
+	
 	$lang['_NEWADDURATION'] = "Ablauf der Anzeigedauer";
 	$lang['_NEWADDEFAULT'] = "New ad default duration (days):";
-	$lang['_SENDREMIDE'] = "Send reminder emails to advertisers before the expiration in days:";
-	$lang['_NOTMESSAGE'] = "die Hinweis Meldungen:";
+	$lang['_SENDREMIDE'] = "Send reminder emails before the expiration (days):";
+	$lang['_NOTMESSAGE'] = "Die Hinweis Meldungen:";
 	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
 	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";
 
@@ -127,4 +128,6 @@ fixed by Christoph Zeuch
 
 	$lang['_AUTHORSEARCH'] = "Name";
 	$lang['_INVALIDTERM'] = "Du muss den Allgemeinen Geschäftsbedingungen zustimmen!";
+
+
 ?>
