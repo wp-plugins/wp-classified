@@ -1,4 +1,10 @@
 <?php
+
+/* 
+fixed by Christoph Zeuch
+*/
+
+
     $lang=array();
 	//
 	$lang['_OR'] = "oder";
@@ -9,24 +15,24 @@
 	$lang['_SELECTCATOTHER'] = "Andere Kataloge";
 	$lang['_RETURN'] = "Return";
 	
-	$lang['_INVALIDEMAIL'] = "Sie müssen eine Emailadresse eingeben.";
-	$lang['_INVALIDEMAIL2'] = "keine gültige e-Mail Adresse!";
-	$lang['_INVALIDNAME'] = "Sie müssen einen Namen eingeben.";
+	$lang['_INVALIDEMAIL'] = "Bitte gib eine Emailadresse ein.";
+	$lang['_INVALIDEMAIL2'] = "leider keine gültige e-Mail Adresse!";
+	$lang['_INVALIDNAME'] = "Bitte gib einen Namen ein.";
 	$lang['_INVALIDSUBJECT'] = "Bitte füll die erforderlichen Felder aus (Subject).";
 	$lang['_INVALIDCOMMENT'] = "Bitte eine Beschreibung eingeben.";
 	$lang['_INVALIDMSG'] = "Please correct these errors to save the listing.";
-	$lang['_INVALIDMSG2'] = "Image sollte ";
-	$lang['_INVALIDMSG3'] = " pixels oder weniger. ";
-	$lang['_INVALIDMSG4'] =  "Das Bild soll kleiner sein als ";
-	$lang['_INVALIDCONFIRM'] = "Das Verifizierungscode stimmt nicht überein.";
-	$lang['_INVALIDIMG'] = "ungültig Bildgröße.";
+	$lang['_INVALIDMSG2'] = "Dein Bild sollte ";
+	$lang['_INVALIDMSG3'] = " pixel oder weniger haben. ";
+	$lang['_INVALIDMSG4'] =  "Das Bild sollte kleiner sein als ";
+	$lang['_INVALIDCONFIRM'] = "Der Verifizierungscode war nicht richtig.";
+	$lang['_INVALIDIMG'] = "leider ungültige Bildgröße.";
 
 	$lang['_OPTIONAL'] = " optional. ";
 	$lang['_REQUIRED'] = " erforderlich. ";
 	$lang['_SAVEAD'] = "Speichern"; 
 
 	$lang['_DESC'] = "Anzeigendetails:";
-	$lang['_PRINT'] = "Die Annonce Drucken";
+	$lang['_PRINT'] = "Die Annonce drucken";
 	$lang['_EMAIL'] = "Email:";
 	$lang['_TEL'] = "Telephone:";
 	$lang['_WEB'] = "Homepage:";
