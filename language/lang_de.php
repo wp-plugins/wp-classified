@@ -105,7 +105,7 @@ fixed by Christoph Zeuch
 	$lang['_CONTACTBY'] = "Soll Deine Email-Adresse angezeigt werden:";
 	$lang['_YES_CONTACT'] = "Ja";
 	$lang['_NO_CONTACT'] = "Nein";
-	$lang['_TERM'] = "Ja, ich halte mich an die allgemeinen Regeln und mache keinen Unfug:";
+	$lang['_TERM'] = "Ja, ich halte mich an die allgemeinen Regeln:";
 
 	$lang['_FRIENDNAME'] = "Name Deines Freundes:";
 	$lang['_FRIENDMAIL'] = "E-Mail Deines Freundes:";
@@ -126,5 +126,5 @@ fixed by Christoph Zeuch
 	$lang['_ADMAXLIMITTXT'] = "Maximale Anzahl von Zeichen per Anzeige.";
 
 	$lang['_AUTHORSEARCH'] = "Name";
-	$lang['_INVALIDTERM'] = "musst Du den Allgemeinen Geschäftsbedingungen zustimmen.";
+	$lang['_INVALIDTERM'] = "Du muss den Allgemeinen Geschäftsbedingungen zustimmen!";
 ?>
