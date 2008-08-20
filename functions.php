@@ -185,7 +185,7 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 <td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 
 <tr>
-<td align=right><?php echo $lang['_CONTACTBY']; ?>:</td>
+<td align=right><?php echo $lang['_CONTACTBY']; ?></td>
 <td>
 <input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" checked/>
 <?php echo $lang['_YES_CONTACT']; ?></option>

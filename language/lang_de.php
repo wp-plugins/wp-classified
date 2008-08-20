@@ -29,7 +29,7 @@
 	$lang['_PRINT'] = "Die Annonce Drucken";
 	$lang['_EMAIL'] = "Email:";
 	$lang['_TEL'] = "Telephone:";
-	$lang['_WEB'] = "Homepage::";
+	$lang['_WEB'] = "Homepage:";
 	$lang['_CONFIRM'] = "Sicherheitscode:";
 	$lang['_PIC'] = "Bild:";
 	$lang['_TITLE'] = "Title:"; // subject
