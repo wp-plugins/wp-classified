@@ -58,7 +58,7 @@ function wpc_header(){
 		</form>
 	</div>
 	<p>&nbsp;</p>
-<?
+<?php
 }
 
 // index page 
@@ -751,7 +751,7 @@ function _send_ad(){
 		<tr><td></td><td><input type=submit value="<?php echo $lang['_SENDEMAIL']; ?>"></td></tr>
 		</form></table>
 		</div>
-		<?
+		<?php
 		wpc_footer();
 	}	
 }
@@ -937,7 +937,7 @@ function display_search($term){
 	<?php } ?>
 	</table>
 	<input type="button" value="<?php echo $lang['_BACK']; ?>" onClick="history.back();">
-	<?
+	<?php
 	} 
 	wpc_footer();
 }
