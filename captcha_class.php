@@ -1,4 +1,4 @@
-<?
+<?php
 // class defaults - change to effect globally
    define('CAPCC_WIDTH', 120); // max 500
    define('CAPCC_HEIGHT', 50); // max 200
