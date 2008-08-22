@@ -142,7 +142,7 @@ function wpcOptions_process(){
  3- Type '[[WP_CLASSIFIED]]' in the post's content area (without the quotes) 
 </pre>
 
-	<?
+	<?php
 		 return null;
 	};
 
@@ -169,7 +169,7 @@ function wpcOptions_process(){
 			<th align="right" valign="top"><?php echo __("Classified Top Image:");?> </th>
 			<td>
 <input type=hidden name="wpClassified_data[classified_top_image]" value="<?php echo $wpcSettings['classified_top_image'];?>">
-			<?
+			<?php
 
 	echo "\n<select name=\"topImage\" onChange=\"showimage()\">";	  
 	$rep = ABSPATH."wp-content/plugins/wp-classified/images/";
@@ -590,7 +590,7 @@ function adm_structure_process(){
 	<th align="right" valign="top"><?php echo __("Category Photo");?> </th>
 	<td>
 	<input type=hidden name="wpClassified_data[photo]" value="<?php echo $categoryinfo['photo'];?>">
-	<?
+	<?php
 
 	echo "\n<select name=\"topImage\" onChange=\"showCatimage()\">";	  
 	$rep = ABSPATH."wp-content/plugins/wp-classified/images/";

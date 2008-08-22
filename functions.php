@@ -154,7 +154,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 <tr>
 <td align=right valign=top><?php echo $lang['_AUTHOR']; ?></td>
 
-<?
+<?php
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
   $captcha = rand(1, 20) . ".png";
