@@ -10,7 +10,7 @@
    define('CAPCC_BACKGROUND_IMAGES', '');
    define('CAPCC_MIN_FONT_SIZE', 12);
    define('CAPCC_MAX_FONT_SIZE', 20);
-   define('CAPCC_USE_COLOUR', false);
+   define('CAPCC_USE_COLOUR', true);
    define('CAPCC_FILE_TYPE', 'png');
    
    /************************ End Default Options **********************/
