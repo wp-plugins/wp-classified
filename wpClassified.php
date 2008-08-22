@@ -975,7 +975,7 @@ function adm_utilities_process(){
         </p>
 	</form>
 	</p>
-	<?
+	<?php
 }
 
 function wpClassified_page_handle_title($title){
