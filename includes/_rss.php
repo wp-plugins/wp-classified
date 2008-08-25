@@ -1,6 +1,6 @@
 <?php
 /*
-wpClassified V1.1
+wpClassified V1.2
 RSS Feeds
 */
 if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { 
@@ -28,7 +28,7 @@ $rssTitle=get_bloginfo('name').' - '.__("Classified");
 $rssLink= (get_bloginfo('wpurl')."/".$pageinfo["post_name"].'?page=wpClassified&wpcfeed');
 $atomLink= (get_bloginfo('wpurl')."/".$pageinfo["post_name"]."?page=wpClassified&amp;wpcfeed=all");
 $rssDescription=get_bloginfo('description');
-$rssGenerator=__('wp-classified Version ') . '1.1';
+$rssGenerator=__('wp-classified Version ') . '1.2';
 		
 $rssItem=array();
 	
