@@ -16,8 +16,9 @@ $wpc_page_info = false;
 
 // include 
 
-$locale = get_locale(); 
-$languageFile = dirname(__FILE__).'/language/lang_'. $locale . '.php';
+$locale = get_locale();
+list ($lng, $locale) = split('_', $locale);
+$languageFile = dirname(__FILE__).'/language/lang_'. $lng . '.php';
 if (file_exists($languageFile)) {
 	require_once($languageFile);
 } else {
