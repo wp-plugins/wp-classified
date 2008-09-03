@@ -129,5 +129,10 @@ fixed by Christoph Zeuch
 	$lang['_AUTHORSEARCH'] = "Name";
 	$lang['_INVALIDTERM'] = "Du muss den Allgemeinen Geschäftsbedingungen zustimmen!";
 
+//// from 1.2.0-h
+	$lang['_DATEFORMAT'] = "Date Format String:";
+	$lang['_ALLOWRSS'] = "Allow RSS Feeds";
+	$lang['_COMFCODE'] = "Show the confirmation code";
+	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
 
 ?>

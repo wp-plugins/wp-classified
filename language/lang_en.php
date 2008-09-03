@@ -130,6 +130,13 @@
 
 	$lang['_AUTHORSEARCH'] = "Author";	
 	$lang['_INVALIDTERM'] = "Please check the Terms of Use Agreement";
+
+//// from 1.2.0-h
+	$lang['_DATEFORMAT'] = "Date Format String:";
+	$lang['_ALLOWRSS'] = "Allow RSS Feeds";
+	$lang['_COMFCODE'] = "Show the confirmation code";
+	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
+
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
 	//$lang['_SENDBY'] = "Added by :";

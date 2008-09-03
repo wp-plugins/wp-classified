@@ -56,12 +56,12 @@ function add_ads_subject(){
 				$msg = $lang['_INVALIDEMAIL'];
 				$addPost = false;
 			}
-
+if($wpcSettings['confirmation_code']=='y'){ 
 			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    				$msg = $lang['_INVALIDCONFIRM'];
 				$addPost = false;
   			}
-
+}
 			if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 				$msg = $lang['_INVALIDCOMMENT'];
 				$addPost = false;
@@ -104,7 +104,7 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
-
+//echo "-->" . $sql;
 				$wpdb->query($sql);
 
 				$tid = $wpdb->get_var("SELECT last_insert_id()");
@@ -155,10 +155,12 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 <td align=right valign=top><?php echo $lang['_AUTHOR']; ?></td>
 
 <?php
+if($wpcSettings['confirmation_code']=='y'){  
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
   $captcha = rand(1, 20) . ".png";
   $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+}
 ?>
 
 <td><?php
@@ -212,12 +214,16 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 <td valign=top align=right><?php echo $lang['_TERM']; ?></td>
 <td><input value="1" type="checkbox" name="wpClassified_data[term]" checked /></td>
 </tr>
-
+<?php
+if($wpcSettings['confirmation_code']=='y'){ 
+?>
 <tr>
 <td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
 <td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 <input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 </tr>
+<?php
+} ?>
 <tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
 </form>
 </table>

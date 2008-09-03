@@ -19,7 +19,7 @@ $wpc_page_info = false;
 $locale = get_locale();
 list ($lng, $locale) = split('_', $locale);
 $languageFile = dirname(__FILE__).'/language/lang_'. $lng . '.php';
-if (file_exists($languageFile)) {
+if (file_exists($languageFile)) {	
 	require_once($languageFile);
 } else {
 	require_once(dirname(__FILE__).'/language/lang_en.php');

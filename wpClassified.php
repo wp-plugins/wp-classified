@@ -270,17 +270,21 @@ function wpcOptions_process(){
 			<td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><span class="smallTxt">default: 10</span></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><?php echo __("Date Format String:");?></th>
+			<th align="right" valign="top"><?php echo $lang['_DATEFORMAT'];?></th>
 			<td><input type=text size=11 name="wpClassified_data[date_format]" value="<?php echo ($wpcSettings['date_format']);?>"><br><span class="smallTxt">example: m-d-Y g:i a</span></td>
 		</tr>
 		<tr>
 			<th></th>
-			<td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>> <?php echo __("Allow RSS Feeds");?></td>
+			<td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>> <?php echo $lang['_ALLOWRSS'];?></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><?php echo __("Number of Recent Posts to feed:");?></th>
+			<th align="right" valign="top"><?php echo $lang['_NOPOSTS'];?></th>
 			<td><input type=text size=4 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
 			<span class="smallTxt"> example: 15</span></td>
+		</tr>
+		<tr>
+			<th></th>	
+			<td><input type=checkbox name="wpClassified_data[confirmation_code]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>> <?php echo $lang['_COMFCODE'];?></td>
 		</tr>
 </table>
 </fieldset>
@@ -467,6 +471,7 @@ function wpClassified_install(){
 		$wpcSettings['wpClassified_filter_posts'] = 'y';
 		$wpcSettings['rss_feed'] = 'y';
 		$wpcSettings['rss_feed_num'] = 15;
+		$wpcSettings['confirmation_code'] = 'y';
 		$wpcSettings['count_ads_per_page'] = 10;
 		$wpcSettings['count_ads_max_limit'] = 400;
 		$wpcSettings['image_width'] = 150;

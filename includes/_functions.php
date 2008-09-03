@@ -51,6 +51,18 @@ function wpc_header(){
 	
 
 ?>
+
+	<p><script type="text/javascript"><!--
+google_ad_client = "pub-2844370112691023";
+google_alternate_ad_url = "http://www.forgani.com/ad.html";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel = "";
+// --></script>
+<script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript"></script></p>
+
 	<div style="text-align:right; float:right;">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
@@ -390,17 +402,16 @@ function _edit_ad(){
 			$msg = $lang['_INVALIDEMAIL'];
 			$addPost = false;
 		} 
-
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
 			$msg = $lang['_INVALIDEMAIL2'];
 			$addPost = false;
 		}
-
+if($wpcSettings['confirmation_code']=='y'){ 
 		if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    			$msg = $lang['_INVALIDCONFIRM'];
 			$addPost = false;
   		}
-
+}
 		if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 			$msg = $lang['_INVALIDCOMMENT'];
 			$addPost = false;
@@ -460,11 +471,12 @@ function _edit_ad(){
 	if ($displayform==true){
 
 		wpc_header();
-
+if($wpcSettings['confirmation_code']=='y'){  
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
   $captcha = rand(1, 20) . ".png";
   $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+}
 		$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			 LEFT JOIN {$table_prefix}users ON 
 			{$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
@@ -513,7 +525,7 @@ function _edit_ad(){
 <?php if ($contactBy==$lang['_NO_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_NO_CONTACT']; ?></option>
 </td></tr>
 
-		<tr>
+	if ( wpClassified_data[] 	<tr>
 		<td align=right><?php echo $lang['_WEB']; ?></td>
 		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
 
@@ -529,12 +541,16 @@ function _edit_ad(){
 <td valign=top align=right><?php echo $lang['_HOW_LONG']; ?></td>
 <td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
 </tr>
-
+<?php
+if($wpcSettings['confirmation_code']=='y') { 
+?>
 		<tr>
 		<td align=right valign=top><?php echo $lang['_CONFIRM']; ?></td>
 		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
 		</tr>
+<?php
+} ?>
 		<tr><td></td><td><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
 		</form></table>
 		</div>
@@ -690,12 +706,12 @@ function _send_ad(){
 			$sendMsg = $lang['_INVALIDEMAIL2'];
 			$sendAd = false;
 		}
-
+if($wpcSettings['confirmation_code']=='y'){ 
 		if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    			$sendMsg = $lang['_INVALIDCONFIRM'];
 			$sendAd = false;
   		}
-		
+}
 		if ($sendAd == true) {
 			$displayform = false;
 
@@ -726,10 +742,12 @@ function _send_ad(){
 	if ($displayform==true){
 		wpc_header();
 		$yourname = get_post_author($post);
+if($wpcSettings['confirmation_code']=='y'){
 		$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
 		$oVisualCaptcha = new _captcha($aFonts);
 		$captcha = rand(1, 20) . ".png";
 		$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+}
 		if ($sendMsg){echo "<p class=\"error\">".__($sendMsg)."</p>";}
 		?>
 		<div class="wpClassified_ads_container">
@@ -745,8 +763,13 @@ function _send_ad(){
 		<tr><td></td><td><hr></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_FRIENDNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[fname]" /></td></tr>
 		<tr><td class="sendTd"><?php echo $lang['_FRIENDMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
+<?php
+if($wpcSettings['confirmation_code']=='y'){ 
+?>
 		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
 		<tr><td class="sendTd"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
+<?php
+} ?>
 		<input type="hidden" name="wpClassified_send_ad" value="yes">
 		<tr><td></td><td><input type=submit value="<?php echo $lang['_SENDEMAIL']; ?>"></td></tr>
 		</form></table>
