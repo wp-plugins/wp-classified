@@ -57,11 +57,11 @@ function wpc_header(){
 		</form>
 	</div>
 	<p>&nbsp;</p>
+	
 <?php
-	if ($wpcSettings[googleID] != 'no') {
-		echo '<div style="text-align:center"><p>'
-		get_GADlink();	
-		echo '</p></div>';
+	if ($wpcSettings['googleID'] && $wpcSettings['googleID'] != 'no') {
+		$gAd = get_GADlink();
+		echo '<div style="text-align:center"><p>' . $gAd . '</p></div>';
 	}
 	
 }
@@ -960,6 +960,7 @@ function display_search($term){
 
 
 function get_GADlink() {
+	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings = get_option('wpClassified_data');
 	$rand = rand(0,100);
 	$key_code = ($rand <= $wpcSettings['share']) ? 'pub-3132018019261025' : $wpcSettings['googleID'];
