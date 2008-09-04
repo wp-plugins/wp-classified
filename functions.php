@@ -382,6 +382,7 @@ function _send_email($mailto, $mailsubject, $mailtext) {
 }
 
 
+
 # NOTIFICATION EMAILS 
 function _email_notifications($userId, $author_name, $listId, $subject, $post, $image) {
 	global $wpdb, $table_prefix, $lang;

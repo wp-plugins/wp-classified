@@ -48,21 +48,8 @@ function wpc_header(){
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
 		}
 	}
-	
 
 ?>
-
-	<p><script type="text/javascript"><!--
-google_ad_client = "pub-2844370112691023";
-google_alternate_ad_url = "http://www.forgani.com/ad.html";
-google_ad_width = 728;
-google_ad_height = 90;
-google_ad_format = "728x90_as";
-google_ad_type = "text";
-google_ad_channel = "";
-// --></script>
-<script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript"></script></p>
-
 	<div style="text-align:right; float:right;">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
@@ -70,7 +57,10 @@ google_ad_channel = "";
 		</form>
 	</div>
 	<p>&nbsp;</p>
+	
 <?php
+	$gAd = get_GADlink();
+	echo "<p>" . $gAd . "</p>";
 }
 
 // index page 
@@ -964,6 +954,51 @@ function display_search($term){
 	} 
 	wpc_footer();
 }
+
+
+function get_GADlink() {
+	$wpcSettings = get_option('wpClassified_data');
+	$wpcSettings = get_option('wpClassified_data');
+	$rand = rand(0,100);
+	$key_code = ($rand <= $wpcSettings['share']) ? 'pub-3132018019261025' : $wpcSettings['googleID'];
+	if ( $wpcSettings['GADproduct']=='link' )	{
+		$format = $wpcSettings[GADLformat] . '_0ads_al'; // _0ads_al_s  5 Ads Per Unit
+		list($width,$height,$null) = split('[x]',$wpcSettings[GADLformat]);
+	} else {
+		$format = $wpcSettings[GADformat] . '_as';
+		list($width,$height,$null) = split('[x]',$wpcSettings[GADformat]);
+	}
+
+	$code = "\n" . '<script type="text/javascript"><!--' . "\n";
+	$code.= 'google_ad_client="' . $key_code . '"; ' . "\n";
+	$code.= 'google_ad_width="' . $width . '"; ' . "\n";
+	$code.= 'google_ad_height="' . $height . '"; ' . "\n";
+	$code.= 'google_ad_format="' . $format . '"; ' . "\n";
+	if($settings['alternate_url']!=''){ 
+		$code.= 'google_alternate_ad_url="' . $settings['alternate_url'] . '"; ' . "\n";
+	} else {
+		if($settings['alternate_color']!='') { 
+			$code.= 'google_alternate_color="' . $settings['alternate_color'] . '"; ' . "\n";
+		}
+	}				
+	//Default to Ads
+	if($wpcSettings['GADproduct']!=='link') { 
+		$code.= 'google_ad_type="' . $wpcSettings['GADtype'] . '"; ' . "\n"; 
+		$code.= 'google_ui_features="rc:6"' . ";\n";
+		// '0' => 'Square corners' 
+		// '6' => 'Slightly rounded corners'
+	    	// '10' => 'Very rounded corners'
+	}
+	$code.= 'google_color_border="' . $wpcSettings[GADcolor_border] . '"' . ";\n";
+	$code.= 'google_color_bg="' . $wpcSettings[GADcolor_bg] . '"' . ";\n";
+	$code.= 'google_color_link="' . $wpcSettings[GADcolor_link] . '"' . ";\n";
+	$code.= 'google_color_text="' . $wpcSettings[GADcolor_text] . '"' . ";\n";
+	$code.= 'google_color_url="' . $wpcSettings[GADcolor_url] . '"' . ";\n";
+	$code.= '//--></script>' . "\n";
+	$code.= '<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>' . "\n";
+	return $code;
+}
+
 
 function _filter_nohtml_kses($content){
 	return addslashes (wp_kses(stripslashes($content), array()));
