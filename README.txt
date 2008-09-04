@@ -80,8 +80,9 @@ demo: http://www.bazarcheh.de/?page_id=92
 == Changelog ==
 
 Changes 1.2.0-f - Sep 04/09/2008
- 1- add Google AdSense for Classifieds
- 2-fixed language
+    1- add Google AdSense for Classifieds
+    2- fixed language
+    3- deactivate the confirmation code 
 
 
 Changes 1.2.0-e - August 10/2008

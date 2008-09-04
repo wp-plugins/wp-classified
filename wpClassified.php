@@ -59,6 +59,10 @@ Admin Side
 You will need to make the folders writable (chmod 777).
 
 
+- deactivate the confirmation code
+- add Google AdSense for Classifieds
+
+
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
@@ -310,7 +314,7 @@ if (!$wpcSettings[GADcolor_url]) $wpcSettings[GADcolor_url]= 'FF0000';
 ?>
 <table width="99%"><tr>
   		<th align="right" valign="top"><a href='https://www.google.com/adsense/' target='google'>Google AdSense Account ID: </a></th>
-  		<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> is this value being assigned to 'no' the Google Ads will not show up<br> example: no or pub-2844370112691023 ...
+  		<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> If this value is assigned to 'no' then the Google Ads will not show up<br> example: no or pub-2844370112691023 ...
 		</span></td></tr>
 <?php
     $share = '10'; // my smallest cut on ad revenue is 10% -  
