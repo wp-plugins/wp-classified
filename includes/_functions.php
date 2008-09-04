@@ -59,8 +59,10 @@ function wpc_header(){
 	<p>&nbsp;</p>
 	
 <?php
+	
 	$gAd = get_GADlink();
-	echo "<p>" . $gAd . "</p>";
+	echo '<div style="text-align:center"><p>' . $gAd . '</p></div>';
+	
 }
 
 // index page 
@@ -196,7 +198,7 @@ function get_wpc_list($msg){
     if ($msg!='') echo "<p class=\"message\">" . $msg . "</p>";
 	if ($numAds>$wpcSettings['count_ads_per_page']){
 		echo "<div align=\"left;\">";
-		echo __("Pages: ");
+		echo "Pages: ";
 		for ($i=0; $i<$numAds/$wpcSettings['count_ads_per_page']; $i++){
 			if ($i*$wpcSettings['count_ads_per_page']==$start){
 				echo " <b>".($i+1)."</b> ";
@@ -278,8 +280,8 @@ function wpc_read_not_allowed(){
 	get_currentuserinfo();
 
 	$tpl->assign('user_level', "<!--".($user_level)."-->");
-	$tpl->assign('access_denied', __("Read Access Denied", 'wpClassified'));
-	$tpl->assign('access_denied_reason', __("These classifieds require you to be a registered user in order to view them. If you are already registered you must log in before trying to view the classifieds.", 'wpClassified'));
+	$tpl->assign('access_denied', "Read Access Denied");
+	$tpl->assign('access_denied_reason', "These classifieds require you to be a registered user in order to view them. If you are already registered you must log in before trying to view the classifieds.");
 	$tpl->display('permission_denied.tpl');
 }
 
@@ -477,7 +479,7 @@ if($wpcSettings['confirmation_code']=='y'){
 
 		?>
 		<?php
-		if ($msg){echo "<p class=\"error\">".__($msg)."</p>";}
+		if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		echo $quicktags;
 
 		// split
@@ -813,7 +815,7 @@ function _display_ad(){
 <?php
 
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
-		echo __("Pages: ");
+		echo "Pages: ";
 		for ($i=0; $i<count($posts)/$wpcSettings['count_ads_per_page']; $i++){
 			if ($i*$wpcSettings['count_ads_per_page']==$_GET['pstart']){
 				echo " <b>".($i+1)."</b> ";
@@ -870,7 +872,7 @@ function _display_ad(){
 	}
 
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
-		echo __("Pages: ");
+		echo "Pages: ";
 		for ($i=0; $i<count($posts)/$wpcSettings['count_ads_per_page']; $i++){
 			if ($i*$wpcSettings['count_ads_per_page']==$_GET['pstart']){
 				echo " <b>".($i+1)."</b> ";

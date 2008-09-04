@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassiefied-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.2.0-e
+Version: 1.2.0-f
 Requires at least: 2.3.x
 Author URI: http://www.forgani.com
 
@@ -340,7 +340,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 	<tr><th align="left" colspan=2>Layout</th></tr>
 		<tr><td colspan=2 align="center">
 		<table><tr>
-		<td>Product</td>
+		<td>Ad Product: </td>
 		<td><select name="wpClassified_data[GADproduct]">
 			<?php
 			foreach($products as $key=>$value)	{
@@ -352,7 +352,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 			}
 			?>
 		</select></td>
-		<td>Ad Format</td>
+		<td>Ad Format: </td>
 		<td><select name="wpClassified_data[GADformat]">
 			<optgroup label='Horizontal'>
 			<?php
@@ -366,7 +366,19 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 			?>
 			</optgroup>
 		</select></td>	
-		<td>Link Format</td>
+		<td>Ad Type: </td>
+		<td><select name="wpClassified_data[GADtype]">
+			<?php
+			foreach($adtypes as $key=>$value)	{
+				if ($key == $wpcSettings[GADtype]) {
+					echo "\n<option value='$key' selected='selected'>$value</option>\n";
+				} else {
+					echo "\n<option value='$key'>$value</option>\n";
+				}
+			}
+			?>
+		</select></td>	
+		<td>Link Format: </td>
 		<td><select name="wpClassified_data[GADLformat]">
 			<?php
 			foreach($lformats as $key=>$value)	{
@@ -378,37 +390,25 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 			}
 			?>
 		</select></td>	
-		<td>Type</td>
-		<td><select name="wpClassified_data[GADtype]">
-			<?php
-			foreach($adtypes as $key=>$value)	{
-				if ($key == $wpcSettings[GADtype]) {
-					echo "\n<option value='$key' selected='selected'>$value</option>\n";
-				} else {
-					echo "\n<option value='$key'>$value</option>\n";
-				}
-			}
-			?>
-			</select></td>	
 		</tr>
 		</th></tr></table>
 	</td></tr>
 	<tr><th align="left" colspan=2>Ad Colours</th></tr>
 		<tr><td colspan=2 align="center">
 		<table><tr>
-		<td>Border</td>
+		<td>Border: </td>
 		<td><input name='wpClassified_data[GADcolor_border]' id='wpClassified_data[GADcolor_border]' size='6' value='<?php echo $wpcSettings[GADcolor_border]; ?>'/>
 		</td>
-		<td>Title/Link</td>
+		<td>Title/Link: </td>
 		<td><input name='wpClassified_data[GADcolor_link]' id='wpClassified_data[GADcolor_link]' size='6' value='<?php echo $wpcSettings[GADcolor_link]; ?>'/>
 		</td>
-		<td>Background</td>
+		<td>Background: </td>
 		<td><input name='wpClassified_data[GADcolor_bg]' id='wpClassified_data[GADcolor_bg]' size='6' value='<?php echo $wpcSettings[GADcolor_bg]; ?>'/>
 		</td>
-		<td>Text</td>
+		<td>Text: </td>
 		<td><input name='wpClassified_data[GADcolor_text]' id='wpClassified_data[GADcolor_text]' size='6' value='<?php echo $wpcSettings[GADcolor_text]; ?>'/>
 		</td>
-		<td>URL</td>
+		<td>URL: </td>
 		<td><input name='wpClassified_data[GADcolor_url]' id='wpClassified_data[GADcolor_url]' size='6' value='<?php echo $wpcSettings[GADcolor_url]; ?>'/>
 		</td>
 		</tr>

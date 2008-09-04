@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.2.0-b
+name: wpClassified Wordpress plugins version 1.2.0-e
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -82,7 +82,14 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
-Changes 1.2.1 - August 10/2008
+
+
+Changes 1.2.0-f - Sep 04/09/2008
+add Google AdSense for Classifieds
+fixed language
+
+
+Changes 1.2.0-e - August 10/2008
 
 User Side
 - implement the conformaion code (captcha)
