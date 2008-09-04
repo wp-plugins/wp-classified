@@ -123,7 +123,7 @@ fixed by Christoph Zeuch
 	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
 	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";
 
-	$lang['_ADMAXLIMIT'] = "Maximale Anzahl von Zeichen per Anzeige.:";
+	$lang['_ADMAXLIMIT'] = "Maximale Anzahl von Zeichen per Anzeige:";
 	$lang['_ADMAXLIMITTXT'] = "Maximale Anzahl von Zeichen per Anzeige.";
 
 	$lang['_AUTHORSEARCH'] = "Name";
