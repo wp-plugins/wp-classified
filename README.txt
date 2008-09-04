@@ -66,9 +66,8 @@ Using phpMyAdmin (or other database manager) run these sql queries on your exist
 
 Uninstalling the plugin:
 
-For uninstalling deactivate the plugin in the WordPress admin menu and 
-delete the wpClassified directory from the /wp-content/plugins/ directory and the page and tables, 
-which are installed by the plugin with drop table in phpMyAdmin.
+ 1- For uninstalling deactivate the plugin in the WordPress admin menu and 
+delete the wpClassified directory from the /wp-content/plugins/ directory and the page and tables, which are installed by the plugin with drop table in phpMyAdmin.
 
 
 == Screenshots ==
@@ -83,50 +82,49 @@ demo: http://www.bazarcheh.de/?page_id=92
 Changelog:
 
 
-
 Changes 1.2.0-f - Sep 04/09/2008
-add Google AdSense for Classifieds
-fixed language
+ 1- add Google AdSense for Classifieds
+ 2-fixed language
 
 
 Changes 1.2.0-e - August 10/2008
 
 User Side
-- implement the conformaion code (captcha)
-- added sent to his friend's button
-- added language file (The work is Not Finished!) 
-- users can send an Ad to a friend.
-- fixed search problem
-- fixed to image showing by editing and setting.
-- added two directory within the “/images” directory cpcc and topic. You will need to make the folders writable (chmod 777).
+   - implement the conformaion code (captcha)
+   - added sent to his friend's button
+   - added language file (The work is Not Finished!) 
+   - users can send an Ad to a friend.
+   - fixed search problem
+   - fixed to image showing by editing and setting.
+   - added two directory within the “/images” directory cpcc and topic. You will need to make the folders writable (chmod 777).
 
 Admin Side
-- expiration notice reminders to users (The work is Not Finished!) 
-- implement the maximum character limit
+   - expiration notice reminders to users (The work is Not Finished!) 
+   - implement the maximum character limit
 
 
 Changes in 1.1.1 - June 20/2008
-- fix the search function
-- implement RSS Feeds
-- admin email notification
+   - fix the search function
+   - implement RSS Feeds
+   - admin email notification
 
 
 Changes in 1.1.0-b - May 15/2008
-- add remove ads that are over x days old 
-- fix some bugs
+   - add remove ads that are over x days old 
+   - fix some bugs
 
 
 Changes in 1.1.0-a - May 12/2008
-- update delete/modify ads function .
-- added Move ads function to admin interface.
-- fixed some issue which are posted to me.
-- using Permalinks. Example to update .htaccess Rewrite Rules.
+   - update delete/modify ads function .
+   - added Move ads function to admin interface.
+   - fixed some issue which are posted to me.
+   - using Permalinks. Example to update .htaccess Rewrite Rules.
 
 
 Changes in 1.0.0 - April 01/2008
-- fix bugs
-- implement a new structure
-- update to display the links to ads at the top of page 
+   - fix bugs
+   - implement a new structure
+   - update to display the links to ads at the top of page 
 
 
 
