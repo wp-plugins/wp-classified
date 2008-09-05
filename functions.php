@@ -208,7 +208,7 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 if($wpcSettings['confirmation_code']=='y'){ 
  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
  $oVisualCaptcha = new _captcha($aFonts);
- $captcha = rand(1, 20) . ".png";
+ $captcha = rand(1, 50) . ".png";
  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
 <tr>
