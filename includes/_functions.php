@@ -518,7 +518,7 @@ if($wpcSettings['confirmation_code']=='y'){
 <?php if ($contactBy==$lang['_NO_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_NO_CONTACT']; ?></option>
 </td></tr>
 
-	if ( wpClassified_data[] 	<tr>
+		<tr>
 		<td align=right><?php echo $lang['_WEB']; ?></td>
 		<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
 
