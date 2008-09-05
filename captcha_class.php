@@ -1,5 +1,10 @@
 <?php
-// class defaults - change to effect globally
+/* 
+* This class is taken in part from the Code of 
+* PhpCaptcha CAPTCHA generation library from Edward Eliot.
+* class defaults - change to effect globally
+*/
+
    define('CAPCC_WIDTH', 120); // max 500
    define('CAPCC_HEIGHT', 50); // max 200
    define('CAPCC_NUM_CHARS', 4);
@@ -281,12 +286,15 @@
          if ($bCaseInsensitive) {
             $sUserCode = strtoupper($sUserCode);
          }
-         if (!empty($_SESSION[CAPCC_SESSION_ID]) && $sUserCode == $_SESSION[CAPCC_SESSION_ID]) {
-            // clear to prevent re-use
-            unset($_SESSION[CAPCC_SESSION_ID]);
-            return true;
+         if (!empty($_SESSION[CAPCC_SESSION_ID]) &&
+         ($sUserCode == $_SESSION[CAPCC_SESSION_ID] ||
+          $sUserCode == $_SESSION[CAPCC_SESSION_ID_PERV])) {
+         // clear to prevent re-use
+         unset($_SESSION[CAPCC_SESSION_ID]);
+         unset ($_SESSION[CAPCC_SESSION_ID_PERV]);
+         return true;
          }
-
+         $_SESSION[CAPCC_SESSION_ID_PERV] = $_SESSION[CAPCC_SESSION_ID];
          return false;
       }
    }
