@@ -464,12 +464,6 @@ if($wpcSettings['confirmation_code']=='y'){
 	if ($displayform==true){
 
 		wpc_header();
-if($wpcSettings['confirmation_code']=='y'){  
-  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-  $oVisualCaptcha = new _captcha($aFonts);
-  $captcha = rand(1, 20) . ".png";
-  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
-}
 		$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			 LEFT JOIN {$table_prefix}users ON 
 			{$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
@@ -536,6 +530,11 @@ if($wpcSettings['confirmation_code']=='y'){
 </tr>
 <?php
 if($wpcSettings['confirmation_code']=='y') { 
+  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+  $oVisualCaptcha = new _captcha($aFonts);
+  $captcha = rand(1, 20) . ".png";
+  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+
 ?>
 		<tr>
 		<td align=right valign=top><?php echo $lang['_CONFIRM']; ?></td>
