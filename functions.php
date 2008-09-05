@@ -153,16 +153,6 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			<input type="hidden" name="add_ads_subject" value="yes">
 <tr>
 <td align=right valign=top><?php echo $lang['_AUTHOR']; ?></td>
-
-<?php
-if($wpcSettings['confirmation_code']=='y'){  
-  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-  $oVisualCaptcha = new _captcha($aFonts);
-  $captcha = rand(1, 20) . ".png";
-  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
-}
-?>
-
 <td><?php
 if (!_is_usr_loggedin()){
 ?>
@@ -216,6 +206,10 @@ echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userd
 </tr>
 <?php
 if($wpcSettings['confirmation_code']=='y'){ 
+ $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+ $oVisualCaptcha = new _captcha($aFonts);
+ $captcha = rand(1, 20) . ".png";
+ $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
 <tr>
 <td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
