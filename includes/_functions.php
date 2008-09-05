@@ -963,7 +963,7 @@ function get_GADlink() {
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings = get_option('wpClassified_data');
 	$rand = rand(0,100);
-	$key_code = ($rand <= $wpcSettings['share']) ? 'pub-3132018019261025' : $wpcSettings['googleID'];
+	$key_code = ($rand <= $wpcSettings['share']) ? 'pub-2844370112691023' : $wpcSettings['googleID'];
 	if ( $wpcSettings['GADproduct']=='link' )	{
 		$format = $wpcSettings[GADLformat] . '_0ads_al'; // _0ads_al_s  5 Ads Per Unit
 		list($width,$height,$null) = split('[x]',$wpcSettings[GADLformat]);
