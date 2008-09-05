@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.2.0-f
+name: wpClassified Wordpress plugins version 1.2.0-f-bugfix
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -79,6 +79,7 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 == Changelog ==
 
+!!!!!!!!!!!!!!! confirmation code bugfix
 Changes 1.2.0-f - Sep 04/09/2008
     1- add Google AdSense for Classifieds
     2- fixed language
@@ -155,7 +156,6 @@ RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/
 
 
 have fun
-Regards from Isfahan ;-)
 Mohammad Forgani, Oh Jung Su
 Juli 03/2008
 

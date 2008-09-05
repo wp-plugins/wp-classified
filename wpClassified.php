@@ -61,7 +61,7 @@ You will need to make the folders writable (chmod 777).
 
 - deactivate the confirmation code
 - add Google AdSense for Classifieds
-
+!!!!!!!!!! fixed the Confirmation code match 
 
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
