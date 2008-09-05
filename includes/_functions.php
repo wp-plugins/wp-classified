@@ -400,10 +400,10 @@ function _edit_ad(){
 			$addPost = false;
 		}
 if($wpcSettings['confirmation_code']=='y'){ 
-		if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   			$msg = $lang['_INVALIDCONFIRM'];
-			$addPost = false;
-  		}
+if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
+	$msg = $lang['_INVALIDCONFIRM'];
+	$addPost = false;
+  }
 }
 		if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 			$msg = $lang['_INVALIDCOMMENT'];
@@ -532,7 +532,7 @@ if($wpcSettings['confirmation_code']=='y'){
 if($wpcSettings['confirmation_code']=='y') { 
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
-  $captcha = rand(1, 20) . ".png";
+  $captcha = rand(1, 50) . ".png";
   $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 
 ?>
@@ -734,12 +734,6 @@ if($wpcSettings['confirmation_code']=='y'){
 	if ($displayform==true){
 		wpc_header();
 		$yourname = get_post_author($post);
-if($wpcSettings['confirmation_code']=='y'){
-		$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-		$oVisualCaptcha = new _captcha($aFonts);
-		$captcha = rand(1, 20) . ".png";
-		$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
-}
 		if ($sendMsg){echo "<p class=\"error\">".__($sendMsg)."</p>";}
 		?>
 		<div class="wpClassified_ads_container">
@@ -757,6 +751,10 @@ if($wpcSettings['confirmation_code']=='y'){
 		<tr><td class="sendTd"><?php echo $lang['_FRIENDMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
 <?php
 if($wpcSettings['confirmation_code']=='y'){ 
+$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+$oVisualCaptcha = new _captcha($aFonts);
+$captcha = rand(1, 50) . ".png";
+$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
 		<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
 		<tr><td class="sendTd"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
