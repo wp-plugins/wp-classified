@@ -1,0 +1,431 @@
+/*  
+* default
+Author: M. Forgani
+Author URI: http://forgani.com/
+*/
+
+.wpc_container {
+	border: 1px solid #c5b2b3;
+	padding: 2px 2px 20px 2px;
+}
+
+.wpc_container hr {
+	color: #efefef;
+	height: 1px;
+}
+
+
+.wpchead{padding-top:.5em;}
+
+.wpcheadlnk{
+	padding-top:1em;
+	font-size: 110%;
+	font-weight: bold;
+	border-bottom: 1px solid #aaa;
+} 
+
+.wpcheadimg{
+	float: left;
+	border:0;
+}
+
+.wpcheaddesc{
+	vertical-align: middle;
+	font-size: 120%;
+	font-weight: bold;
+	color:#000;
+}
+
+.wpcsearch{
+	text-align:right; 
+	float:right;
+}
+
+.main-content {
+/*border-bottom: 1px solid #C5B2B3;*/
+/*background-color: #ccc;*/
+	padding: 0;
+} 
+
+
+.main-content h2{
+	color: #505050;
+	font-weight: normal;
+	font-size: 140%;
+}
+
+.column-left{
+	float: left;
+	margin-bottom: 10px;
+	margin-left: 15px;
+}
+
+.list-content{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	clear: both;
+	margin-left: 15px;
+}
+
+.list-content img{
+	float: left;
+	margin-top: 0px;
+	margin-right: 3px;
+	border:0;
+}
+
+.catphoto{
+	float: left;
+	margin-top: 0px;
+	margin-right: 15px;
+	border:0;
+}
+
+
+.list-content h2{
+	color: #444;
+	text-align: left;
+	font-weight: bold;
+	padding-left: 130px;
+	font-size: 110%;
+}
+
+.list_ads { 
+/*border: 1px solid #C5B2B3;*/
+	padding: 1px;
+}
+
+.list_ads_top{
+	padding: 10px 5px;
+	margin-bottom: 10px;
+	background-color:#eee;
+	text-align: right;
+}
+
+.list_ads_top img{
+	vertical-align: middle;
+	padding: 0 2px;
+	border: none;
+}
+
+.list_ads_sub {
+	border-spacing: 0px;
+	clear:both;
+	font-weight: bold;
+}
+
+.wpc_main { 
+/*border: 1px solid #C5B2B3;*/
+	background-color:#f4f1ee;
+	padding: 1px;
+	padding-left: 130px;
+	margin-right: 10px;
+	border-spacing: 0px;
+}
+
+.main_desc{
+	font-size:80%;
+	padding-left:.5em;
+}
+
+.main_col_left{
+	background-color:#f4f1ee;
+	float: left;
+	width:48%;
+	margin-bottom: 10px;
+	margin-left: 4px;
+}
+
+.main_col_middle{
+	background-color:#f4f1ee;
+	float: left;
+	width:22%;
+	margin: 0 4px 10px 4px;
+}
+
+.main_col_right{
+	background-color:#f4f1ee;
+	float: right;
+	width:28%;
+	margin-bottom: 10px;
+}
+
+.main_col_left_btn{
+	border-bottom: 1px solid #bbb; 
+	font-size: 9px;
+	float: left;
+	width:48%;
+	margin-bottom: 10px;
+	margin-left: 5px;
+}
+
+.main_col_middle_btn{
+	border-bottom: 1px solid #bbb; 
+	float: left;
+	width:22%;
+	font-size: 9px;
+	margin-bottom: 10px;
+}
+
+.main_col_right_btn{
+	border-bottom: 1px solid #bbb; 
+	float: right;
+	width:28%;
+	font-size: 9px;
+	margin-bottom: 10px;
+}
+
+
+.show_ad { 
+	padding: 1px;
+}
+
+.show_ad_header {
+	background-color: #eee;
+	border-bottom: 1px solid #c5b2b3;
+	padding: 2px 5px;
+	margin-bottom: 2px;
+}
+
+.show_ad_img1 {
+	float: left; 
+	padding: 8px;
+}
+
+.show_ad_title{
+	font-weight: bold;
+	padding: 4px 5px;
+}
+
+.show_ad_info{
+	font-size: 9px;
+	padding: 0px 5px;
+}
+
+.show_ad_info img{
+	vertical-align: middle;
+	padding: 0px 3px;
+	border: none;
+}
+
+.show_ad_body {
+	border-bottom: 1px solid #aaa;
+	background-color: #fff; /*#f4f1ee;*/
+	padding: 10px 10px;
+}
+
+.show_ad_left{
+	font-size: 9px;
+	float: left;
+	width:48%;
+	padding: 5px;
+}
+
+.show_ad_left img{
+	vertical-align: middle;
+	padding: 0 2px;
+	border: none;
+}
+
+.show_ad_right{
+	border-bottom: 1px solid #bbb; 
+	text-align: right;
+	font-size: 9px;
+	padding: 5px;
+}
+
+.show_ad_banner{
+	text-align: center;
+	padding-top: 10px;
+}
+
+.subcat {
+	letter-spacing: normal;
+	border-spacing: 0;
+	padding:0;
+} 
+
+.ads {
+	font-weight: bold;
+	background-color: #f4f1ee;
+}
+
+.editform {
+	margin-top: 10px; 
+}
+
+.editform h2{
+	font-weight: bold;
+	font-size: 1.2em;
+	margin: 10px 0 0 10px; 
+}
+
+.editform h3{
+	font-weight: blod;
+	font-size: 1.1em;
+	margin: 10px 0 0 10px; 
+}
+
+.editform table {
+	width: 90%;
+	margin-top: 20px;
+}
+
+.editform table td, .border {
+	padding: 2px;
+	margin: 0px;
+	border-top: 1px solid #efefef;
+}
+
+.wpc_label_right{
+	text-align: right;
+	vertical-align: top;
+}
+
+.editform .input, .editform select, .editform textarea{
+	font-size: 11px;
+}
+
+.wpc_footer{
+	margin-top: 4px;
+	padding: 8px 5px 20px 0;
+	vertical-align: middle;
+	font-size: 90%;
+}
+
+.wpc_footer hr {
+	color: #efefef;
+	height: 0px;
+}
+
+.rssCell, .rssCell a{
+	color: #000000;
+	margin: 0;
+	padding: 0 5px 0 0;
+	text-align: right;
+	vertical-align: middle;
+	font-size: 90%;
+	font-weight: bold;
+} 
+
+.rssIcon, .rssIcon a,
+.rssIcon p, .rssIcon img {
+	color: #000000 !important;
+	border: none;
+	font-weight: bold;
+	text-decoration: none;
+	vertical-align: middle;
+} 
+
+
+.smallRed{
+	color: red; 
+	font-size: 8pt;
+}
+
+.delete{
+	background-color: transparent;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/delete.gif);
+	background-repeat: no-repeat;
+	vertical-align: middle;
+	padding: 0 2px 4px 20px;
+	float: right;
+	border: none;
+	font-size: 90%;
+}
+
+.edit{
+	background-color: transparent;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/edit.gif);
+	background-repeat: no-repeat;
+	padding: 0 2px 4px 20px;
+	float: left;
+	vertical-align: middle;
+	border: none;
+	font-size: 90%;
+}
+
+.print{
+	background-color: transparent;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/print.jpg);
+	background-repeat: no-repeat;
+	vertical-align: middle;
+	padding-left: 20px;
+	float: right;
+	border: none;
+	font-size: 90%;
+}
+
+
+.imgMiddle{
+	vertical-align: middle;
+	padding: 0 2px 0 2px;
+	border: none;
+}
+
+.rightCell{
+	margin-top: 4x;
+	padding: 8px 5px 2px 0;
+	float: right;
+	text-align: right;
+	vertical-align: middle;
+	font-size: 90%;
+	font-weight: bold;
+}
+
+.leftCell{
+	margin-top: 4px;
+	padding: 8px 5px 2px 0;
+	vertical-align: middle;
+	float: left;
+	font-size: 90%;
+}
+
+.rightCellsend{
+	margin-top: 4px;
+	padding: 8px 5px 2px 0;
+	vertical-align: middle;
+	float: right;
+	text-align: right;
+	font-size: 90%;
+}
+
+.error{
+	margin: 0;
+	padding: 0 0 10px 0;
+	color: red;
+	font-weight: bold;
+}
+
+.message{
+	margin: 0;
+	padding: 0 0 10px 0;
+	color: green;
+	font-weight: bold;
+}
+
+.sendInput{width: 258px;}
+
+.sendTd{
+background-color: #ffffff;
+text-align: right;
+vertical-align: top;
+}
+
+.smallTxt{
+font-size:80%;
+color: #333;
+}
+
+.legend  {
+padding: 10px;
+color: blue;
+} 
+
+.fieldset {
+margin-bottom: 1em;
+padding:.5em;
+border: 1px solid #aaa;
+} 
+
+
