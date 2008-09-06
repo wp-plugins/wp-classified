@@ -286,15 +286,11 @@
          if ($bCaseInsensitive) {
             $sUserCode = strtoupper($sUserCode);
          }
-         if (!empty($_SESSION[CAPCC_SESSION_ID]) &&
-         ($sUserCode == $_SESSION[CAPCC_SESSION_ID] ||
-          $sUserCode == $_SESSION[CAPCC_SESSION_ID_PERV])) {
+         if (!empty($_SESSION[CAPCC_SESSION_ID]) && $sUserCode == $_SESSION[CAPCC_SESSION_ID]) {
          // clear to prevent re-use
          unset($_SESSION[CAPCC_SESSION_ID]);
-         unset ($_SESSION[CAPCC_SESSION_ID_PERV]);
          return true;
          }
-         $_SESSION[CAPCC_SESSION_ID_PERV] = $_SESSION[CAPCC_SESSION_ID];
          return false;
       }
    }
