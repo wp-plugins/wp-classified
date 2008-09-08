@@ -56,7 +56,7 @@ onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php
 <td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_PIC']; ?></td>
-<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>">&nbsp;&nbsp;<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $postinfo->image_file; ?>" class="imgMiddle"  width="120" height="100"><br /><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)</small></td>
+<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>">&nbsp;&nbsp;<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $postinfo->image_file; ?>" class="imgMiddle"  width="120" height="100"><br /><span class="smallTxt"><?php echo __("(maximum" . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)</span></td>
 </tr>
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
