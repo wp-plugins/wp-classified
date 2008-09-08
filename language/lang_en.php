@@ -36,7 +36,7 @@
 	$lang['_CONFIRM'] = "Confirmation code:";
 	$lang['_PIC'] = "Image:";
 	$lang['_TITLE'] = "Title:"; // subject
-	$lang['_SUBJET'] = "Subject"; //posting name
+	$lang['_SUBJECT'] = "Subject"; //posting name
 	$lang['_AUTHOR'] = "Your name/Company name:";
 	$lang['_TEL'] = "Phone(s)/mobile(s):";
 	$lang['_DATE'] = "Date";
@@ -137,10 +137,11 @@
 	$lang['_COMFCODE'] = "Show the confirmation code";
 	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
 
-/// from 1.3.0
+/// from 1.2.1
 	$lang['_NEWPOST'] = "New Post";
 	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
 	$lang['_NOTNOTIFY'] = "Not Notified";
+	$lang['_POSTON'] = "Post on";
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   

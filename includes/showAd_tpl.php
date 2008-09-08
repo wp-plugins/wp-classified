@@ -42,7 +42,8 @@ if (($i+1)==$hm){
 <div class="show_ad_header">
 <?php
 if ($post->image_file!=''){
-	echo "<div class=\"show_ad_img1\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" .$post->image_file."\"></div>";
+	include (dirname(__FILE__).'/js/viewer.js.php');
+	echo "<div class=\"show_ad_img1\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $post->image_file. "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $post->image_file. "\" style=\"width: 120px; height: 100px\"></a></div>";
 }
 ?>
 
@@ -50,7 +51,7 @@ if ($post->image_file!=''){
 <?php echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a>
 </div>
 <div class="show_ad_info">
-Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/user.gif"><?php echo get_post_author($post);?>on<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/cal.gif"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
+Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/user.gif"><?php echo get_post_author($post);?> on <img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/cal.gif"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
 </div>
 <?php if ($editlink){
 	echo '<p class="smallTxt"><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</span></p>';

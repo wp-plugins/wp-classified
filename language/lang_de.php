@@ -39,8 +39,8 @@ fixed by Christoph Zeuch
 	$lang['_CONFIRM'] = "Sicherheitscode:";
 	$lang['_PIC'] = "Bild:";
 	$lang['_TITLE'] = "Title:"; // subject
-	$lang['_SUBJET'] = "Betreffzeile"; //posting name
-	$lang['_AUTHOR'] = "Dein Name / Firmenname:";
+	$lang['_SUBJECT'] = "Betreffzeile"; //posting name
+	$lang['_AUTHOR'] = "Dein Name / Firmenname";
 	$lang['_TEL'] = "Telefon(e) / Mobil(e):";
 	$lang['_DATE'] = "Datum";
 	$lang['_LIST'] = "List";
@@ -123,7 +123,7 @@ fixed by Christoph Zeuch
 	$lang['_NOTMESSAGESUBJECT'] = "Expiration reminder email subject";
 	$lang['_NOTMESSAGEBODY'] = "Expiration reminder email body:";
 
-	$lang['_ADMAXLIMIT'] = "Maximale Anzahl von Zeichen per Anzeige.:";
+	$lang['_ADMAXLIMIT'] = "Maximale Anzahl von Zeichen per Anzeige:";
 	$lang['_ADMAXLIMITTXT'] = "Maximale Anzahl von Zeichen per Anzeige.";
 
 	$lang['_AUTHORSEARCH'] = "Name";
@@ -134,11 +134,5 @@ fixed by Christoph Zeuch
 	$lang['_ALLOWRSS'] = "Allow RSS Feeds";
 	$lang['_COMFCODE'] = "Show the confirmation code";
 	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
-
-	/// from 1.3
-	$lang['_NEWPOST'] = "New Post";
-	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
-	$lang['_NOTNOTIFY'] = "Not Notified";
-
-
+	$lang['_POSTON'] = "Post on";
 ?>

@@ -8,7 +8,7 @@
 * list all ads already exist under a defined category
 */
 
-global $lang;
+global $_GET, $table_prefix, $wpdb, $lang;
 $wpcSettings = get_option('wpClassified_data');
 
 
@@ -43,10 +43,10 @@ if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) {
 	echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?><?php
 } 
 ?>
-</div><!--list_ads_desc-->
-<div class="main_col_left"><?php echo $lang['_ADS'];?></div>
+</div><!--list_ads_top-->
+<div class="main_col_left"><?php echo $lang['_SUBJECT'];?></div>
 <div class="main_col_middle"><?php echo $lang['_VIEWS']?></div>
-<div class="main_col_right"><?php echo $lang['_LAST'];?></div>
+<div class="main_col_right"><?php echo $lang['_POSTON'];?></div>
 <?php
 for ($x=0; $x<count($ads); $x++){
 	$ad = $ads[$x];
@@ -69,7 +69,17 @@ for ($x=0; $x<count($ads); $x++){
 	?>
 	</div><!--list_ads_sub-->
 	<div class="main_col_left_btn"><?php echo $lang['_FROM'];?> <?php echo create_ads_author($ad);?></div>
-	<div class="main_col_middle_btn"><?php echo $ad->views;?></div>
+	<div class="main_col_middle_btn">
+	<?php
+	$rec = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads 
+		WHERE ads_ads_subjects_id = $ad->ads_subjects_id ");
+
+	if ($rec->image_file !='') {
+		include (dirname(__FILE__).'/js/viewer.js.php');
+		echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $rec->image_file. "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
+    }
+	?>
+	&nbsp;<?php echo $ad->views;?></div>
 	<div class="main_col_right_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></div>
 	<?php
 }

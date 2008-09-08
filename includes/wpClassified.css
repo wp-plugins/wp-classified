@@ -4,9 +4,46 @@ Author: M. Forgani
 Author URI: http://forgani.com/
 */
 
+.wpc_head{
+	padding-top:.5em;
+}
+
+.wpc_head_link{
+	padding-top:1em;
+	font-size: 110%;
+	font-weight: bold;
+	border-bottom: 1px solid #aaa;
+} 
+
+.wpc_head_img{
+	float: left;
+	border:0;
+}
+
+.wpc_head_desc{
+	vertical-align: middle;
+	font-size: 120%;
+	font-weight: bold;
+	color:#000;
+}
+
+.wpc_search{
+	text-align:right; 
+	float:right;
+	clear:both;
+}
+
+.wpc_googleAd {
+	padding: 5px;
+	float:left;
+	text-align: center;
+}
+
+
 .wpc_container {
 	border: 1px solid #c5b2b3;
-	padding: 2px 2px 20px 2px;
+	padding: 10px 2px 20px 2px;
+	clear:both;
 }
 
 .wpc_container hr {
@@ -15,31 +52,6 @@ Author URI: http://forgani.com/
 }
 
 
-.wpchead{padding-top:.5em;}
-
-.wpcheadlnk{
-	padding-top:1em;
-	font-size: 110%;
-	font-weight: bold;
-	border-bottom: 1px solid #aaa;
-} 
-
-.wpcheadimg{
-	float: left;
-	border:0;
-}
-
-.wpcheaddesc{
-	vertical-align: middle;
-	font-size: 120%;
-	font-weight: bold;
-	color:#000;
-}
-
-.wpcsearch{
-	text-align:right; 
-	float:right;
-}
 
 .main-content {
 /*border-bottom: 1px solid #C5B2B3;*/
@@ -130,6 +142,7 @@ Author URI: http://forgani.com/
 
 .main_col_left{
 	background-color:#f4f1ee;
+	font-weight: bold;
 	float: left;
 	width:48%;
 	margin-bottom: 10px;
@@ -138,6 +151,7 @@ Author URI: http://forgani.com/
 
 .main_col_middle{
 	background-color:#f4f1ee;
+	font-weight: bold;
 	float: left;
 	width:22%;
 	margin: 0 4px 10px 4px;
@@ -145,6 +159,7 @@ Author URI: http://forgani.com/
 
 .main_col_right{
 	background-color:#f4f1ee;
+	font-weight: bold;
 	float: right;
 	width:28%;
 	margin-bottom: 10px;
@@ -154,6 +169,7 @@ Author URI: http://forgani.com/
 	border-bottom: 1px solid #bbb; 
 	font-size: 9px;
 	float: left;
+	height: 1.6em;
 	width:48%;
 	margin-bottom: 10px;
 	margin-left: 5px;
@@ -163,6 +179,7 @@ Author URI: http://forgani.com/
 	border-bottom: 1px solid #bbb; 
 	float: left;
 	width:22%;
+	height: 1.6em;
 	font-size: 9px;
 	margin-bottom: 10px;
 }
@@ -171,6 +188,7 @@ Author URI: http://forgani.com/
 	border-bottom: 1px solid #bbb; 
 	float: right;
 	width:28%;
+	height: 1.6em;
 	font-size: 9px;
 	margin-bottom: 10px;
 }
@@ -407,25 +425,61 @@ Author URI: http://forgani.com/
 .sendInput{width: 258px;}
 
 .sendTd{
-background-color: #ffffff;
-text-align: right;
-vertical-align: top;
+	background-color: #ffffff;
+	text-align: right;
+	vertical-align: top;
 }
 
 .smallTxt{
-font-size:80%;
-color: #333;
+	font-size:80%;
+	color: #333;
+	font-weight: normal;
 }
 
 .legend  {
-padding: 10px;
-color: blue;
+	padding: 10px;
+	color: blue;
 } 
 
 .fieldset {
-margin-bottom: 1em;
-padding:.5em;
-border: 1px solid #aaa;
+	margin-bottom: 1em;
+	padding:.5em;
+	border: 1px solid #aaa;
 } 
 
+#thumbBox{ /*Outermost DIV for thumbnail viewer*/
+position: absolute;
+left: 0;
+top: 0;
+width: auto;
+padding: 10px;
+padding-bottom: 0;
+background: #313131;
+visibility: hidden;
+z-index: 10;
+cursor: hand;
+cursor: pointer;
+}
 
+#thumbBox .footerbar{ /*Footer DIV of thumbbox that contains "close" link */
+font: bold 10px Tahoma;
+letter-spacing: 1px;
+line-height: 0.9em;
+color: #ccc;
+padding: 5px 0;
+text-align: left;
+}
+
+
+#thumbBox #thumbImage{ /*DIV within thumbbox that holds the enlarged image */
+background-color: white;
+}
+
+#thumbLoading{ /*DIV for showing "loading" status while thumbbox is being generated*/
+position: absolute;
+visibility: hidden;
+border: 1px solid black;
+background-color: #EFEFEF;
+padding: 5px;
+z-index: 5;
+}

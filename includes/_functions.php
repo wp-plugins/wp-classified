@@ -17,24 +17,24 @@ function wpc_header(){
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
-	echo '<div class="wpchead">';
+	echo '<div class="wpc_head">';
 	if ($wpcSettings['classified_top_image']!=''){
 		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
-		echo '<div class="wpcheadimg"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '"></div>';
+		echo '<div class="wpc_head_img"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '"></div>';
 	}
 	if ($wpcSettings['description']!=''){
-		echo '<div class="wpcheaddesc">'.$wpcSettings['description'] . "&nbsp;</div>";
+		echo '<div class="wpc_head_desc">'.$wpcSettings['description'] . "&nbsp;</div>";
 	}
 	if ($lnks==""){$lnks = get_wpc_header_link();}
-	echo '<p class="wpcheadlnk">' . $lnks. '</p>';
+	echo '<p class="wpc_head_link">' . $lnks. '</p>';
 ?>
-	<div class="wpcsearch">
+	<div class="wpc_search">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
 		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
 		</form>
 	</div>
-	</div><!--wpchead-->
+	</div><!--wpc_head-->
 <?php
 	if ($wpcSettings['googleID'] && $wpcSettings['googleID'] != 'no') {
 		$gAd = get_GADlink();
