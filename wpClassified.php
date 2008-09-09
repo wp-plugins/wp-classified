@@ -482,7 +482,7 @@ function wpClassified_process(){
 		case "prtad": _print_ad(); break;
 		case "sndad": _send_ad(); break;
 		case "mi": _modify_img(); break;
-		case "di": _delete_img(); break;
+		case "di": _delete_img($_POST['file']); break;
 	}
 }
 

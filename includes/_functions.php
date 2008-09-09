@@ -196,7 +196,7 @@ function _delete_ad(){
 	$pageinfo = get_wpClassified_pageinfo();
 	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=da&lid=".$_GET['lid']."&asid=".$_GET['asid'];
 
-	if ($_POST['subject_id']>0){
+	if ($_POST['YesOrNo']>0){
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$_POST['subject_id'])."'");
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".((int)$_POST['subject_id'])."'");
 		get_wpc_list($lang['_ANNDEL']);
@@ -206,7 +206,7 @@ function _delete_ad(){
 	<h3><?php echo $lang['_CONFDEL'];?></h3>
 	<form method="post" id="delete_ad_conform" name="delete_ad_conform" action="<?php echo $link_del;?>">
 	<strong>
-		<input type="hidden" name="subject_id" value="<?php echo $_GET['asid'];?>">
+		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['asid'];?>">
 		<?php echo $lang['_SURDELANN'];?><br />
 		<input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
 	</strong>
@@ -357,34 +357,46 @@ function _print_ad(){
 	$desctext = $post->post;
 	$phone = $post->phone;
 	$photo = $post->image_file;
+
+	$array = split('###', $post->image_file);
 	$submitter = get_post_author($post);
 	//wpc_header();
 	echo "<html><head><title>".$wpcSettings['wpClassified_slug']."</title></head>";
+
+	
     	echo "<body bgcolor=\"#FFFFFF\" text=\"#000000\">";
 	echo "<table border=0><tr><td><table border=0 width=100% cellpadding=0 cellspacing=1 bgcolor=\"#000000\"><tr><td>";
     	echo "<table border=0 width=100% cellpadding=15 cellspacing=1 bgcolor=\"#FFFFFF\"><tr><td>";
 	echo "<br /><br /><table width=99% border=0><tr><td>".$lang['_CLASSIFIED_AD']."(No. $aid)<br />" .$lang['_FROM']. "<br /><br />";
 	echo " <b>" . $lang['_TITLE']. "</b> <i>" .$subject. "</i><br />";
 	
-	if ($photo) {     
-		echo "<tr><td><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" .$photo."\" border=0>";
-	}
-	echo "</td></tr><tr><td><b>".$lang['_DESC']."</b><br /><br /><div style=\"text-align:justify;\">".$desctext."</div><p>";
+	foreach($array as $f) {
+		if ($f !=''){
+			include (dirname(__FILE__).'/js/viewer.js.php');
+			echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a><br>" .$f . "</div>";
+		} 
+	} 
+	
+
+	echo "<p class=\"justify\"><b>".$lang['_DESC']."</b><br /><br />".$desctext."</p>";
 	if ($phone) {
 		echo "<br /><b>".$lang['_TEL']."</b>" . $phone . "<br />";
 	}
 	if ($web) {
 		echo"<b>".$lang['_WEB']."</b> ". $web ;
 	}
-	echo "<hr />";
-	echo "To contact by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address.";
-	echo "<br /><a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a><br />";
-	echo "<br /><br />".$lang['_ADSADDED'].$subject."<br /><br />";
-	echo "</td></tr></table>";
-	echo "<br /><br /></td></tr></table></td></tr></table>";
-    	echo "<br /><br /><center>This advertisement is from the classified ads section on the website  ";
-	echo "<b>".bloginfo('name')."</b><br />";
-    	echo "</td></tr></table>";
+	?>
+	<hr />
+	To contact by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address:
+	<?php
+	echo " <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a>";
+	echo "<br /><br />".$lang['_ADSADDED']. " " . "<nobr>" . @date($wpcSettings['date_format'], $post->date) ."</nobr>";
+	?>
+	<br />This advertisement is from the classified ads section on the website <a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?>.</a>
+	</td></tr></table>
+	</td></tr></table></td></tr></table>
+    	</td></tr></table>
+	<?php
 	//wpc_footer();
 }
 

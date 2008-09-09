@@ -156,6 +156,7 @@ function _modify_img() {
 	$post = $postinfo[0];
 	$displayform = true;
 
+	
 	if ($_POST['add_img']=='yes'){
 		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 			die($lang['_MUSTLOGIN']);
@@ -222,14 +223,50 @@ function _modify_img() {
 
 
 function _delete_img() {
-	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
+	$pageinfo = get_wpClassified_pageinfo();
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
-	
-	$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
-	$post = $postinfo[0];
-	$displayform = true;
+//$fp = fopen('/var/www/web5/html/wp-content/plugins/wp-classified/images/data.txt', 'w');
+	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=di&aid=".$_GET['aid']. "&file=".$_GET[file];
+	if ($_POST['YesOrNo']>0){
+		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+		$rec = $postinfo[0];
+		$array = split('###', $rec->image_file);
+
+		foreach($array as $f) {
+			if ($f == $_GET[file]){
+				//print STDERR "---> " . $_GET[file];
+			} else {
+			  $txt .= $f . '###';
+			}
+		}
+		$newstring = substr($txt, 0, -3);
+		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($newstring)) . "' WHERE ads_id=" . $_GET['aid'] );
+
+//fwrite($fp, $newstring . "\n");
+//fclose($fp);
+		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+		$post = $postinfo[0];
+		if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
+			include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+		} else {
+			include(ABSPATH . INC . "/modifyImg_tpl.php");
+		}
+	} else {
+	?>
+	<h3><?php echo $lang['_CONFDEL'];?></h3>
+	<form method="post" id="delete_img_conform" name="delete_img_conform" action="<?php echo $link_del;?>">
+	<strong>
+		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['asid'];?>">
+		<?php echo $lang['_DELETESURE']; ?><br />
+		<input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
+	</strong>
+	</form>
+	<?php
+	return false;
+	}
 }
 
 
@@ -282,7 +319,7 @@ function create_public_link($action, $vars){
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid="."&aid=".((int)$vars['aid']);
 		break;
 		case "di": //delete Images
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/di/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/di/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
 		break;
 	}
 }
