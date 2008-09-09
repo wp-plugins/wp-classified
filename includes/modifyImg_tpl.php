@@ -26,14 +26,14 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<table><tr>
 	<td class="wpc_label_right">Image: </td>
 	<td>
-	<?php if ($curcount <> 3) { ?>
+	<?php if ($curcount <> $wpcSettings['number_of_image']) { ?>
 	<input type="hidden" name="add_img" value="yes">
 	<input name="addImage" type="file">&nbsp;<input type=submit value="<?php echo $lang['_SUBMIT']; ?>" id="submit">
 	<br /><span class="smallTxt"><?php echo "(maximum " . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel" ;?>)<br>
 	<?php
 	}
 	?>
-	You have placed <?php echo $curcount; ?> of 3 images</span></td>
+	You have placed <?php echo $curcount; ?> of <?php echo $wpcSettings['number_of_image']; ?> images</span></td>
 	</tr>
 	</table>
 	</form>

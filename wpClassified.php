@@ -195,9 +195,9 @@ function wpcOptions_process(){
 			if ($file == "." || $file == "..") $a=1;
 		} else {
 			if ($file == $wpcSettings['classified_top_image']) {
-				echo "\n<option value=$file selected>$file</option>\n";
+				echo "\n<option value=\"$file\" selected>$file</option>\n";
 			} else {
-				echo "\n<option value=$file>$file</option>\n";
+				echo "\n<option value=\"$file\">$file</option>\n";
 			}
 		}
 	}
@@ -217,12 +217,47 @@ function wpcOptions_process(){
 			<th align="right" valign="top">wpClassified Page Link Name: </th>
 			<td><input type="text" name="wpClassified_data[wpClassified_slug]" value="<?php echo $wpcSettings['wpClassified_slug'];?>"></td>
 		</tr>
+		
+
+		
+<?php
+if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = "120";
+if (!$wpcSettings['number_of_image']) $wpcSettings['number_of_image'] = "3";
+if (!$wpcSettings['image_position']) $wpcSettings['image_position'] = "1";
+$position=array ('1' => 'Images on right','2' => 'Images on top');	
+?>
+
 		<tr>
-			<th align="right" valign="top">Max. Ad image size: </th>
-			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 100x150</span></td>
+			<th align="right" valign="top">Number of image columns: </th>
+			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
+		</tr>
+
+		<tr>
+			<th align="right" valign="top">Image Display</th>
+			<td>
+				<select name="wpClassified_dat[image_position]" tabindex="1">
+				<?php
+				foreach($position as $key=>$value)	{
+					if ($key == $wpcSettings[image_position]) {
+						echo "\n<option value='$key' selected='selected'>$value</option>\n";
+					} else {
+						echo "\n<option value='$key'>$value</option>\n";
+					}
+				}
+				?>
+				</select>
+			</td>
 		</tr>
 		<tr>
-			<th align="right" valign="top">Ad Image Alignment: </th>
+			<th align="right" valign="top">Max. Ad image size: </th>
+			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
+		</tr>
+		<tr>
+			<th align="right" valign="top">Thumbnail Width: </th>
+			<td><input type="text" size="5" name="wpClassified_data[thumbnail_image_width]" value="<?php echo $wpcSettings['thumbnail_image_width'];?>"><br /><span class="smallTxt">example: 120</span></td>
+		</tr>
+		<tr>
+			<th align="right" valign="top">Ad first Image Alignment: </th>
 			<td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><span class="smallTxt">choose: left or right</span></td>
 		</tr>
 		<tr>
@@ -264,12 +299,20 @@ if (!$wpcSettings['inform_user_subject'])
 if (!$wpcSettings['inform_user_body']) 
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = "90";
+$textarea=array ('tinymce' => 'HTML with TinyMCE (inline wysiwyg)','plain' => 'No HTML, No BBCode');	
 ?>
 		<tr>
-			<th align="right">Posting Style: "</th>
+			<th align="right">Posting Style: </th>
 			<td><select name="wpClassified_data[wpc_edit_style]">
-			<option value="tinymce"<?php echo ($wpcSettings["wpc_edit_style"]=="tinymce")?" selected":"";?>>HTML with TinyMCE (inline wysiwyg)</option>
-			<option value="plain">No HTML, No BBCode</option>
+			<?php
+			foreach($textarea as $key=>$value)	{
+				if ($key == $wpcSettings[wpc_edit_style]) {
+					echo "\n<option value='$key' selected='selected'>$value</option>\n";
+				} else {
+					echo "\n<option value='$key'>$value</option>\n";
+				}
+			}
+			?>
 			</select></td>
 		</tr>
 		
@@ -611,8 +654,11 @@ function wpClassified_install(){
 	$wpcSettings['confirmation_code'] = 'y';
 	$wpcSettings['count_ads_per_page'] = 10;
 	$wpcSettings['count_ads_max_limit'] = 400;
-	$wpcSettings['image_width'] = 150;
-	$wpcSettings['image_height'] = 200;
+	$wpcSettings['number_of_image'] = 3;
+	$wpcSettings['image_position'] = 1;
+	$wpcSettings['thumbnail_image_width'] = 120;
+	$wpcSettings['image_width'] = 640;
+	$wpcSettings['image_height'] = 480;
 	$wpcSettings['date_format'] = 'm-d-Y g:i a';
 	$wpcSettings['googleID'] = 'pub-2844370112691023';
 	$wpcSettings['GADproduct'] = 'ad';
@@ -758,9 +804,9 @@ function adm_structure_process(){
 			if ($file == "." || $file == "..") $a=1;
 		} else {
 			if ("images/" . $file == $categoryinfo['photo']) {
-				echo "\n<option value=images/$file selected>images/$file</option>\n";
+				echo "\n<option value=\"images/$file\" selected>images/$file</option>\n";
 			} else {
-				echo "\n<option value=images/$file>images/$file</option>\n";
+				echo "\n<option value=\"images/$file\">images/$file</option>\n";
 			}
 		}
 	}
@@ -809,7 +855,7 @@ function adm_structure_process(){
 				<th align="right">List Status</th>
 				<td><select name="wpClassified_data[status]">
 					<option value="active">Open</option>
-					<option value="inactive"<?php echo ($classifiedinfo['status']=='inactive')?" selected":"";?>>Closed</option>
+					<option value="inactive" <?php echo ($classifiedinfo['status']=='inactive')?" selected":"";?>>Closed</option>
 					<option value="readonly"<?php echo ($classifiedinfo['status']=='readonly')?" selected":"";?>>Read-Only</option>
 				</select></td>
 			</tr>

@@ -189,7 +189,7 @@ function _modify_img() {
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 				$array = split('###', $post->image_file);
 				$curcount = count ($array);
-				if ( $setImage !='' && $curcount < 3) {
+				if ( $setImage !='' && $curcount < $wpcSettings['number_of_image']) {
 					if  ($post->image_file !=''){
 						$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file = '". $post->image_file . "###" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
 					} else {
