@@ -42,7 +42,7 @@ Author URI: http://forgani.com/
 
 .wpc_container {
 	border: 1px solid #c5b2b3;
-	padding: 10px 2px 20px 2px;
+	padding: 8px 2px 3px 2px;
 	clear:both;
 }
 
@@ -120,6 +120,11 @@ Author URI: http://forgani.com/
 	border: none;
 }
 
+.list_ads hr { 
+	clear:both;
+	margin: 3px;
+}
+
 .list_ads_sub {
 	border-spacing: 0px;
 	clear:both;
@@ -144,7 +149,7 @@ Author URI: http://forgani.com/
 	background-color:#f4f1ee;
 	font-weight: bold;
 	float: left;
-	width:48%;
+	width:45%;
 	margin-bottom: 10px;
 	margin-left: 4px;
 }
@@ -153,7 +158,7 @@ Author URI: http://forgani.com/
 	background-color:#f4f1ee;
 	font-weight: bold;
 	float: left;
-	width:22%;
+	width:25%;
 	margin: 0 4px 10px 4px;
 }
 
@@ -166,36 +171,42 @@ Author URI: http://forgani.com/
 }
 
 .main_col_left_btn{
-	border-bottom: 1px solid #bbb; 
+	
 	font-size: 9px;
 	float: left;
 	height: 1.6em;
-	width:48%;
-	margin-bottom: 10px;
-	margin-left: 5px;
+	width:45%;
 }
 
 .main_col_middle_btn{
-	border-bottom: 1px solid #bbb; 
 	float: left;
-	width:22%;
+	width:25%;
 	height: 1.6em;
 	font-size: 9px;
-	margin-bottom: 10px;
 }
 
 .main_col_right_btn{
-	border-bottom: 1px solid #bbb; 
 	float: right;
 	width:28%;
 	height: 1.6em;
 	font-size: 9px;
-	margin-bottom: 10px;
 }
 
 
 .show_ad { 
 	padding: 1px;
+}
+
+
+.show_ad p {
+	margin-top: 0 0 1em 0;
+	line-height: 1.5em;
+	font-size: 110%;
+}
+
+.show_ad p.justify {
+	text-align: justify;
+	padding: 10px;
 }
 
 .show_ad_header {
@@ -206,10 +217,17 @@ Author URI: http://forgani.com/
 }
 
 .show_ad_img1 {
-	float: left; 
-	padding: 8px;
+	float: left;
+	margin:0 8px 1px 0;
+	border:1px solid rgb(150,150,150);
 }
 
+.show_ad_img12 {
+	margin:0px 15px 7px 1px;  
+	border:1px solid rgb(150,150,150);
+	clear: both;
+	float: right; 
+}
 .show_ad_title{
 	font-weight: bold;
 	padding: 4px 5px;
@@ -226,30 +244,18 @@ Author URI: http://forgani.com/
 	border: none;
 }
 
-.show_ad_body {
-	border-bottom: 1px solid #aaa;
-	background-color: #fff; /*#f4f1ee;*/
-	padding: 10px 10px;
-}
+div.info{text-align:right;margin:1em 0;padding:0}
+div.info div{display:inline;white-space:nowrap}
+div.info div.left{float:left} 
 
-.show_ad_left{
-	font-size: 9px;
-	float: left;
-	width:48%;
-	padding: 5px;
-}
-
-.show_ad_left img{
+.info img{
 	vertical-align: middle;
 	padding: 0 2px;
 	border: none;
 }
 
-.show_ad_right{
-	border-bottom: 1px solid #bbb; 
+.rightTxt{
 	text-align: right;
-	font-size: 9px;
-	padding: 5px;
 }
 
 .show_ad_banner{
@@ -285,7 +291,7 @@ Author URI: http://forgani.com/
 }
 
 .editform table {
-	width: 90%;
+	width: 99%;
 	margin-top: 20px;
 }
 
@@ -412,6 +418,7 @@ Author URI: http://forgani.com/
 	margin: 0;
 	padding: 0 0 10px 0;
 	color: red;
+	font-size: 1.1em;
 	font-weight: bold;
 }
 

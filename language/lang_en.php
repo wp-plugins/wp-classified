@@ -52,7 +52,6 @@
 	$lang['_ANNDEL'] = "Classified Ad has been deleted.";
 	
 	$lang['_ANNMOD2'] = "Classified Ad has been modified.";
-	$lang['_SAVE'] = "The Classified Ad has been saved.";
 	$lang['_THANKS'] = "Thank You for using our Classified Ads.";
 	$lang['_MUSTLOGIN'] = "You must login to post an Ad.";
 	$lang['_GUEST'] = "You are not logged in and posting as a guest, click";
@@ -142,6 +141,11 @@
 	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
 	$lang['_NOTNOTIFY'] = "Not Notified";
 	$lang['_POSTON'] = "Post on";
+	$lang['_SAVEADINFO'] = "The Classified Ad has been saved.";
+	$lang['_SUBMIT'] = "Submit";
+	$lang['_UPLOAD'] = "Upload";
+	$lang['_DELETE'] = "Delete";
+	$lang['_DELETESURE'] = "Are you sure you wish to delete this?";
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   

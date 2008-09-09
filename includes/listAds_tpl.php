@@ -23,7 +23,7 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 		if ($i*$wpcSettings['count_ads_per_page']==$start){
 			echo " <b>".($i+1)."</b> ";
 		} else {
-			echo " ".create_public_link("classified", array("name"=>($i+1), "lid"=>$lists["lists_id"], 	"name"=>$lists["name"], "start"=>($i*$wpcSettings['count_ads_per_page'])))." ";
+			echo " ".create_public_link("classified", array("name"=>($i+1), "lid"=>$lists["lists_id"], "name"=>$lists["name"], "start"=>($i*$wpcSettings['count_ads_per_page'])))." ";
 		}
 	}
 	echo "</div>";
@@ -71,16 +71,20 @@ for ($x=0; $x<count($ads); $x++){
 	<div class="main_col_left_btn"><?php echo $lang['_FROM'];?> <?php echo create_ads_author($ad);?></div>
 	<div class="main_col_middle_btn">
 	<?php
+	
 	$rec = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads 
 		WHERE ads_ads_subjects_id = $ad->ads_subjects_id ");
+	$array = split('###', $rec->image_file);
+	$img = $array[0];
 
-	if ($rec->image_file !='') {
+	if ($img !='') {
 		include (dirname(__FILE__).'/js/viewer.js.php');
-		echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $rec->image_file. "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
+		echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
     }
 	?>
 	&nbsp;<?php echo $ad->views;?></div>
 	<div class="main_col_right_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></div>
+	<hr>
 	<?php
 }
 ?>

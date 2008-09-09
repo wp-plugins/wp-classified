@@ -65,9 +65,9 @@ function get_user_info(){
 	global $table_prefix, $wpdb, $user_ID, $wpc_user_info;
 	get_currentuserinfo();
 	$wpc_user_info = $wpdb->get_row("SELECT * from {$table_prefix}users
-							LEFT JOIN {$table_prefix}wpClassified_user_info
-							ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
-							WHERE {$table_prefix}users.ID = '".(int)$user_ID."'", ARRAY_A);
+					LEFT JOIN {$table_prefix}wpClassified_user_info
+					ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
+					WHERE {$table_prefix}users.ID = '".(int)$user_ID."'", ARRAY_A);
 }
 
 function get_wpc_user_field(){

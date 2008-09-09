@@ -283,7 +283,7 @@ function _edit_ad(){
 				$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
 				if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 					$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
-					 echo "<h2>" .$lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1] . "</h2>";
+					 $msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
 					$addPost=false;	
 				} else {
 					$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
@@ -638,7 +638,6 @@ function display_search($term){
 
 
 function get_GADlink() {
-	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings = get_option('wpClassified_data');
 	$rand = rand(0,100);
 	$key_code = ($rand <= $wpcSettings['share']) ? 'pub-2844370112691023' : $wpcSettings['googleID'];

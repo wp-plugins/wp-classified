@@ -130,9 +130,13 @@ fixed by Christoph Zeuch
 	$lang['_INVALIDTERM'] = "Du muss den Allgemeinen Geschäftsbedingungen zustimmen!";
 
 //// from 1.2.0-h
-	$lang['_DATEFORMAT'] = "Date Format String:";
-	$lang['_ALLOWRSS'] = "Allow RSS Feeds";
-	$lang['_COMFCODE'] = "Show the confirmation code";
-	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
+	$lang['_NEWPOST'] = "New Post";
+	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
+	$lang['_NOTNOTIFY'] = "Not Notified";
 	$lang['_POSTON'] = "Post on";
+	$lang['_SAVEADINFO'] = "The Classified Ad has been saved.";
+	$lang['_SUBMIT'] = "Submit";
+	$lang['_UPLOAD'] = "Upload";
+	$lang['_DELETE'] = "Delete";
+	$lang['_DELETESURE'] = "Are you sure you wish to delete this?";
 ?>

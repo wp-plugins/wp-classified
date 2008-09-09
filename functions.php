@@ -13,7 +13,7 @@
 
 require('captcha_class.php');
 
-function add_ads_subject(){
+function _add_ad(){
 	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -25,7 +25,7 @@ function add_ads_subject(){
 
 	$displayform = true;
 
-	if ($_POST['add_ads_subject']=='yes'){
+	if ($_POST['add_ad']=='yes'){
 		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 			die($lang['_MUSTLOGIN']);
 		} else {
@@ -55,12 +55,13 @@ function add_ads_subject(){
 				$msg = $lang['_INVALIDEMAIL'];
 				$addPost = false;
 			}
-if($wpcSettings['confirmation_code']=='y'){ 
-			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   				$msg = $lang['_INVALIDCONFIRM'];
-				$addPost = false;
-  			}
-}
+
+			if($wpcSettings['confirmation_code']=='y'){ 
+				if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
+   					$msg = $lang['_INVALIDCONFIRM'];
+					$addPost = false;
+  				}
+			}
 			if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 				$msg = $lang['_INVALIDCOMMENT'];
 				$addPost = false;
@@ -71,32 +72,33 @@ if($wpcSettings['confirmation_code']=='y'){
 				$addPost = false;
 			}
 
-
 			if ($_FILES['image_file']!=''){
 				$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 				if ($ok==true){
 					$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
 					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
-						 echo "<h2>" .$lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1] . "</h2>";
+						 $msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
 						$addPost=false;	
 					} else {
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['image_file']['size']);
 						@fclose($fp);
-						$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
 						@fwrite($fp, $content);
 						@fclose($fp);
 						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
 						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'];
 					}
 				}
+			} else {
+				$addPost==false;
 			}
 			if ($addPost==true){
 				$displayform = false;
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
-$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
+	$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
 	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
@@ -124,13 +126,16 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			update_ads($_GET['lid']);
 		}
 		$_GET['asid'] = $tid;
-		get_wpc_list($lang['_SAVE'].$out."<br>".$lang['_THANKS']);
+		get_wpc_list($lang['_SAVEADINFO'].$out."<br>".$lang['_THANKS']);
 			} else {
 				$displayform = true;
 			}
 		}
 	}
-
+	
+	if ($addPost==true){
+		$displayform = false;
+	}
 	if ($displayform==true){
 		if (!file_exists(ABSPATH . INC . "/newAd_tpl.php")){ 
 			include(dirname(__FILE__)."/includes/newAd_tpl.php");
@@ -138,6 +143,93 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 			include(ABSPATH . INC . "/newAd_tpl.php");
 		}
 	}
+}
+
+
+function _modify_img() {
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
+	$wpcSettings = get_option('wpClassified_data');
+	$userfield = get_wpc_user_field();
+	get_currentuserinfo();
+	
+	$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+	$post = $postinfo[0];
+	$displayform = true;
+
+	if ($_POST['add_img']=='yes'){
+		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
+			die($lang['_MUSTLOGIN']);
+		} else {
+			$addPost = true;
+			if ($_FILES['addImage']!=''){
+				$ok = (substr($_FILES['addImage']['type'], 0, 5)=="image")?true:false;
+				if ($ok==true){
+					$imginfo = @getimagesize($_FILES['addImage']['tmp_name']);
+					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
+						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
+						$msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
+						$addPost=false;	
+					} else {
+						$fp = @fopen($_FILES['addImage']['tmp_name'], "r");
+						$content = @fread($fp, $_FILES['addImage']['size']);
+						@fclose($fp);
+						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], "w");
+						@fwrite($fp, $content);
+						@fclose($fp);
+						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], 0777);
+						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'];
+					}
+				}
+			} else {
+				$addPost==false;
+			}
+			if ($addPost==true){
+				$displayform = false;
+				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
+				$array = split('###', $post->image_file);
+				$curcount = count ($array);
+				if ( $setImage !='' && $curcount < 3) {
+					if  ($post->image_file !=''){
+						$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file = '". $post->image_file . "###" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
+					} else {
+						$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
+					}
+				} 
+				$addPost = false;
+				$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+				$post = $postinfo[0];
+				if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
+					include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+				} else {
+					include(ABSPATH . INC . "/modifyImg_tpl.php");
+				}
+			} else {
+				$displayform = true;
+			}
+		}
+	}
+	if ($addPost==true){
+		$displayform = false;
+	}
+	if ($displayform==true){
+		if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
+			include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+		} else {
+			include(ABSPATH . INC . "/modifyImg_tpl.php");
+		}
+	}
+}
+
+
+function _delete_img() {
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
+	$wpcSettings = get_option('wpClassified_data');
+	$userfield = get_wpc_user_field();
+	get_currentuserinfo();
+	
+	$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+	$post = $postinfo[0];
+	$displayform = true;
 }
 
 
@@ -164,7 +256,7 @@ function create_public_link($action, $vars){
 		case "pa":
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
-		case "paForm":
+		case "paform":
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
@@ -177,10 +269,20 @@ function create_public_link($action, $vars){
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/da/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "eaform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+			return 
+			($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
 		break;
 		case "searchform":
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/search/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=search";
+		break;
+		case "mi": //modify Images
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
+		break;
+		case "miform":
+			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid="."&aid=".((int)$vars['aid']);
+		break;
+		case "di": //delete Images
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/di/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
 		break;
 	}
 }

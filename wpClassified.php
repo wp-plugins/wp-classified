@@ -63,10 +63,18 @@ You will need to make the folders writable (chmod 777).
 - add Google AdSense for Classifieds
 
 
+release 1.3.0-alpha - Sep 09/09/2008
+
+- Update to  display-style classified ads in one column
+- Ad images viewer added
+- Allowed more images per ad
+- Page Templates management separated
+- Added stylesheet for page layout
+
+
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
-
 */
 
 //require_once('settings.php');
@@ -462,27 +470,19 @@ function wpClassified_process(){
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 	<?php
-	
 	switch ($_GET['_action']){
 		default:
-		case "classified": wpc_index();
-		break;
-		case "search": display_search($_POST['search_terms']);
-		break;
-		case "vl": get_wpc_list($msg);
-		break;
-		case "pa": add_ads_subject();
-		break;
-		case "ea": _edit_ad();
-		break;
-		case "da": _delete_ad();
-		break;
-		case "va": _display_ad();
-		break;
-		case "prtad": _print_ad();
-		break;
-		case "sndad": _send_ad();
-		break;
+		case "classified": wpc_index();	break;
+		case "search": display_search($_POST['search_terms']); break;
+		case "vl": get_wpc_list($msg); break;
+		case "pa": _add_ad(); break;
+		case "ea": _edit_ad(); break;
+		case "da": _delete_ad(); break;
+		case "va": _display_ad(); break;
+		case "prtad": _print_ad(); break;
+		case "sndad": _send_ad(); break;
+		case "mi": _modify_img(); break;
+		case "di": _delete_img(); break;
 	}
 }
 
@@ -772,7 +772,7 @@ function adm_structure_process(){
 
 		<tr>
 			<th></th>
-			<td><input type=submit value="Save"</td>
+			<td><input type=submit value="Save"></td>
 		</tr>
 		</table>
 	</form>
@@ -1152,7 +1152,6 @@ function wpClassified_page_handle_titlechange($title){
 	$wpcSettings = get_option('wpClassified_data');
 	return str_replace("[[WP_CLASSIFIED]]", $wpcSettings["wpClassified_slug"], $title);
 }
-
 
 function wpClassified_search_highlight($keywords,$post,$bgcolors='yellow'){
 	if (is_array($bgcolors)) {

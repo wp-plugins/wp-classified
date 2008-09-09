@@ -52,9 +52,9 @@ if(! $results) {
 		<div class="main_col_left_btn"><?php echo $lang['_FROM'];?> <?php echo $result->display_name; ?></div>
 		<div class="main_col_middle_btn"><?php echo $result->name; ?></div>
 		<div class="main_col_right_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></div>
-		<input type="button" value="<?php echo $lang['_BACK']; ?>" onClick="history.back();">
 		<?php
 	} 
+	echo '<input type="button" value="' . $lang['_BACK'] .'" onClick="history.back();">';
 }
 echo "</div></div>";
 wpc_footer();

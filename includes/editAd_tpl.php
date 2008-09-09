@@ -8,10 +8,12 @@
 * 
 */
 
-global $lang;
+global $lang, $quicktags;
 $wpcSettings = get_option('wpClassified_data');
 
 wpc_header();
+
+
 if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 	echo $quicktags;
 ?>
@@ -43,29 +45,46 @@ onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php
 <?php if ($contactBy==$lang['_NO_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_NO_CONTACT']; ?></option>
 </td></tr>
 
-	<tr>
+<tr>
 <td class="wpc_label_right"><?php echo $lang['_WEB']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
+<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td></tr>
 
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
+<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td></tr>
 <tr><td></td><td><hr></td></tr>
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
 <td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
-<tr>
-<td class="wpc_label_right"><?php echo $lang['_PIC']; ?></td>
-<td><input type=file name="image_file" id="image_file" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->image_file));?>">&nbsp;&nbsp;<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $postinfo->image_file; ?>" class="imgMiddle"  width="120" height="100"><br /><span class="smallTxt"><?php echo __("(maximum " . (int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. " pixel");?>)</span></td>
-</tr>
-<tr>
-<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
-<td><?php create_ads_input($postinfo->post);?></td>
-</tr>
+<tr><td colspan=2><p>Images:</p></td></tr>
+<tr><td colspan=2>
+<table width=90%><tr>
+<?php
+
+$array = split('###', $postinfo->image_file);
+foreach($array as $f) {
+	include (dirname(__FILE__).'/js/viewer.js.php');
+	echo '<td align="center">';
+	echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a>";
+?>
+	<!-- Image Upload -->
+	<br><?php echo $f; ?>
+	</td>
+<?php
+}
+?>
+</tr></table>
+<tr><td colspan=2 align="center">
+<?php echo create_public_link("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
+</td></tr>
+
+<tr><td colspan=2><?php echo $lang['_DESC']; ?><br>
+<div style="text-align: center;"><?php create_ads_input($postinfo->post);?></div>
+</td></tr>
 
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_HOW_LONG']; ?></td>
-<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
+<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><?php echo $lang['_DAY']; ?><br><span class ="smallTxt">default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
 </tr>
 <?php
 if($wpcSettings['confirmation_code']=='y') { 
@@ -81,7 +100,7 @@ if($wpcSettings['confirmation_code']=='y') {
 </tr>
 <?php
 } ?>
-<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="sub">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
+<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
 </form></table>
 </div>
 </div>
