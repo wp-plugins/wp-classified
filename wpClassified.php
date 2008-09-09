@@ -66,10 +66,10 @@ You will need to make the folders writable (chmod 777).
 release 1.3.0-alpha - Sep 09/09/2008
 
 - Update to  display-style classified ads in one column
-- Ad images viewer added
+- Added the ad images viewer
 - Allowed more images per ad
-- Page Templates management separated
-- Added stylesheet for page layout
+- All the pages using templates
+- Added style sheet for page layout 
 
 
 Permalink structure:
