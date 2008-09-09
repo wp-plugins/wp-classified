@@ -84,7 +84,7 @@ Changelog:
 
 Changes 1.3.0-alpha - Sep 09/09/2008
 
-- Update to  display-style classified ads in one column
+- Modify to display-style classified ads in one column
 - Added the ad images viewer
 - Allowed more images per ad
 - All the pages using templates
