@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.0-alpha
+name: wpClassified Wordpress plugins version 1.3.0
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -82,7 +82,7 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 Changelog:
 
-Changes 1.3.0-alpha - Sep 09/09/2008
+Changes 1.3.0 - Sep 10/09/2008
 
 - Modify to display-style classified ads in one column
 - Added the ad images viewer

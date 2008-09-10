@@ -36,10 +36,12 @@ function wpc_header(){
 	</div>
 	</div><!--wpc_head-->
 <?php
-	if ($wpcSettings['googleID'] && $wpcSettings['googleID'] != 'no') {
+
+	if ($wpcSettings[GADposition] == 'top' || $wpcSettings[GADposition] == 'bth') {
 		$gAd = get_GADlink();
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
+
 
 	$today = time();
 	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
@@ -152,7 +154,11 @@ function wpc_footer(){
 	global $wpClassified_version;
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins (Version '.$wpClassified_version.') powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
-	
+	if ($wpcSettings[GADposition] == 'btn' || $wpcSettings[GADposition] == 'bth') {
+		$gAd = get_GADlink();
+		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
+	}
+
 	echo "<div class=\"wpc_footer\">";
 	if($wpcSettings['rss_feed']=='y'){
 		$rssurl= _rss_url();

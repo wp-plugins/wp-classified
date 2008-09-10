@@ -63,7 +63,7 @@ You will need to make the folders writable (chmod 777).
 - add Google AdSense for Classifieds
 
 
-release 1.3.0-alpha - Sep 09/09/2008
+release 1.3.0 - Sep 10/09/2008
 
 - Update to  display-style classified ads in one column
 - Added the ad images viewer
@@ -137,13 +137,13 @@ function wpcOptions_process(){
 		echo "<h2>The wpClassified Page not found.</h2>";
 	?>
 	<hr />	
-	<h2><?php _e('Create wpClassified Page', 'wpClassified'); ?></h2>
+	<h2><?php 'Create wpClassifieds Page'; ?></h2>
 	<p style="text-align: left;">
-	<?php _e('The wpClassified plugin Page will be created automatically', 'wpClassified'); ?>
+	<?php 'The wpClassified plugin Page will be created automatically'; ?>
 	</p>
 	<form method="post" id="create_wpcOptions" name="create_wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=createpage">
 	<p style="text-align: center;">
-	<input type="submit" name="do" value="<?php _e('wpClassified Create Page', 'wpClassified'); ?>" class="button" />
+	<input type="submit" name="do" value="<?php 'wpClassified Create Page'; ?>" class="button" />
 	</p>
 	</form>
 	<pre>
@@ -166,7 +166,7 @@ function wpcOptions_process(){
 
 <table><tr valign="top"><td>
 <fieldset class="fieldset">
-	<legend class="legend"><strong>Classifed Page Details</strong></legend>
+	<legend class="legend"><strong>Classifeds Page Details</strong></legend>
 	<table width="99%">
 	<input type=hidden name="wpClassified_data[wpClassified_version]" value="<?php echo $wpClassified_version;?>">
 		<tr>
@@ -214,7 +214,7 @@ function wpcOptions_process(){
 			<td><input type=checkbox name="wpClassified_data[show_credits]" value="y"<?php echo ($wpcSettings['show_credits']=='y')?" checked":"";?>> Display wpClassified credit line at the bottom of page.</td>
 		</tr>
 		<tr>
-			<th align="right" valign="top">wpClassified Page Link Name: </th>
+			<th align="right" valign="top">Classifieds Page Link Name: </th>
 			<td><input type="text" name="wpClassified_data[wpClassified_slug]" value="<?php echo $wpcSettings['wpClassified_slug'];?>"></td>
 		</tr>
 		
@@ -224,7 +224,7 @@ function wpcOptions_process(){
 if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = "120";
 if (!$wpcSettings['number_of_image']) $wpcSettings['number_of_image'] = "3";
 if (!$wpcSettings['image_position']) $wpcSettings['image_position'] = "1";
-$position=array ('1' => 'Images on right','2' => 'Images on top');	
+$imgPosition=array ('1' => 'Images on right');	
 ?>
 
 		<tr>
@@ -235,9 +235,9 @@ $position=array ('1' => 'Images on right','2' => 'Images on top');
 		<tr>
 			<th align="right" valign="top">Image Display</th>
 			<td>
-				<select name="wpClassified_dat[image_position]" tabindex="1">
+				<select name="wpClassified_data[image_position]">
 				<?php
-				foreach($position as $key=>$value)	{
+				foreach($imgPosition as $key=>$value)	{
 					if ($key == $wpcSettings[image_position]) {
 						echo "\n<option value='$key' selected='selected'>$value</option>\n";
 					} else {
@@ -362,24 +362,46 @@ if (!$wpcSettings[GADcolor_link]) $wpcSettings[GADcolor_link]= '0000FF';
 if (!$wpcSettings[GADcolor_bg]) $wpcSettings[GADcolor_bg]= 'FFFFFF';
 if (!$wpcSettings[GADcolor_text]) $wpcSettings[GADcolor_text]= '000000';
 if (!$wpcSettings[GADcolor_url]) $wpcSettings[GADcolor_url]= 'FF0000';
+if (!$wpcSettings[GADposition]) $wpcSettings[GADposition]= 'btn';
+if (!$wpcSettings[GADproduct]) $wpcSettings[GADproduct]= 'link';
+if (!$wpcSettings[googleID]) $wpcSettings[googleID] = 'pub-2844370112691023';
+$GADpos = array ('top' => 'top','btn' => 'bottom', 'bth' => 'both','no' => 'none');
 ?>
 <table width="99%"><tr>
   		<th align="right" valign="top"><a href='https://www.google.com/adsense/' target='google'>Google AdSense Account ID: </a></th>
-  		<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> If this value is assigned to 'no' then the Google Ads will not show up<br> example: no or pub-2844370112691023 ...
+  		<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> example: no, pub-2844370112691023 or ...
 		</span></td></tr>
-<?php
-    $share = '10'; // my smallest cut on ad revenue is 10% -  
-    while($share<101){
-      if($share==$wpcSettings['share']){
-        $share_list .= "<option value='$share' selected='selected'>$share%\n";
-      }else{
-        $share_list .= "<option value='$share'>$share%\n";
-      }
-      ++$share;
-    }
-?>
+		
 		<tr>
-  		<td align="right" valign="top"><label>Plugin Author Ad Share:</label></td>
+			<th align="right" valign="top">Google Ad Position: </th>
+			<td>
+				<select name="wpClassified_data[GADposition]" tabindex="1">
+				<?php
+				foreach($GADpos as $key=>$value)	{
+					if ($key == $wpcSettings[GADposition]) {
+						echo "\n<option value='$key' selected='selected'>$value</option>\n";
+					} else {
+						echo "\n<option value='$key'>$value</option>\n";
+					}
+				}
+				?>
+				</select>
+			</td>
+		</tr>
+
+		<?php
+		$share = '10'; // my smallest cut on ad revenue is 10% -  
+		while($share<101){
+		if($share==$wpcSettings['share']){
+			$share_list .= "<option value='$share' selected='selected'>$share%\n";
+		}else{
+			$share_list .= "<option value='$share'>$share%\n";
+		}
+		++$share;
+		}
+		?>
+		<tr>
+  		<th align="right" valign="top"><label>Plugin Author Ad Share:</label></th>
   		<td>
       		<select name='wpClassified_data[share]'><?php echo $share_list;?></select>
     		</td>
@@ -390,6 +412,7 @@ $products=array ('ad' => 'Ad Unit','link' => 'Link Unit');
 $formats=array ('728x90'  => '728 x 90  ' . 'Leaderboard', '468x60'  => '468 x 60  ' . 'Banner','234x60'  => '234 x 60  ' . 'Half Banner');
 $lformats=array ('728x15'  => '728 x 15', '468x15' => '468 x 15');
 $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'text' => 'Text Only');
+
 ?>
 
 	<tr><th align="left" colspan=2>Layout</th></tr>
@@ -661,7 +684,7 @@ function wpClassified_install(){
 	$wpcSettings['image_height'] = 480;
 	$wpcSettings['date_format'] = 'm-d-Y g:i a';
 	$wpcSettings['googleID'] = 'pub-2844370112691023';
-	$wpcSettings['GADproduct'] = 'ad';
+	$wpcSettings['GADproduct'] = 'link';
 	$wpcSettings['GADformat'] = '468x60';
 	$wpcSettings['GADLformat'] = '468x15';
 	$wpcSettings['GADtype'] = 'text';
@@ -670,6 +693,7 @@ function wpClassified_install(){
 	$wpcSettings[GADcolor_bg]= 'E4F2FD';
 	$wpcSettings[GADcolor_text]= '000000';
 	$wpcSettings[GADcolor_url]= 'FF0000';
+	$wpcSettings[GADposition] = 'btn';
 	$wpcSettings['share'] = '10';
 	$wpcSettings['wpClassified_unread_color'] = '#FF0000';
 	$wpcSettings['image_alignment'] = 'left';
