@@ -42,12 +42,12 @@ Author URI: http://forgani.com/
 
 .wpc_container {
 	border: 1px solid #c5b2b3;
-	padding: 8px 2px 3px 2px;
+	padding: 1px 1px 3px 1px;
 	clear:both;
 }
 
 .wpc_container hr {
-	color: #efefef;
+	color: #c5b2b3;
 	height: 1px;
 }
 
@@ -110,6 +110,7 @@ Author URI: http://forgani.com/
 .list_ads_top{
 	padding: 10px 5px;
 	margin-bottom: 10px;
+	border: 1px solid #c5b2b3;
 	background-color:#eee;
 	text-align: right;
 }
@@ -318,7 +319,7 @@ div.info div.left{float:left}
 }
 
 .wpc_footer hr {
-	color: #efefef;
+	color: #c5b2b3;
 	height: 0px;
 }
 
