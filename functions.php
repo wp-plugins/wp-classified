@@ -13,12 +13,11 @@
 
 require('captcha_class.php');
 
-function add_ads_subject(){
+function _add_ad(){
 	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
-
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				 LEFT JOIN {$table_prefix}wpClassified_categories
 				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
@@ -26,7 +25,7 @@ function add_ads_subject(){
 
 	$displayform = true;
 
-	if ($_POST['add_ads_subject']=='yes'){
+	if ($_POST['add_ad']=='yes'){
 		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 			die($lang['_MUSTLOGIN']);
 		} else {
@@ -56,12 +55,13 @@ function add_ads_subject(){
 				$msg = $lang['_INVALIDEMAIL'];
 				$addPost = false;
 			}
-if($wpcSettings['confirmation_code']=='y'){ 
-			if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   				$msg = $lang['_INVALIDCONFIRM'];
-				$addPost = false;
-  			}
-}
+
+			if($wpcSettings['confirmation_code']=='y'){ 
+				if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
+   					$msg = $lang['_INVALIDCONFIRM'];
+					$addPost = false;
+  				}
+			}
 			if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
 				$msg = $lang['_INVALIDCOMMENT'];
 				$addPost = false;
@@ -72,32 +72,33 @@ if($wpcSettings['confirmation_code']=='y'){
 				$addPost = false;
 			}
 
-
 			if ($_FILES['image_file']!=''){
 				$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 				if ($ok==true){
 					$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
 					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
 						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
-						 echo "<h2>" .$lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1] . "</h2>";
+						 $msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
 						$addPost=false;	
 					} else {
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['image_file']['size']);
 						@fclose($fp);
-						$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
 						@fwrite($fp, $content);
 						@fclose($fp);
 						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
 						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'];
 					}
 				}
+			} else {
+				$addPost==false;
 			}
 			if ($addPost==true){
 				$displayform = false;
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
-$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
+	$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
 	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
@@ -105,127 +106,166 @@ $sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
 //echo "-->" . $sql;
-				$wpdb->query($sql);
+	$wpdb->query($sql);
 
-				$tid = $wpdb->get_var("SELECT last_insert_id()");
-				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
-					(ads_ads_subjects_id, date, author, author_name, author_ip, status, subject, image_file, post) VALUES
-					('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', 
-					'".getenv('REMOTE_ADDR')."', 'active', 
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
-					'".$wpdb->escape(stripslashes($setImage))."',
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."')");
-				do_action('wpClassified_new_ads', $tid);
-				$out = _email_notifications($user_ID, $_POST['wpClassified_data']['author_name'], 
-					$_GET['lid'], $_POST['wpClassified_data'][subject], $_POST['wpClassified_data']['post'], $setImage);
-				echo $out;
-				$pid = $wpdb->get_var("select last_insert_id()");
-				if (!$isSpam){
-					update_user_post_count($user_ID);
-					update_ads($_GET['lid']);
-				}
-				$_GET['asid'] = $tid;
-				get_wpc_list($lang['_SAVE'].$out."<br>".$lang['_THANKS']);
+	$tid = $wpdb->get_var("SELECT last_insert_id()");
+	$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
+		(ads_ads_subjects_id, date, author, author_name, author_ip, status, subject, image_file, post) VALUES
+		('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', 
+		'".getenv('REMOTE_ADDR')."', 'active', 
+		'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
+		'".$wpdb->escape(stripslashes($setImage))."',
+		'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."')");
+		do_action('wpClassified_new_ads', $tid);
+		$out = _email_notifications($user_ID, $_POST['wpClassified_data']['author_name'], 
+		$_GET['lid'], $_POST['wpClassified_data'][subject], $_POST['wpClassified_data']['post'], $setImage);
+		echo $out;
+		$pid = $wpdb->get_var("select last_insert_id()");
+		if (!$isSpam){
+			update_user_post_count($user_ID);
+			update_ads($_GET['lid']);
+		}
+		$_GET['asid'] = $tid;
+		get_wpc_list($lang['_SAVEADINFO'].$out."<br>".$lang['_THANKS']);
 			} else {
 				$displayform = true;
 			}
 		}
 	}
-
-	if ($displayform==true){
-		wpc_header();
-		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
-			?>
-			<br><br><?php echo __("Sorry, you must be registered and logged in to post in these classifieds.");?><br><br>
-			<a href="<?php echo get_bloginfo('wpurl');?>/wp-register.php"><?php echo __("Register Here");?></a><br><br>- <?php echo __("OR");?> -<br><br>
-			<a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("Login Here");?></a>
-			<?php
-		} else {
-			echo $quicktags;
-			?>
-			<?php
-			if ($msg){echo "<p class=\"error\">".__($msg)."</p>";}
-			?>
-		<div class="wpClassified_ads_container">
-			<table width=100% class="editform">
-			<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
-			action="<?php echo create_public_link("paForm", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
-			<input type="hidden" name="add_ads_subject" value="yes">
-<tr>
-<td align=right valign=top><?php echo $lang['_AUTHOR']; ?></td>
-<td><?php
-if (!_is_usr_loggedin()){
-?>
-<input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][author_name]));?>"><br>
-(<?php echo $lang['_GUEST']; ?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)
-<?php
-} else {
-echo "<b>".$userdata->$userfield."</b>";
-echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userdata->$userfield.'">';
-} 
-?></td>
-</tr><tr>
-<td align=right valign=top><?php echo $lang['_TITLE']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
-<tr>
-<td align=right valign=top><?php echo $lang['_PIC']; ?></td>
-<td><input type=file name="image_file"><br /><small>
-<?php echo $lang['_OPTIONAL'].$lang['_INVALIDMSG4']." (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel )"; ?></small></td></tr>
-<tr>
-<tr>
-<td align=right><?php echo $lang['_EMAIL']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
-
-<tr>
-<td align=right><?php echo $lang['_CONTACTBY']; ?></td>
-<td>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" checked/>
-<?php echo $lang['_YES_CONTACT']; ?></option>
-<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_NO_CONTACT']; ?>" />
-<?php echo $lang['_NO_CONTACT']; ?></option>
-</td></tr>
-
-
-<td align=right><?php echo $lang['_WEB']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><small><?php echo $lang['_OPTIONAL'];?></small></td></tr>
-<td align=right><?php echo $lang['_TEL']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><small><?php echo $lang['_OPTIONAL']; ?></small></td></tr>
-<tr>
-<td valign=top align=right><?php echo $lang['_DESC']; ?></td>
-<td><?php create_ads_input($_POST['wpClassified_data']['post']); ?></td>
-</tr>
-
-<tr>
-<td valign=top align=right><?php echo $lang['_HOW_LONG']; ?></td>
-<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php echo (int)$wpcSettings["ad_expiration"]; ?>"/><?php echo $lang['_DAY']; ?><br><small>default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</td>
-</tr>
-
-<tr>
-<td valign=top align=right><?php echo $lang['_TERM']; ?></td>
-<td><input value="1" type="checkbox" name="wpClassified_data[term]" checked /></td>
-</tr>
-<?php
-if($wpcSettings['confirmation_code']=='y'){ 
- $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
- $oVisualCaptcha = new _captcha($aFonts);
- $captcha = rand(1, 50) . ".png";
- $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
-?>
-<tr>
-<td valign=top align=right><?php echo $lang['_CONFIRM']; ?></td>
-<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
-<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
-</tr>
-<?php
-} ?>
-<tr><td></td><td><input type=submit value="<?php echo __("Post the Ad");?>" id="sub">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
-</form>
-</table>
-</div>
-
-<?php
+	
+	if ($addPost==true){
+		$displayform = false;
 	}
-		wpc_footer();
+	if ($displayform==true){
+		if (!file_exists(ABSPATH . INC . "/newAd_tpl.php")){ 
+			include(dirname(__FILE__)."/includes/newAd_tpl.php");
+		} else {
+			include(ABSPATH . INC . "/newAd_tpl.php");
+		}
+	}
+}
+
+
+function _modify_img() {
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
+	$wpcSettings = get_option('wpClassified_data');
+	$userfield = get_wpc_user_field();
+	get_currentuserinfo();
+	
+	$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+	$post = $postinfo[0];
+	$displayform = true;
+
+	
+	if ($_POST['add_img']=='yes'){
+		if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
+			die($lang['_MUSTLOGIN']);
+		} else {
+			$addPost = true;
+			if ($_FILES['addImage']!=''){
+				$ok = (substr($_FILES['addImage']['type'], 0, 5)=="image")?true:false;
+				if ($ok==true){
+					$imginfo = @getimagesize($_FILES['addImage']['tmp_name']);
+					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
+						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
+						$msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
+						$addPost=false;	
+					} else {
+						$fp = @fopen($_FILES['addImage']['tmp_name'], "r");
+						$content = @fread($fp, $_FILES['addImage']['size']);
+						@fclose($fp);
+						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], "w");
+						@fwrite($fp, $content);
+						@fclose($fp);
+						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], 0777);
+						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'];
+					}
+				}
+			} else {
+				$addPost==false;
+			}
+			if ($addPost==true){
+				$displayform = false;
+				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
+				$array = split('###', $post->image_file);
+				$curcount = count ($array);
+				if ( $setImage !='' && $curcount < $wpcSettings['number_of_image']) {
+					if  ($post->image_file !=''){
+						$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file = '". $post->image_file . "###" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
+					} else {
+						$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
+					}
+				} 
+				$addPost = false;
+				$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+				$post = $postinfo[0];
+				if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
+					include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+				} else {
+					include(ABSPATH . INC . "/modifyImg_tpl.php");
+				}
+			} else {
+				$displayform = true;
+			}
+		}
+	}
+	if ($addPost==true){
+		$displayform = false;
+	}
+	if ($displayform==true){
+		if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
+			include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+		} else {
+			include(ABSPATH . INC . "/modifyImg_tpl.php");
+		}
+	}
+}
+
+
+function _delete_img() {
+	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $lang;
+	$wpcSettings = get_option('wpClassified_data');
+	$pageinfo = get_wpClassified_pageinfo();
+	$userfield = get_wpc_user_field();
+	get_currentuserinfo();
+//$fp = fopen('/var/www/web5/html/wp-content/plugins/wp-classified/images/data.txt', 'w');
+	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=di&aid=".$_GET['aid']. "&file=".$_GET[file];
+	if ($_POST['YesOrNo']>0){
+		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+		$rec = $postinfo[0];
+		$array = split('###', $rec->image_file);
+
+		foreach($array as $f) {
+			if ($f == $_GET[file]){
+				//print STDERR "---> " . $_GET[file];
+			} else {
+			  $txt .= $f . '###';
+			}
+		}
+		$newstring = substr($txt, 0, -3);
+		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($newstring)) . "' WHERE ads_id=" . $_GET['aid'] );
+
+//fwrite($fp, $newstring . "\n");
+//fclose($fp);
+		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+		$post = $postinfo[0];
+		if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
+			include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+		} else {
+			include(ABSPATH . INC . "/modifyImg_tpl.php");
+		}
+	} else {
+	?>
+	<h3><?php echo $lang['_CONFDEL'];?></h3>
+	<form method="post" id="delete_img_conform" name="delete_img_conform" action="<?php echo $link_del;?>">
+	<strong>
+		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['asid'];?>">
+		<?php echo $lang['_DELETESURE']; ?><br />
+		<input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
+	</strong>
+	</form>
+	<?php
+	return false;
 	}
 }
 
@@ -253,7 +293,7 @@ function create_public_link($action, $vars){
 		case "pa":
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
-		case "paForm":
+		case "paform":
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
@@ -266,10 +306,20 @@ function create_public_link($action, $vars){
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/da/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "eaform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+			return 
+			($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
 		break;
 		case "searchform":
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/search/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=search";
+		break;
+		case "mi": //modify Images
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
+		break;
+		case "miform":
+			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid="."&aid=".((int)$vars['aid']);
+		break;
+		case "di": //delete Images
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/di/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
 		break;
 	}
 }
@@ -398,20 +448,20 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 		$post_content = _filter_nohtml_kses($post_content);
 		$post_content = stripslashes($post_content);
 		# admin message
-		$msg.= sprintf(__('New classified post on your site %s:', "wpClassified"), get_option('blogname')).$eol.$eol;
-		$msg.= sprintf(__('From: %s', "wpClassified"), $subject).$eol;
-		$msg.= sprintf(__('List: %s', "wpClassified"), $listName).$eol;
+		$msg.= sprintf(__('New classified post on your site %s:'), get_option('blogname')).$eol.$eol;
+		$msg.= $lang['_FROM'] . ': ' . $subject . $eol;
+		$msg.= $lang['_LIST'] . ': ' . $listName . $eol;
 		$msg.= $url.$eol.$eol;
-		$msg.= __('Post:', "wpClassified").$eol.$post_content.$eol.$eol;
-		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review', 'wpClassified'), $subject, $listName).$eol;
+		$msg.= $lang['_CLASSIFIED_AD'].$eol.$post_content.$eol.$eol;
+		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review'), $subject, $listName).$eol;
 		$msg.= '<a href="'.get_bloginfo('wpurl'). '/index.php?pagename=classified">' .$lang['_VIEWALLADS']. "</a>".$eol;
 		$adminStruct = get_userdata($ADMINID);
-		$email_sent = _send_email(get_option('admin_email'), sprintf(__('[%s] New Forum Post', "wpClassified"), get_bloginfo('name')), $msg);
+		$email_sent = _send_email(get_option('admin_email'), get_bloginfo('name') . ' ' . $lang['_NEWPOST'], $msg);
 		$check = $email_status[1];
 		if($email_status[0] == true) {
-			$out = '- '.__('Notified: Administrator', "wpClassified");
+			$out = '- '. $lang['_NOTIFYADMIN'];
 		} else {
-			$out = '- '.__('Not Notified', "wpClassified");
+			$out = '- '. $lang['_NOTNOTIFY'];
 			return $check;
 		}
 	}

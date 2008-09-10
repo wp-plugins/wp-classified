@@ -1,10 +1,11 @@
 <?php
+
 /* 
 * This class is taken in part from the Code of 
 * PhpCaptcha CAPTCHA generation library from Edward Eliot.
 * class defaults - change to effect globally
 */
-
+   session_start();
    define('CAPCC_WIDTH', 120); // max 500
    define('CAPCC_HEIGHT', 50); // max 200
    define('CAPCC_NUM_CHARS', 4);
@@ -226,8 +227,9 @@
       
       function create($sFilename = '') {
          // check for required gd functions
-         if (!function_exists('imagecreate') || !function_exists("image$this->sFileType") || ($this->vBackgroundImages != '' && !function_exists('imagecreatetruecolor'))) {
-  	    return false;
+         if (!function_exists('imagecreate') || 
+			 !function_exists("image$this->sFileType") || ($this->vBackgroundImages != '' && !function_exists('imagecreatetruecolor'))) {
+  				return false;
          }
          // get background image if specified and copy to CAPTCHA
          if (is_array($this->vBackgroundImages) || $this->vBackgroundImages != '') {
@@ -287,12 +289,13 @@
             $sUserCode = strtoupper($sUserCode);
          }
          if (!empty($_SESSION[CAPCC_SESSION_ID]) && $sUserCode == $_SESSION[CAPCC_SESSION_ID]) {
-         // clear to prevent re-use
-         unset($_SESSION[CAPCC_SESSION_ID]);
-         return true;
+            // clear to prevent re-use
+            unset($_SESSION[CAPCC_SESSION_ID]);
+            return true;
          }
          return false;
       }
+	  
    }
    
 

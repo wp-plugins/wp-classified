@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassiefied-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.2.0-f-bugfix
+Version: 1.3.0
 Requires at least: 2.3.x
 Author URI: http://www.forgani.com
 
@@ -61,12 +61,20 @@ You will need to make the folders writable (chmod 777).
 
 - deactivate the confirmation code
 - add Google AdSense for Classifieds
-!!!!!!!!!! fixed the Confirmation code match 
+
+
+release 1.3.0 - Sep 10/09/2008
+
+- Update to  display-style classified ads in one column
+- Added the ad images viewer
+- Allowed more images per ad
+- All the pages using templates
+- Added style sheet for page layout 
+
 
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
-
 */
 
 //require_once('settings.php');
@@ -129,13 +137,13 @@ function wpcOptions_process(){
 		echo "<h2>The wpClassified Page not found.</h2>";
 	?>
 	<hr />	
-	<h2><?php _e('Create wpClassified Page', 'wpClassified'); ?></h2>
+	<h2><?php 'Create wpClassifieds Page'; ?></h2>
 	<p style="text-align: left;">
-	<?php _e('The wpClassified plugin Page will be created automatically', 'wpClassified'); ?>
+	<?php 'The wpClassified plugin Page will be created automatically'; ?>
 	</p>
 	<form method="post" id="create_wpcOptions" name="create_wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=createpage">
 	<p style="text-align: center;">
-	<input type="submit" name="do" value="<?php _e('wpClassified Create Page', 'wpClassified'); ?>" class="button" />
+	<input type="submit" name="do" value="<?php 'wpClassified Create Page'; ?>" class="button" />
 	</p>
 	</form>
 	<pre>
@@ -158,7 +166,7 @@ function wpcOptions_process(){
 
 <table><tr valign="top"><td>
 <fieldset class="fieldset">
-	<legend class="legend"><strong>Classifed Page Details</strong></legend>
+	<legend class="legend"><strong>Classifeds Page Details</strong></legend>
 	<table width="99%">
 	<input type=hidden name="wpClassified_data[wpClassified_version]" value="<?php echo $wpClassified_version;?>">
 		<tr>
@@ -187,9 +195,9 @@ function wpcOptions_process(){
 			if ($file == "." || $file == "..") $a=1;
 		} else {
 			if ($file == $wpcSettings['classified_top_image']) {
-				echo "\n<option value=$file selected>$file</option>\n";
+				echo "\n<option value=\"$file\" selected>$file</option>\n";
 			} else {
-				echo "\n<option value=$file>$file</option>\n";
+				echo "\n<option value=\"$file\">$file</option>\n";
 			}
 		}
 	}
@@ -206,15 +214,50 @@ function wpcOptions_process(){
 			<td><input type=checkbox name="wpClassified_data[show_credits]" value="y"<?php echo ($wpcSettings['show_credits']=='y')?" checked":"";?>> Display wpClassified credit line at the bottom of page.</td>
 		</tr>
 		<tr>
-			<th align="right" valign="top">wpClassified Page Link Name: </th>
+			<th align="right" valign="top">Classifieds Page Link Name: </th>
 			<td><input type="text" name="wpClassified_data[wpClassified_slug]" value="<?php echo $wpcSettings['wpClassified_slug'];?>"></td>
+		</tr>
+		
+
+		
+<?php
+if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = "120";
+if (!$wpcSettings['number_of_image']) $wpcSettings['number_of_image'] = "3";
+if (!$wpcSettings['image_position']) $wpcSettings['image_position'] = "1";
+$imgPosition=array ('1' => 'Images on right');	
+?>
+
+		<tr>
+			<th align="right" valign="top">Number of image columns: </th>
+			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
+		</tr>
+
+		<tr>
+			<th align="right" valign="top">Image Display</th>
+			<td>
+				<select name="wpClassified_data[image_position]">
+				<?php
+				foreach($imgPosition as $key=>$value)	{
+					if ($key == $wpcSettings[image_position]) {
+						echo "\n<option value='$key' selected='selected'>$value</option>\n";
+					} else {
+						echo "\n<option value='$key'>$value</option>\n";
+					}
+				}
+				?>
+				</select>
+			</td>
 		</tr>
 		<tr>
 			<th align="right" valign="top">Max. Ad image size: </th>
-			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 100x150</span></td>
+			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top">Ad Image Alignment: </th>
+			<th align="right" valign="top">Thumbnail Width: </th>
+			<td><input type="text" size="5" name="wpClassified_data[thumbnail_image_width]" value="<?php echo $wpcSettings['thumbnail_image_width'];?>"><br /><span class="smallTxt">example: 120</span></td>
+		</tr>
+		<tr>
+			<th align="right" valign="top">Ad first Image Alignment: </th>
 			<td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><span class="smallTxt">choose: left or right</span></td>
 		</tr>
 		<tr>
@@ -256,12 +299,20 @@ if (!$wpcSettings['inform_user_subject'])
 if (!$wpcSettings['inform_user_body']) 
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = "90";
+$textarea=array ('tinymce' => 'HTML with TinyMCE (inline wysiwyg)','plain' => 'No HTML, No BBCode');	
 ?>
 		<tr>
-			<th align="right">Posting Style: "</th>
+			<th align="right">Posting Style: </th>
 			<td><select name="wpClassified_data[wpc_edit_style]">
-			<option value="tinymce"<?php echo ($wpcSettings["wpc_edit_style"]=="tinymce")?" selected":"";?>>HTML with TinyMCE (inline wysiwyg)</option>
-			<option value="plain">No HTML, No BBCode</option>
+			<?php
+			foreach($textarea as $key=>$value)	{
+				if ($key == $wpcSettings[wpc_edit_style]) {
+					echo "\n<option value='$key' selected='selected'>$value</option>\n";
+				} else {
+					echo "\n<option value='$key'>$value</option>\n";
+				}
+			}
+			?>
 			</select></td>
 		</tr>
 		
@@ -311,24 +362,46 @@ if (!$wpcSettings[GADcolor_link]) $wpcSettings[GADcolor_link]= '0000FF';
 if (!$wpcSettings[GADcolor_bg]) $wpcSettings[GADcolor_bg]= 'FFFFFF';
 if (!$wpcSettings[GADcolor_text]) $wpcSettings[GADcolor_text]= '000000';
 if (!$wpcSettings[GADcolor_url]) $wpcSettings[GADcolor_url]= 'FF0000';
+if (!$wpcSettings[GADposition]) $wpcSettings[GADposition]= 'btn';
+if (!$wpcSettings[GADproduct]) $wpcSettings[GADproduct]= 'link';
+if (!$wpcSettings[googleID]) $wpcSettings[googleID] = 'pub-2844370112691023';
+$GADpos = array ('top' => 'top','btn' => 'bottom', 'bth' => 'both','no' => 'none');
 ?>
 <table width="99%"><tr>
   		<th align="right" valign="top"><a href='https://www.google.com/adsense/' target='google'>Google AdSense Account ID: </a></th>
-  		<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> If this value is assigned to 'no' then the Google Ads will not show up<br> example: no or pub-2844370112691023 ...
+  		<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> example: no, pub-2844370112691023 or ...
 		</span></td></tr>
-<?php
-    $share = '10'; // my smallest cut on ad revenue is 10% -  
-    while($share<101){
-      if($share==$wpcSettings['share']){
-        $share_list .= "<option value='$share' selected='selected'>$share%\n";
-      }else{
-        $share_list .= "<option value='$share'>$share%\n";
-      }
-      ++$share;
-    }
-?>
+		
 		<tr>
-  		<td align="right" valign="top"><label>Plugin Author Ad Share:</label></td>
+			<th align="right" valign="top">Google Ad Position: </th>
+			<td>
+				<select name="wpClassified_data[GADposition]" tabindex="1">
+				<?php
+				foreach($GADpos as $key=>$value)	{
+					if ($key == $wpcSettings[GADposition]) {
+						echo "\n<option value='$key' selected='selected'>$value</option>\n";
+					} else {
+						echo "\n<option value='$key'>$value</option>\n";
+					}
+				}
+				?>
+				</select>
+			</td>
+		</tr>
+
+		<?php
+		$share = '10'; // my smallest cut on ad revenue is 10% -  
+		while($share<101){
+		if($share==$wpcSettings['share']){
+			$share_list .= "<option value='$share' selected='selected'>$share%\n";
+		}else{
+			$share_list .= "<option value='$share'>$share%\n";
+		}
+		++$share;
+		}
+		?>
+		<tr>
+  		<th align="right" valign="top"><label>Plugin Author Ad Share:</label></th>
   		<td>
       		<select name='wpClassified_data[share]'><?php echo $share_list;?></select>
     		</td>
@@ -339,6 +412,7 @@ $products=array ('ad' => 'Ad Unit','link' => 'Link Unit');
 $formats=array ('728x90'  => '728 x 90  ' . 'Leaderboard', '468x60'  => '468 x 60  ' . 'Banner','234x60'  => '234 x 60  ' . 'Half Banner');
 $lformats=array ('728x15'  => '728 x 15', '468x15' => '468 x 15');
 $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'text' => 'Text Only');
+
 ?>
 
 	<tr><th align="left" colspan=2>Layout</th></tr>
@@ -462,27 +536,19 @@ function wpClassified_process(){
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 	<?php
-	
 	switch ($_GET['_action']){
 		default:
-		case "classified": wpc_index();
-		break;
-		case "search": display_search($_POST['search_terms']);
-		break;
-		case "vl": get_wpc_list($msg);
-		break;
-		case "pa": add_ads_subject();
-		break;
-		case "ea": _edit_ad();
-		break;
-		case "da": _delete_ad();
-		break;
-		case "va": _display_ad();
-		break;
-		case "prtad": _print_ad();
-		break;
-		case "sndad": _send_ad();
-		break;
+		case "classified": wpc_index();	break;
+		case "search": display_search($_POST['search_terms']); break;
+		case "vl": get_wpc_list($msg); break;
+		case "pa": _add_ad(); break;
+		case "ea": _edit_ad(); break;
+		case "da": _delete_ad(); break;
+		case "va": _display_ad(); break;
+		case "prtad": _print_ad(); break;
+		case "sndad": _send_ad(); break;
+		case "mi": _modify_img(); break;
+		case "di": _delete_img($_POST['file']); break;
 	}
 }
 
@@ -611,11 +677,14 @@ function wpClassified_install(){
 	$wpcSettings['confirmation_code'] = 'y';
 	$wpcSettings['count_ads_per_page'] = 10;
 	$wpcSettings['count_ads_max_limit'] = 400;
-	$wpcSettings['image_width'] = 150;
-	$wpcSettings['image_height'] = 200;
+	$wpcSettings['number_of_image'] = 3;
+	$wpcSettings['image_position'] = 1;
+	$wpcSettings['thumbnail_image_width'] = 120;
+	$wpcSettings['image_width'] = 640;
+	$wpcSettings['image_height'] = 480;
 	$wpcSettings['date_format'] = 'm-d-Y g:i a';
 	$wpcSettings['googleID'] = 'pub-2844370112691023';
-	$wpcSettings['GADproduct'] = 'ad';
+	$wpcSettings['GADproduct'] = 'link';
 	$wpcSettings['GADformat'] = '468x60';
 	$wpcSettings['GADLformat'] = '468x15';
 	$wpcSettings['GADtype'] = 'text';
@@ -624,6 +693,7 @@ function wpClassified_install(){
 	$wpcSettings[GADcolor_bg]= 'E4F2FD';
 	$wpcSettings[GADcolor_text]= '000000';
 	$wpcSettings[GADcolor_url]= 'FF0000';
+	$wpcSettings[GADposition] = 'btn';
 	$wpcSettings['share'] = '10';
 	$wpcSettings['wpClassified_unread_color'] = '#FF0000';
 	$wpcSettings['image_alignment'] = 'left';
@@ -758,9 +828,9 @@ function adm_structure_process(){
 			if ($file == "." || $file == "..") $a=1;
 		} else {
 			if ("images/" . $file == $categoryinfo['photo']) {
-				echo "\n<option value=images/$file selected>images/$file</option>\n";
+				echo "\n<option value=\"images/$file\" selected>images/$file</option>\n";
 			} else {
-				echo "\n<option value=images/$file>images/$file</option>\n";
+				echo "\n<option value=\"images/$file\">images/$file</option>\n";
 			}
 		}
 	}
@@ -772,7 +842,7 @@ function adm_structure_process(){
 
 		<tr>
 			<th></th>
-			<td><input type=submit value="Save"</td>
+			<td><input type=submit value="Save"></td>
 		</tr>
 		</table>
 	</form>
@@ -809,7 +879,7 @@ function adm_structure_process(){
 				<th align="right">List Status</th>
 				<td><select name="wpClassified_data[status]">
 					<option value="active">Open</option>
-					<option value="inactive"<?php echo ($classifiedinfo['status']=='inactive')?" selected":"";?>>Closed</option>
+					<option value="inactive" <?php echo ($classifiedinfo['status']=='inactive')?" selected":"";?>>Closed</option>
 					<option value="readonly"<?php echo ($classifiedinfo['status']=='readonly')?" selected":"";?>>Read-Only</option>
 				</select></td>
 			</tr>
@@ -1153,7 +1223,6 @@ function wpClassified_page_handle_titlechange($title){
 	return str_replace("[[WP_CLASSIFIED]]", $wpcSettings["wpClassified_slug"], $title);
 }
 
-
 function wpClassified_search_highlight($keywords,$post,$bgcolors='yellow'){
 	if (is_array($bgcolors)) {
 		$no_colors=count($bgcolors);
@@ -1279,7 +1348,7 @@ function create_ads_input($content=""){
 	switch ($wpcSettings["wpc_edit_style"]){
 		case "plain":
 		default:
-			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='40' rows='7'>".str_replace("<", "&lt;", $content)."</textarea>";
+			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='80' rows='20'>".str_replace("<", "&lt;", $content)."</textarea>";
 		break;
 		case "tinymce":
 			 $mode="advanced";

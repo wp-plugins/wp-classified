@@ -1,172 +1,391 @@
-
 /*  
 * default
 Author: M. Forgani
 Author URI: http://forgani.com/
 */
 
-.wpClassified_ads_header {
-background-color: #eee;
-border-bottom: 1px solid #c5b2b3;
-padding: 2px 5px;
-margin-bottom: 2px;
+.wpc_head{
+	padding-top:.5em;
 }
 
-.wpClassified_ads_footer {
-margin: 2px;
+.wpc_head_link{
+	padding-top:1em;
+	font-size: 110%;
+	font-weight: bold;
+	border-bottom: 1px solid #aaa;
+} 
+
+.wpc_head_img{
+	float: left;
+	border:0;
 }
 
-.wpClassified_ads_container {
-border: 1px solid #c5b2b3;
-padding: 2px 2px 50px 2px;
+.wpc_head_desc{
+	vertical-align: middle;
+	font-size: 120%;
+	font-weight: bold;
+	color:#000;
 }
 
-.wpClassified_ads_content {
-padding: 2px;
-border: 1px solid #c5b2b3;
-background-color: #f4f1ee;
+.wpc_search{
+	text-align:right; 
+	float:right;
+	clear:both;
 }
 
-.wpClassified_ads_body {
-border-bottom: 1px solid #aaa;
-background-color: #f4f1ee;
-padding: 2px 5px;
+.wpc_googleAd {
+	padding: 5px;
+	float:left;
+	text-align: center;
 }
 
-.wp_announcement {
-display: block;
-border: 1px solid #e1dbd2;
-font-size: 16px;
-background: url(/wp-content/plugins/wp-classified/images/topic/announcement.jpg) no-repeat 5px 5px;
-border: none;
-padding: 5px 5px 5px 45px;
-margin-bottom: 20px; 
+
+.wpc_container {
+	border: 1px solid #c5b2b3;
+	padding: 8px 2px 3px 2px;
+	clear:both;
 }
 
-.title_menu {
- display: block;
- font-weight: bold;
+.wpc_container hr {
+	color: #efefef;
+	height: 1px;
 }
 
-.cat {
+
+
+.main-content {
 /*border-bottom: 1px solid #C5B2B3;*/
-padding: 0;
+/*background-color: #ccc;*/
+	padding: 0;
 } 
 
-.cat tr {
-border-spacing: 0px;
-} 
 
-.subcat {
-letter-spacing: normal;
-border-spacing: 0;
-padding:0;
-} 
-
-table.table_ads{
-border:0;
-width:100%;
+.main-content h2{
+	color: #505050;
+	font-weight: normal;
+	font-size: 140%;
 }
 
-.ads {
- font-weight: bold;
- background-color: #f4f1ee;
+.column-left{
+	float: left;
+	margin-bottom: 10px;
+	margin-left: 15px;
 }
 
-.ads_subject {
-border-spacing: 0px;
+.list-content{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	clear: both;
+	margin-left: 15px;
 }
 
-.ads_subject_btn{
-border-spacing: 0px;
-border-bottom: 1px solid #bbb; 
-font-size: 10px;
-margin-top: 20px; 
+.list-content img{
+	float: left;
+	margin-top: 0px;
+	margin-right: 3px;
+	border:0;
 }
 
-.editform {
-margin-top: 40px; 
+.catphoto{
+	float: left;
+	margin-top: 0px;
+	margin-right: 15px;
+	border:0;
 }
 
-.editform tr {
-width:100%;
-border-spacing: 0px;
+
+.list-content h2{
+	color: #444;
+	text-align: left;
+	font-weight: bold;
+	padding-left: 130px;
+	font-size: 110%;
 }
 
 .list_ads { 
-border: 1px solid #C5B2B3;
-background-color:#f4f1ee;
-padding: 2px;
-border-spacing: 0px;
+/*border: 1px solid #C5B2B3;*/
+	padding: 1px;
 }
 
-.rssCell,
-.rssCell a{
-color: #000000;
-margin: 0;
-padding: 0 5px 0 0;
-text-align: right;
-vertical-align: middle;
-font-size: 90%;
-font-weight: bold;
+.list_ads_top{
+	padding: 10px 5px;
+	margin-bottom: 10px;
+	background-color:#eee;
+	text-align: right;
+}
+
+.list_ads_top img{
+	vertical-align: middle;
+	padding: 0 2px;
+	border: none;
+}
+
+.list_ads hr { 
+	clear:both;
+	margin: 3px;
+}
+
+.list_ads_sub {
+	border-spacing: 0px;
+	clear:both;
+	font-weight: bold;
+}
+
+.wpc_main { 
+/*border: 1px solid #C5B2B3;*/
+	background-color:#f4f1ee;
+	padding: 1px;
+	padding-left: 130px;
+	margin-right: 10px;
+	border-spacing: 0px;
+}
+
+.main_desc{
+	font-size:80%;
+	padding-left:.5em;
+}
+
+.main_col_left{
+	background-color:#f4f1ee;
+	font-weight: bold;
+	float: left;
+	width:45%;
+	margin-bottom: 10px;
+	margin-left: 4px;
+}
+
+.main_col_middle{
+	background-color:#f4f1ee;
+	font-weight: bold;
+	float: left;
+	width:25%;
+	margin: 0 4px 10px 4px;
+}
+
+.main_col_right{
+	background-color:#f4f1ee;
+	font-weight: bold;
+	float: right;
+	width:28%;
+	margin-bottom: 10px;
+}
+
+.main_col_left_btn{
+	
+	font-size: 9px;
+	float: left;
+	height: 1.6em;
+	width:45%;
+}
+
+.main_col_middle_btn{
+	float: left;
+	width:25%;
+	height: 1.6em;
+	font-size: 9px;
+}
+
+.main_col_right_btn{
+	float: right;
+	width:28%;
+	height: 1.6em;
+	font-size: 9px;
+}
+
+
+.show_ad { 
+	padding: 1px;
+}
+
+
+.show_ad p {
+	margin-top: 0 0 1em 0;
+	line-height: 1.5em;
+	font-size: 110%;
+}
+
+.show_ad p.justify {
+	text-align: justify;
+	padding: 10px;
+}
+
+.show_ad_header {
+	background-color: #eee;
+	border-bottom: 1px solid #c5b2b3;
+	padding: 2px 5px;
+	margin-bottom: 2px;
+}
+
+.show_ad_img1 {
+	float: left;
+	margin:0 8px 1px 0;
+	border:1px solid rgb(150,150,150);
+}
+
+.show_ad_img12 {
+	margin:0px 15px 7px 1px;  
+	border:1px solid rgb(150,150,150);
+	clear: both;
+	float: right; 
+}
+.show_ad_title{
+	font-weight: bold;
+	padding: 4px 5px;
+}
+
+.show_ad_info{
+	font-size: 9px;
+	padding: 0px 5px;
+}
+
+.show_ad_info img{
+	vertical-align: middle;
+	padding: 0px 3px;
+	border: none;
+}
+
+div.info{text-align:right;margin:1em 0;padding:0}
+div.info div{display:inline;white-space:nowrap}
+div.info div.left{float:left} 
+
+.info img{
+	vertical-align: middle;
+	padding: 0 2px;
+	border: none;
+}
+
+.rightTxt{
+	text-align: right;
+}
+
+.show_ad_banner{
+	text-align: center;
+	padding-top: 10px;
+}
+
+.subcat {
+	letter-spacing: normal;
+	border-spacing: 0;
+	padding:0;
+} 
+
+.ads {
+	font-weight: bold;
+	background-color: #f4f1ee;
+}
+
+.editform {
+	margin-top: 10px; 
+}
+
+.editform h2{
+	font-weight: bold;
+	font-size: 1.2em;
+	margin: 10px 0 0 10px; 
+}
+
+.editform h3{
+	font-weight: blod;
+	font-size: 1.1em;
+	margin: 10px 0 0 10px; 
+}
+
+.editform table {
+	width: 99%;
+	margin-top: 20px;
+}
+
+.editform table td, .border {
+	padding: 2px;
+	margin: 0px;
+	border-top: 1px solid #efefef;
+}
+
+.wpc_label_right{
+	text-align: right;
+	vertical-align: top;
+}
+
+.editform .input, .editform select, .editform textarea{
+	font-size: 11px;
+}
+
+.wpc_footer{
+	margin-top: 4px;
+	padding: 8px 5px 20px 0;
+	vertical-align: middle;
+	font-size: 90%;
+}
+
+.wpc_footer hr {
+	color: #efefef;
+	height: 0px;
+}
+
+.rssCell, .rssCell a{
+	color: #000000;
+	margin: 0;
+	padding: 0 5px 0 0;
+	text-align: right;
+	vertical-align: middle;
+	font-size: 90%;
+	font-weight: bold;
 } 
 
 .rssIcon, .rssIcon a,
-.rssIcon p,
-.rssIcon img {
-color: #000000 !important;
-border: none;
-font-weight: bold;
-text-decoration: none;
-vertical-align: middle;
+.rssIcon p, .rssIcon img {
+	color: #000000 !important;
+	border: none;
+	font-weight: bold;
+	text-decoration: none;
+	vertical-align: middle;
 } 
 
 
 .smallRed{
-color: red; 
-font-size: 8pt;
+	color: red; 
+	font-size: 8pt;
 }
 
 .delete{
-background-color: transparent;
-background-image: url(/wp-content/plugins/wp-classified/images/topic/delete.gif);
-background-repeat: no-repeat;
-vertical-align: middle;
-padding: 0 2px 4px 20px;
-float: right;
-border: none;
-font-size: 90%;
+	background-color: transparent;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/delete.gif);
+	background-repeat: no-repeat;
+	vertical-align: middle;
+	padding: 0 2px 4px 20px;
+	float: right;
+	border: none;
+	font-size: 90%;
 }
 
 .edit{
-background-color: transparent;
-background-image: url(/wp-content/plugins/wp-classified/images/topic/edit.gif);
-background-repeat: no-repeat;
-padding: 0 2px 4px 20px;
-float: left;
-vertical-align: middle;
-border: none;
-font-size: 90%;
+	background-color: transparent;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/edit.gif);
+	background-repeat: no-repeat;
+	padding: 0 2px 4px 20px;
+	float: left;
+	vertical-align: middle;
+	border: none;
+	font-size: 90%;
 }
 
 .print{
-background-color: transparent;
-background-image: url(/wp-content/plugins/wp-classified/images/topic/print.jpg);
-background-repeat: no-repeat;
-vertical-align: middle;
-padding-left: 20px;
-float: right;
-border: none;
-font-size: 90%;
+	background-color: transparent;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/print.jpg);
+	background-repeat: no-repeat;
+	vertical-align: middle;
+	padding-left: 20px;
+	float: right;
+	border: none;
+	font-size: 90%;
 }
 
 
 .imgMiddle{
-vertical-align: middle;
-padding: 0 2px 0 2px;
-border: none;
+	vertical-align: middle;
+	padding: 0 2px 0 2px;
+	border: none;
 }
-
 
 .rightCell{
 	margin-top: 4x;
@@ -186,7 +405,7 @@ border: none;
 	font-size: 90%;
 }
 
-.rightCellNorm{
+.rightCellsend{
 	margin-top: 4px;
 	padding: 8px 5px 2px 0;
 	vertical-align: middle;
@@ -199,6 +418,7 @@ border: none;
 	margin: 0;
 	padding: 0 0 10px 0;
 	color: red;
+	font-size: 1.1em;
 	font-weight: bold;
 }
 
@@ -209,26 +429,64 @@ border: none;
 	font-weight: bold;
 }
 
-.sendInput{
-width: 258px;
-}
+.sendInput{width: 258px;}
 
 .sendTd{
-background-color: #ffffff;
-text-align: right;
-vertical-align: top;
+	background-color: #ffffff;
+	text-align: right;
+	vertical-align: top;
 }
 
 .smallTxt{
-font-size:80%;
+	font-size:80%;
+	color: #333;
+	font-weight: normal;
 }
 
 .legend  {
-padding: 10px;
-color: blue;
+	padding: 10px;
+	color: blue;
 } 
 
 .fieldset {
-margin-bottom: 1em;
-padding:.5em;
-border: 1px solid #aaa;} 
+	margin-bottom: 1em;
+	padding:.5em;
+	border: 1px solid #aaa;
+} 
+
+#thumbBox{ /*Outermost DIV for thumbnail viewer*/
+position: absolute;
+left: 0;
+top: 0;
+width: auto;
+padding: 10px;
+padding-bottom: 0;
+background: #313131;
+visibility: hidden;
+z-index: 10;
+cursor: hand;
+cursor: pointer;
+}
+
+#thumbBox .footerbar{ /*Footer DIV of thumbbox that contains "close" link */
+font: bold 10px Tahoma;
+letter-spacing: 1px;
+line-height: 0.9em;
+color: #ccc;
+padding: 5px 0;
+text-align: left;
+}
+
+
+#thumbBox #thumbImage{ /*DIV within thumbbox that holds the enlarged image */
+background-color: white;
+}
+
+#thumbLoading{ /*DIV for showing "loading" status while thumbbox is being generated*/
+position: absolute;
+visibility: hidden;
+border: 1px solid black;
+background-color: #EFEFEF;
+padding: 5px;
+z-index: 5;
+}

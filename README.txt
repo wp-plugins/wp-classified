@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.2.0-f-bugfix
+name: wpClassified Wordpress plugins version 1.3.0
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -66,8 +66,9 @@ Using phpMyAdmin (or other database manager) run these sql queries on your exist
 
 Uninstalling the plugin:
 
- 1- For uninstalling deactivate the plugin in the WordPress admin menu and 
-delete the wpClassified directory from the /wp-content/plugins/ directory and the page and tables, which are installed by the plugin with drop table in phpMyAdmin.
+For uninstalling deactivate the plugin in the WordPress admin menu and 
+delete the wpClassified directory from the /wp-content/plugins/ directory and the page and tables, 
+which are installed by the plugin with drop table in phpMyAdmin.
 
 
 == Screenshots ==
@@ -79,51 +80,60 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 == Changelog ==
 
-!!!!!!!!!!!!!!! confirmation code bugfix
+Changelog:
+
+Changes 1.3.0 - Sep 10/09/2008
+
+- Modify to display-style classified ads in one column
+- Added the ad images viewer
+- Allowed more images per ad
+- All the pages using templates
+- Added style sheet for page layout 
+
+
 Changes 1.2.0-f - Sep 04/09/2008
-    1- add Google AdSense for Classifieds
-    2- fixed language
-    3- deactivate the confirmation code 
+add Google AdSense for Classifieds
+fixed language
 
 
 Changes 1.2.0-e - August 10/2008
 
 User Side
-   - implement the conformaion code (captcha)
-   - added sent to his friend's button
-   - added language file (The work is Not Finished!) 
-   - users can send an Ad to a friend.
-   - fixed search problem
-   - fixed to image showing by editing and setting.
-   - added two directory within the “/images” directory cpcc and topic. You will need to make the folders writable (chmod 777).
+- implement the conformaion code (captcha)
+- added sent to his friend's button
+- added language file (The work is Not Finished!) 
+- users can send an Ad to a friend.
+- fixed search problem
+- fixed to image showing by editing and setting.
+- added two directory within the “/images” directory cpcc and topic. You will need to make the folders writable (chmod 777).
 
 Admin Side
-   - expiration notice reminders to users (The work is Not Finished!) 
-   - implement the maximum character limit
+- expiration notice reminders to users (The work is Not Finished!) 
+- implement the maximum character limit
 
 
 Changes in 1.1.1 - June 20/2008
-   - fix the search function
-   - implement RSS Feeds
-   - admin email notification
+- fix the search function
+- implement RSS Feeds
+- admin email notification
 
 
 Changes in 1.1.0-b - May 15/2008
-   - add remove ads that are over x days old 
-   - fix some bugs
+- add remove ads that are over x days old 
+- fix some bugs
 
 
 Changes in 1.1.0-a - May 12/2008
-   - update delete/modify ads function .
-   - added Move ads function to admin interface.
-   - fixed some issue which are posted to me.
-   - using Permalinks. Example to update .htaccess Rewrite Rules.
+- update delete/modify ads function .
+- added Move ads function to admin interface.
+- fixed some issue which are posted to me.
+- using Permalinks. Example to update .htaccess Rewrite Rules.
 
 
 Changes in 1.0.0 - April 01/2008
-   - fix bugs
-   - implement a new structure
-   - update to display the links to ads at the top of page 
+- fix bugs
+- implement a new structure
+- update to display the links to ads at the top of page 
 
 
 
@@ -156,6 +166,7 @@ RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/
 
 
 have fun
+Regards from Isfahan ;-)
 Mohammad Forgani, Oh Jung Su
 Juli 03/2008
 
