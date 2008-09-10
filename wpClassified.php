@@ -385,7 +385,7 @@ $GADpos = array ('top' => 'top','btn' => 'bottom', 'bth' => 'both','no' => 'none
 					}
 				}
 				?>
-				</select>
+				</select>&nbsp;&nbsp;<span class="smallTxt">(If this value is assigned to 'none' then the Google Ads will not show up)</small>
 			</td>
 		</tr>
 
