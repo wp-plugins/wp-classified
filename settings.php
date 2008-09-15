@@ -4,7 +4,7 @@
 * settings.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.2.0-c
+* @version 1.3.0-a
 */
 
 // user level
@@ -17,7 +17,7 @@ $wpc_page_info = false;
 // include 
 
 $locale = get_locale();
-list ($lng, $locale) = split('_', $locale);
+list ($lng, $loc) = split('_', $locale);
 $languageFile = dirname(__FILE__).'/language/lang_'. $lng . '.php';
 if (file_exists($languageFile)) {	
 	require_once($languageFile);
