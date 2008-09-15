@@ -9,7 +9,7 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3-alpha';
+$wpClassified_version = '1.3.0';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
@@ -17,7 +17,7 @@ $wpc_page_info = false;
 // include 
 
 $locale = get_locale();
-list ($lng, $locale) = split('_', $locale);
+list ($lng, $loc) = split('_', $locale);
 $languageFile = dirname(__FILE__).'/language/lang_'. $lng . '.php';
 if (file_exists($languageFile)) {	
 	require_once($languageFile);
