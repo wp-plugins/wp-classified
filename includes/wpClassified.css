@@ -279,6 +279,10 @@ div.info div.left{float:left}
 	margin-top: 10px; 
 }
 
+.editform img {
+  border:0;
+}
+
 .editform h2{
 	font-weight: bold;
 	font-size: 1.2em;
