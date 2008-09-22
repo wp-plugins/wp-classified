@@ -103,7 +103,7 @@ function _add_ad(){
 	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."',
+	'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
 //echo "-->" . $sql;
 	$wpdb->query($sql);

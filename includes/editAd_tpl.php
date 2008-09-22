@@ -84,7 +84,7 @@ foreach($array as $f) {
 
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_HOW_LONG']; ?></td>
-<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><?php echo $lang['_DAY']; ?><br><span class ="smallTxt">default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
+<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><br><span class ="smallTxt">default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
 </tr>
 <?php
 if($wpcSettings['confirmation_code']=='y') { 
