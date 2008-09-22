@@ -316,13 +316,12 @@ function _edit_ad(){
 			$wpdb->query($sql);
 
 			$sql = "update {$table_prefix}wpClassified_ads_subjects
-				set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
-				email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
-				web='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
-				phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-				txt='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'
-				###'.$_POST['wpClassified_data'][contactBy]."'
-				WHERE ads_subjects_id='".(int)$_GET['asid']."' ";
+			set 
+			subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
+			email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
+			web='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+			phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
+			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$_POST['wpClassified_data'][contactBy]."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";
 
 				$wpdb->query($sql);
 				get_wpc_list($lang['_UPDATE']);
