@@ -4,12 +4,12 @@
 * settings.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* @version 1.3.0-a
+* @version 1.2.0-c
 */
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3-alpha';
+$wpClassified_version = '1.3.0';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
