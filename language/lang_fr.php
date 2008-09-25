@@ -2,7 +2,7 @@
 
 /* 
 Localization by:
-                Guirec Piriou(http://www.ph.etc.br)
+        Guirec Piriou(http://)
 */
 
 
@@ -143,7 +143,7 @@ Localization by:
 	$lang['_COMFCODE'] = "Afficher le code de confirmation";
 	$lang['_NOPOSTS'] = "Nombre de posts récents pour les flux RSS:";
 
-/// from 1.2.1
+//// from 1.2.1
 	$lang['_NEWPOST'] = "Nouveau post";
 	$lang['_NOTIFYADMIN'] = "Notifié: Administrateur";
 	$lang['_NOTNOTIFY'] = "Non notifié";
