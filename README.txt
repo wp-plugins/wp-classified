@@ -73,7 +73,8 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-demo: http://www.bazarcheh.de/?page_id=92
+demo 1.2): http://www.bazarcheh.de/?page_id=92
+demo 1.3): http://forgani.com/index.php?pagename=classified
 
 
 == History ==
