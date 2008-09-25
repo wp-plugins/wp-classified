@@ -11,8 +11,7 @@ Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 == Description ==
 
-This plugin allows you to add a simple classified page in to your wordpress blog.
-
+This plugin allows you to add a simple classified page in to your wordpress blog. 
 The plugin has been create and successfully tested on Wordpress version 2.5.1 with default and unchanged Permalink structure.
 
 
@@ -34,8 +33,6 @@ You will need to make the following folders writable (chmod 777) :
 /wp-classified/images
 /wp-classified/images/topic
 /wp-classified/images/cpcc
-
-
 
 == Upgrade Instructions  ==
 
@@ -73,7 +70,6 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 - demo 1.2): http://www.bazarcheh.de/?page_id=92
 - demo 1.3): http://forgani.com/index.php?pagename=classified
-
 
 
 == History ==
