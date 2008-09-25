@@ -2,7 +2,7 @@
 
 /* 
 Localization by:
-                Guirec Piriou(http://www.ph.etc.br)
+                Guirec Piriou(http://)
 */
 
     $lang=array();
