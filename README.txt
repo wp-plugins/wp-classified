@@ -1,12 +1,12 @@
 === wp-classified ===
+
 name: wpClassified Wordpress plugins version 1.3.0
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Tags: ads, adsense, classifieds, classified, wpclassifieds
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
-
 
 
 == Description ==
@@ -37,7 +37,6 @@ You will need to make the following folders writable (chmod 777) :
 
 
 
-
 == Upgrade Instructions  ==
 
    1. Deactivate the plugin from your Wordpress admin panel.
@@ -45,6 +44,7 @@ You will need to make the following folders writable (chmod 777) :
    2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
    3. Activate the plugin from your Wordpress admin panel.
    4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
+
 
 == Database Upgrade ==
 
@@ -71,11 +71,14 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-   1. demo 1.2): http://www.bazarcheh.de/?page_id=92
-   2. demo 1.3): http://forgani.com/index.php?pagename=classified
+- demo 1.2): http://www.bazarcheh.de/?page_id=92
+- demo 1.3): http://forgani.com/index.php?pagename=classified
+
 
 
 == History ==
+
+
 
 == Changelog ==
 
