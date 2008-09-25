@@ -32,9 +32,7 @@ You have now there a new tab called "wpClassified" to configure the plugin.
 You will need to make the following folders writable (chmod 777) :
 
 /wp-classified/images
-
 /wp-classified/images/topic
-
 /wp-classified/images/cpcc
 
 
@@ -73,9 +71,8 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-demo 1.2): http://www.bazarcheh.de/?page_id=92
-
-demo 1.3): http://forgani.com/index.php?pagename=classified
+   1. demo 1.2): http://www.bazarcheh.de/?page_id=92
+   2. demo 1.3): http://forgani.com/index.php?pagename=classified
 
 
 == History ==
