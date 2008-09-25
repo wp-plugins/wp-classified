@@ -137,13 +137,13 @@ Localization by:
 	$lang['_AUTHORSEARCH'] = "Autor";	
 	$lang['_INVALIDTERM'] = "Por favor, confira os Termos de Uso do Serviço";
 
-//// from 1.2.0-h
+// from 1.2.0-h
 	$lang['_DATEFORMAT'] = "Formato das Datas:";
 	$lang['_ALLOWRSS'] = "Habilitar RSS Feeds";
 	$lang['_COMFCODE'] = "Exibir código de confirmação";
 	$lang['_NOPOSTS'] = "Número de anúncios recentes no Feed RSS:";
 
-/// from 1.2.1
+// from 1.2.1
 	$lang['_NEWPOST'] = "Novo anúncio";
 	$lang['_NOTIFYADMIN'] = "Administrador notificado";
 	$lang['_NOTNOTIFY'] = "Não notificado";
