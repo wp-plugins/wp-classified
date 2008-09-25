@@ -39,7 +39,6 @@ You will need to make the following folders writable (chmod 777) :
 
 
 
-
 == Upgrade Instructions  ==
 
    1. Deactivate the plugin from your Wordpress admin panel.
@@ -56,9 +55,7 @@ Using phpMyAdmin (or other database manager) run these sql queries on your exist
 
 - So first start the phpMyAdmin console...
 - Select the right Database
-- Click on "Export" tab
-
-	upgrade1_1to1_2.sql
+- Click on "Export" tab and choose the file upgrade1_1to1_2.sql and Go
 
 
 
@@ -73,8 +70,8 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-demo: http://www.bazarcheh.de/?page_id=92
-
+* demo 1.2: http://www.bazarcheh.de/?page_id=92
+* demo 1.3: http://forgani.com/index.php?pagename=classified
 
 == History ==
 
