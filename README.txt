@@ -30,17 +30,17 @@ You have now there a new tab called "wpClassified" to configure the plugin.
 
 You will need to make the following folders writable (chmod 777) :
 
-/wp-classified/images
-/wp-classified/images/topic
-/wp-classified/images/cpcc
+* /wp-classified/images
+* /wp-classified/images/topic
+* /wp-classified/images/cpcc
 
 == Upgrade Instructions  ==
 
-   1. Deactivate the plugin from your Wordpress admin panel.
-   2. Backup Database tables *_wpClassified_* and files
-   2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
-   3. Activate the plugin from your Wordpress admin panel.
-   4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
+1. Deactivate the plugin from your Wordpress admin panel.
+2. Backup Database tables *_wpClassified_* and files
+2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
+3. Activate the plugin from your Wordpress admin panel.
+4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
 
 
 == Database Upgrade ==
@@ -51,10 +51,7 @@ Using phpMyAdmin (or other database manager) run these sql queries on your exist
 
 - So first start the phpMyAdmin console...
 - Select the right Database
-- Click on "Export" tab
-
-	upgrade1_1to1_2.sql
-
+- Click on "Export" tab and choose the file upgrade1_1to1_2.sql and Go
 
 
 == Frequently Asked Questions ==
@@ -68,8 +65,8 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-- demo 1.2): http://www.bazarcheh.de/?page_id=92
-- demo 1.3): http://forgani.com/index.php?pagename=classified
+* demo 1.2): http://www.bazarcheh.de/?page_id=92
+* demo 1.3): http://forgani.com/index.php?pagename=classified
 
 
 == History ==
