@@ -38,7 +38,7 @@ if(! $results) {
 		$re_strip = '';
 		$new_subject_name = preg_replace($re_find, $re_strip, $result->subject);
 
-		$pstart = $wpdb->get_row("SELECT count(*) as count FROM {$table_prefix}wpClassified_adsWHERE ads_ads_subjects_id = '".$result->ads_subjects_id."' AND ads_id < '".$result->ads_id."'", ARRAY_A);
+		$pstart = $wpdb->get_row("SELECT count(*) as count FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".$result->ads_subjects_id."' AND ads_id < '".$result->ads_id."'", ARRAY_A);
 		$post_pstart = ($pstart['count'])/$wpcSettings['count_ads_per_page'];
 		if ($post_pstart=='0'){
 			$post_pstart = '0';
