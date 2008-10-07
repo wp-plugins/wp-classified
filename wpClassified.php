@@ -115,10 +115,11 @@ function wpcOptions_process(){
 			$msg = "Settings Updated!";
 		break;
 		case "createpage":	
+			$today = date("Y-m-d");
 			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
 			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
 			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
-				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '2008-04-27 22:30:57', '2008-04-02 22:30:57', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '2008-04-27 22:30:57', '2008-04-27 22:30:57', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
+				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '.$today.', '.$today.', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '.$today.', '.$today.', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
 			}
 		break;
 	}
@@ -1118,7 +1119,7 @@ function adm_users_process(){
 
 function adm_utilities_process(){
 	global $_GET, $_POST, $wpdb, $table_prefix;
-      
+
 	$t = $table_prefix.'wpClassified';
 	$wpcSettings = get_option('wpClassified_data');
 	switch ($_GET["adm_action"]){

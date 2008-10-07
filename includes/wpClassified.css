@@ -16,7 +16,6 @@ Author URI: http://forgani.com/
 } 
 
 .wpc_head img{
-	float: left;
 	border:0;
 }
 
@@ -137,7 +136,7 @@ Author URI: http://forgani.com/
 	padding: 1px;
 	padding-left: 130px;
 	margin-right: 10px;
-	clear:both;
+	/*clear:both;*/
 	border-spacing: 0px;
 }
 
