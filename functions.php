@@ -438,7 +438,6 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 	$listName = $lst[0]->name;
 	
 	$out = '';
-	$email_status = array();
 	$eol = "\r\n";
 	
 	# notify admin?
@@ -464,14 +463,8 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 		$msg.= $eol . $lang['_VIEWALLADS'] . ': '. get_bloginfo('wpurl'). '/index.php?pagename=classified';
 
 		$adminStruct = get_userdata($ADMINID);
-		$email_sent = _send_email(get_option('admin_email'), get_bloginfo('name') . ' ' . $lang['_NEWPOST'], $msg);
-		$check = $email_status[1];
-		if($email_status[0] == true) {
-			$out = '- '. $lang['_NOTIFYADMIN'];
-		} else {
-			$out = '- '. $lang['_NOTNOTIFY'];
-			return $check;
-		}
+		$email_status = _send_email(get_option('admin_email'), get_bloginfo('name') . ': ' . $lang['_NEWPOST'], $msg);
+		return $email_status;
 	}
 	return $out;
 }

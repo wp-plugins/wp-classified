@@ -137,7 +137,7 @@
 	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
 
 /// from 1.2.1
-	$lang['_NEWPOST'] = "New Post";
+	$lang['_NEWPOST'] = "A new Ad is posted!";
 	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
 	$lang['_NOTNOTIFY'] = "Not Notified";
 	$lang['_POSTON'] = "Post on";
