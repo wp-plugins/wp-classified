@@ -212,7 +212,23 @@ function create_rss_link($action, $vars) {
 }
 
 function _delete_ad(){
-	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang;
+	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang, $wpc_user_info;
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
+	 $postinfo = $wpdb->get_results($sql, ARRAY_A);
+
+	$post = $postinfo[0];
+	$permission=false;
+	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$post['author']) || _is_usr_admin() || _is_usr_mod()){
+		$permission=true;
+        }
+	if (!$permission) {
+		if (getenv('REMOTE_ADDR')==$post['author_ip']) $permission=true;
+	}	
+	if (!$permission) {
+		wpClassified_permission_denied();
+		return;
+	}
+
 	$pageinfo = get_wpClassified_pageinfo();
 	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=da&lid=".$_GET['lid']."&asid=".$_GET['asid'];
 
@@ -251,18 +267,24 @@ function _edit_ad(){
 	 LEFT JOIN {$table_prefix}users
 	 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 	 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'", ARRAY_A);
-	$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
+	$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 	 LEFT JOIN {$table_prefix}users
 	 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
-	 WHERE ads_id = '".(int)$_GET['aid']."'");
-	$postinfo = $postinfo[0];
+	 WHERE ads_id = '".(int)$_GET['aid']."'", ARRAY_A);
+	$postinfo = $postinfos[0];
 
-	if ($wpc_user_info["ID"]!=$postinfo->author &&	
-		!_is_usr_admin() && !_is_usr_mod() &&
-		(!_is_usr_loggedin() && getenv('REMOTE_ADDR')!=$postinfo->author_ip)){
+	$permission=false;
+	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
+		$permission=true;
+        }
+	if (!$permission) {
+		if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
+	}	
+	if (!$permission) {
 		wpClassified_permission_denied();
 		return;
 	}
+
 	list ($adExpire, $contactBy) = split('###',  $adsInfo["txt"]);
 	$displayform = true;
 	if ($_POST['wpClassified_edit_ad']=='yes'){
@@ -615,9 +637,16 @@ function _display_ad(){
 	
 	for ($i=0; $i<$hm; $i++){
 		$post = $posts[$i];
-		if (_is_usr_admin() || _is_usr_mod() || 
-			(!_is_usr_loggedin() && getenv('REMOTE_ADDR')==$post->author_ip) ||
-			($post->author==$wpc_user_info["ID"] && _is_usr_loggedin())){
+
+		$permission=false;
+		if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$post->author) || _is_usr_admin() || _is_usr_mod()){
+			$permission=true;
+        	}
+		if (!$permission) {
+			if (getenv('REMOTE_ADDR')==$post->author_ip) $permission=true;
+		}	
+		
+		if ($permission){
 			$editlink = " ".create_public_link("ea", array("name"=>"EDIT AD", "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>"Edit Your Ad", "aid"=>$post->ads_id))." ";
 
 			$deletelink = " ".create_public_link("da", array("name"=>"DELETE AD", "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>"Delete", "aid"=>$post->ads_id))." ";

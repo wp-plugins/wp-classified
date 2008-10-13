@@ -12,6 +12,7 @@ Author URI: http://forgani.com/
 	padding-top:1em;
 	font-size: 110%;
 	font-weight: bold;
+	line-height: 2em;
 	border-bottom: 1px solid #aaa;
 } 
 
@@ -28,12 +29,13 @@ Author URI: http://forgani.com/
 
 .wpc_search{
 	text-align:right; 
+    margin: 5px 0;
 	float:right;
 	clear:both;
 }
 
 .wpc_googleAd {
-	padding: 5px;
+	padding: 5px 0;
 	float:left;
 	text-align: center;
 }
@@ -45,10 +47,12 @@ Author URI: http://forgani.com/
 	clear:both;
 }
 
+
 .wpc_container hr {
 	color: #efefef;
 	height: 1px;
 }
+
 
 
 
@@ -93,11 +97,29 @@ Author URI: http://forgani.com/
 }
 
 
+.wpc_colaps{
+	display:inline;
+	clear:both;
+	background-color:#f4f1ee;
+	padding: 2px;
+    margin: 0px 5px 0 0;
+	border: 1px solid #aaa;
+}
+
+
 .list-content h2{
 	color: #444;
 	text-align: left;
 	font-weight: bold;
 	padding-left: 130px;
+	font-size: 110%;
+}
+
+.list-content dt{
+	color: #444;
+	text-align: left;
+	font-weight: bold;
+	padding-left: 100px;
 	font-size: 110%;
 }
 
@@ -141,7 +163,6 @@ Author URI: http://forgani.com/
 }
 
 .main_desc{
-	font-size:80%;
 	padding-left:.5em;
 }
 
@@ -171,7 +192,6 @@ Author URI: http://forgani.com/
 }
 
 .main_col_left_btn{
-	
 	font-size: 9px;
 	float: left;
 	height: 1.6em;
@@ -223,7 +243,7 @@ Author URI: http://forgani.com/
 }
 
 .show_ad_img12 {
-	margin:0px 15px 7px 1px;  
+	margin:10px 5px 10px 10px;  
 	border:1px solid rgb(150,150,150);
 	clear: both;
 	float: right; 
@@ -315,33 +335,30 @@ div.info div.left{float:left}
 
 .wpc_footer{
 	margin-top: 4px;
+	clear:both;
 	padding: 8px 5px 20px 0;
-	vertical-align: middle;
-	font-size: 90%;
+	font-size: 9pt;
+	color: #333;
 }
 
-.wpc_footer hr {
-	color: #efefef;
-	height: 0px;
+.wpc_footer_hr {
+    margin: 20px 0 5px 0;
 }
 
-.rssCell, .rssCell a{
-	color: #000000;
-	margin: 0;
-	padding: 0 5px 0 0;
-	text-align: right;
-	vertical-align: middle;
-	font-size: 90%;
-	font-weight: bold;
-} 
 
-.rssIcon, .rssIcon a,
-.rssIcon p, .rssIcon img {
-	color: #000000 !important;
+.wpc_footer p {
+    margin-top: 10px;
+	border-bottom: 1px solid #aaa;
+	color: #333;
+}
+
+
+.rssIcon {
 	border: none;
 	font-weight: bold;
-	text-decoration: none;
-	vertical-align: middle;
+	margin: 4px;
+	background-image: url(/wp-content/plugins/wp-classified/images/topic/rss.png);
+	background-repeat: no-repeat;
 } 
 
 
@@ -358,7 +375,6 @@ div.info div.left{float:left}
 	padding: 0 2px 4px 20px;
 	float: right;
 	border: none;
-	font-size: 90%;
 }
 
 .edit{
@@ -369,7 +385,6 @@ div.info div.left{float:left}
 	float: left;
 	vertical-align: middle;
 	border: none;
-	font-size: 90%;
 }
 
 .print{
@@ -380,7 +395,6 @@ div.info div.left{float:left}
 	padding-left: 20px;
 	float: right;
 	border: none;
-	font-size: 90%;
 }
 
 
@@ -396,7 +410,6 @@ div.info div.left{float:left}
 	float: right;
 	text-align: right;
 	vertical-align: middle;
-	font-size: 90%;
 	font-weight: bold;
 }
 
@@ -405,7 +418,6 @@ div.info div.left{float:left}
 	padding: 8px 5px 2px 0;
 	vertical-align: middle;
 	float: left;
-	font-size: 90%;
 }
 
 .rightCellsend{
@@ -414,14 +426,12 @@ div.info div.left{float:left}
 	vertical-align: middle;
 	float: right;
 	text-align: right;
-	font-size: 90%;
 }
 
 .error{
 	margin: 0;
 	padding: 0 0 10px 0;
 	color: red;
-	font-size: 1.1em;
 	font-weight: bold;
 }
 
@@ -441,7 +451,8 @@ div.info div.left{float:left}
 }
 
 .smallTxt{
-	font-size:80%;
+	font-size:8px;
+    padding-top: 2px;
 	color: #333;
 	font-weight: normal;
 }

@@ -208,6 +208,7 @@ function _modify_img() {
 				} else {
 					include(ABSPATH . INC . "/modifyImg_tpl.php");
 				}
+				$displayform = false;
 			} else {
 				$displayform = true;
 			}
@@ -232,7 +233,25 @@ function _delete_img() {
 	$pageinfo = get_wpClassified_pageinfo();
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
-//$fp = fopen('/var/www/web5/html/wp-content/plugins/wp-classified/images/data.txt', 'w');
+
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
+	 $postinfo = $wpdb->get_results($sql, ARRAY_A);
+
+	$post = $postinfo[0];
+	$permission=false;
+	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$post['author']) || _is_usr_admin() || _is_usr_mod()){
+		$permission=true;
+        }
+	if (!$permission) {
+		if (getenv('REMOTE_ADDR')==$post['author_ip']) $permission=true;
+	}	
+	if (!$permission) {
+		wpClassified_permission_denied();
+		return;
+	}
+
+	
+	//$fp = fopen('/var/www/web5/html/wp-content/plugins/wp-classified/images/data.txt', 'w');
 	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=di&aid=".$_GET['aid']. "&file=".$_GET[file];
 	if ($_POST['YesOrNo']>0){
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
@@ -248,6 +267,9 @@ function _delete_img() {
 		$newstring = substr($txt, 0, -3);
 		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($newstring)) . "' WHERE ads_id=" . $_GET['aid'] );
 
+		$file = ABSPATH."wp-content/plugins/wp-classified/images/" . $_GET[file];
+		unlink($file);
+
 //fwrite($fp, $newstring . "\n");
 //fclose($fp);
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
@@ -262,7 +284,7 @@ function _delete_img() {
 	<h3><?php echo $lang['_CONFDEL'];?></h3>
 	<form method="post" id="delete_img_conform" name="delete_img_conform" action="<?php echo $link_del;?>">
 	<strong>
-		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['asid'];?>">
+		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['aid'];?>">
 		<?php echo $lang['_DELETESURE']; ?><br />
 		<input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
 	</strong>
