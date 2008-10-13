@@ -79,7 +79,7 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 Changelog:
 
-Changes 1.3.0-a - Sep 10/10/2008
+Changes 1.3.0-a - Oct 10/10/2008
 - Modify to expanded and collapses the Categories
 - Modify to show the last post in footer
 
