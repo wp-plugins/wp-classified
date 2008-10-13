@@ -15,9 +15,46 @@ $wpcSettings = get_option('wpClassified_data');
 wpc_header();
 $catCnt = count($categories);
 
-echo "\n<div class=\"wpc_container\">\n";
-echo "<div class=\"main-content\">\n"; 
-//echo "<div class=\"column-left\">\n";
+?>
+
+<script language="JavaScript" type="text/JavaScript">
+
+window.onload=function() {
+var aDT=document.getElementsByTagName('dt');
+for(var i=0; i<aDT.length; i++) {
+    if (aDT[i].addEventListener) { // W3C
+    	aDT[i].addEventListener('click', function() {hideAll(this.nextSibling.nextSibling);}, false);
+        }
+    else {
+    	aDT[i].onclick=function() {hideAll(this.nextSibling);};
+        }
+	aDT[i].style.cursor='pointer';
+	}
+//hideAll();
+showAll();
+}
+
+function hideAll(dt) {
+var aDD=(dt)? dt.parentNode.getElementsByTagName('dd') : document.getElementsByTagName('dd');
+for(var i=0; i<aDD.length; i++) {
+	if(aDD[i]!=dt) {aDD[i].style.display='none';}
+    }
+if(dt) {dt.style.display=(dt.style.display=='none')? '' : 'none';}
+}
+
+function showAll() {
+var aDD=document.getElementsByTagName('dd');
+for(var i=0; i<aDD.length; i++) {
+	aDD[i].style.display='';
+    }
+}
+
+</script>
+<p><div class="wpc_colaps"><a href="javascript:showAll()">Expand All</a></div><div class="wpc_colaps"><a href="javascript:hideAll()">Collapse All</a></div></p>
+<div class="wpc_container">
+<div class="main-content">
+
+<?php
 if ($catCnt!="0"){
 	for ($x=0; $x<$catCnt; $x++){
         echo "<div class=\"list-content\">\n";
@@ -25,7 +62,9 @@ if ($catCnt!="0"){
 		$img = get_bloginfo('wpurl');
 		echo "<img class=\"catphoto\" src=\"" . $img . "/wp-content/plugins/wp-classified/" . $category->photo . "\">\n";
 		?>
-		<h2><?php echo $category->name;?></h2></td>
+		<dl id="group">
+		<dt><img src="<?php echo $img; ?>/wp-content/plugins/wp-classified/images/topic/colapse.gif" border="0">&nbsp;<?php echo $category->name;?></dt>
+		<dd>
 		<?php
 		$catlist = $lists[$category->categories_id];
 		for ($i=0; $i<count($catlist); $i++){
@@ -45,6 +84,7 @@ if ($catCnt!="0"){
 			</div>
 			<?php
 		} 
+		echo "</dd></dl>";
 		echo "\n</div><!--list-content-->";
 	} // for
 } 

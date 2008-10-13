@@ -3,6 +3,7 @@
 /*
 * editAd_tpl template
 * This file is part of wp-classified
+* Author Website : http://www.forgani.com
 * @author Mohammad Forgani 2008
 * @version 1.2.1
 * 

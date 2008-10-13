@@ -19,17 +19,6 @@ if ($wpcSettings["view_must_register"]=="y" && !_is_usr_loggedin()){
 	return;
 }
 	
-if (count($posts)>$wpcSettings['count_ads_per_page']){
-	echo "Pages: ";
-	for ($i=0; $i<count($posts)/$wpcSettings['count_ads_per_page']; $i++){
-		if ($i*$wpcSettings['count_ads_per_page']==$_GET['pstart']){
-			echo " <b>".($i+1)."</b> ";
-		} else {
-			echo " ".create_public_link("ads_subject", array("name"=>($i+1), "lid"=>$_GET['lid'], "asid"=>$_GET['asid'], "subject"=>$adsInfo->subject, "name"=>$lists["name"], "start"=>($i*$wpcSettings['count_ads_per_page'])))." ";
-		}
-	}
-}
-
 if (($i+1)==$hm){ 
 	echo "<a name='$post->ads_id'></a><a name='lastpost'></a>"; 
 } else {
@@ -66,11 +55,11 @@ Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-cl
 <?php
 if ($array[1] !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" style=\"width: 120px; height: 100px\"></a><br>" .$array[1] . "</div>";
+	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" style=\"width: 120px; height: 100px\"></a></div>"; //<br>" .$array[1] . "
 } 
 if ($array[2] !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" style=\"width: 120px; height: 100px\"></a><br>". $array[2] . "</div>";
+	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" style=\"width: 120px; height: 100px\"></a></div>"; //<br>" .$array[2] . "
 } 
 ?>
 
@@ -116,18 +105,7 @@ $sendAd = '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classif
 echo $sendAd . "</div>";
 echo "</div>";
 
-//if ($i==0){
 
-if (count($posts)>$wpcSettings['count_ads_per_page']){
-	echo "Pages: ";
-	for ($i=0; $i<count($posts)/$wpcSettings['count_ads_per_page']; $i++){
-		if ($i*$wpcSettings['count_ads_per_page']==$_GET['pstart']){
-			echo " <b>".($i+1)."</b> ";
-		} else {
-			echo " ".create_public_link("ads_subject", array("name"=>($i+1), "lid"=>$_GET['lid'], 'asid'=>$_GET['asid'], "subject"=>$adsInfo->subject, "name"=>$lists["name"], "start"=>($i*$wpcSettings['count_ads_per_page'])))." ";
-		}
-	}
-}
 
 
 ?>

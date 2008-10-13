@@ -98,14 +98,18 @@ function _add_ad(){
 				$displayform = false;
 				$isSpam = wpClassified_spam_filter(stripslashes($_POST['wpClassified_data']['author_name']), '', stripslashes($_POST['wpClassified_data'][subject]), stripslashes($_POST['wpClassified_data']['post']), $user_ID);
 
+	$web = $_POST['wpClassified_data'][web];
+	if($web && !eregi("http://",$web)){ 
+		$web = 'http://' . $web;
+	}
+
 	$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
 	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['author_name']))."', '".getenv('REMOTE_ADDR')."',
-	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+	'".$web."',
 	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-	'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."',
-	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
-//echo "-->" . $sql;
+	'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."','".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
+
 	$wpdb->query($sql);
 
 	$tid = $wpdb->get_var("SELECT last_insert_id()");
@@ -118,7 +122,7 @@ function _add_ad(){
 		'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['post']))."')");
 		do_action('wpClassified_new_ads', $tid);
 		$out = _email_notifications($user_ID, $_POST['wpClassified_data']['author_name'], 
-		$_GET['lid'], $_POST['wpClassified_data'][subject], $_POST['wpClassified_data']['post'], $setImage);
+		$_GET['lid'], $_POST['wpClassified_data'][subject], $_POST['wpClassified_data']['post'], $setImage, $tid);
 		echo $out;
 		$pid = $wpdb->get_var("select last_insert_id()");
 		if (!$isSpam){
@@ -237,7 +241,6 @@ function _delete_img() {
 
 		foreach($array as $f) {
 			if ($f == $_GET[file]){
-				//print STDERR "---> " . $_GET[file];
 			} else {
 			  $txt .= $f . '###';
 			}
@@ -276,7 +279,6 @@ function create_public_link($action, $vars){
 	$pageinfo = get_wpClassified_pageinfo();
 	// fix me
 	//$rewrite = ($wp_rewrite->get_page_permastruct()=="")?false:true;
-	$starts = (((int)$vars["start"])?"(".$vars["start"].")/":"");
 	if (!$vars['post_jump']) {
 		$lastAd = ($action=="lastAd")?"#lastpost":"";
 	} else {
@@ -288,7 +290,7 @@ function create_public_link($action, $vars){
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
 		break;
 		case "classified":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."&start=".(int)$vars['start']."\">".$vars["name"]."</a> ";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
 		case "pa":
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
@@ -297,7 +299,7 @@ function create_public_link($action, $vars){
 			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/va/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".$starts."?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAd."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&pstart=".((int)$vars["start"])."&search_words=".$vars['search_words'].$lastAd."\">".$vars['name']."</a>";
+			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/va/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAd."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&search_words=".$vars['search_words'].$lastAd."\">".$vars['name']."</a>";
 		break;
 		case "ea":
 			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
@@ -428,11 +430,11 @@ function _send_email($mailto, $mailsubject, $mailtext) {
 
 
 # NOTIFICATION EMAILS 
-function _email_notifications($userId, $author_name, $listId, $subject, $post, $image) {
-	global $wpdb, $table_prefix, $lang;
+function _email_notifications($userId, $author_name, $listId, $subject, $post, $image, $asid) {
+	global$_GET, $_POST, $wpdb, $table_prefix, $lang, $PHP_SELF;
 
 	$wpcSettings = get_option('wpClassified_data');
-	$lst = $wpdb->get_results("SELECT name FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id=" .$listId);
+	$lst = $wpdb->get_results("SELECT name FROM {$table_prefix}wpClassified_lists WHERE lists_id=" .$listId);
 	$listName = $lst[0]->name;
 	
 	$out = '';
@@ -453,8 +455,14 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 		$msg.= $lang['_LIST'] . ': ' . $listName . $eol;
 		$msg.= $url.$eol.$eol;
 		$msg.= $lang['_CLASSIFIED_AD'].$eol.$post_content.$eol.$eol;
-		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review'), $subject, $listName).$eol;
-		$msg.= '<a href="'.get_bloginfo('wpurl'). '/index.php?pagename=classified">' .$lang['_VIEWALLADS']. "</a>".$eol;
+		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review'), $subject, $listName);
+
+		$lnk = create_public_link("ads_subject", array("name"=>$subject, "lid"=>$listId, 'asid'=>$asid, "subject"=>$subject, "name"=>$listName));
+
+		$msg.= $eol . $lnk;
+
+		$msg.= $eol . $lang['_VIEWALLADS'] . ': '. get_bloginfo('wpurl'). '/index.php?pagename=classified';
+
 		$adminStruct = get_userdata($ADMINID);
 		$email_sent = _send_email(get_option('admin_email'), get_bloginfo('name') . ' ' . $lang['_NEWPOST'], $msg);
 		$check = $email_status[1];

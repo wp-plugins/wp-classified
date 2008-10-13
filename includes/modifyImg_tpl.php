@@ -1,5 +1,13 @@
 <?php
 
+/*
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
+* Author Website : http://www.forgani.com
+* @version 1.2.0-c
+*/
+
+
 global $lang, $quicktags;
 $wpcSettings = get_option('wpClassified_data');
 wpc_header();

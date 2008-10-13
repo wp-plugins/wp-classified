@@ -11,7 +11,8 @@ If you translate the plugin in your language,
 please send me the language file so that I can add to the next version of the plugin.
 
 
-    * Email: wpclassified@forgani.com
+    * Email: wpclassified@forgani.com 
+	(Please include wpclassified in the subject of your email.)
 
 
 

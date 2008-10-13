@@ -34,14 +34,16 @@ function wpc_header(){
 		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
 		</form>
 	</div>
-	</div><!--wpc_head-->
-<?php
-
+	<?php
 	if ($wpcSettings[GADposition] == 'top' || $wpcSettings[GADposition] == 'bth') {
 		$gAd = get_GADlink();
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
+	?>
+	</div><!--wpc_head-->
+<?php
 
+	
 
 	$today = time();
 	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
@@ -104,9 +106,6 @@ function get_wpc_list($msg){
 	global $_GET, $wpc_user_info, $table_prefix, $wpdb, $lang;
 	//$listId = get_query_var("lists_id");
 	$listId = get_query_var("lid");
-	$start = get_query_var("start");
-	$start = ereg_replace("[^0-9]", "", $g_pstart);
-	if (!$start){$start = 0;}
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
@@ -128,8 +127,7 @@ function get_wpc_list($msg){
 		&& {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
 		GROUP BY ads_subjects_id
 		ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
-		{$table_prefix}wpClassified_ads_subjects.date DESC
-		LIMIT ".($start).", ".($wpcSettings['count_ads_per_page'])." ");
+		{$table_prefix}wpClassified_ads_subjects.date DESC");
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."'	&& status != 'deleted'");
 
 	if (!file_exists(ABSPATH . INC . "/listAds_tpl.php")){ 
@@ -151,7 +149,7 @@ function wpc_read_not_allowed(){
 }
 
 function wpc_footer(){
-	global $wpClassified_version;
+	global $wpClassified_version, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins (Version '.$wpClassified_version.') powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 	if ($wpcSettings[GADposition] == 'btn' || $wpcSettings[GADposition] == 'bth') {
@@ -159,10 +157,26 @@ function wpc_footer(){
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
 
-	echo "<div class=\"wpc_footer\">";
+    if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
+    echo "<div class=\"wpc_footer\">";
+	echo "<p>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</p>";
+   
+	$start = 0;
+
+    $sql = "SELECT {$table_prefix}wpClassified_ads_subjects.* FROM {$table_prefix}wpClassified_ads_subjects
+		ORDER BY {$table_prefix}wpClassified_ads_subjects.ads_subjects_id DESC,
+		{$table_prefix}wpClassified_ads_subjects.date DESC
+		LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+	$lastAds = $wpdb->get_results($sql);
+
+	foreach ($lastAds as $lastAd) {
+		$link = create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
+		echo "- " . $link . " - " . $lastAd->author_name . " - <span class=\"smallTxt\"><i>" . @date($wpcSettings['date_format'], $lastAd->date) . "</i></span><BR />";
+	}	
+	echo '<HR class="wpc_footer_hr">';
 	if($wpcSettings['rss_feed']=='y'){
 		$rssurl= _rss_url();
-		$out = '<a class="rssIcon" href="'.$rssurl.'"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/rss.png" /> ' . $wpcSettings['wpClassified_slug'] . ' RSS&nbsp;</a>';
+		$out = '<a class="rssIcon" href="'.$rssurl.'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $wpcSettings['wpClassified_slug'] . ' RSS&nbsp;</a>';
 		echo $out;
 	}
 
@@ -194,7 +208,7 @@ function create_rss_link($action, $vars) {
 	global $wpdb, $table_prefix, $wp_rewrite;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = get_wpClassified_pageinfo();
-	return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".$starts."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+	return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 }
 
 function _delete_ad(){
@@ -203,8 +217,10 @@ function _delete_ad(){
 	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=da&lid=".$_GET['lid']."&asid=".$_GET['asid'];
 
 	if ($_POST['YesOrNo']>0){
-		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$_POST['subject_id'])."'");
-		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".((int)$_POST['subject_id'])."'");
+		$sql = "DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$_GET['asid'])."'";
+		$wpdb->query($sql);
+		$sql = "DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".((int)$_GET['asid'])."'";
+		$wpdb->query($sql);
 		get_wpc_list($lang['_ANNDEL']);
 		return true;
 	} else {
@@ -305,6 +321,12 @@ function _edit_ad(){
 		}
 		if ($addPost==true) {
 			$displayform = false;
+
+			$web = $_POST['wpClassified_data'][web];
+			if($web && !eregi("http://",$web)){ 
+				$web = 'http://' . $web;
+			}
+
 			$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 			$sql = "update {$table_prefix}wpClassified_ads
 				set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',";
@@ -319,7 +341,7 @@ function _edit_ad(){
 			set 
 			subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
 			email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
-			web='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][web]))."',
+			web='".$web."',
 			phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
 			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$_POST['wpClassified_data'][contactBy]."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";
 
@@ -394,7 +416,7 @@ function _print_ad(){
 	<hr />
 	To contact by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address:
 	<?php
-	echo " <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"])."\">".$subject."</a>";
+	echo " <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."\">".$subject."</a>";
 	echo "<br /><br />".$lang['_ADSADDED']. " " . "<nobr>" . @date($wpcSettings['date_format'], $post->date) ."</nobr>";
 	?>
 	<br />This advertisement is from the classified ads section on the website <a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?>.</a>
@@ -518,7 +540,7 @@ function _send_ad(){
 		$message .= "your friend " . $yourname . " sent you information about " . $subject . "<br><br>";
 		$message .= $lang['_ADDETAIL']. "<BR>" . $msg . "<BR><BR>";
 		$message .= $lang['_FRIENDBTN1'];
-		$message .= get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."&pstart=".((int)$vars["start"]) . "<BR><BR><BR>";
+		$message .= get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."<BR><BR><BR>";
 		$message .= $yourname . $lang['_FRIENDBTN2'];
 		
   			$txt = html2text($message); 
@@ -582,20 +604,16 @@ function _display_ad(){
 			 && {$table_prefix}wpClassified_ads.status = 'active'
 		 ORDER BY {$table_prefix}wpClassified_ads.date ASC");
 	
-	
-	if (count($posts)>$wpcSettings['count_ads_per_page']+$_GET['pstart']){
-		$hm = $wpcSettings['count_ads_per_page']+$_GET['pstart'];
+	if (count($posts)>$wpcSettings['count_ads_per_page']){
+		$hm = $wpcSettings['count_ads_per_page'];
 	} else {
 		$hm = count($posts);
 	}
 	if ($hm>count($posts)){
 		$hm = count($posts);
 	}
-	if ($_GET['pstart']<0){
-		$_GET['pstart'] = 0;
-	}
-
-	for ($i=$_GET['pstart']; $i<$hm; $i++){
+	
+	for ($i=0; $i<$hm; $i++){
 		$post = $posts[$i];
 		if (_is_usr_admin() || _is_usr_mod() || 
 			(!_is_usr_loggedin() && getenv('REMOTE_ADDR')==$post->author_ip) ||

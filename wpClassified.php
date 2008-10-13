@@ -72,6 +72,11 @@ release 1.3.0 - Sep 10/09/2008
 - Added style sheet for page layout 
 
 
+Changes 1.3.0-a - Sep 10/10/2008
+- Modify to expand and collapses the Categories
+- Modify to show the last post in footer
+
+
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
@@ -115,11 +120,10 @@ function wpcOptions_process(){
 			$msg = "Settings Updated!";
 		break;
 		case "createpage":	
-			$today = date("Y-m-d");
 			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
 			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
 			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
-				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '.$today.', '.$today.', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '.$today.', '.$today.', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
+				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '2008-04-27 22:30:57', '2008-04-02 22:30:57', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '2008-04-27 22:30:57', '2008-04-27 22:30:57', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
 			}
 		break;
 	}
@@ -144,7 +148,7 @@ function wpcOptions_process(){
 	</p>
 	<form method="post" id="create_wpcOptions" name="create_wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=createpage">
 	<p style="text-align: center;">
-	<input type="submit" name="do" value="wpClassified Create Page" class="button" />
+	<input type="submit" name="do" value="<?php 'wpClassified Create Page'; ?>" class="button" />
 	</p>
 	</form>
 	<pre>
@@ -225,6 +229,7 @@ function wpcOptions_process(){
 if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = "120";
 if (!$wpcSettings['number_of_image']) $wpcSettings['number_of_image'] = "3";
 if (!$wpcSettings['image_position']) $wpcSettings['image_position'] = "1";
+if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
 $imgPosition=array ('1' => 'Images on right');	
 ?>
 
@@ -280,6 +285,10 @@ $imgPosition=array ('1' => 'Images on right');
 		<tr>
 			<th></th>
 			<td><input type=checkbox name="wpClassified_data[wpClassified_filter_posts]" value="y"<?php echo ($wpcSettings['wpClassified_filter_posts']=='y')?" checked":"";?>> Apply WP Ad/comment filters to classified posts.</td>
+		</tr>
+		<tr>
+			<th align="right" valign="top">Number of last post to show: </th>
+			<td><input type="text" size="3" name="wpClassified_data[count_last_ads]" value="<?php echo $wpcSettings['count_last_ads'];?>"><br /><span class="smallTxt">example: 5</span></td>
 		</tr>
 
 		<tr>
@@ -695,7 +704,8 @@ function wpClassified_install(){
 	$wpcSettings[GADcolor_text]= '000000';
 	$wpcSettings[GADcolor_url]= 'FF0000';
 	$wpcSettings[GADposition] = 'btn';
-	$wpcSettings['share'] = '10';
+	$wpcSettings['share'] = 10;
+	$wpcSettings['count_last_ads'] = 5;
 	$wpcSettings['wpClassified_unread_color'] = '#FF0000';
 	$wpcSettings['image_alignment'] = 'left';
 	$wpcSettings['classified_top_image'] = 'default.gif';
@@ -1119,7 +1129,7 @@ function adm_users_process(){
 
 function adm_utilities_process(){
 	global $_GET, $_POST, $wpdb, $table_prefix;
-
+      
 	$t = $table_prefix.'wpClassified';
 	$wpcSettings = get_option('wpClassified_data');
 	switch ($_GET["adm_action"]){

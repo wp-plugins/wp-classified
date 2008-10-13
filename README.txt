@@ -70,13 +70,19 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-demo http://www.bazarcheh.de/?page_id=92 and http://forgani.com/index.php?pagename=classified
+* http://forgani.com/index.php?pagename=classified   (v.1.3)
+* http://www.bazarcheh.de/?page_id=92                (v.1.2)
 
 == History ==
 
 == Changelog ==
 
 Changelog:
+
+Changes 1.3.0-a - Sep 10/10/2008
+- Modify to expanded and collapses the Categories
+- Modify to show the last post in footer
+
 
 Changes 1.3.0 - Sep 10/09/2008
 
@@ -153,7 +159,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule . /index.php [L]
 ##########
 RewriteRule !classified/ /index.php [L]
-RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified&_action=$1&lid=$3&asid=5&aid=$6 [QSA,L,R,NS]
+RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified&_action=$1&lid=$3&asid=$5&aid=$6 [QSA,L,R,NS]
 </IfModule>
 # END WordPress
 
