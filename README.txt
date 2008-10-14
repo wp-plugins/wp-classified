@@ -5,7 +5,7 @@ Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
 Stable tag: 1.1.0
-Tags: ads, adsense, classifieds, classified, wpclassifieds
+Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 
@@ -31,7 +31,7 @@ e.g.
 You have now there a new tab called "wpClassified" to configure the plugin.
 
 
-You will need to make the following folders writable (chmod 777) :
+You will need to make the following folders writeable (chmod 777) :
 
 /wp-classified/images
 /wp-classified/images/topic
