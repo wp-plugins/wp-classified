@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.0-b
+name: wpClassified Wordpress plugins version 1.3.0
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -79,10 +79,9 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 Changelog:
 
-Changes 1.3.0-b - Oct 10/10/2008
+Changes 1.3.0-a - Oct 10/10/2008
 - Modify to expanded and collapses the Categories
 - Modify to show the last post in footer
-- fix the URL faking bug
 
 
 Changes 1.3.0 - Sep 10/09/2008
@@ -102,7 +101,7 @@ fixed language
 Changes 1.2.0-e - August 10/2008
 
 User Side
-- implement the conformaion code (captcha)
+- implement the conformation code (captcha)
 - added sent to his friend's button
 - added language file (The work is Not Finished!) 
 - users can send an Ad to a friend.
