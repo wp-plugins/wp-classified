@@ -6,9 +6,9 @@
 *
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* Author Website : forgani.com
+* Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.2.0-e
+* @version 1.3.0-b
 */
 
 require('captcha_class.php');
@@ -471,16 +471,18 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 		$post_content = _filter_nohtml_kses($post_content);
 		$post_content = stripslashes($post_content);
 		# admin message
-		$msg.= sprintf(__('New classified post on your site %s:'), get_option('blogname')).$eol.$eol;
-		$msg.= $lang['_FROM'] . ': ' . $subject . $eol;
+
+		$msg .= ("This e-mail has been sent to notify you that a Ad has been posted at your site '" .get_option('blogname'). "', and is pending review/approval.");
+		$msg .= $eol . $eol . "The Ad and user information is as follows: " . $eol;
+		$msg.= $lang['_FROM'] . ': ' . $author_name . $eol;
+		$msg.= 'Title: ' . $subject . $eol;
 		$msg.= $lang['_LIST'] . ': ' . $listName . $eol;
-		$msg.= $url.$eol.$eol;
-		$msg.= $lang['_CLASSIFIED_AD'].$eol.$post_content.$eol.$eol;
-		$msg.= sprintf(__('There are currently %s Ad(s) in %s List(s) Awaiting Review'), $subject, $listName);
+		$msg.= 'WebSite: ' . $url.$eol.$eol;
+		$msg.= $lang['_CLASSIFIED_AD'] . ': ' .$eol.$post_content.$eol.$eol;
 
 		$lnk = create_public_link("ads_subject", array("name"=>$subject, "lid"=>$listId, 'asid'=>$asid, "subject"=>$subject, "name"=>$listName));
 
-		$msg.= $eol . $lnk;
+		$msg.= $eol .  "Visit: " . $lnk;
 
 		$msg.= $eol . $lang['_VIEWALLADS'] . ': '. get_bloginfo('wpurl'). '/index.php?pagename=classified';
 

@@ -213,16 +213,19 @@ function create_rss_link($action, $vars) {
 
 function _delete_ad(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang, $wpc_user_info;
-	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
-	 $postinfo = $wpdb->get_results($sql, ARRAY_A);
 
-	$post = $postinfo[0];
+	if (!$_GET['aid']) $_GET['aid']=$_POST['YesOrNo'];
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
+	 $postinfos = $wpdb->get_results($sql, ARRAY_A);
+
+	$postinfo = $postinfos[0];
 	$permission=false;
-	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$post['author']) || _is_usr_admin() || _is_usr_mod()){
+	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
 		$permission=true;
         }
+	
 	if (!$permission) {
-		if (getenv('REMOTE_ADDR')==$post['author_ip']) $permission=true;
+		if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
 	}	
 	if (!$permission) {
 		wpClassified_permission_denied();
@@ -244,7 +247,7 @@ function _delete_ad(){
 	<h3><?php echo $lang['_CONFDEL'];?></h3>
 	<form method="post" id="delete_ad_conform" name="delete_ad_conform" action="<?php echo $link_del;?>">
 	<strong>
-		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['asid'];?>">
+		<input type="hidden" name="YesOrNo" value="<?php echo $_GET['aid'];?>">
 		<?php echo $lang['_SURDELANN'];?><br />
 		<input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
 	</strong>
@@ -267,6 +270,7 @@ function _edit_ad(){
 	 LEFT JOIN {$table_prefix}users
 	 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 	 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'", ARRAY_A);
+
 	$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 	 LEFT JOIN {$table_prefix}users
 	 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
