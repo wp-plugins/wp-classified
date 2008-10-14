@@ -562,25 +562,29 @@ function _send_ad(){
 		if ($sendAd == true) {
 			$displayform = false;
 
-		$message = "Dear " . $_POST['wpClassified_data'][fname]. "<br>";
-		$message .= "your friend " . $yourname . " sent you information about " . $subject . "<br><br>";
-		$message .= $lang['_ADDETAIL']. "<BR>" . $msg . "<BR><BR>";
-		$message .= $lang['_FRIENDBTN1'];
-		$message .= get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."<BR><BR><BR>";
-		$message .= $yourname . $lang['_FRIENDBTN2'];
-		
+			$message = "Dear " . $_POST['wpClassified_data'][fname]. "<br>";
+			$message .= "your friend " . $yourname . " send you this interesting advertisement about " . $subject . "<br><br>";
+			$message .= $lang['_ADDETAIL']. "<BR>" . $msg . "<BR><BR>";
+			$message .= $lang['_FRIENDBTN1'];
+			$message .= get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."<BR><BR><BR>";
+			$message .= $yourname . $lang['_FRIENDBTN2'];
+			
   			$txt = html2text($message); 
 			$from = "From: ". $yourname . "<" .$mailfrom. ">";
 			//$from .= "Content-Type: text/html";
-			$sub = "your friend " . $yourname . " sent you information";
+			$sub = "your friend " . $yourname . " sent you an interesting advertisement";
 
-			if (mail($mailto, $sub, $txt, $from ."\n")) {
-				get_wpc_list($lang['_SEND']);
-			} else {
+			$status = array();
+			$email = wp_mail($mailto, $sub, $txt, $from);
+			if ($email == false) {
+				$status[0] = false;
 				$sendMsg = $lang['_SENDERR'];
 				$sendAd = false;
-			}
-			return true;	
+			} else {
+				$status[0] = true;
+				get_wpc_list($lang['_SEND']);
+			} 
+			return $status;	
 		}
 	} else {
 		$displayform = true;
