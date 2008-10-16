@@ -8,8 +8,6 @@ Stable tag: 1.1.0
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
 Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
-
-
 == Description ==
 
 This plugin allows you to add a simple classified page in to your wordpress blog. 
@@ -70,8 +68,7 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-* http://forgani.com/index.php?pagename=classified   (v.1.3)
-* http://www.bazarcheh.de/?page_id=92                (v.1.2)
+http://forgani.com/index.php?pagename=classified (1.3) &&  http://www.bazarcheh.de/?page_id=92  (v.1.2)
 
 == History ==
 
