@@ -4,7 +4,7 @@
 * _function.php
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
-* Author Website : forgani.com
+* Author Website : http://www.forgani.com
 * Licence Type   : GPL
 * @version 1.3
 */

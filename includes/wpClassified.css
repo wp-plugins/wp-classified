@@ -1,7 +1,8 @@
 /*  
 * default
-Author: M. Forgani
-Author URI: http://forgani.com/
+* Author: M. Forgani
+* wpclassified wordpress plugin
+* Author URI: http://forgani.com/
 */
 
 .wpc_head{
@@ -29,13 +30,14 @@ Author URI: http://forgani.com/
 
 .wpc_search{
 	text-align:right; 
-    margin: 5px 0;
+    	margin: 5px 0;
 	float:right;
 	clear:both;
 }
 
 .wpc_googleAd {
-	padding: 5px 0;
+	padding: 3px 0;
+	margin: 5px 0;
 	float:left;
 	text-align: center;
 }

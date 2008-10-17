@@ -1,7 +1,7 @@
 <?php
 
 /*
-* newAd_tpl template
+* newAd_tpl template wordpress plugin
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com

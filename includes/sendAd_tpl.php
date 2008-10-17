@@ -1,9 +1,10 @@
 <?php
 
 /*
-* sendAd_tpl template
+* sendAd_tpl template wordpress plugin
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
+* Author Website : http://www.forgani.com
 * @version 1.2.1
 * 
 */
