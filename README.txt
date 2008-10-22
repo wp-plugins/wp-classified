@@ -156,7 +156,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule . /index.php [L]
 ##########
 RewriteRule !classified/ /index.php [L]
-RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified&_action=$1&lid=$3&asid=$5&aid=$6 [QSA,L,R,NS]
+RewriteRule !(classified|odlinks)/ /index.php [L]
+RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified [QSA,L,R,NS]
 </IfModule>
 # END WordPress
 
