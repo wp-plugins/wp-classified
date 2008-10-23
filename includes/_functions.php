@@ -26,7 +26,7 @@ function wpc_header(){
 		echo '<div class="wpc_head_desc">'.$wpcSettings['description'] . "&nbsp;</div>";
 	}
 	if ($lnks==""){$lnks = get_wpc_header_link();}
-	echo '<p class="wpc_head_link">' . $lnks. '</p>';
+	echo '<h3>' . $lnks. '</h3>';
 ?>
 	<div class="wpc_search">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
@@ -159,7 +159,7 @@ function wpc_footer(){
 
     if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
     echo "<div class=\"wpc_footer\">";
-	echo "<p>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</p>";
+	echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
    
 	$start = 0;
 
@@ -176,7 +176,7 @@ function wpc_footer(){
 	echo '<HR class="wpc_footer_hr">';
 	if($wpcSettings['rss_feed']=='y'){
 		$rssurl= _rss_url();
-		$out = '<a class="rssIcon" href="'.$rssurl.'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $wpcSettings['wpClassified_slug'] . ' RSS&nbsp;</a>';
+		$out = '<div class="rssIcon"><a href="'.$rssurl.'">' . $wpcSettings['wpClassified_slug'] . ' RSS</a></div>';
 		echo $out;
 	}
 

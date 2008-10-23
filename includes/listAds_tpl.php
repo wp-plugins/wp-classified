@@ -32,24 +32,26 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 ?>
 	
 <div class="list_ads">
-<div class="list_ads_top">
-<?php 
-$addtopicImg = '<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg">';
-if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
+  <div class="list_ads_top">
+  <?php 
+  $addtopicImg = '<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg">';
+  if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
 	echo $addtopicImg;
 	echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?>
 	<?php
-} else {
+  } else {
 	echo $addtopicImg;
 	echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?><?php
-} 
-?>
-</div><!--list_ads_top-->
-<div class="main_col_left"><?php echo $lang['_SUBJECT'];?></div>
-<div class="main_col_middle"><?php echo $lang['_VIEWS']?></div>
-<div class="main_col_right"><?php echo $lang['_POSTON'];?></div>
-<?php
-for ($x=0; $x<count($ads); $x++){
+  } 
+  ?>
+  </div><!--list_ads_top-->
+  <div id="main_col_title">
+  <div class="main_col_left"><?php echo $lang['_SUBJECT'];?></div>
+  <div class="main_col_middle"><?php echo $lang['_VIEWS']?></div>
+  <div class="main_col_right"><?php echo $lang['_POSTON'];?></div>
+  </div>
+  <?php
+  for ($x=0; $x<count($ads); $x++){
 	$ad = $ads[$x];
 	if (!@in_array($ad->ads_subjects_id, $read) && _is_usr_loggedin()){
 		$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/unread.gif\" class=\"imgMiddle\"> ";
@@ -84,11 +86,10 @@ for ($x=0; $x<count($ads); $x++){
     }
 	?>
 	&nbsp;<?php echo $ad->views;?></div>
-	<div class="main_col_right_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></div>
-	<hr>
+	<div class="main_col_right_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></div><P>
 	<?php
-}
-?>
+  }
+  ?>
 </div>
 </div>
 <?php
