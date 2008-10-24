@@ -104,7 +104,7 @@ add_action('template_redirect', 'rss_feed');
 function wpcOptions_process(){
 	global $_GET, $_POST, $wp_rewrite, $PHP_SELF, $wpdb, $table_prefix, $wpClassified_version, $wp_version, $lang;
 	ShowImg();
-    ?>
+	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 	<?php
 	switch ($_GET['adm_action']){
@@ -139,6 +139,7 @@ function wpcOptions_process(){
 	}
 
 	$wpcSettings = get_option('wpClassified_data');
+
 	$pageinfo = get_wpClassified_pageinfo();
 	if ($pageinfo == false){
 		echo "<h2>The wpClassified Page not found.</h2>";
@@ -606,7 +607,11 @@ function wpClassified_adm_page(){
 	global $_GET, $_POST, $PHP_SELF, $wpdb, $adm_links, $table_prefix;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
-	wpClassified_install();
+
+	$t = $table_prefix.'wpClassified';
+        if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+		wpClassified_install();
+        }
 	
 	?>
 	<div class="wrap">
@@ -657,14 +662,13 @@ function wpClassified_adm_page(){
 function wpClassified_install(){
 	global $wpClassified_version, $wp_rewrite;
 
-
 	$wpcSettings = array();
 	$wpcSettings = $_POST['wpClassified_data'];
 	update_option('wpClassified_data', $wpcSettings);
 	$wp_rewrite->flush_rules();
 	$wpcSettings = get_option('wpClassified_data');
 	wpClassified_check_db();
-
+	$wpcSettings['wpClassified_installed'] = 'y';
 	$wpcSettings['wpClassified_version'] = $wpClassified_version;
 	$wpcSettings['userfield'] = get_wpc_user_field();
 	$wpcSettings['show_credits'] = 'y';
