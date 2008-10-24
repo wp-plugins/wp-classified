@@ -20,10 +20,10 @@ function wpc_header(){
 	echo '<div class="wpc_head">';
 	if ($wpcSettings['classified_top_image']!=''){
 		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
-		echo '<div class="wpc_head_img"><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '"></div>';
+		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '">';
 	}
 	if ($wpcSettings['description']!=''){
-		echo '<div class="wpc_head_desc">'.$wpcSettings['description'] . "&nbsp;</div>";
+		echo '<p>'.$wpcSettings['description'] . "&nbsp;</p>";
 	}
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo '<h3>' . $lnks. '</h3>';

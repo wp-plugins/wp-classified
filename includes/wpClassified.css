@@ -9,7 +9,7 @@
 }
 
 .wpc_head h3{
-	padding-top:1em;
+	padding-top:5px;
 	border-bottom: 1px solid #ddd;
 } 
 
@@ -21,9 +21,11 @@
 	border:0;
 }
 
-.wpc_head_desc{
-	vertical-align: middle;
-	font-weight: bold;
+.wpc_head p{
+	vertical-align: top;
+	margin: 10px;
+	font-weight: bold;	
+	display:inline;
 }
 
 .wpc_search{
