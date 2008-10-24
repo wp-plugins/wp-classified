@@ -149,7 +149,7 @@ function wpcOptions_process(){
 	</p>
 	<form method="post" id="create_wpcOptions" name="create_wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=createpage">
 	<p style="text-align: center;">
-	<input type="submit" name="do" value="<?php 'wpClassified Create Page'; ?>" class="button" />
+	<input type="submit" name="do" value="<?php echo 'wpClassified Create Page'; ?>" class="button" />
 	</p>
 	</form>
 	<pre>
