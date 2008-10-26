@@ -665,7 +665,7 @@ function wpClassified_install(){
 	$wpcSettings = array();
 	$wpcSettings = $_POST['wpClassified_data'];
 	update_option('wpClassified_data', $wpcSettings);
-	$wp_rewrite->flush_rules();
+	//$wp_rewrite->flush_rules(); // maybe is the bug 1052
 	$wpcSettings = get_option('wpClassified_data');
 	wpClassified_check_db();
 	$wpcSettings['wpClassified_installed'] = 'y';
