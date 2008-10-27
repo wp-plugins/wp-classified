@@ -46,6 +46,7 @@
 .wpc_container {
 	border: 1px solid #c5b2b3;
 	padding: 8px 2px 3px 2px;
+	clear:both;  /* if do not look well remove it */
 }
 
 
@@ -129,6 +130,7 @@
 
 .list_ads_top a{
 	font-weight: bold;
+	clear:both;
 }
  
 .list_ads_top img{
