@@ -172,14 +172,19 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $
 	if (!$_GET['start']){
 		$_GET['start'] = 0;
 	}
-	$ads = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 		 LEFT JOIN {$table_prefix}users
 		 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+		 LEFT JOIN {$table_prefix}wpClassified_ads
+		 ON {$table_prefix}wpClassified_ads.ads_ads_subjects_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_id
 		 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."'
 				&& {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
 		 ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
 			    {$table_prefix}wpClassified_ads_subjects.date DESC
-		 LIMIT ".($_GET['start']).", ".($wpcSettings['count_ads_per_page'])." ");
+		 LIMIT ".($_GET['start']).", ".($wpcSettings['count_ads_per_page']);
+
+	$ads = $wpdb->get_results($sql);
 
 
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."' && status != 'deleted'");
@@ -214,11 +219,11 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $
 		$slab = ($ad->sticky!='y')?"Sticky":"Unsticky";
 		$act = ($ad->status=='open')?"De-activate":"Activate";
 		$links = array(
-		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=editAd&aid=".$ad->ads_subjects_id."\">".__("Edit")."</a>",
-		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=stickyAd&aid=".$ad->ads_subjects_id."\">".__($slab)."</a>",
-		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=activateAd&aid=".$ad->ads_subjects_id."\">".__($act)."</a>",
-		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=deleteAd&aid=".$ad->ads_subjects_id."\">".__("Delete")."</a>",
-		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=move&aid=".$ad->ads_subjects_id."\">".__("Move")."</a>");
+		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=editAd&aid=".$ad->ads_id."\">".__("Edit")."</a>",
+		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=stickyAd&aid=".$ad->ads_id."\">".__($slab)."</a>",
+		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=activateAd&aid=".$ad->ads_id."\">".__($act)."</a>",
+		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=deleteAd&aid=".$ad->ads_id."\">".__("Delete")."</a>",
+		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=move&aid=".$ad->ads_id."\">".__("Move")."</a>");
 		?>
 		<tr>
 			<td><small><?php echo @implode(" | ", $links);?></small></td>
@@ -308,7 +313,7 @@ function delete_ad(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 
 	$linkb = $PHP_SELF."?page=wpClassified&adm_arg=".$_GET['adm_arg']."&adm_action=deleteAd&lid=".$_GET['lid']."&aid=".$_GET['aid'];
-
+	
 	if ($_POST['deleteid']>0){
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".((int)$_POST['deleteid'])."'");
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".((int)$_POST['deleteid'])."'");
