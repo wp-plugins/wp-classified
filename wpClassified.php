@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.3.0-b
+Version: 1.3.0-c
 Requires at least: 2.3.x
 Author URI: http://www.forgani.com
 
@@ -76,6 +76,11 @@ Changes 1.3.0-b - Sep 13/10/2008
 - Modify to expand and collapses the Categories
 - Modify to show the last post in footer
 - fix the URL faking bug
+
+Changes 1.3.0-c - Sep 27/10/2008
+- some efforts made to the methods in admin interface 
+
+
 
 
 Permalink structure:
@@ -665,7 +670,7 @@ function wpClassified_install(){
 	$wpcSettings = array();
 	$wpcSettings = $_POST['wpClassified_data'];
 	update_option('wpClassified_data', $wpcSettings);
-	//$wp_rewrite->flush_rules(); // maybe is the bug 1052
+	//$wp_rewrite->flush_rules(); // is the bug 1052????
 	$wpcSettings = get_option('wpClassified_data');
 	wpClassified_check_db();
 	$wpcSettings['wpClassified_installed'] = 'y';
@@ -852,7 +857,7 @@ function adm_structure_process(){
 
 		<tr>
 			<th></th>
-			<td><input type=submit value="Save"></td>
+			<td><input type=submit value="Save">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);"></td>
 		</tr>
 		</table>
 	</form>
@@ -895,7 +900,7 @@ function adm_structure_process(){
 			</tr>
 			<tr>
 				<th></th>
-				<td><input type=submit value="Save"></td>
+				<td><input type=submit value="Save">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);"></td>
 			</tr>
 		</table>
 	</form>
@@ -1033,7 +1038,7 @@ function adm_users_process(){
 							}
 						}
 						?></td>
-						<td align="right"><input type="text" size="25" name="term" value="<?php echo $_GET["term"];?>" /><input type="submit" value="Search" /></td>
+						<td align="right"><input type="text" size="25" name="term" value="<?php echo $_GET["term"];?>" /><input type="submit" value="Search" />&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);"></td>
 					</tr>
 				</table>
 			</form>
@@ -1118,7 +1123,7 @@ function adm_users_process(){
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="submit" value="Save" /></td>
+				<td><input type="submit" value="Save" />&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);"></td>
 			</tr>
 			</table>
 			<?php

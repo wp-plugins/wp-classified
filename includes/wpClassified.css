@@ -46,7 +46,6 @@
 .wpc_container {
 	border: 1px solid #c5b2b3;
 	padding: 8px 2px 3px 2px;
-	clear:both;
 }
 
 
@@ -128,6 +127,10 @@
 	text-align: right;
 }
 
+.list_ads_top a{
+	font-weight: bold;
+}
+ 
 .list_ads_top img{
 	vertical-align: middle;
 	padding: 0 2px;

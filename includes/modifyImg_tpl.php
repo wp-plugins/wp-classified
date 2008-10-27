@@ -18,7 +18,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<a href="<?php echo get_bloginfo('wpurl');?>/wp-register.php"><?php echo __("Register Here");?></a><br><br>- <?php echo __("OR");?> -<br><br>
 	<a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("Login Here");?></a>
 	<?php
-} else {			
+} else {	
 	echo $quicktags;
 	if ($msg){
 		echo "<p class=\"error\">".$msg."</p>";

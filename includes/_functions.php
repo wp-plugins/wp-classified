@@ -6,7 +6,7 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3
+* @version 1.3.0-c
 */
 
 if (!$_SESSION) session_start();
@@ -31,7 +31,7 @@ function wpc_header(){
 	<div class="wpc_search">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
-		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
+		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);">
 		</form>
 	</div>
 	<?php
@@ -158,20 +158,16 @@ function wpc_footer(){
 	}
 
     if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
-    echo "<div class=\"wpc_footer\">";
+    	echo "<div class=\"wpc_footer\">";
 	echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
    
 	$start = 0;
 
-    $sql = "SELECT {$table_prefix}wpClassified_ads_subjects.* FROM {$table_prefix}wpClassified_ads_subjects
-		ORDER BY {$table_prefix}wpClassified_ads_subjects.ads_subjects_id DESC,
-		{$table_prefix}wpClassified_ads_subjects.date DESC
-		LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
-	$lastAds = $wpdb->get_results($sql);
-
+    	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+ 	$lastAds = $wpdb->get_results($sql);
 	foreach ($lastAds as $lastAd) {
 		$link = create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
-		echo "- " . $link . " - " . $lastAd->author_name . " - <span class=\"smallTxt\"><i>" . @date($wpcSettings['date_format'], $lastAd->date) . "</i></span><BR />";
+		echo "- ".$link." - ".$lastAd->author_name." - <span class=\"smallTxt\"><i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
 	}	
 	echo '<HR class="wpc_footer_hr">';
 	if($wpcSettings['rss_feed']=='y'){
