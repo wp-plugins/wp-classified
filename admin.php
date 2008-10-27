@@ -315,8 +315,10 @@ function delete_ad(){
 	$linkb = $PHP_SELF."?page=wpClassified&adm_arg=".$_GET['adm_arg']."&adm_action=deleteAd&lid=".$_GET['lid']."&aid=".$_GET['aid'];
 	
 	if ($_POST['deleteid']>0){
+		$sql = "DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id =
+		 (SELECT ads_ads_subjects_id FROM {$table_prefix}wpClassified_ads WHERE ads_id =".((int)$_POST['deleteid']).")";
+		$wpdb->query($sql);
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".((int)$_POST['deleteid'])."'");
-		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".((int)$_POST['deleteid'])."'");
 		adm_sync_count($_GET['lid']);
 		return true;
 	} else {
@@ -403,7 +405,7 @@ function delete_ad_subject(){
 		<h3>Ad Deletion Confirmation</h3>
 		<form method="post" id="ead_form" name="ead_form" action="<?php echo $url;?>">
 		<strong>
-			<input type="hidden" name="deleteid" value="<?php echo $_GET['asid'];?>">
+			<input type="hidden" name="deleteid" value="<?php echo $_GET['aid'];?>">
 			Are you sure you want to delete this ads? <br />
 			<input type=submit value="<?php echo __("Yes");?>"> <input type=button value="<?php echo __("No");?>" onclick="history.go(-1);">
 		</strong>
