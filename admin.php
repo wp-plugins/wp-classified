@@ -247,7 +247,7 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $
 		$lastAds = $wpdb->get_results($sql);
 		foreach ($lastAds as $lastAd) {
 			echo "<a href=\"".$PHP_SELF."?page=wpClassified&adm_arg=".$_GET['adm_arg']."&lid=&asid=" .$lastAd->ads_subjects_id."\">".$lastAd->subject."</a>";
-			echo "- ".$link." - ".$lastAd->author_name." - <span class=\"smallTxt\"><i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
+			echo " - <span class=\"smallTxt\"><i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
 		}	
 		echo "</div>";
 		?>
