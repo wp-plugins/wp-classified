@@ -222,12 +222,12 @@ function wpcOptions_process(){
 		<td><input type="text" size=80 name="wpClassified_data[description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?>"></td>
 	</tr>
 	<tr>
-		<th></th>
-		<td><input type=checkbox name="wpClassified_data[show_credits]" value="y"<?php echo ($wpcSettings['show_credits']=='y')?" checked":"";?>> Display wpClassified credit line at the bottom of page.</td>
+	<th></th>
+	<td><input type=checkbox name="wpClassified_data[show_credits]" value="y"<?php echo ($wpcSettings['show_credits']=='y')?" checked":"";?>> Display wpClassified credit line at the bottom of page.</td>
 	</tr>
 	<tr>
-		<th align="right" valign="top">Classifieds Page Link Name: </th>
-		<td><input type="text" name="wpClassified_data[wpClassified_slug]" value="<?php echo $wpcSettings['wpClassified_slug'];?>"></td>
+	<th align="right" valign="top">Classifieds Page Link Name: </th>
+	<td><input type="text" name="wpClassified_data[wpClassified_slug]" value="<?php echo $wpcSettings['wpClassified_slug'];?>"></td>
 	</tr>	
 
 <?php
@@ -415,12 +415,6 @@ $GADpos = array ('top' => 'top','btn' => 'bottom', 'bth' => 'both','no' => 'none
 		++$share;
 		}
 		?>
-		<tr>
-  		<th align="right" valign="top"><label>Plugin Author Ad Share:</label></th>
-  		<td>
-      		<select name='wpClassified_data[share]'><?php echo $share_list;?></select>
-    		</td>
-  		</tr>
 
 <?php
 $products=array ('ad' => 'Ad Unit','link' => 'Link Unit');	
@@ -709,7 +703,6 @@ function wpClassified_install(){
 	$wpcSettings[GADcolor_text]= '000000';
 	$wpcSettings[GADcolor_url]= 'FF0000';
 	$wpcSettings[GADposition] = 'btn';
-	$wpcSettings['share'] = 10;
 	$wpcSettings['count_last_ads'] = 5;
 	$wpcSettings['wpClassified_unread_color'] = '#FF0000';
 	$wpcSettings['image_alignment'] = 'left';
