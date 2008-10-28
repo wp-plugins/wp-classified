@@ -29,10 +29,10 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	?>
 	
 	<div class="editform">
-	<h3>Add Images</h3>
+	<h3><?php echo $lang['_ADDIMAGE'];?></h3>
 	<form method="post" id="addImg" name="addImg" enctype="multipart/form-data" action="<?php echo create_public_link("miform", array("aid"=>$post->ads_id));?>">
 	<table><tr>
-	<td class="wpc_label_right">Image: </td>
+	<td class="wpc_label_right"><?php echo $lang['_PIC'];?></td>
 	<td>
 	<?php if ($curcount <> $wpcSettings['number_of_image']) { ?>
 	<input type="hidden" name="add_img" value="yes">
@@ -46,7 +46,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	</table>
 	</form>
 	<br>
-	<h3>Delete Images</h3>
+	<h3><?php echo $lang['_DELIMAGE'];?></h3>
 	<table><tr>
 <?php
 foreach($array as $f) {

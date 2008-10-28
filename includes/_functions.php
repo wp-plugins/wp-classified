@@ -436,12 +436,12 @@ function _print_ad(){
 	}
 	?>
 	<hr />
-	To contact by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address:
+	<?php echo $lang['_TOCONTACTBY'];?>
 	<?php
 	echo " <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."\">".$subject."</a>";
 	echo "<br /><br />".$lang['_ADSADDED']. " " . "<nobr>" . @date($wpcSettings['date_format'], $post->date) ."</nobr>";
 	?>
-	<br />This advertisement is from the classified ads section on the website <a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?>.</a>
+	<br /><?php echo $lang['_ADLINKINFO'];?> <a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?>.</a>
 	</td></tr></table>
 	</td></tr></table></td></tr></table>
     	</td></tr></table>

@@ -149,10 +149,19 @@ Localization by:
 	$lang['_NOTNOTIFY'] = "Não notificado";
 	$lang['_POSTON'] = "Enviado para";
 	$lang['_SAVEADINFO'] = "O anúncio foi salvo.";
-	$lang['_SUBMIT'] = "Enviar";
 	$lang['_UPLOAD'] = "Upload";
-	$lang['_DELETE'] = "Apagar";
 	$lang['_DELETESURE'] = "Você tem certeza que deseja apagar?";
+
+
+
+
+// from 1.3.0-c
+	$lang['_TOCONTACTBY'] = "To contact by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address:";
+	$lang['_ADLINKINFO'] = "This advertisement is from the classified ads section on the website ";
+	$lang['_ADDIMAGE'] = "Add Images";
+	$lang['_DELIMAGE'] = "Delete Images";
+
+
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   

@@ -133,10 +133,15 @@ fixed by Christoph Zeuch
 	$lang['_NEWPOST'] = "New Post";
 	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
 	$lang['_NOTNOTIFY'] = "Not Notified";
-	$lang['_POSTON'] = "Post on";
-	$lang['_SAVEADINFO'] = "The Classified Ad has been saved.";
-	$lang['_SUBMIT'] = "Submit";
+	$lang['_POSTON'] = "aufgegeben am";
+	$lang['_SAVEADINFO'] = "Die Anzeige wurde gespeichert.";
 	$lang['_UPLOAD'] = "Upload";
-	$lang['_DELETE'] = "Delete";
-	$lang['_DELETESURE'] = "Are you sure you wish to delete this?";
+	$lang['_DELETESURE'] = "Sind Sie sicher, dass Sie das löschen möchten?";
+
+
+// from 1.3.0-c
+	$lang['_TOCONTACTBY']="Wenn Sie Interesse an dieser Anzeige haben, Bitte benutzen Sie das Kontaktformular auf dieser Webseite indem Sie auf der e-Mail link der Anzeige klicken:";
+	$lang['_ADLINKINFO']="Diese Anzeige ist vom Anzeigetafel auf der WebSite ";
+	$lang['_ADDIMAGE'] = "Bilder hinzufügen";
+	$lang['_DELIMAGE'] = "Bilder entfernen";
 ?>
