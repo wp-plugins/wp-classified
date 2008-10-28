@@ -68,7 +68,7 @@ which are installed by the plugin with drop table in phpMyAdmin.
 
 == Screenshots ==
 
-http://forgani.com/index.php?pagename=classified (1.3) &&  http://www.bazarcheh.de/?page_id=92  (v.1.2)
+http://forgani.com/index.php?pagename=classified (1.3) 
 
 == History ==
 
