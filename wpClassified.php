@@ -107,7 +107,7 @@ add_action('template_redirect', 'rss_feed');
 
 // wpClassified settings 
 function wpcOptions_process(){
-	global $_GET, $_POST, $wp_rewrite, $PHP_SELF, $wpdb, $table_prefix, $wpClassified_version, $wp_version, $lang;
+	global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $wpClassified_version, $wp_version, $lang;
 	ShowImg();
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
@@ -171,7 +171,7 @@ function wpcOptions_process(){
 		 return null;
 	};
 
-	$url = ($wp_rewrite->get_page_permastruct()=="")?"<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=classified\">".get_bloginfo('wpurl')."/index.php?pagename=classified</a>":"<a href=\"".get_bloginfo('wpurl')."/wpClassified/\">".get_bloginfo('wpurl')."/wpClassified/</a>";
+	$url = "<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=classified\">".get_bloginfo('wpurl')."/index.php?pagename=classified</a>";
     
 	?>
 	<p>

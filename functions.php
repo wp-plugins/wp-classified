@@ -184,6 +184,9 @@ function _modify_img() {
 						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], 0777);
 						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'];
 					}
+				} else {
+					$msg = "The file type is invalid";
+					$addPost=false;	
 				}
 			} else {
 				$addPost==false;
@@ -296,11 +299,9 @@ function _delete_img() {
 
 
 function create_public_link($action, $vars){
-	global $wpdb, $table_prefix, $wp_rewrite;
+	global $wpdb, $table_prefix;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = get_wpClassified_pageinfo();
-	// fix me
-	//$rewrite = ($wp_rewrite->get_page_permastruct()=="")?false:true;
 	if (!$vars['post_jump']) {
 		$lastAd = ($action=="lastAd")?"#lastpost":"";
 	} else {
@@ -309,41 +310,41 @@ function create_public_link($action, $vars){
 	$action = ($action=="lastAd")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
 		break;
 		case "classified":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
 		case "pa":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
 		case "paform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/pa/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']:get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
+			return get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/va/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/?search_words=".ereg_replace("[^[:alnum:]]", "+", $vars["search_words"]).$lastAd."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&search_words=".$vars['search_words'].$lastAd."\">".$vars['name']."</a>";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid']."&search_words=".$vars['search_words'].$lastAd."\">".$vars['name']."</a>";
 		break;
 		case "ea":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "da":
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/da/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid'])."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "eaform":
 			return 
-			($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/ea/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['asid']."/".((int)$vars['aid']):get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+			get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
 		break;
 		case "searchform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/search/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=search";
+			return get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=search";
 		break;
 		case "mi": //modify Images
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
 		break;
 		case "miform":
-			return ($rewrite)?get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/mi/":get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid="."&aid=".((int)$vars['aid']);
+			return get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid="."&aid=".((int)$vars['aid']);
 		break;
 		case "di": //delete Images
-			return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/di/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['aid']."\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
 		break;
 	}
 }
