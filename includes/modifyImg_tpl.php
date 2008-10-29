@@ -63,8 +63,9 @@ foreach($array as $f) {
 </tr>
 	
 	</table>
-	<p><hr><b><?php echo $lang['_BACK']; ?> to <?php echo create_public_link("ads_subject", array("name"=>$post->subject, "lid"=>$_GET['lid'], "asid"=>$post->ads_ads_subjects_id)); ?></b></p>
-	<br />
+	<p><hr>
+	<b><?php echo $lang['_BACK']; ?> to <?php echo create_public_link("ads_subject", array("name"=>$post->subject, "lid"=>$_GET['lid'], "asid"=>$post->ads_ads_subjects_id)); ?></b></p>
+	<p>&nbsp;</p>
 	</div>
 	</div>
 <?php
