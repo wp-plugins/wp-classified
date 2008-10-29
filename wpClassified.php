@@ -313,7 +313,7 @@ if (!$wpcSettings['inform_user_subject'])
 	$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
 if (!$wpcSettings['inform_user_body']) 
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
-if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = "90";
+if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = "180";
 $textarea=array ('tinymce' => 'HTML with TinyMCE (inline wysiwyg)','plain' => 'No HTML, No BBCode');	
 ?>
 		<tr>
@@ -507,26 +507,26 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 
 <tr><td>
 <?php
-if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]= 365;
+if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]= 14;
 ?>
 <fieldset class="fieldset">
-<legend class="legend"><strong><?php echo $lang['_NEWADDURATION'];?></strong>&nbsp;&nbsp;<span class="smallTxt">(is currently not implemented!)</span></legend>
+<legend class="legend"><strong><?php echo $lang['_NEWADDURATION'];?></strong></legend>
 <table width="99%"><tr><td>
 	<tr>
-			<th align="right" valign="top"><?php echo $lang['_NEWADDEFAULT'];?></th>
-			<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will auto-removed this many days after the ad is created. default:90 days</span></td>
+		<th align="right" valign="top"><?php echo $lang['_NEWADDEFAULT'];?></th>
+		<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will auto-removed this many days after the ad is created. default:90 days</span></td>
 	</tr>
 	<tr>
-			<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>
-			<td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">example:7 days</span></td>
+		<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>
+		<td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">example:7 days</span></td>
 	</tr>
 	<tr>
-			<th align="right" valign="top"><?php echo $lang['_NOTMESSAGE'];?></th>
-			<td><?php echo $lang['_NOTMESSAGESUBJECT'];?><br />
-			<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
-			<textarea cols=60 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
-			<span class="smallTxt">example: !sitename reminder: classified ads expiring soon! </span></td></tr>
-			<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=60 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
+		<th align="right" valign="top"><?php echo $lang['_NOTMESSAGE'];?></th>
+		<td><?php echo $lang['_NOTMESSAGESUBJECT'];?>&nbsp;&nbsp;<span class="smallTxt">(is currently not implemented!)</span><br />
+		<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
+		<textarea cols=60 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
+		<span class="smallTxt">example: !sitename reminder: classified ads expiring soon! </span></td></tr>
+		<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=60 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
 	</tr>
 </table>
 </fieldset>
@@ -688,7 +688,7 @@ function wpClassified_install(){
 	$wpcSettings['number_of_image'] = 3;
 	$wpcSettings['image_position'] = 1;
 	$wpcSettings['thumbnail_image_width'] = 120;
-	$wpcSettings['inform_user_expiration'] = 365;
+	$wpcSettings['inform_user_expiration'] = 7;
 	$wpcSettings['image_width'] = 640;
 	$wpcSettings['image_height'] = 480;
 	$wpcSettings['date_format'] = 'm-d-Y g:i a';
@@ -716,7 +716,7 @@ function wpClassified_install(){
 	$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
 	$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
-	$wpcSettings['ad_expiration'] = "90";
+	$wpcSettings['ad_expiration'] = "180";
 	//}
 	update_option('wpClassified_data', $wpcSettings);
 }
