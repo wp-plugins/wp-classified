@@ -8,7 +8,7 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3.0-d';
+$wpClassified_version = '1.3.0-e';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
@@ -25,6 +25,7 @@ if (file_exists($languageFile)) {
 }
 
 require_once (dirname(__FILE__).'/includes/_functions.php');
+require_once(dirname(__FILE__)."/functions.php");
 require_once (dirname(__FILE__).'/admin.php');
 
 
@@ -231,6 +232,5 @@ function wpClassified_last_octet($ip){
 	$ip[count($ip)-1] = "***";
 	return @implode(".", $ip);
 }
-
 
 ?>

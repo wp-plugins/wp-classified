@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.3.0-c
+Version: 1.3.0-e
 Requires at least: 2.3.x
 Author URI: http://www.forgani.com
 
@@ -78,9 +78,12 @@ Changes 1.3.0-b - Sep 13/10/2008
 - fix the URL faking bug
 
 Changes 1.3.0-c - Sep 27/10/2008
-- some efforts made to the methods in admin interface 
+- extending the Administration Interface
 
 
+Changes 1.3.0-e - Nov 03/11/2008
+- include the links of photo to the last ads's list
+- NEW: You can now place the last ads history on the sidebar as a widget
 
 
 Permalink structure:
@@ -103,7 +106,17 @@ if (function_exists('add_action')) {
 	add_action('admin_menu', 'wpcAdmpage');
 }
 
+/////////////////////////////////////////////
+
 add_action('template_redirect', 'rss_feed');
+/*
+add_action( 'in_admin_footer', 'wpClassified_admin_footer' );
+function wpClassified_admin_footer() {
+	global $wpClassified_version;
+	$plugin_data = get_plugin_data( __FILE__ );
+	printf('%1$s plugin | Version %2$s<br />', "wpClassified", $wpClassified_version);
+}
+*/
 
 // wpClassified settings 
 function wpcOptions_process(){
@@ -1217,7 +1230,6 @@ function wpClassified_page_handle_pagetitle($title){
 
 function wpClassified_page_handle_content($content){
    	$wpcSettings = get_option('wpClassified_data');
-	require_once(dirname(__FILE__)."/functions.php");
 	$content = preg_replace( "/\[\[WP_CLASSIFIED\]\]/ise", "wpClassified_process()", $content); 
 	return $content;
 }
@@ -1446,6 +1458,62 @@ echo "<script type=\"text/javascript\">\n";
 		echo "</script>\n"; 
 }
 
+// Widget stuff
+function widget_wpClassified_init() {
+	if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
+		return;
+	if ( function_exists('register_sidebar_widget') ) :
+	function widget_wpClassified($args) {
+		extract($args);
+		$wpcSettings = get_option('wpClassified_data');	
+		echo $before_widget;
+		echo $before_title . $wpcSettings['widget_title'] . $after_title;
+		echo '<ul><li>';
+		echo _widget_display($wpcSettings['widget_format']);
+		echo '</li></ul>'.$after_widget;
+	}
+	
+	function widget_wpClassified_control() {
+		$wpcSettings = $newoptions = get_option('wpClassified_data');
+		if ( $_POST["wpClassified-submit"] ) {
+			$newoptions['widget_title'] = strip_tags(stripslashes($_POST['wpClassified_data']['widget_title']));
+			$newoptions['widget_format'] = $_POST['wpClassified_data']['widget_format'];
+			if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
+		}
+		if ( $wpcSettings != $newoptions ) {
+			$wpcSettings = $newoptions;
+			update_option('wpClassified_data', $wpcSettings);
+		}
+		$title = htmlspecialchars($wpcSettings['widget_title'], ENT_QUOTES);
+		if ( empty($wpcSettings['widget_title']) ) $wpcSettings['widget_title'] = 'Last Classifieds Ads';
+	?>
+		<p><label for="wpClassified-widget_title"><?php _e('Title:'); ?><br /><input style="width: 250px;" id="wpClassified_data[widget_title]" name="wpClassified_data[widget_title]" type="text" value="<?php echo $wpcSettings['widget_title']; ?>" /></label></p>
+		<p>
+		<label for="wpClassified-widget_format">
+		<input class="checkbox" id="wpClassified_data[widget_format]" name="wpClassified_data[widget_format]" type="checkbox" value="y" <?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label>
+		</p>
+		<input type="hidden" id="wpClassified-submit" name="wpClassified-submit" value="1" />
+	<?php
+	}
 
+	global $use_own_css;
+
+	register_sidebar_widget('Classified', 'widget_wpClassified', null, 'wpClassified');
+	register_widget_control('Classified', 'widget_wpClassified_control', 300, 75, 'wpClassified');
+
+	endif;
+}
+
+function wpClassified_shortcode_handler($atts, $content=null){
+	return _widget_display($wpcSettings['widget_format']);
+}
+
+function _widget_display() {
+	$wpcSettings = get_option('wpClassified_data');
+	$out = get_last_ads($wpcSettings['widget_format']);
+	return $out;
+}
+
+add_action('init', 'widget_wpClassified_init');
 
 ?>

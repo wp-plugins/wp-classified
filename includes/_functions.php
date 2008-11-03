@@ -156,33 +156,9 @@ function wpc_footer(){
 		$gAd = get_GADlink();
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
-
-    if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
-    	echo "<div class=\"wpc_footer\">";
+	echo "<div class=\"wpc_footer\">";
 	echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
-   
-	$start = 0;
-
-    	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
- 	$lastAds = $wpdb->get_results($sql);
-
-	foreach ($lastAds as $lastAd) {
-		$link = create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
-		echo "- ".$link." ";
-
-		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
-		//echo "--->" . $sql;
-		$rec = $wpdb->get_row($sql);
-		$array = split('###', $rec->image_file);
-		$img = $array[0];
-		
-		if ($img !='') {
-			include (dirname(__FILE__).'/js/viewer.js.php');
-			echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
-		}
-
-		echo " <span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
-	}	
+	echo get_last_ads(false);
 	echo '<HR class="wpc_footer_hr">';
 	if($wpcSettings['rss_feed']=='y'){
 		$rssurl= _rss_url();
@@ -199,6 +175,10 @@ function wpc_footer(){
 
 function rss_filter($text)
 {echo convert_chars(ent2ncr($text));} 
+
+
+
+
 
 function _rss_url() {
 	global $wpdb, $table_prefix;
@@ -773,6 +753,36 @@ function _filter_content($content, $searchvalue) {
 	}
 	$searchvalue=urldecode($searchvalue);
 	return $content."\n";
+}
+
+function get_last_ads($format) {
+	global $table_prefix, $wpdb, $lang;
+	if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
+
+	$start = 0;
+	$out ='';
+
+    	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+ 	$lastAds = $wpdb->get_results($sql);
+
+	foreach ($lastAds as $lastAd) {
+		$link=create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
+		$out .= $link;
+
+		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
+		//echo "--->" . $sql;
+		$rec = $wpdb->get_row($sql);
+		$array = split('###', $rec->image_file);
+		$img = $array[0];
+		if (!$format) {
+			if ($img !='') {
+				include (dirname(__FILE__).'/js/viewer.js.php');
+				$out .= "&nbsp;<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
+			}
+			$out .= "&nbsp;<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
+		}
+	}	
+	return $out;
 }
 
 ?>

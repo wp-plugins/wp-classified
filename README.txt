@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.0-c
+name: wpClassified Wordpress plugins version 1.3.0-e
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -75,6 +75,12 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 Changelog:
+
+Changes 1.3.0-e - Nov 03/11/2008
+- include the links of photo to the last ads's list
+- NEW: You can now place the last ads history on the sidebar as a widget
+- extending the Administration Interface
+
 
 Changes 1.3.0-b - Oct 10/10/2008
 - Modify to expanded and collapses the Categories
