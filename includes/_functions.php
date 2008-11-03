@@ -165,9 +165,23 @@ function wpc_footer(){
 
     	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
  	$lastAds = $wpdb->get_results($sql);
+
 	foreach ($lastAds as $lastAd) {
 		$link = create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
-		echo "- ".$link." - ".$lastAd->author_name." - <span class=\"smallTxt\"><i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
+		echo "- ".$link." ";
+
+		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
+		//echo "--->" . $sql;
+		$rec = $wpdb->get_row($sql);
+		$array = split('###', $rec->image_file);
+		$img = $array[0];
+		
+		if ($img !='') {
+			include (dirname(__FILE__).'/js/viewer.js.php');
+			echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
+		}
+
+		echo " <span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
 	}	
 	echo '<HR class="wpc_footer_hr">';
 	if($wpcSettings['rss_feed']=='y'){
