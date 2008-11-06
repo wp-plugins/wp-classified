@@ -8,7 +8,7 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3.0-e';
+$wpClassified_version = '1.3.0-f';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
@@ -40,7 +40,6 @@ if (!$table_prefix){
 	$table_prefix = $wpdb->prefix;
 }
 
-$wpc_user_info = array();
 $adm_links = array(
 	array(name=>'Classified Options',arg=>'wpcOptions'),
 	array(name=>'Add/Edit Categories',arg=>'wpcStructure'),
@@ -89,20 +88,31 @@ function get_wpc_user_field(){
 	return $wpc_user_field;
 }
 
+
 function _is_usr_admin(){
-	global $wpc_user_info;
-	return ($wpc_user_info["permission"]=="administrator")?true:false;
+	global $userdata, $user_level;
+	if ($user_level && $user_level>=8) 
+		return true;
+	else
+	return ($userdata->wp_user_level >= 8)?true:false;
 }
 
 function _is_usr_mod($classified=0){
-	global $wpdb, $wpc_user_info, $table_prefix;
-	return ($wpc_user_info["permission"]=="moderator")?true:false;
+	global $userdata, $user_level;
+	if ($user_level && $user_level>4) 
+		return true;
+	else
+	return ($userdata->wp_user_level > 4)?true:false;
 }
 
 function _is_usr_loggedin(){
-	global $wpc_user_info;
-	return ((int)$wpc_user_info["ID"])?true:false;
+	global $userdata, $user_level;
+	if ($user_level && $user_level>1) 
+		return true;
+	else
+	return ($userdata->wp_user_level > 1)?true:false;
 }
+
 
 
 function wpc_get_top_lnks(){

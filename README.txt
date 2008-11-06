@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.0-e
+name: wpClassified Wordpress plugins version 1.3.0-f
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -75,6 +75,9 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 Changelog:
+
+Changes 1.3.0-f - Nov 05/11/2008
+- fixed the login problem for wmpu and buddypress
 
 Changes 1.3.0-e - Nov 03/11/2008
 - include the links of photo to the last ads's list
