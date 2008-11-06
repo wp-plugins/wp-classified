@@ -61,6 +61,7 @@ if ($catCnt!="0"){
         echo "<div class=\"list-content\">\n";
 		$category = $categories[$x];
 		$img = get_bloginfo('wpurl');
+		if ($category->photo)
 		echo "<img class=\"catphoto\" src=\"" . $img . "/wp-content/plugins/wp-classified/" . $category->photo . "\">\n";
 		?>
 		<dl id="group">
