@@ -759,9 +759,7 @@ function get_last_ads($format) {
 	foreach ($lastAds as $lastAd) {
 		$link=create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
 		$out .= $link;
-
 		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
-		//echo "--->" . $sql;
 		$rec = $wpdb->get_row($sql);
 		$array = split('###', $rec->image_file);
 		$img = $array[0];
@@ -770,8 +768,9 @@ function get_last_ads($format) {
 				include (dirname(__FILE__).'/js/viewer.js.php');
 				$out .= "&nbsp;<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
 			}
-			$out .= "&nbsp;<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
+			$out .= "&nbsp;<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
 		}
+		$out .= "<BR />";
 	}	
 	return $out;
 }
