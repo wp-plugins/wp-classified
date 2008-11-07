@@ -735,6 +735,7 @@ function wpClassified_install(){
 	$wpcSettings['wpClassified_display_last_post_link'] = 'y';
 	$wpcSettings['wpClassified_last_ads_subject_num'] = 5;
 	$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
+	$wpcSettings['widget_format']= "n";
 	$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 	$wpcSettings['ad_expiration'] = "180";
