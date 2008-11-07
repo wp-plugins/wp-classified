@@ -173,63 +173,60 @@ function wpc_get_top_lnks(){
 function get_wpc_header_link(){
 	global $_GET, $_POST, $user_level, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER;
 	$pageinfo = get_wpClassified_pageinfo();
-	if (basename($_SERVER['PHP_SELF'])!='index.php'){
-		return "[[WP_CLASSIFIED]]";
+# fix for WPMU version
+//	if (basename($_SERVER['PHP_SELF'])!='index.php')
+//		return "[[WP_CLASSIFIED]]";
+	$wpClassified_settings = get_option('wpClassified_data');
+	if ($_POST['search_terms']) {
+		$_GET['_action'] = "search";
 	} else {
-		$wpClassified_settings = get_option('wpClassified_data');
-		if ($_POST['search_terms']) {
-			$_GET['_action'] = "search";
-		} else {
-			$_POST['search_terms'] = '';
-		}
-		switch ($_GET['_action']){
-			default:
-			case "classified":
-				return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a>";
-			break;
-			case "search":
-				$search_title = "Searching for: ".$_POST['search_terms'];
-				return $search_title;
-			break;
-			case "vl":
-				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
-				LEFT JOIN {$table_prefix}wpClassified_categories
-				ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-				WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
-
+		$_POST['search_terms'] = '';
+	}
+	switch ($_GET['_action']){
+		default:
+		case "classified":
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a>";
+		break;
+		case "search":
+			$search_title = "Searching for: ".$_POST['search_terms'];
+			return $search_title;
+		break;
+		case "vl":
+			$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
+			LEFT JOIN {$table_prefix}wpClassified_categories
+			ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
+			WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 				return create_public_link("index", array("name"=>"Classified"))." ".$lists['name'];
-			break;
-			case "pa":
-				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
-					 LEFT JOIN {$table_prefix}wpClassified_categories
-					 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+		break;
+		case "pa":
+			$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
+				 LEFT JOIN {$table_prefix}wpClassified_categories
+				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
+				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Add a new Ad in this category";
-			break;
-			case "ea":
-				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Add a new Ad in this category";
+		break;
+		case "ea":
+			$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+				 LEFT JOIN {$table_prefix}wpClassified_lists
+				 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
+				 LEFT JOIN {$wpmuBaseTablePrefix}users
+				 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+				 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." - Edit Ads";
+		break;
+		case "va":
+			$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$wpmuBaseTablePrefix}users
 					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
-				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
-				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
-			break;
-			case "va":
-				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
-						 LEFT JOIN {$table_prefix}wpClassified_lists
-						 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
-						 LEFT JOIN {$wpmuBaseTablePrefix}users
-						 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-						 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
-				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified",
-						array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
+			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified",
+				array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
-			break;
-		}
+		break;
 	}
 }
 
