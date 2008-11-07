@@ -35,10 +35,10 @@ if (!$_SERVER)$_SERVER = $HTTP_SERVER_VARS;
 if (!$_COOKIE)$_COOKIE = $HTTP_COOKIE_VARS;
 
 
-global $table_prefix, $wpdb;
-if (!$table_prefix){
-	$table_prefix = $wpdb->prefix;
-}
+global $table_prefix, $wpdb, $wpmuBaseTablePrefix;
+	if (!$table_prefix) $table_prefix = $wpdb->prefix;
+	if (!$wpmuBaseTablePrefix) 
+		$wpmuBaseTablePrefix=$table_prefix;
 
 $adm_links = array(
 	array(name=>'Classified Options',arg=>'wpcOptions'),
@@ -60,19 +60,13 @@ function get_wpClassified_pageinfo(){
 	return $wpc_page_info;
 }
 
-function get_user_info(){
-	global $table_prefix, $wpdb, $user_ID, $wpc_user_info;
-	get_currentuserinfo();
-	$wpc_user_info = $wpdb->get_row("SELECT * from {$table_prefix}users
-					LEFT JOIN {$table_prefix}wpClassified_user_info
-					ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
-					WHERE {$table_prefix}users.ID = '".(int)$user_ID."'", ARRAY_A);
-}
 
 function get_wpc_user_field(){
-	global $wpdb, $table_prefix, $wpc_user_field, $wp_version;
+	global $wpdb, $table_prefix, $wpmuBaseTablePrefix, $wpc_user_field, $wp_version;
 	if ($wpc_user_field == false){
-		$tcols = $wpdb->get_results("SHOW COLUMNS FROM {$table_prefix}users", ARRAY_A);
+
+		$sql = "SHOW COLUMNS FROM {$wpmuBaseTablePrefix}users";
+		$tcols = $wpdb->get_results($sql, ARRAY_A);
 		$cols = array();
 		for ($i=0; $i<count($tcols); $i++){
 			$cols[] = $tcols[$i]['Field'];
@@ -80,8 +74,11 @@ function get_wpc_user_field(){
 		if (in_array("display_name", $cols)){
 			$wpc_user_field = "display_name";
 			$wp_version = "2";
+		} elseif (in_array("user_nicename", $cols)){
+			$wpc_user_field = "user_nicename";
+			$wp_version = "WPMU";
 		} else {
-			$wpc_user_field = "user_nickname";
+			$wpc_user_field = "nickname";
 			$wp_version = "1";
 		}
 	}
@@ -116,7 +113,7 @@ function _is_usr_loggedin(){
 
 
 function wpc_get_top_lnks(){
-	global $_GET, $_POST, $user_level, $table_prefix, $wpdb, $_SERVER;
+	global $_GET, $_POST, $user_level, $table_prefix, $wpdb, $wpmuBaseTablePrefix, $_SERVER;
 	if (basename($_SERVER['PHP_SELF'])!='index.php'){
 		return "[[WP_CLASSIFIED]]";
 	} else {
@@ -150,8 +147,8 @@ function wpc_get_top_lnks(){
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
-					 LEFT JOIN {$table_prefix}users
-					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+					 LEFT JOIN {$wpmuBaseTablePrefix}users
+					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
 				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
@@ -161,8 +158,8 @@ function wpc_get_top_lnks(){
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
-					 LEFT JOIN {$table_prefix}users
-					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+					 LEFT JOIN {$wpmuBaseTablePrefix}users
+					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
@@ -174,7 +171,7 @@ function wpc_get_top_lnks(){
 
 
 function get_wpc_header_link(){
-	global $_GET, $_POST, $user_level, $table_prefix, $wpdb, $_SERVER;
+	global $_GET, $_POST, $user_level, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER;
 	$pageinfo = get_wpClassified_pageinfo();
 	if (basename($_SERVER['PHP_SELF'])!='index.php'){
 		return "[[WP_CLASSIFIED]]";
@@ -214,8 +211,8 @@ function get_wpc_header_link(){
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
 					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
-					 LEFT JOIN {$table_prefix}users
-					 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+					 LEFT JOIN {$wpmuBaseTablePrefix}users
+					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".create_public_link("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
@@ -224,8 +221,8 @@ function get_wpc_header_link(){
 				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 						 LEFT JOIN {$table_prefix}wpClassified_lists
 						 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
-						 LEFT JOIN {$table_prefix}users
-						 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+						 LEFT JOIN {$wpmuBaseTablePrefix}users
+						 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 						 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
 
 				return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified",

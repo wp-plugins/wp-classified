@@ -14,7 +14,7 @@
 require('captcha_class.php');
 
 function _add_ad(){
-	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
+	global $_GET, $_POST, $userdata, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
@@ -84,11 +84,11 @@ function _add_ad(){
 						$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['image_file']['size']);
 						@fclose($fp);
-						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$user_ID."-".$_FILES['image_file']['name'], "w");
 						@fwrite($fp, $content);
 						@fclose($fp);
-						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
-						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'];
+						@chmod(dirname(__FILE__)."/images/".(int)$user_ID."-".$_FILES['image_file']['name'], 0777);
+						$setImage = (int)$user_ID."-".$_FILES['image_file']['name'];
 					}
 				}
 			} else {
@@ -151,7 +151,7 @@ function _add_ad(){
 
 
 function _modify_img() {
-	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
+	global $_GET, $_POST, $userdata, $user_ID, $table_prefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
@@ -178,11 +178,11 @@ function _modify_img() {
 						$fp = @fopen($_FILES['addImage']['tmp_name'], "r");
 						$content = @fread($fp, $_FILES['addImage']['size']);
 						@fclose($fp);
-						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], "w");
+						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$user_ID."-".$_FILES['addImage']['name'], "w");
 						@fwrite($fp, $content);
 						@fclose($fp);
-						@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'], 0777);
-						$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['addImage']['name'];
+						@chmod(dirname(__FILE__)."/images/".(int)$user_ID."-".$_FILES['addImage']['name'], 0777);
+						$setImage = (int)$user_ID."-".$_FILES['addImage']['name'];
 					}
 				} else {
 					$msg = "The file type is invalid";
@@ -231,18 +231,18 @@ function _modify_img() {
 
 
 function _delete_img() {
-	global $_GET, $_POST, $userdata, $wpc_user_info, $user_ID, $table_prefix, $wpdb, $lang;
+	global $_GET, $_POST, $userdata, $user_ID, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = get_wpClassified_pageinfo();
 	$userfield = get_wpc_user_field();
 	get_currentuserinfo();
 
-	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
 	 $postinfo = $wpdb->get_results($sql, ARRAY_A);
 
 	$post = $postinfo[0];
 	$permission=false;
-	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$post['author']) || _is_usr_admin() || _is_usr_mod()){
+	if ((_is_usr_loggedin() && $user_ID==$post['author']) || _is_usr_admin() || _is_usr_mod()){
 		$permission=true;
         }
 	if (!$permission) {

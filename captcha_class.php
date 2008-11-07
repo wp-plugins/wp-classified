@@ -228,9 +228,8 @@
       function create($sFilename = '') {
          // check for required gd functions
          if (!function_exists('imagecreate') || 
-		 !function_exists("image$this->sFileType") || ($this->vBackgroundImages != '' && !function_exists('imagecreatetruecolor'))) {
-		echo "<p class=\"error\">PHP running on your server does not support the GD image library, check with your webhost if ImageMagick is installed or unselect confirmation code in admin interface</p>";
-  		return false;
+			 !function_exists("image$this->sFileType") || ($this->vBackgroundImages != '' && !function_exists('imagecreatetruecolor'))) {
+  				return false;
          }
          // get background image if specified and copy to CAPTCHA
          if (is_array($this->vBackgroundImages) || $this->vBackgroundImages != '') {

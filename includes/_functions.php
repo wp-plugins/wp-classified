@@ -67,7 +67,7 @@ function wpc_header(){
 
 // function to show the Main page
 function wpc_index(){
-	global $_GET, $user_ID, $wpc_user_info, $table_prefix, $wpdb;
+	global $_GET, $user_ID, $table_prefix, $wpdb;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -75,7 +75,7 @@ function wpc_index(){
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
 	$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists WHERE status != 'inactive' ORDER BY position ASC");
-	if ((int)$wpc_user_info["ID"]){
+	if ((int)$user_ID){
 		$readtest = $wpdb->get_results("SELECT {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id, {$table_prefix}wpClassified_ads_subjects.status, {$table_prefix}wpClassified_read.read_ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects
 		LEFT JOIN {$table_prefix}wpClassified_read ON
 		{$table_prefix}wpClassified_read.read_user_id = '".$user_ID."' &&
@@ -103,7 +103,7 @@ function wpc_index(){
 
 // function to list all ads already exist under a defined category
 function get_wpc_list($msg){
-	global $_GET, $wpc_user_info, $table_prefix, $wpdb, $lang;
+	global $_GET, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang, $user_ID, $user_identity, $userdata, $user_level;
 	//$listId = get_query_var("lists_id");
 	$listId = get_query_var("lid");
 	get_currentuserinfo();
@@ -113,21 +113,16 @@ function get_wpc_list($msg){
 	}
 	$userfield = get_wpc_user_field();
 	//update_views($_GET['lid']);
-	
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 		LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id	 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
-	$read = (_is_usr_loggedin())?$wpdb->get_col("SELECT read_ads_subjects_id FROM {$table_prefix}wpClassified_read WHERE read_user_id = ".$wpc_user_info["ID"]):array();
-	$ads = $wpdb->get_results("SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects
-		LEFT JOIN {$table_prefix}users
-		ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-		LEFT JOIN {$table_prefix}users AS lu
-		ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author
-		WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."'
-		&& {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
-		GROUP BY ads_subjects_id
-		ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
-		{$table_prefix}wpClassified_ads_subjects.date DESC");
+	
+	$read = (_is_usr_loggedin())?$wpdb->get_col("SELECT read_ads_subjects_id FROM {$table_prefix}wpClassified_read WHERE read_user_id = ".$user_ID):array();
+
+	$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$wpmuBaseTablePrefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author	LEFT JOIN {$wpmuBaseTablePrefix}users AS lu ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."' && {$table_prefix}wpClassified_ads_subjects.status != 'deleted' GROUP BY ads_subjects_id ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,{$table_prefix}wpClassified_ads_subjects.date DESC";
+
+	$ads = $wpdb->get_results($sql);
+	
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."'	&& status != 'deleted'");
 
 	if (!file_exists(ABSPATH . INC . "/listAds_tpl.php")){ 
@@ -202,15 +197,16 @@ function create_rss_link($action, $vars) {
 }
 
 function _delete_ad(){
-	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang, $wpc_user_info;
+	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang, $user_ID;
 
 	if (!$_GET['aid']) $_GET['aid']=$_POST['YesOrNo'];
-	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id =" .(int)$_GET['aid'];
+
 	 $postinfos = $wpdb->get_results($sql, ARRAY_A);
 
 	$postinfo = $postinfos[0];
 	$permission=false;
-	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
+	if ((_is_usr_loggedin() && $user_ID==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
 		$permission=true;
         }
 	
@@ -249,26 +245,26 @@ function _delete_ad(){
 
 // edit post function
 function _edit_ad(){
-	global $_GET, $_POST, $wpc_user_info, $table_prefix, $wpdb, $quicktags, $lang;
+	global $_GET, $_POST, $user_ID, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $quicktags, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 	 LEFT JOIN {$table_prefix}wpClassified_categories
 	 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 	 WHERE {$table_prefix}wpClassified_lists.lists_id = '".(int)$_GET['lid']."'", ARRAY_A);
-	$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
-	 LEFT JOIN {$table_prefix}users
-	 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-	 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'", ARRAY_A);
 
-	$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
-	 LEFT JOIN {$table_prefix}users
-	 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
-	 WHERE ads_id = '".(int)$_GET['aid']."'", ARRAY_A);
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'";
+
+	$adsInfo = $wpdb->get_row($sql, ARRAY_A);
+
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id = '".(int)$_GET['aid']."'";
+
+
+	$postinfos = $wpdb->get_results($sql, ARRAY_A);
 	$postinfo = $postinfos[0];
 
 	$permission=false;
-	if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
+	if ((_is_usr_loggedin() && $user_ID==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
 		$permission=true;
         }
 	if (!$permission) {
@@ -327,11 +323,11 @@ function _edit_ad(){
 					$fp = @fopen($_FILES['image_file']['tmp_name'], "r");
 					$content = @fread($fp, $_FILES['image_file']['size']);
 					@fclose($fp);
-					$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], "w");
+					$fp = fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$user_ID."-".$_FILES['image_file']['name'], "w");
 					@fwrite($fp, $content);
 					@fclose($fp);
-					@chmod(dirname(__FILE__)."/images/".(int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'], 0777);
-					$setImage = (int)$wpc_user_info["ID"]."-".$_FILES['image_file']['name'];
+					@chmod(dirname(__FILE__)."/images/".(int)$user_ID."-".$_FILES['image_file']['name'], 0777);
+					$setImage = (int)$user_ID."-".$_FILES['image_file']['name'];
 				}
 			}
 		}
@@ -354,8 +350,7 @@ function _edit_ad(){
 			$wpdb->query($sql);
 
 			$sql = "update {$table_prefix}wpClassified_ads_subjects
-			set 
-			subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
+			set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
 			email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
 			web='".$web."',
 			phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
@@ -368,12 +363,10 @@ function _edit_ad(){
 		}
 	} 
 	if ($displayform==true){
-		$postinfos = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
-			 LEFT JOIN {$table_prefix}users ON 
-			{$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
-			 LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON 
-			ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id
-			 WHERE ads_id = '".(int)$_GET['aid']."'");
+
+		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id WHERE ads_id = '".(int)$_GET['aid']."'";
+
+		$postinfos = $wpdb->get_results($sql);
 		$postinfo = $postinfos[0];
 
 		if (!file_exists(ABSPATH . INC . "/editAd_tpl.php")){ 
@@ -385,16 +378,15 @@ function _edit_ad(){
 }
 
 function _print_ad(){
-	global $_GET, $table_prefix, $wpdb, $lang;
+	global $_GET, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	$pageinfo = get_wpClassified_pageinfo();
 	$aid = (int)$_GET['aid'];
 
-	$post = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads 
-		LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id 
-		LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
-		WHERE ads_id = $aid");
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" . $aid;
+
+	$post = $wpdb->get_row($sql);
 
 	$subject = $post->subject;
 	$desctext = $post->post;
@@ -517,16 +509,15 @@ function html2text( $badStr ) {
 
 
 function _send_ad(){
-    global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF, $lang;
+    global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	$pageinfo = get_wpClassified_pageinfo();
 	$aid = (int)$_GET['aid'];
 
-	$post = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads 
-		LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id 
-		LEFT JOIN {$table_prefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
-		WHERE ads_id = $aid");
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" . $aid;
+
+	$post = $wpdb->get_row($sql);
 
 	$link_snd = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=sndad&aid=".$_GET['aid'];
 
@@ -593,36 +584,37 @@ function _send_ad(){
 
 // function to display advertisement information
 function _display_ad(){
-	global $_GET, $wpc_user_info, $table_prefix, $wpdb;
+	global $_GET, $user_ID, $table_prefix, $wpmuBaseTablePrefix, $wpdb;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 	
 	
 	if (_is_usr_loggedin()){
-		$readposts = $wpdb->get_col("SELECT read_ads_id FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id = '".(int)$_GET['asid']."' && read_ads_user_id = '".(int)$wpc_user_info["ID"]."'");
+		$readposts = $wpdb->get_col("SELECT read_ads_id FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id = '".(int)$_GET['asid']."' && read_ads_user_id = '".(int)$user_ID."'");
 	} else {
 		$readposts = array();
 	}
 	update_ads_views($_GET['asid']);
 	if (_is_usr_loggedin()){
-		$wpdb->query("REPLACE INTO {$table_prefix}wpClassified_read (read_user_id, read_ads_subjects_id) VALUES ('".(int)$wpc_user_info["ID"]."', '".(int)$_GET['asid']."')");
+		$wpdb->query("REPLACE INTO {$table_prefix}wpClassified_read (read_user_id, read_ads_subjects_id) VALUES ('".(int)$user_ID."', '".(int)$_GET['asid']."')");
 	}
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 		 LEFT JOIN {$table_prefix}wpClassified_categories
 		 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 		 WHERE {$table_prefix}wpClassified_lists.lists_id = '".(int)$_GET['lid']."'", ARRAY_A);
-	$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
-		 LEFT JOIN {$table_prefix}users
-		 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-		 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'", ARRAY_A);
-	$posts = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
-		 LEFT JOIN {$table_prefix}users
-		 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
-		 LEFT JOIN {$table_prefix}wpClassified_user_info
-		 ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
-		 WHERE {$table_prefix}wpClassified_ads.ads_ads_subjects_id = '".(int)$_GET['asid']."'
-			 && {$table_prefix}wpClassified_ads.status = 'active'
-		 ORDER BY {$table_prefix}wpClassified_ads.date ASC");
+
+
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'";
+
+	$adsInfo = $wpdb->get_row($sql, ARRAY_A);
+
+	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_user_info ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID WHERE {$table_prefix}wpClassified_ads.ads_ads_subjects_id = '".(int)$_GET['asid']."' && {$table_prefix}wpClassified_ads.status = 'active' ORDER BY {$table_prefix}wpClassified_ads.date ASC";
+	
+
+	$posts = $wpdb->get_results($sql);
+
+
+	
 	
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
 		$hm = $wpcSettings['count_ads_per_page'];
@@ -637,7 +629,7 @@ function _display_ad(){
 		$post = $posts[$i];
 
 		$permission=false;
-		if ((_is_usr_loggedin() && $wpc_user_info["ID"]==$post->author) || _is_usr_admin() || _is_usr_mod()){
+		if ((_is_usr_loggedin() && $user_ID==$post->author) || _is_usr_admin() || _is_usr_mod()){
 			$permission=true;
         	}
 		if (!$permission) {
@@ -654,7 +646,7 @@ function _display_ad(){
 		if (!@in_array($post->ads_id, $readposts) && _is_usr_loggedin()){
 			$xbefred = "<font color=\"".$wpcSettings['wpClassified_unread_color']."\">";
 			$xafred = "</font>";
-			$setasread[] = "('".(int)$wpc_user_info["ID"]."', '".$_GET['asid']."', '".$post->ads_id."')";
+			$setasread[] = "('".(int)$user_ID."', '".$_GET['asid']."', '".$post->ads_id."')";
 		} else {
 			$xbefred = "";
 			$xafred = "";
@@ -679,7 +671,7 @@ function _display_ad(){
 
 
 function display_search($term){
-	global $_GET, $_POST, $table_prefix, $wpdb, $lang;
+	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
@@ -687,7 +679,7 @@ function display_search($term){
 	#
 	# fixed 07-Apr-2008
 	#
-	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($term)."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($term)."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
+	$sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$wpmuBaseTablePrefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$wpmuBaseTablePrefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$wpmuBaseTablePrefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($term)."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($term)."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
 
 	$results = $wpdb->get_results($sql);
 

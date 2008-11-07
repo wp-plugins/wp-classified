@@ -88,6 +88,7 @@ Changes 1.3.0-e - Nov 03/11/2008
 Changes 1.3.0-f - Nov 05/11/2008
 - fixed the login problem wmpu and buddypress
 
+
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
@@ -554,7 +555,7 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 
 
 function wpClassified_process(){
-	global $_GET, $_POST, $userdata, $user_level, $table_prefix, $wpdb, $user_ID, $user_identity;
+	global $_GET, $_POST, $table_prefix, $wpdb, $user_ID, $user_identity, $userdata, $user_level;
 	$wpcSettings = get_option('wpClassified_data');
 	if (is_user_logged_in()) { 
 		get_currentuserinfo();	
@@ -991,7 +992,7 @@ function adm_structure_process(){
 
 //mohamm
 function adm_users_process(){
-	global $_GET, $_POST, $wpdb, $table_prefix;
+	global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix;
 	$wpcSettings = get_option('wpClassified_data');
 	if ($_GET["adm_action"]=="saveuser"){
 		$id = (int)$_GET["id"];
@@ -1021,18 +1022,18 @@ function adm_users_process(){
 					if ($where!=" WHERE "){
 						$where .= " || ";
 					}
-					$where .= "{$table_prefix}users.".$field." like '%".$wpdb->escape($_GET["term"])."%'";
+					$where .= "{$wpmuBaseTablePrefix}users.".$field." like '%".$wpdb->escape($_GET["term"])."%'";
 				}
 			} else {
 				$where = "";
 			}
-			$all_users = $wpdb->get_results("select * from {$table_prefix}users
+			$all_users = $wpdb->get_results("select * from {$wpmuBaseTablePrefix}users
 								LEFT JOIN {$table_prefix}wpClassified_user_info
-								ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
+								ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID
 								$where
-								ORDER BY {$table_prefix}users.".$searchfields[0]." ASC
+								ORDER BY {$wpmuBaseTablePrefix}users.".$searchfields[0]." ASC
 								LIMIT $start, $perpage", ARRAY_A);
-			$numusers = $wpdb->get_results("select count(*) as numusers from {$table_prefix}users $where ", ARRAY_A);
+			$numusers = $wpdb->get_results("select count(*) as numusers from {$wpmuBaseTablePrefix}users $where ", ARRAY_A);
 			$numusers = $numusers[0]["numusers"];
 			?>
 			<form method="get" id="adm_form_get" action="<?php echo $_SERVER["PHP_SELF"];?>">
@@ -1089,10 +1090,10 @@ function adm_users_process(){
 			<?php
 		break;
 		case "edit":
-			$user = $wpdb->get_results("select * from {$table_prefix}users
+			$user = $wpdb->get_results("select * from {$wpmuBaseTablePrefix}users
 							LEFT JOIN {$table_prefix}wpClassified_user_info
-							ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$table_prefix}users.ID
-							WHERE {$table_prefix}users.ID = '".(int)$_GET['id']."'", ARRAY_A);
+							ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID
+							WHERE {$wpmuBaseTablePrefix}users.ID = '".(int)$_GET['id']."'", ARRAY_A);
 
 			$user = $user[0];
 			$namefield = get_wpc_user_field();
@@ -1319,14 +1320,14 @@ function update_views($lists_id, $sign="+"){
 
 
 function get_last_ads_subjects(){
-	global $wpdb, $table_prefix;
+	global $wpdb, $table_prefix, $wpmuBaseTablePrefix;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 
-	$ads = $wpdb->get_results("SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects
-			 LEFT JOIN {$table_prefix}users
-			 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-			 LEFT JOIN {$table_prefix}users AS lu
+	$ads = $wpdb->get_results("SELECT {$table_prefix}wpClassified_ads_subjects.*, {$wpmuBaseTablePrefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects
+			 LEFT JOIN {$wpmuBaseTablePrefix}users
+			 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
+			 LEFT JOIN {$wpmuBaseTablePrefix}users AS lu
 			 ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author
 			 WHERE {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
 			 ORDER BY {$table_prefix}wpClassified_ads_subjects.date DESC
