@@ -205,7 +205,7 @@ function _delete_ad(){
 
 	$postinfo = $postinfos[0];
 	$permission=false;
-	if ((_is_usr_loggedin() && $user_ID==$postinfo['author'])){
+	if ((_is_usr_loggedin() && $user_ID==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
 		$permission=true;
         }
 	
@@ -263,7 +263,7 @@ function _edit_ad(){
 	$postinfo = $postinfos[0];
 
 	$permission=false;
-	if ((_is_usr_loggedin() && $user_ID==$postinfo['author'])){
+	if ((_is_usr_loggedin() && $user_ID==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
 		$permission=true;
         }
 	if (!$permission) {
@@ -363,7 +363,7 @@ function _edit_ad(){
 	} 
 	if ($displayform==true){
 
-		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id WHERE ads_id = '".(int)$_GET['aid']."'";
+		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id WHERE ads_id = '".(int)$_GET['aid']."'";
 
 		$postinfos = $wpdb->get_results($sql);
 		$postinfo = $postinfos[0];
@@ -628,7 +628,7 @@ function _display_ad(){
 		$post = $posts[$i];
 
 		$permission=false;
-		if ((_is_usr_loggedin() && $user_ID==$post->author)){
+		if ((_is_usr_loggedin() && $user_ID==$post->author) || _is_usr_admin() || _is_usr_mod()){
 			$permission=true;
         	}
 		if (!$permission) {
