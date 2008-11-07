@@ -70,7 +70,6 @@ function wpc_index(){
 	global $_GET, $user_ID, $table_prefix, $wpdb;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
-	$userfield = get_wpc_user_field();
 
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
@@ -206,7 +205,7 @@ function _delete_ad(){
 
 	$postinfo = $postinfos[0];
 	$permission=false;
-	if ((_is_usr_loggedin() && $user_ID==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
+	if ((_is_usr_loggedin() && $user_ID==$postinfo['author'])){
 		$permission=true;
         }
 	
@@ -264,7 +263,7 @@ function _edit_ad(){
 	$postinfo = $postinfos[0];
 
 	$permission=false;
-	if ((_is_usr_loggedin() && $user_ID==$postinfo['author']) || _is_usr_admin() || _is_usr_mod()){
+	if ((_is_usr_loggedin() && $user_ID==$postinfo['author'])){
 		$permission=true;
         }
 	if (!$permission) {
@@ -629,7 +628,7 @@ function _display_ad(){
 		$post = $posts[$i];
 
 		$permission=false;
-		if ((_is_usr_loggedin() && $user_ID==$post->author) || _is_usr_admin() || _is_usr_mod()){
+		if ((_is_usr_loggedin() && $user_ID==$post->author)){
 			$permission=true;
         	}
 		if (!$permission) {
