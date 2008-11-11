@@ -88,21 +88,18 @@ function get_wpc_user_field(){
 
 function _is_usr_admin(){
 	global $userdata, $user_level;
-	$user_level = $userdata->wp_user_level;
 	if ($user_level && $user_level>=8) return true;
 	else return ($userdata->wp_user_level >= 8)?true:false;
 }
 
 function _is_usr_mod($classified=0){
 	global $userdata, $user_level;
-	$user_level = $userdata->wp_user_level;
 	if ($user_level && $user_level>4) return true;
 	else return ($userdata->wp_user_level > 4)?true:false;
 }
 
 function _is_usr_loggedin(){
 	global $userdata, $user_level, $user_ID;
-	$user_level = $userdata->wp_user_level;
 	if ($user_level && $user_level>=1) return true;
 	elseif ($user_ID) return true;
 	else return ($userdata->wp_user_level >=1)?true:false;
