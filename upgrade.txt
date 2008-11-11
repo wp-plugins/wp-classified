@@ -1,12 +1,9 @@
 Upgrade Instructions
 
    1. Deactivate the plugin from your WordPress admin panel.
-   2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
-   3. Activate the plugin from your WordPress admin panel.
-   4. Please Note: after the upgrade you need to check the setting in 'wpClassified' page in admin interface and SAVE!
+   2. Backup Database tables *_wpClassified_* and files.
+   3. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
+   4. Activate the plugin from your WordPress admin panel.
+   5. Please Note: after the upgrade you need to check the setting in 'wpClassified' page in admin interface check that all the required fields are filled in and save!
 
 
-###########
-Für alle Benutzer aus Deutschland:
-In der Datei wp-config.php soll wie gewohnt über 
-define ('WPLANG', 'de_DE'); die Sprache des Frontends angegeben werden.
