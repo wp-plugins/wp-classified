@@ -39,7 +39,7 @@ function wpClassified_spam_filter($name, $email, $subject, $post, $userID){
 
 
 function adm_modify_process(){
-	global $_GET, $_POST, $table_prefix, $PHP_SELF, $wpdb, $user_level;
+	global $_GET, $_POST, $table_prefix, $PHP_SELF, $wpdb;
 
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$wpcSettings = get_option('wpClassified_data');

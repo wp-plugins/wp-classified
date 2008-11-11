@@ -102,7 +102,7 @@ function wpc_index(){
 
 // function to list all ads already exist under a defined category
 function get_wpc_list($msg){
-	global $_GET, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang, $user_ID, $user_identity, $userdata, $user_level;
+	global $_GET, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang, $user_ID;
 	//$listId = get_query_var("lists_id");
 	$listId = get_query_var("lid");
 	get_currentuserinfo();

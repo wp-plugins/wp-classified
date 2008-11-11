@@ -8,7 +8,7 @@
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3.0-f';
+$wpClassified_version = '1.3.0-g';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
@@ -88,32 +88,27 @@ function get_wpc_user_field(){
 
 function _is_usr_admin(){
 	global $userdata, $user_level;
-	if ($user_level && $user_level>=8) 
-		return true;
-	else
-	return ($userdata->wp_user_level >= 8)?true:false;
+	if ($user_level && $user_level>=8) return true;
+	else return ($userdata->wp_user_level >= 8)?true:false;
 }
 
 function _is_usr_mod($classified=0){
 	global $userdata, $user_level;
-	if ($user_level && $user_level>4) 
-		return true;
-	else
-	return ($userdata->wp_user_level > 4)?true:false;
+	if ($user_level && $user_level>4) return true;
+	else return ($userdata->wp_user_level > 4)?true:false;
 }
 
 function _is_usr_loggedin(){
-	global $userdata, $user_level;
-	if ($user_level && $user_level>1) 
-		return true;
-	else
-	return ($userdata->wp_user_level > 1)?true:false;
+	global $userdata, $user_level, $user_ID;
+	if ($user_level && $user_level>=1) return true;
+	elseif ($user_ID) return true;
+	else return ($userdata->wp_user_level >=1)?true:false;
 }
 
 
 
 function wpc_get_top_lnks(){
-	global $_GET, $_POST, $user_level, $table_prefix, $wpdb, $wpmuBaseTablePrefix, $_SERVER;
+	global $_GET, $_POST, $table_prefix, $wpdb, $wpmuBaseTablePrefix, $_SERVER;
 	if (basename($_SERVER['PHP_SELF'])!='index.php'){
 		return "[[WP_CLASSIFIED]]";
 	} else {
@@ -171,7 +166,7 @@ function wpc_get_top_lnks(){
 
 
 function get_wpc_header_link(){
-	global $_GET, $_POST, $user_level, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER;
+	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER;
 	$pageinfo = get_wpClassified_pageinfo();
 # fix for WPMU version
 //	if (basename($_SERVER['PHP_SELF'])!='index.php')

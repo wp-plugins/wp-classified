@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.3.0-f
+Version: 1.3.0-g
 Requires at least: 2.3.x
 Author URI: http://www.forgani.com
 
@@ -85,9 +85,8 @@ Changes 1.3.0-e - Nov 03/11/2008
 - include the links of photo to the last ads's list
 - NEW: You can now place the last ads history on the sidebar as a widget
 
-Changes 1.3.0-f - Nov 05/11/2008
-- fixed the login problem wmpu and buddypress
-
+Changes 1.3.0-f,g - Nov 05/11/2008
+- fixed the login problem wmpu and buddypress and wp v2.6.3
 
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
@@ -555,7 +554,7 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 
 
 function wpClassified_process(){
-	global $_GET, $_POST, $table_prefix, $wpdb, $user_ID, $user_identity, $userdata, $user_level;
+	global $_GET, $_POST, $table_prefix, $wpdb, $user_ID, $user_identity;
 	$wpcSettings = get_option('wpClassified_data');
 	if (is_user_logged_in()) { 
 		get_currentuserinfo();	
@@ -1274,7 +1273,7 @@ function wpClassified_search_highlight($keywords,$post,$bgcolors='yellow'){
 }
 
 function create_post_html($post){
-	global $_GET, $_POST, $user_login, $userdata, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $user_identity, $table_prefix, $wpdb;
+	global $_GET, $_POST, $user_login, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $table_prefix, $wpdb;
 	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
 	switch ($wpcSettings["wpc_edit_style"]){
