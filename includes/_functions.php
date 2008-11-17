@@ -17,17 +17,21 @@ function wpc_header(){
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
+	
 	echo '<div class="wpc_head">';
-	if ($wpcSettings['classified_top_image']!=''){
-		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '">';
-	}
-	if ($wpcSettings['description']!=''){
-		echo '<p>'.$wpcSettings['description'] . "&nbsp;</p>";
-	}
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo '<h3>' . $lnks. '</h3>';
-?>
+	echo "<table width=90% border=0 cellspacing=0 cellpadding=8><tr>";
+	if ($wpcSettings['classified_top_image']!=''){
+		
+		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
+		echo '<td><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '"></td>';
+	}
+	if ($wpcSettings['description']!=''){
+		echo '<td valign=middle>'.$wpcSettings['description'] . "</td>";
+	}
+	echo "</tr></table>";
+	?>
 	<div class="wpc_search">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
@@ -44,6 +48,9 @@ function wpc_header(){
 <?php
 
 	
+	//
+	cleanUpIpTempImages();
+
 
 	$today = time();
 	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
@@ -773,6 +780,24 @@ function get_last_ads($format) {
 		$out .= "<BR />";
 	}	
 	return $out;
+}
+
+
+function cleanUpIpTempImages()  {
+	$dir = ABSPATH."wp-content/plugins/wp-classified/images/cpcc/";
+	$deleteTimeDiff=50;
+    if (!($dh = opendir($dir)))
+      throw new sfCacheException('Unable to open cache directory "'.$dir.'"');
+    $result = true;
+    while ($file = readdir($dh)) {
+      if (($file != '.') && ($file != '..')) {
+        $file2 = $dir.DIRECTORY_SEPARATOR.$file;
+        if (is_file($file2)) {
+            if ((mktime() - filemtime($file2)) < $$deleteTimeDiff)
+				@unlink ( $strDir.$strFile );
+			}
+        }
+    }
 }
 
 ?>

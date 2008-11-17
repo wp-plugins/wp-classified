@@ -455,7 +455,7 @@ function _send_email($mailto, $mailsubject, $mailtext) {
 # NOTIFICATION EMAILS 
 function _email_notifications($userId, $author_name, $listId, $subject, $post, $image, $asid) {
 	global$_GET, $_POST, $wpdb, $table_prefix, $lang, $PHP_SELF;
-
+	$pageinfo = get_wpClassified_pageinfo();
 	$wpcSettings = get_option('wpClassified_data');
 	$lst = $wpdb->get_results("SELECT name FROM {$table_prefix}wpClassified_lists WHERE lists_id=" .$listId);
 	$listName = $lst[0]->name;
@@ -481,8 +481,8 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 		$msg.= 'WebSite: ' . $url.$eol.$eol;
 		$msg.= $lang['_CLASSIFIED_AD'] . ': ' .$eol.$post_content.$eol.$eol;
 
-		$lnk = create_public_link("ads_subject", array("name"=>$subject, "lid"=>$listId, 'asid'=>$asid, "subject"=>$subject, "name"=>$listName));
-
+		//$lnk = create_public_link("ads_subject", array("name"=>$subject, "lid"=>$listId, 'asid'=>$asid, "subject"=>$subject, "name"=>$listName));
+		$lnk = get_bloginfo('wpurl'). "/?page_id=" . $pageinfo["ID"] . "&_action=va&lid=" . $listId . "&asid=". $asid;
 		$msg.= $eol .  "Visit: " . $lnk;
 
 		$msg.= $eol . $lang['_VIEWALLADS'] . ': '. get_bloginfo('wpurl'). '/index.php?pagename=classified';

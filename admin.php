@@ -465,16 +465,20 @@ function edit_ad(){
 	<input type="hidden" name="modify_ad" value="true">
 	<fieldset>
 	<legend>Original Ad (<?php echo $_GET['aid']; ?>)</legend>
+	<b><?php echo $rec->subject; ?></b><BR>
 	<div style="font-weight:normal;"><?php echo $rec->post;?></div>
 	</fieldset>
 	<fieldset>
 	<legend>Edit</legend>
 	<br>
-	<label>Editor:</label>
-	<?php echo "<textarea name='ad_content_data' id='ad_content_data' cols='80' rows='10'>".str_replace("<", "&lt;", $rec->post)."</textarea>" ?>	
-	<P>
-	<label>&nbsp;</label>
-	<input type="submit" value="Save">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);">
+	<table width="100%" class="editform" border="0">
+			<tr>
+				<td valign="top" align="left">Subject: </td><td><input type="text" size="60" name="ad_subject" id="ad_subject" value="<?php echo $rec->subject;?>" /></td></tr>
+				<tr><td valign="top" align="left">Description: </td><td><input type="hidden" name="ads_subjects_id" id="ads_subjects_id" value="<?php echo $rec->ads_ads_subjects_id;?>" /><br>
+				<?php echo "<textarea name='ad_content_data' id='ad_content_data' cols='80' rows='10'>".str_replace("<", "&lt;", $rec->post)."</textarea>" ?>	
+			</td></tr>
+			<tr><td valign="top" align="left"></td><td><BR><input type="submit" value="Save">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);"></td></tr>
+	</table>
 	</fieldset>
 	</form>
 	<?php
@@ -486,8 +490,11 @@ function save_ad(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 	$mod = $_POST['modify_ad'];
 	if ($mod=="true"){
-		$html = stripslashes($_POST['ad_content_data']); 
-		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET post = '".$html."' WHERE ads_id = '".(int)$_GET['aid']."'");
+		$html=stripslashes($_POST['ad_content_data']); 
+		$sbj=$_POST['ad_subject'];
+		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET post = '".$html."', subject='".$sbj."' WHERE ads_id = '".(int)$_GET['aid']."'");
+		$sql = "UPDATE {$table_prefix}wpClassified_ads_subjects SET subject='".$sbj."' WHERE ads_subjects_id=".$_POST['ads_subjects_id'];
+		$wpdb->query($sql);		
 	}
 	$msg = "Ad Saved";
 	return $msg;
