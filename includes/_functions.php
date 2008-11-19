@@ -787,7 +787,7 @@ function cleanUpIpTempImages()  {
 	$dir = ABSPATH."wp-content/plugins/wp-classified/images/cpcc/";
 	$deleteTimeDiff=50;
     if (!($dh = opendir($dir)))
-      throw new sfCacheException('Unable to open cache directory "'.$dir.'"');
+      echo 'Unable to open cache directory "'.$dir.'"';
     $result = true;
     while ($file = readdir($dh)) {
       if (($file != '.') && ($file != '..')) {
