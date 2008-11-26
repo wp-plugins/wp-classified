@@ -17,8 +17,8 @@ function wpc_header(){
 	if ($wpcSettings['count_ads_per_page'] < 1) { 
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
-	
 	echo '<div class="wpc_head">';
+
 	if ($lnks==""){$lnks = get_wpc_header_link();}
 	echo '<h3>' . $lnks. '</h3>';
 	echo "<table width=90% border=0 cellspacing=0 cellpadding=8><tr>";
@@ -299,6 +299,26 @@ function _edit_ad(){
 		} 
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
 			$msg = $lang['_INVALIDEMAIL2'];
+			$addPost = false;
+		}
+
+		if ($_POST['wpClassified_data'][web]) {
+			if (!checkUrl($_POST['wpClassified_data'][web])){
+				$msg = $lang['_INVALIDURL'];
+				$addPost = false;
+			}
+		}
+		if ($_POST['wpClassified_data'][phone]) {
+			if (!eregi("[a-z_A-Z]", $_POST['wpClassified_data'][phone]) ||
+				!checkLength($_POST['wpClassified_data'][phone],20) ){
+				$msg = $lang['_INVALIDPHONE'];
+				$addPost = false;
+			}
+		}
+		$_POST['wpClassified_data'][subject] = preg_replace("/(\<)(.*?)(\>)/mi", "", $_POST['wpClassified_data'][subject]);
+		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])=='' || 
+			!checkInput($_POST['wpClassified_data'][subject])){
+			$msg = $lang['_INVALIDTITLE'];
 			$addPost = false;
 		}
 		if($wpcSettings['confirmation_code']=='y'){ 
@@ -799,5 +819,9 @@ function cleanUpIpTempImages()  {
         }
     }
 }
+
+
+
+
 
 ?>

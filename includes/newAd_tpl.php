@@ -40,7 +40,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	</tr>
 	
 	<td class="wpc_label_right"><?php echo $lang['_EMAIL']; ?></td>
-	<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
+	<td><input type=text size=30 name="wpClassified_data[email]" onclick="checkEmail(this.form.wpClassified_data[email])" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 
 	<tr>
 	<td class="wpc_label_right"><?php echo $lang['_CONTACTBY']; ?></td>
@@ -58,6 +58,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td></tr>
 	<tr><td></td><td><hr></td></tr>
 	<tr>
+	<!-- "the text input must contains only letters and numbers." -->
 	<td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
 	<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 	<tr>
