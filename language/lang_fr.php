@@ -158,6 +158,14 @@ Localization by:
 	$lang['_ADDIMAGE'] = "Add Images";
 	$lang['_DELIMAGE'] = "Delete Images";
 
+
+// from 1.3.g
+
+	$lang['_INVALIDURL'] = "Please enter a valid URL!";
+	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
+	$lang['_INVALIDTITLE'] = "Invalid character!, The Title should contain letters and numbers";
+
+
 	//$lang['_RETURNANN'] = "Retourner les sous-catégories d'annonces";
 	//$lang['_DU'] = "ajouté le";   
 	//$lang['_SENDBY'] = "Ajouté par:";

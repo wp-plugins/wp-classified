@@ -55,7 +55,23 @@ function _add_ad(){
 				$msg = $lang['_INVALIDEMAIL'];
 				$addPost = false;
 			}
-
+			if ($_POST['wpClassified_data'][web]) {
+				if (!checkUrl($_POST['wpClassified_data'][web])){
+					$msg = $lang['_INVALIDURL'];
+					$addPost = false;
+				}
+			}
+			if ($_POST['wpClassified_data'][phone]) {
+				if (!eregi("[a-z_A-Z]", $_POST['wpClassified_data'][phone]) ||
+					!checkLength($_POST['wpClassified_data'][phone],20) ){
+					$msg = $lang['_INVALIDPHONE'];
+					$addPost = false;
+				}
+			}
+			$_POST['wpClassified_data'][subject] = preg_replace("/(\<)(.*?)(\>)/mi", "", $_POST['wpClassified_data'][subject]);
+			if (! checkInput($_POST['wpClassified_data'][subject])){
+				$msg = "The Title should contain only letters and numbers";
+			}
 			if($wpcSettings['confirmation_code']=='y'){ 
 				if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    					$msg = $lang['_INVALIDCONFIRM'];
@@ -494,6 +510,27 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 	return $out;
 }
 
+function checkInput($input){ 
+	if (!checkLength($input,20)) return false;
+	if (ereg('[^A-Za-z0-9]', $input)) {
+		return true;
+	} 
+	return false;
+}
+
+function checkUrl($url)	{
+	if (!checkLength($url,30)) return false;
+	$res = (($ftest = @fopen($url, ‘r’)) === false) ? false : @fclose($ftest);
+	return ($res == TRUE) ? 1:0 ;
+}
+
+
+function checkLength($data,$max){
+	$len = strlen($data);
+	$rmax = true;
+	if($len > $max) $rmax = false;
+	return $rmax;
+}
 
 
 ?>

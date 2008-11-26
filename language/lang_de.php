@@ -144,4 +144,13 @@ fixed by Christoph Zeuch
 	$lang['_ADLINKINFO']="Diese Anzeige ist vom Anzeigetafel auf der WebSite ";
 	$lang['_ADDIMAGE'] = "Bilder hinzufügen";
 	$lang['_DELIMAGE'] = "Bilder entfernen";
+
+// from 1.3.g
+
+	$lang['_INVALIDURL'] = "Please enter a valid URL!";
+	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
+	$lang['_INVALIDTITLE'] = "Invalid character!, The Title should contain letters and numbers";
+
+
+
 ?>
