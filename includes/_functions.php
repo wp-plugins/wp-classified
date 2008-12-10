@@ -76,8 +76,6 @@ function wpc_header(){
 function wpc_index(){
 	global $_GET, $user_ID, $table_prefix, $wpdb;
 	get_currentuserinfo();
-	$wpcSettings = get_option('wpClassified_data');
-
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
 	$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists WHERE status != 'inactive' ORDER BY position ASC");
@@ -140,7 +138,6 @@ function get_wpc_list($msg){
 
 function wpc_read_not_allowed(){
 	global $user_level;
-	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
 
 	$tpl->assign('user_level', "<!--".($user_level)."-->");
@@ -636,11 +633,7 @@ function _display_ad(){
 
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_user_info ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID WHERE {$table_prefix}wpClassified_ads.ads_ads_subjects_id = '".(int)$_GET['asid']."' && {$table_prefix}wpClassified_ads.status = 'active' ORDER BY {$table_prefix}wpClassified_ads.date ASC";
 	
-
 	$posts = $wpdb->get_results($sql);
-
-
-	
 	
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
 		$hm = $wpcSettings['count_ads_per_page'];
@@ -699,7 +692,6 @@ function _display_ad(){
 function display_search($term){
 	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang;
 	get_currentuserinfo();
-	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 
 	#
@@ -775,6 +767,7 @@ function _filter_content($content, $searchvalue) {
 
 function get_last_ads($format) {
 	global $table_prefix, $wpdb, $lang;
+	$wpcSettings = get_option('wpClassified_data');
 	if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
 
 	$start = 0;
