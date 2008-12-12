@@ -306,8 +306,7 @@ function _edit_ad(){
 			}
 		}
 		if ($_POST['wpClassified_data'][phone]) {
-			if (!eregi("[a-z_A-Z]", $_POST['wpClassified_data'][phone]) ||
-				!checkLength($_POST['wpClassified_data'][phone],20) ){
+			if (!validate_phone($_POST['wpClassified_data'][phone])) {
 				$msg = $lang['_INVALIDPHONE'];
 				$addPost = false;
 			}
@@ -799,21 +798,29 @@ function get_last_ads($format) {
 function cleanUpIpTempImages()  {
 	$dir = ABSPATH."wp-content/plugins/wp-classified/images/cpcc/";
 	$deleteTimeDiff=50;
-    if (!($dh = opendir($dir)))
-      echo 'Unable to open cache directory "'.$dir.'"';
-    $result = true;
-    while ($file = readdir($dh)) {
-      if (($file != '.') && ($file != '..')) {
-        $file2 = $dir.DIRECTORY_SEPARATOR.$file;
-        if (is_file($file2)) {
-            if ((mktime() - filemtime($file2)) < $$deleteTimeDiff)
-				@unlink ( $strDir.$strFile );
-			}
-        }
-    }
+	if (!($dh = opendir($dir)))
+	echo 'Unable to open cache directory "'.$dir.'"';
+	$result = true;
+	while ($file = readdir($dh)) {
+	if (($file != '.') && ($file != '..')) {
+		$file2 = $dir.DIRECTORY_SEPARATOR.$file;
+		if (is_file($file2)) {
+		if ((mktime() - filemtime($file2)) < $$deleteTimeDiff)
+					@unlink ( $strDir.$strFile );
+				}
+		}
+	}
 }
 
 
+function validate_phone($phone){
+        $phoneregexp ='/^(\+[1-9][0-9]*(\([0-9]*\)|-[0-9]*-))?[0]?[1-9][0-9\- ]*$/';
+        $phonevalid = false;
+        if (preg_match($phoneregexp, $phone)) {
+                $phonevalid = true;
+        }
+	return $phonevalid;
+}
 
 
 

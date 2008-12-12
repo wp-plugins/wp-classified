@@ -55,7 +55,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<td class="wpc_label_right"><?php echo $lang['_WEB']; ?></td>
 	<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL'];?></span></td></tr>
 	<td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-	<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td></tr>
+	<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp; e.g. +98(231)12345</span></td></tr>
 	<tr><td></td><td><hr></td></tr>
 	<tr>
 	<!-- "the text input must contains only letters and numbers." -->

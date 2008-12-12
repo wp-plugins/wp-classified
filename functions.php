@@ -62,8 +62,7 @@ function _add_ad(){
 				}
 			}
 			if ($_POST['wpClassified_data'][phone]) {
-				if (!eregi("[a-z_A-Z]", $_POST['wpClassified_data'][phone]) ||
-					!checkLength($_POST['wpClassified_data'][phone],20) ){
+				if (!validate_phone($_POST['wpClassified_data'][phone])) {
 					$msg = $lang['_INVALIDPHONE'];
 					$addPost = false;
 				}

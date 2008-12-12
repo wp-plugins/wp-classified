@@ -52,7 +52,7 @@ onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php
 
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td></tr>
+<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp;e.g. +98(231)12345</span></td></tr>
 <tr><td></td><td><hr></td></tr>
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
