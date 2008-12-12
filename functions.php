@@ -145,7 +145,7 @@ function _add_ad(){
 			update_ads($_GET['lid']);
 		}
 		$_GET['asid'] = $tid;
-		get_wpc_list($lang['_SAVEADINFO'].$out."<br>".$lang['_THANKS']);
+		get_wpc_list($lang['_SAVEADINFO']."<br>".$lang['_THANKS']);
 			} else {
 				$displayform = true;
 			}
@@ -521,6 +521,15 @@ function checkUrl($url)	{
 	if (!checkLength($url,30)) return false;
 	$res = (($ftest = @fopen($url, ‘r’)) === false) ? false : @fclose($ftest);
 	return ($res == TRUE) ? 1:0 ;
+
+	/*
+	$online = exec("ping $url -c 1");  
+	if (eregi("unbekannter host", $online) || eregi("unknown host", $online)) {
+		$res == FLASE
+	} else {
+		$res == TRUE
+   	}
+	*/
 }
 
 
