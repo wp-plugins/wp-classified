@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.0-h
+name: wpClassified Wordpress plugins version 1.3.1-a
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -19,6 +19,8 @@ default and unchanged Permalink structure.
 == Installation ==
 
 This section describes how to install the plugin and get it working.
+Please test the plugin with your theme on a develop machine or a local machine, 
+if the test is successful then install it on the production machine.
 
 e.g.
 
@@ -75,6 +77,10 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 Changelog:
+
+Changes 1.3.1-a - Jan 20/01/2009
+- It covers changes between WordPress Version 2.6 and Version 2.7
+- fixed the widget control
 
 Changes 1.3.0-g - Nov 26/11/2008
 Bugfix release
@@ -153,10 +159,14 @@ Example for htaccess code to redirect to wpClassified
 
 You need an .htaccess file that is created/modified by wordpress via the Permalink/mod-rewrite option. 
 
-Please edit the .htaccess file in the root folder of your Wordpress.
+By using  the ‘/%postname%’ or ‘/%category%/%postname%/’ as permalink
+structure the plugin must work correctly and you do not need change anything.
+
+For something else please edit the .htaccess file in the root folder of your Wordpress.
 You can edit the .htaccess file by FTP.
 You use the default .htaccess file and modify the file as follow:
 The redirect should look something like this
+
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
@@ -172,8 +182,6 @@ RewriteRule !(classified|odlinks)/ /index.php [L]
 RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified [QSA,L,R,NS]
 </IfModule>
 # END WordPress
-
-
 
 
 

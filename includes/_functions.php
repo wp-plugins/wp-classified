@@ -6,7 +6,7 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.0-c
+* @version 1.3.1-a
 */
 
 if (!$_SESSION) session_start();
@@ -35,7 +35,7 @@ function wpc_header(){
 	<div class="wpc_search">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
-		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);">
+		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
 		</form>
 	</div>
 	<?php

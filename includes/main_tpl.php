@@ -5,7 +5,7 @@
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
-* @version 1.2.1
+* @version 1.3.1
 * show the Main page
 */
 

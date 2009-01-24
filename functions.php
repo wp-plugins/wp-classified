@@ -8,7 +8,7 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.0-b
+* @version 1.3.1-a
 */
 
 require('captcha_class.php');
@@ -69,7 +69,7 @@ function _add_ad(){
 			}
 			$_POST['wpClassified_data'][subject] = preg_replace("/(\<)(.*?)(\>)/mi", "", $_POST['wpClassified_data'][subject]);
 			if (! checkInput($_POST['wpClassified_data'][subject])){
-				$msg = "The Title should contain only letters and numbers";
+				$msg = $lang['_INVALIDTITLE'];
 			}
 			if($wpcSettings['confirmation_code']=='y'){ 
 				if (! _captcha::Validate($_POST['wpClassified_data'][confirmCode])) {
@@ -314,7 +314,7 @@ function _delete_img() {
 
 
 function create_public_link($action, $vars){
-	global $wpdb, $table_prefix;
+	global $wpdb, $table_prefix, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = get_wpClassified_pageinfo();
 	if (!$vars['post_jump']) {
@@ -325,7 +325,7 @@ function create_public_link($action, $vars){
 	$action = ($action=="lastAd")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">" . $lang['_MAIN'] . "</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
 		break;
 		case "classified":
 			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
@@ -510,7 +510,7 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 }
 
 function checkInput($input){ 
-	if (!checkLength($input,20)) return false;
+	if (!checkLength($input,30)) return false;
 	if (ereg('[^A-Za-z0-9]', $input)) {
 		return true;
 	} 

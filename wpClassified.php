@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author: Mohammad Forgani
-Version: 1.3.0-h
+Version: 1.3.1-a
 Requires at least: 2.3.x
 Author URI: http://www.forgani.com
 
@@ -15,35 +15,6 @@ demo: http://www.bazarcheh.de/?page_id=92
 
 
 Release Notes:
-
-Version 1.0.0 - 1/04/2008
-- Added Uninstall 
-
-Version 1.0.1 - 1/04/2008
-- fix bugs
-- implement a new structure
-
-Version 1.0.2 - March 16/2008
-- update to display the links to ads at the top of page 
-
-Version 1.1.0 - May 12/2008
-- update delete/modify ads function .
-- added Move ads function to admin interface.
-- fixed some issue which are posted to me.
-- using Permalinks. Example to update .htaccess Rewrite Rules.
-
-Version 1.1.1 - June 03/2008
-- fix the search function
-- implement RSS Feeds
-- add admin email notification
-
-Version 1.2.0 - Augst 10/08/2008
-Changes August 10/2008
-- update {table_prefix}wpClassified_ads_subjects 
-and added some new fields email, web, phone, ...
-- implement the conformaion code (captcha)
-- implement language files (The Work is Not Finished!)
-- added sent to his friend's button
 
 release 1.2.0-e - Augst 20/08/2008
 
@@ -57,11 +28,8 @@ Admin Side
 - implement the maximum character limit
 - added two directory within the “/images” directory cpcc and topic. 
 You will need to make the folders writable (chmod 777).
-
-
-- deactivate the confirmation code
-- add Google AdSense for Classifieds
-
+- option to deactivate the confirmation code
+- added google AdSense
 
 release 1.3.0 - Sep 10/09/2008
 
@@ -71,7 +39,6 @@ release 1.3.0 - Sep 10/09/2008
 - All the pages using templates
 - Added style sheet for page layout 
 
-
 Changes 1.3.0-b - Sep 13/10/2008
 - Modify to expand and collapses the Categories
 - Modify to show the last post in footer
@@ -79,7 +46,6 @@ Changes 1.3.0-b - Sep 13/10/2008
 
 Changes 1.3.0-c - Sep 27/10/2008
 - extending the Administration Interface
-
 
 Changes 1.3.0-e - Nov 03/11/2008
 - include the links of photo to the last ads's list
@@ -91,16 +57,18 @@ Changes 1.3.0-f,g - Nov 05/11/2008
 Changes 1.3.0-h - Nov 26/11/2008
 Bugfix release
 
+Changes 1.3.1-a - Jan 20/01/2009
+- It covers changes between WordPress Version 2.6 and Version 2.7
+- fixed the widget
+
+
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
 */
 
-//require_once('settings.php');
-
-///////////////////////
+ERROR_REPORTING(0); 
 require_once(dirname(__FILE__).'/settings.php');
-////////////////////////////////////////
 
 add_filter("the_content", "wpClassified_page_handle_content");
 add_filter("the_title", "wpClassified_page_handle_title");
@@ -111,22 +79,14 @@ if (function_exists('add_action')) {
 	add_action('admin_menu', 'wpcAdmpage');
 }
 
-/////////////////////////////////////////////
 
 add_action('template_redirect', 'rss_feed');
-/*
-add_action( 'in_admin_footer', 'wpClassified_admin_footer' );
-function wpClassified_admin_footer() {
-	global $wpClassified_version;
-	$plugin_data = get_plugin_data( __FILE__ );
-	printf('%1$s plugin | Version %2$s<br />', "wpClassified", $wpClassified_version);
-}
-*/
 
 // wpClassified settings 
 function wpcOptions_process(){
 	global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $wpClassified_version, $wp_version, $lang;
-	ShowImg();
+
+	javaShowCategoryImg();
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 	<?php
@@ -143,14 +103,10 @@ function wpcOptions_process(){
 			update_option('wpClassified_data', $_POST['wpClassified_data']);
 			$msg = "Settings Updated!";
 		break;
-		case "createpage":	
-			$dt = date("Y-m-d");
-			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
-			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
-				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
-			}
-		break;
+		case "install":
+			include("wpClassified_db.php");
+			wpClassified_db();
+		break;	
 	}
 
 	if ($msg!=''){
@@ -163,38 +119,26 @@ function wpcOptions_process(){
 
 	$wpcSettings = get_option('wpClassified_data');
 
-	$pageinfo = get_wpClassified_pageinfo();
-	if ($pageinfo == false){
-		echo "<h2>The wpClassified Page not found.</h2>";
-	?>
-	<hr />	
-	<h2><?php 'Create wpClassifieds Page'; ?></h2>
-	<p style="text-align: left;">
-	<?php 'The wpClassified plugin Page will be created automatically'; ?>
-	</p>
-	<form method="post" id="create_wpcOptions" name="create_wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=createpage">
-	<p style="text-align: center;">
-	<input type="submit" name="do" value="<?php echo 'wpClassified Create Page'; ?>" class="button" />
-	</p>
-	</form>
-	<pre>
-	<h3>Or you can create the page manually in 3 steps:</h3>
-
- 1- Go to 'WP-Admin -> Write -> Write Page' 
- 2- Type in the post's title area [[WP_CLASSIFIED]]
- 3- Type '[[WP_CLASSIFIED]]' in the post's content area (without the quotes) 
-</pre>
-
-	<?php
-		 return null;
-	};
+	$t = $table_prefix.'wpClassified';
+	if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+		wpClassified_install();
+		$pageinfo = get_wpClassified_pageinfo();
+		if ($pageinfo == false){
+			$dt = date("Y-m-d");
+			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
+			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
+			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
+				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
+			}
+		}
+	}
 
 	$url = "<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=classified\">".get_bloginfo('wpurl')."/index.php?pagename=classified</a>";
-    
 	?>
+	<div class="wrap">
 	<p>
-	<form method="post" id="wpcOptions" name="wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=savesettings">
-
+	<form method="post" id="wpcOptions" name="wpcOptions" action="<?php echo $PHP_SELF;?>?page=wpcOptions&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=savesettings">
+	<h2>General Settings</h2>
 	<table><tr valign="top"><td>
 	<fieldset class="fieldset">
 	<legend class="legend"><strong>Classifeds Page Details</strong></legend>
@@ -532,7 +476,8 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 <table width="99%"><tr><td>
 	<tr>
 		<th align="right" valign="top"><?php echo $lang['_NEWADDEFAULT'];?></th>
-		<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will auto-removed this many days after the ad is created. default:90 days</span></td>
+		<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will be auto-removed after these
+			number of days since creation. default:365 days</span></td>
 	</tr>
 	<tr>
 		<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>
@@ -548,7 +493,7 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 	</tr>
 </table>
 </fieldset>
-</td></tr></table>
+</td></tr></table></div>
 <p><input type=submit value="Update wpClassifieds Settings"></p>
 	</form>
 	</p>
@@ -562,8 +507,8 @@ function wpClassified_process(){
 	if (is_user_logged_in()) { 
 		get_currentuserinfo();	
 		//_e('Hello, ');
-       		//echo $user_identity;
-        	//_e('!');
+		//echo $user_identity;
+		//_e('!');
 	}
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
@@ -618,41 +563,25 @@ function adm_sync_count($id){
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET ads = '".$posts."', ads_status = '".$ads."' WHERE lists_id = '".$id."'");
 }
 
-
 function wpcAdmpage(){
-	global $wpc_admin_menu, $wpc_admin_menu, $wpc_user_level;
-	add_management_page($wpc_admin_menu, $wpc_admin_menu, $wpc_user_level, 'wpClassified', 'wpClassified_adm_page');
+	global $wpc_admin_menu, $wpc_admin_menu, $wpc_user_level, $adm_links;
+	$wpcSettings = get_option('wpClassified_data');
+	
+	add_menu_page('wpClassified','wpClassified',8,__FILE__,'wpcOptions_process','../wp-content/plugins/wp-classified/images/wpc.gif');
+	$wpcSettings = get_option('wpClassified_data');
+	for ($i=0; $i<count($adm_links); $i++){
+		$tlink = $adm_links[$i];
+		add_submenu_page(__FILE__,$tlink['name'],$tlink['name'],8,$tlink['arg'],$tlink['prg']);
+	}
 }
 
-
 function wpClassified_adm_page(){
-	global $_GET, $_POST, $PHP_SELF, $wpdb, $adm_links, $table_prefix;
+	global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix;
 	get_currentuserinfo();
 	$wpcSettings = get_option('wpClassified_data');
-
-	$t = $table_prefix.'wpClassified';
-        if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
-		wpClassified_install();
-        }
-	
 	?>
+	
 	<div class="wrap">
-		<ul id="<?php echo "submenu"; ?>">
-		<?php
-			for ($i=0; $i<count($adm_links); $i++){
-				$tlink = $adm_links[$i];
-				if ($tlink['arg']==$_GET['adm_arg'] || (!$_GET['adm_arg'] && $i==0)){
-					$sel = " class=\"current\"";
-					$pagelabel = $tlink['name'];
-				} else {
-					$sel = "";
-				}
-			?>
-			<li><a href='<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $tlink['arg'];?>'<?php echo $sel;?>><?php echo __($tlink['name']);?></a></li>
-			<?php
-			}
-			?>
-		</ul>
 		<h2><?php echo __($pagelabel);?></h2>
 			<?php
 			switch ($_REQUEST['adm_arg']){
@@ -737,7 +666,6 @@ function wpClassified_install(){
 	$wpcSettings['wpClassified_display_last_post_link'] = 'y';
 	$wpcSettings['wpClassified_last_ads_subject_num'] = 5;
 	$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
-	$wpcSettings['widget_format']= "n";
 	$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 	$wpcSettings['ad_expiration'] = "180";
@@ -746,18 +674,19 @@ function wpClassified_install(){
 }
 
 function wpClassified_check_db(){
-	include("wpClassified_db.php");
-	wpClassified_db();
+	$activate_url = $PHP_SELF . '?page=wpcOptions&adm_arg=' . $_GET['adm_arg'] . '&adm_action=install';
+	echo '<div class="wrap"><h2>Installation the wpClassified</h2>';
+	echo '<h3><strong>&nbsp;&nbsp;<a href='.$activate_url.'>Click Here</a> to install the wpClassified.</strong></h3></div>';
 }
 
 function adm_structure_process(){
 	global $_GET, $_POST, $table_prefix, $PHP_SELF, $wpdb;
 
-	ShowImg();
+	javaShowCategoryImg();
 	$t = $table_prefix.'wpClassified';
 	$tab = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'");
 	if(!$tab) {
-		echo "<h3>No Classifieds tables found in database, Maybe you simply forget to save settings?</h3>";
+		echo "<h3>No wpClassified tables found in database, May be you simply forget to save settings?</h3>";
 	}	
 	switch ($_GET['adm_action']){
 		case "saveCategory":
@@ -836,7 +765,7 @@ function adm_structure_process(){
 		$categoryinfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'", ARRAY_A);
 	?>
 	<p>
-	<form method="post" id="admCatStructure" name="admCatStructure" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveCategory&categories_id=<?php echo $_GET['categories_id'];?>">
+	<form method="post" id="admCatStructure" name="admCatStructure" action="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveCategory&categories_id=<?php echo $_GET['categories_id'];?>">
 		<table border=0 class="editform">
 		<tr><th align="right">Category Name</th>
 		<td><input type=text size=80 name="wpClassified_data[name]" value="<?php echo $categoryinfo['name'];?>"></td>
@@ -885,7 +814,7 @@ function adm_structure_process(){
 		$classifiedinfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 	?>
 	<p>
-	<form method="post" id="admLstStructure" name="admLstStructure" action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveList&lid=<?php echo $_GET['lid'];?>">
+	<form method="post" id="admLstStructure" name="admLstStructure" action="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveList&lid=<?php echo $_GET['lid'];?>">
 		<table border=0 class="editform">
 			<tr>
 				<th align="right">List Name</th>
@@ -942,8 +871,10 @@ function adm_structure_process(){
 		}
 		-->
 		</script>
-		<input type=button value="Add Category" onclick="document.location.href='<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=0';">
-		 <input<?php echo (count($categories)<1)?" disabled":"";?> type=button value="Add List" onclick="document.location.href='<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=0';">
+		<div class="wrap">
+		<H2>Add/Edit Categories</H2><HR>
+		<input type=button value="Add Category" onclick="document.location.href='<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=0';">
+		 <input<?php echo (count($categories)<1)?" disabled":"";?> type=button value="Add List" onclick="document.location.href='<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=0';">
 		<?php
 		for ($i=0; $i<count($tlists); $i++){
 			$lists[$tlists[$i]->wpClassified_lists_id][] = $tlists[$i];
@@ -963,12 +894,12 @@ function adm_structure_process(){
 		$category = $categories[$x];
 	?>
 		<tr>
-		<td><sup><h3><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupCategory&categories_id=<?php echo $category->categories_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownCategory&categories_id=<?php echo $category->categories_id;?>">&darr;</a> <?php
+		<td><sup><h3><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupCategory&categories_id=<?php echo $category->categories_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownCategory&categories_id=<?php echo $category->categories_id;?>">&darr;</a> <?php
 		if (count($lists[$category->categories_id])<1){
-			?> <a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');" style="color: red; font-size: 10px;">[Delete]</a><?php
+			?> <a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');" style="color: red; font-size: 10px;">[Delete]</a><?php
 		}
 		?></h3></sup></td>
-		<td colspan=2><h3><a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=<?php echo $category->categories_id;?>"><?php echo $category->name;?></a></h3></td>
+		<td colspan=2><h3><a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=<?php echo $category->categories_id;?>"><?php echo $category->name;?></a></h3></td>
 		<td colspan=3></td>
 			</tr>
 			<?php
@@ -977,8 +908,8 @@ function adm_structure_process(){
 				?>
 				<tr>
 					<td></td>
-					<td><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupList&lid=<?php echo $tfs[$i]->lists_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownList&lid=<?php echo $tfs[$i]->lists_id;?>">&darr;</a></td>
-					<td><span style="font-size: 10px;">(<?php echo $liststatuses[$tfs[$i]->status];?>)</span> <a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=<?php echo $tfs[$i]->lists_id;?>"><?php echo $tfs[$i]->name;?></a></td>
+					<td><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupList&lid=<?php echo $tfs[$i]->lists_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownList&lid=<?php echo $tfs[$i]->lists_id;?>">&darr;</a></td>
+					<td><span style="font-size: 10px;">(<?php echo $liststatuses[$tfs[$i]->status];?>)</span> <a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=<?php echo $tfs[$i]->lists_id;?>"><?php echo $tfs[$i]->name;?></a></td>
 					<td align=right><?php echo $tfs[$i]->ads_status;?></td>
 					<td align=right><?php echo $tfs[$i]->ads;?></td>
 					<td align=right><?php echo $tfs[$i]->ads_views;?></td>
@@ -987,7 +918,7 @@ function adm_structure_process(){
 			}
 		}
 		?>
-		</table>
+		</table></div>
 		<?php
 	}
 }
@@ -1039,6 +970,8 @@ function adm_users_process(){
 			$numusers = $wpdb->get_results("select count(*) as numusers from {$wpmuBaseTablePrefix}users $where ", ARRAY_A);
 			$numusers = $numusers[0]["numusers"];
 			?>
+			<div class="wrap">
+			<h2>Users Admin</h2>
 			<form method="get" id="adm_form_get" action="<?php echo $_SERVER["PHP_SELF"];?>">
 				<input type="hidden" name="adm_arg" value="<?php echo $_GET["adm_arg"];?>" />
 				<input type="hidden" name="page" value="wpClassified" />
@@ -1061,19 +994,19 @@ function adm_users_process(){
 			</form>
 			<table width="100%" cellpadding="3" cellspacing="3" border="0">
 				<tr>
-					<th></th>
-					<th>ID</th>
-					<th>Username</th>
-					<th>Display Name</th>
-					<th>E-mail Address</th>
-					<th>URL</th>
+					<th align="left">Action</th>
+					<th align="left">ID</th>
+					<th align="left">Username</th>
+					<th align="left">Display Name</th>
+					<th align="left">E-mail Address</th>
+					<th align="left">URL</th>
 				</tr>
 				<?php		
 				foreach ($all_users as $user){
 				$bgcolor = ($bgcolor=="#CCCCCC")?"#DDDDDD":"#CCCCCC";
 				?>
 				<tr bgcolor="<?php echo $bgcolor;?>">
-				<td align="center"><a href="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=edit&id=<?php echo $user["ID"];?>&start=<?php echo $start;?>&perpage=<?php echo $perpage;?>&term=<?php echo urlencode($_GET["term"]);?>">Edit</a></td>
+				<td align="left"><a href="<?php echo $PHP_SELF;?>?page=wpcUsers&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=edit&id=<?php echo $user["ID"];?>&start=<?php echo $start;?>&perpage=<?php echo $perpage;?>&term=<?php echo urlencode($_GET["term"]);?>">Edit</a></td>
 				<td><?php echo eregi_replace("(".$_GET["term"].")", "<font color=\"red\"><b>\\1</b></font>", $user["ID"]);?></td>
 				<td><?php echo eregi_replace("(".$_GET["term"].")", "<font color=\"red\"><b>\\1</b></font>", $user["user_login"]);?></td>
 				<td><?php echo eregi_replace("(".$_GET["term"].")", "<font color=\"red\"><b>\\1</b></font>", $user[$namefield]);?></td>
@@ -1089,7 +1022,7 @@ function adm_users_process(){
 			<?php
 			}
 			?>
-			</table>
+			</table></div>
 			<?php
 		break;
 		case "edit":
@@ -1105,7 +1038,7 @@ function adm_users_process(){
 
 			?>
 			<form method="post" id="admUser" name="admUser" enctype="multipart/form-data"
-			 action="<?php echo $_SERVER["PHP_SELF"];?>?page=wpClassified&adm_arg=<?php echo $_GET["adm_arg"];?>&adm_action=saveuser&id=<?php echo $_GET["id"];?>&start=<?php echo $_GET["start"];?>&perpage=<?php echo $_GET["perpage"];?>&term=<?php echo urlencode($_GET["term"]);?>">
+			 action="<?php echo $_SERVER["PHP_SELF"];?>?page=wpcUsers&adm_arg=<?php echo $_GET["adm_arg"];?>&adm_action=saveuser&id=<?php echo $_GET["id"];?>&start=<?php echo $_GET["start"];?>&perpage=<?php echo $_GET["perpage"];?>&term=<?php echo urlencode($_GET["term"]);?>">
 			<table width="100%">
 			<tr>
 				<td>ID</td>
@@ -1152,12 +1085,13 @@ function adm_utilities_process(){
 	global $_GET, $_POST, $wpdb, $table_prefix;
 	$t = $table_prefix.'wpClassified';
 	$wpcSettings = get_option('wpClassified_data');
+	$exit = FALSE;
 	switch ($_GET["adm_action"]){
 		default:
 		case "list":
 		break;
 		case "uninstall":
-			$msg = '<p>';
+			$msg .= '<div class="wrap">';
 			$msg .= '<h2>Uninstall wpClassified</h2>';
 			if($_tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
 				foreach ($_tables as $table){
@@ -1176,9 +1110,9 @@ function adm_utilities_process(){
 			if(function_exists('wp_nonce_url')) {
 				$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_wp-classified/wpClassified.php');
 			}
-			echo '<P><div class="wrap">';
-			echo '<p><strong><a href='.$deactivate_url.'>Click Here</a> To Finish The Uninstallation And wpClassified Will Be Deactivated Automatically.</strong></p>';
-			echo '</div><P>';
+			$msg .= '<h3><strong><a href='.$deactivate_url.'>Click Here</a> To Finish The Uninstallation And wpClassified Will Be Deactivated Automatically.</strong></h3>';
+			$msg .= '</div>';
+			$exit = TRUE;
 		break;
 	}
 
@@ -1189,44 +1123,46 @@ function adm_utilities_process(){
 		</p>
 		<?php
 	}
-	?>
-	<p>
-	<h2>Uninstall wpClassified</h2>
-	<p style="text-align: left;">Deactivating wpClassified plugin does not remove any data, which are created by installation. To completely remove the plugin, you can uninstall it here.'</p>
-	<p style="text-align: left; color: red">
-	<strong>WARNING:</strong><br />Once uninstalled, this cannot be undone. You should use a database backup of WordPress to back up all the classifieds data first.	</p>
-	<p style="text-align: left; color: red">
-	<strong>The following WordPress Options/Tables will be DELETED:</strong><br />
-	</p>
-	<table width="70%"  border="0" cellspacing="3" cellpadding="3">
-	<tr class="thead">
-		<td align="center"><strong>WordPress Tables</strong></td>
-	</tr>
-	<tr>
-	<td valign="top" style="background-color: #eee;">
-		<ol>
-		<?php
-		if($tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
-			foreach ($tables as $table){
-				echo '<li>'.$table.'</li>'."\n";
-			}
-		}
+	if (!$exit) {
 		?>
-		</ol>
-	</td>
-	</tr>
-	</table>
-	<p>&nbsp;</p>
-	
-	<form method="post" id="admUtilities" name="admUtilities"
-			 action="<?php echo $PHP_SELF;?>?page=wpClassified&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=uninstall">
-	<p style="text-align: center;">
-	<br />
-	<input type="submit" name="do" value="UNINSTALL wpClassified" class="button" onclick="return confirm('You Are About To Uninstall wpClassified From WordPress.\nThis Action Is Not Reversible.\n\n Choose [Cancel] To Stop, [OK] To Uninstall.')" />
-        </p>
-	</form>
-	</p>
-	<?php
+		<div class="wrap">
+		<h2>Uninstall wpClassified</h2>
+		<p style="text-align: left;">Deactivating wpClassified plugin does not remove any data, which are created by installation. To completely remove the plugin, you can uninstall it here.</p>
+		<p style="text-align: left; color: red">
+		<strong>WARNING:</strong><br />Once uninstalled, this cannot be undone. You should use a database backup of WordPress to back up all the classifieds data first.	</p>
+		<p style="text-align: left; color: red">
+		<strong>The following WordPress Options/Tables will be DELETED:</strong><br />
+		</p>
+		<table width="70%"  border="0" cellspacing="3" cellpadding="3">
+		<tr class="thead">
+			<td align="center"><strong>WordPress Tables</strong></td>
+		</tr>
+		<tr>
+		<td valign="top" style="background-color: #eee;">
+			<ol>
+			<?php
+			if($tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+				foreach ($tables as $table){
+					echo '<li>'.$table.'</li>'."\n";
+				}
+			}
+			?>
+			</ol>
+		</td>
+		</tr>
+		</table>
+		<p>&nbsp;</p>
+		
+		<form method="post" id="admUtilities" name="admUtilities"
+				action="<?php echo $PHP_SELF;?>?page=wpcUtilities&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=uninstall">
+		<p style="text-align: center;">
+		<br />
+		<input type="submit" name="do" value="UNINSTALL wpClassified" class="button" onclick="return confirm('You Are About To Uninstall wpClassified From WordPress.\nThis Action Is Not Reversible.\n\n Choose [Cancel] To Stop, [OK] To Uninstall.')" />
+			</p>
+		</form>
+		</div>
+		<?php
+	}
 }
 
 function wpClassified_page_handle_title($title){
@@ -1445,7 +1381,7 @@ function checknumberofcharacters(texttocheck,inst){
 	}
 }
 
-function ShowImg() {
+function javaShowCategoryImg() {
 echo "<script type=\"text/javascript\">\n";
 	echo "<!--\n\n";
 	echo "function showimage() {\n";
@@ -1463,8 +1399,6 @@ echo "<script type=\"text/javascript\">\n";
 	echo "'".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/' + document.admCatStructure.topImage.options[document.admCatStructure.topImage.selectedIndex].value;\n";
 	echo 'document.admCatStructure.elements["wpClassified_data[photo]"].value = document.admCatStructure.topImage.options[document.admCatStructure.topImage.selectedIndex].value;';
 		echo "}\n\n";
-
-
 		echo "//-->\n";
 		echo "</script>\n"; 
 }
@@ -1473,7 +1407,6 @@ echo "<script type=\"text/javascript\">\n";
 function widget_wpClassified_init() {
 	if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
 		return;
-	if ( function_exists('register_sidebar_widget') ) :
 	function widget_wpClassified($args) {
 		extract($args);
 		$wpcSettings = get_option('wpClassified_data');	
@@ -1482,13 +1415,15 @@ function widget_wpClassified_init() {
 		echo '<ul><li>';
 		echo _widget_display($wpcSettings['widget_format']);
 		echo '</li></ul>'.$after_widget;
+		echo $after_widget;
 	}
-	
+
+
 	function widget_wpClassified_control() {
 		$wpcSettings = $newoptions = get_option('wpClassified_data');
 		if ( $_POST["wpClassified-submit"] ) {
-			$newoptions['widget_title'] = strip_tags(stripslashes($_POST['wpClassified_data']['widget_title']));
-			$newoptions['widget_format'] = $_POST['wpClassified_data']['widget_format'];
+			$newoptions['widget_title'] = strip_tags(stripslashes($_POST['widget_title']));
+			$newoptions['widget_format'] = $_POST['widget_format'];
 			if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
 		}
 		if ( $wpcSettings != $newoptions ) {
@@ -1496,27 +1431,19 @@ function widget_wpClassified_init() {
 			update_option('wpClassified_data', $wpcSettings);
 		}
 		$title = htmlspecialchars($wpcSettings['widget_title'], ENT_QUOTES);
-		if ( empty($wpcSettings['widget_title']) ) $wpcSettings['widget_title'] = 'Last Classifieds Ads';
-	?>
-		<p><label for="wpClassified-widget_title"><?php _e('Title:'); ?><br /><input style="width: 250px;" id="wpClassified_data[widget_title]" name="wpClassified_data[widget_title]" type="text" value="<?php echo $wpcSettings['widget_title']; ?>" /></label></p>
-		<p>
+		if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
+		if ( empty($newoptions['widget_format']) ) $newoptions['widget_format'] = 'y';
+		?>
+		<label for="wpClassified-widget_title"><?php _e('Title:'); ?><input style="width: 200px;" id="widget_title" name="widget_title" type="text" value="<?php echo htmlspecialchars($wpcSettings['widget_title']); ?>" /></label></p>
+		<br />
 		<label for="wpClassified-widget_format">
-		<input class="checkbox" id="wpClassified_data[widget_format]" name="wpClassified_data[widget_format]" type="checkbox" value="y" <?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label>
-		</p>
+		<input class="checkbox" id="widget_format" name="widget_format" type="checkbox" value="y" <?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label><br />
 		<input type="hidden" id="wpClassified-submit" name="wpClassified-submit" value="1" />
-	<?php
+		<?php
 	}
-
-	global $use_own_css;
-
-	register_sidebar_widget('Classified', 'widget_wpClassified', null, 'wpClassified');
-	register_widget_control('Classified', 'widget_wpClassified_control', 300, 75, 'wpClassified');
-
-	endif;
-}
-
-function wpClassified_shortcode_handler($atts, $content=null){
-	return _widget_display($wpcSettings['widget_format']);
+	
+	register_sidebar_widget('wpClassified', 'widget_wpClassified', null, 'wpClassified');
+	register_widget_control('wpClassified', 'widget_wpClassified_control');
 }
 
 function _widget_display() {

@@ -5,7 +5,7 @@
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
-* @version 1.2.1
+* @version 1.3.1-a
 * 
 */
 
@@ -85,7 +85,7 @@ foreach($array as $f) {
 
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_HOW_LONG']; ?></td>
-<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><br><span class ="smallTxt">default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
+<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><br><span class ="smallTxt">(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
 </tr>
 <?php
 if($wpcSettings['confirmation_code']=='y') { 
@@ -101,7 +101,7 @@ if($wpcSettings['confirmation_code']=='y') {
 </tr>
 <?php
 } ?>
-<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
+<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td></tr>
 </form></table>
 </div>
 </div>

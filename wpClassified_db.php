@@ -1,5 +1,11 @@
 <?php
 
+/*
+* admin.php
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
+* @version 1.3.1-a
+*/
 
 function wpClassified_db(){
 	global $wpdb, $table_prefix, $wpClassified_version;
@@ -15,8 +21,7 @@ function wpClassified_db(){
 	`ads_status` int(11) NOT NULL default '0',
 	`ads` int(11) NOT NULL default '0',
 	`ads_views` int(11) NOT NULL default '0',
-	PRIMARY KEY  (`lists_id`),
-	KEY `lists_id` (`lists_id`)
+	PRIMARY KEY  (`lists_id`)
 	)";
 	
 	$wpClassified_sql[$table_prefix.'wpClassified_categories'] = "
@@ -26,8 +31,7 @@ function wpClassified_db(){
 	`photo` varchar(150) NOT NULL default 'Unnamed',
 	`position` int(11) NOT NULL default '0',
 	`status` enum('active','inactive') NOT NULL default 'inactive',
-	PRIMARY KEY  (`categories_id`),
-	KEY `categories_id` (`categories_id`)
+	PRIMARY KEY  (`categories_id`)
 	)";
 	
 	
@@ -105,6 +109,8 @@ function wpClassified_db(){
 		$tables[] = $tabs[$i][0];
 	}
 	@reset($wpClassified_sql);
+	echo '<div class="wrap"><h2>Installation the wpClassified</h2>';
+	
 	while (list($k, $v) = @each($wpClassified_sql)){
 		if (!@in_array($k, $tables)){
 			echo " - create table: " .  $k . "<BR>"; 
@@ -112,6 +118,8 @@ function wpClassified_db(){
 		}
 		$wpcSettings['wpClassified_installed'] = 'y';
 	}
+	echo "<h3>The tables have been created successfully. Now please save the settings!</h3>";
+	echo '</div>';
 }
 
 ?>
