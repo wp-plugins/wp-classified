@@ -268,9 +268,7 @@ function _delete_img() {
 		return;
 	}
 
-	
-	//$fp = fopen('/var/www/web5/html/wp-content/plugins/wp-classified/images/data.txt', 'w');
-	$link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=di&aid=".$_GET['aid']. "&file=".$_GET[file];
+	$link_del = get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$_GET['aid']. "&file=".$_GET[file];
 	if ($_POST['YesOrNo']>0){
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
 		$rec = $postinfo[0];
@@ -287,9 +285,6 @@ function _delete_img() {
 
 		$file = ABSPATH."wp-content/plugins/wp-classified/images/" . $_GET[file];
 		unlink($file);
-
-//fwrite($fp, $newstring . "\n");
-//fclose($fp);
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
 		$post = $postinfo[0];
 		if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
