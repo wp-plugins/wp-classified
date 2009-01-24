@@ -130,6 +130,12 @@ fixed by Christoph Zeuch
 	$lang['_INVALIDTERM'] = "Du muss den Allgemeinen Geschäftsbedingungen zustimmen!";
 
 //// from 1.2.0-h
+	$lang['_DATEFORMAT'] = "Date Format String:";
+	$lang['_ALLOWRSS'] = "Allow RSS Feeds:";
+	$lang['_COMFCODE'] = "Show the confirmation code:";
+	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
+
+//// from 1.2.0-h
 	$lang['_NEWPOST'] = "New Post";
 	$lang['_NOTIFYADMIN'] = "Notified: Administrator";
 	$lang['_NOTNOTIFY'] = "Not Notified";
@@ -149,8 +155,12 @@ fixed by Christoph Zeuch
 
 	$lang['_INVALIDURL'] = "Please enter a valid URL!";
 	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
-	$lang['_INVALIDTITLE'] = "Invalid character!, The Title should contain letters and numbers";
 
+// from 1.3.1
+
+	// from 1.3.1
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long";
+	$lang['_MAIN'] = "Main";
 
 
 ?>

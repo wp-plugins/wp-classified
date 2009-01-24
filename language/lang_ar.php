@@ -136,8 +136,8 @@
 
 //// from 1.2.0-h
 	$lang['_DATEFORMAT'] = "شكل التاريخ:";
-	$lang['_ALLOWRSS'] = "السماح بتغذية أر إس إس";
-	$lang['_COMFCODE'] = "اظهر رمز التأكيد";
+	$lang['_ALLOWRSS'] = "السماح بتغذية أر إس إس:";
+	$lang['_COMFCODE'] = "اظهر رمز التأكيد:";
 	$lang['_NOPOSTS'] = "ادخال عدد الاعلانات الحديثة:";
 
 //// from 1.2.1
@@ -155,7 +155,13 @@
 	$lang['_ADDIMAGE'] = "أضف صورة";
 	$lang['_DELIMAGE'] = "حذف صورة";
 
+// from 1.3.1, 1.3.g
 
+	$lang['_INVALIDURL'] = "Please enter a valid URL!";
+	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
+
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long";
+	$lang['_MAIN'] = "ابتدا";
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   

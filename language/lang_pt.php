@@ -139,8 +139,8 @@ Localization by:
 
 //// from 1.2.0-h
 	$lang['_DATEFORMAT'] = "Formato das Datas:";
-	$lang['_ALLOWRSS'] = "Habilitar RSS Feeds";
-	$lang['_COMFCODE'] = "Exibir código de confirmação";
+	$lang['_ALLOWRSS'] = "Habilitar RSS Feeds:";
+	$lang['_COMFCODE'] = "Exibir código de confirmação:";
 	$lang['_NOPOSTS'] = "Número de anúncios recentes no Feed RSS:";
 
 /// from 1.2.1
@@ -162,8 +162,7 @@ Localization by:
 
 	$lang['_INVALIDURL'] = "Please enter a valid URL!";
 	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
-	$lang['_INVALIDTITLE'] = "Invalid character!, The Title should contain letters and numbers";
-
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long"; 
 
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
@@ -175,5 +174,9 @@ Localization by:
 	//$lang['_BYMAIL'] = "Email :";
 	//$lang['_DISPO'] = "expires on";
 	//$lang['_NOMAIL'] = "We do not give out users email addresses, to contact them by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address. ";
+
+// from 1.3.1
+
+	$lang['_MAIN'] = "Main";
 
 ?>

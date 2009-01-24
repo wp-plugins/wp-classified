@@ -139,8 +139,8 @@ Localization by:
 
 //// from 1.2.0-h
 	$lang['_DATEFORMAT'] = "Format de la date:";
-	$lang['_ALLOWRSS'] = "Autoriser les fils RSS";
-	$lang['_COMFCODE'] = "Afficher le code de confirmation";
+	$lang['_ALLOWRSS'] = "Autoriser les fils RSS:";
+	$lang['_COMFCODE'] = "Afficher le code de confirmation:";
 	$lang['_NOPOSTS'] = "Nombre de posts récents pour les flux RSS:";
 
 //// from 1.2.1
@@ -163,7 +163,6 @@ Localization by:
 
 	$lang['_INVALIDURL'] = "Please enter a valid URL!";
 	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
-	$lang['_INVALIDTITLE'] = "Invalid character!, The Title should contain letters and numbers";
 
 
 	//$lang['_RETURNANN'] = "Retourner les sous-catégories d'annonces";
@@ -175,5 +174,11 @@ Localization by:
 	//$lang['_BYMAIL'] = "Email:";
 	//$lang['_DISPO'] = "expire le";
 	//$lang['_NOMAIL'] = "Nous ne divulguons à personne les adresses emails des utilisateurs. Pour les contacter par email, veuillez utiliser le formulaire de contact sur notre site en cliquant sur le lien email de l'annonce. Vous pouvez voir l'annonce à cette adresse web. ";
+
+// from 1.3.1
+
+	// from 1.3.1
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long";
+	$lang['_MAIN'] = "Main";
 
 ?>
