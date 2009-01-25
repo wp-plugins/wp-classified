@@ -3,9 +3,9 @@
 Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
-Author: Mohammad Forgani
+Author:Mohammad Forgani
 Version: 1.3.1-a
-Requires at least: 2.3.x
+Requires at least:2.3.x
 Author URI: http://www.forgani.com
 
 I create and tested on Wordpress version 2.3.2 
@@ -223,14 +223,14 @@ $imgPosition=array ('1' => 'Images on right');
 		</tr>
 		<tr>
 			<th align="right" valign="top">Max. Ad image size: </th>
-			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height: <input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
+			<td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height:<input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
 		</tr>
 		<tr>
 			<th align="right" valign="top">Thumbnail Width: </th>
 			<td><input type="text" size="5" name="wpClassified_data[thumbnail_image_width]" value="<?php echo $wpcSettings['thumbnail_image_width'];?>"><br /><span class="smallTxt">example: 120</span></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top">Ad first Image Alignment: </th>
+			<th align="right" valign="top">Ad first Image Alignment:</th>
 			<td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><span class="smallTxt">choose: left or right</span></td>
 		</tr>
 		<tr>
@@ -272,7 +272,7 @@ $imgPosition=array ('1' => 'Images on right');
 //for upgrade versions
 if (!$wpcSettings['googleID']) $wpcSettings['googleID'] = 'pub-2844370112691023';
 if (!$wpcSettings['inform_user_subject']) 
-	$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
+	$wpcSettings['inform_user_subject'] = "!sitename reminder:classified ads expiring soon!";
 if (!$wpcSettings['inform_user_body']) 
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = "180";
@@ -307,7 +307,7 @@ $textarea=array ('tinymce' => 'HTML with TinyMCE (inline wysiwyg)','plain' => 'N
 		</tr>
 		<tr>
 			<th align="right" valign="top">Ads displayed per page: </th>
-			<td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><span class="smallTxt">default: 10</span></td>
+			<td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><span class="smallTxt">default:10</span></td>
 		</tr>
 		<tr>
 			<th align="right" valign="top"><?php echo $lang['_DATEFORMAT'];?></th>
@@ -389,7 +389,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 	<tr><th align="left" colspan=2>Layout</th></tr>
 		<tr><td colspan=2 align="center">
 		<table><tr>
-		<td>Ad Product: </td>
+		<td>Ad Product:</td>
 		<td><select name="wpClassified_data[GADproduct]">
 			<?php
 			foreach($products as $key=>$value)	{
@@ -401,7 +401,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 			}
 			?>
 		</select></td>
-		<td>Ad Format: </td>
+		<td>Ad Format:</td>
 		<td><select name="wpClassified_data[GADformat]">
 			<optgroup label='Horizontal'>
 			<?php
@@ -427,7 +427,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 			}
 			?>
 		</select></td>	
-		<td>Link Format: </td>
+		<td>Link Format:</td>
 		<td><select name="wpClassified_data[GADLformat]">
 			<?php
 			foreach($lformats as $key=>$value)	{
@@ -445,7 +445,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 	<tr><th align="left" colspan=2>Ad Colours</th></tr>
 		<tr><td colspan=2 align="center">
 		<table><tr>
-		<td>Border: </td>
+		<td>Border:</td>
 		<td><input name='wpClassified_data[GADcolor_border]' id='wpClassified_data[GADcolor_border]' size='6' value='<?php echo $wpcSettings[GADcolor_border]; ?>'/>
 		</td>
 		<td>Title/Link: </td>
@@ -454,7 +454,7 @@ $adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'te
 		<td>Background: </td>
 		<td><input name='wpClassified_data[GADcolor_bg]' id='wpClassified_data[GADcolor_bg]' size='6' value='<?php echo $wpcSettings[GADcolor_bg]; ?>'/>
 		</td>
-		<td>Text: </td>
+		<td>Text:</td>
 		<td><input name='wpClassified_data[GADcolor_text]' id='wpClassified_data[GADcolor_text]' size='6' value='<?php echo $wpcSettings[GADcolor_text]; ?>'/>
 		</td>
 		<td>URL: </td>
@@ -488,7 +488,7 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 		<td><?php echo $lang['_NOTMESSAGESUBJECT'];?>&nbsp;&nbsp;<span class="smallTxt">(is currently not implemented!)</span><br />
 		<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
 		<textarea cols=60 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
-		<span class="smallTxt">example: !sitename reminder: classified ads expiring soon! </span></td></tr>
+		<span class="smallTxt">example: !sitename reminder:classified ads expiring soon! </span></td></tr>
 		<tr><th align="right" valign="top"><?php echo $lang['_NOTMESSAGEBODY'];?></th><td><textarea cols=60 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
 	</tr>
 </table>
@@ -666,7 +666,7 @@ function wpClassified_install(){
 	$wpcSettings['wpClassified_display_last_post_link'] = 'y';
 	$wpcSettings['wpClassified_last_ads_subject_num'] = 5;
 	$wpcSettings['wpClassified_last_ads_subjects_author'] = "y";
-	$wpcSettings['inform_user_subject'] = "!sitename reminder: classified ads expiring soon!";
+	$wpcSettings['inform_user_subject'] = "!sitename reminder:classified ads expiring soon!";
 	$wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 	$wpcSettings['ad_expiration'] = "180";
 	//}
@@ -715,6 +715,9 @@ function adm_structure_process(){
 		break;
 		case "deleteCategory":
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'");
+		break;
+		case "deleteList":
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'");
 		break;
 		case "moveupCategory":
 			$ginfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'", ARRAY_A);
@@ -860,7 +863,12 @@ function adm_structure_process(){
 		<script language=javascript>
 		<!--
 		function deleteCategory(x, y){
-			if (confirm("Are you sure you wish to delete the group:\n"+x)){
+			if (confirm("Are you sure you wish to delete the category:\n"+x)){
+				document.location.href = y;
+			}
+		}
+		function deleteList(x, y){
+			if (confirm("Are you sure you wish to delete the list:\n"+x)){
 				document.location.href = y;
 			}
 		}
@@ -881,38 +889,36 @@ function adm_structure_process(){
 		}
 ?>
 <hr>
-<table border=0 width=100%>
+<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/delete.png"> - delete category, including and all lists within.<p>  
+<table style="width: 100%; background-color:#fafafa; border:1px #C0C0C0 solid; border-spacing:1px;">
 	<tr>
-		<th></th>
-		<th align=left colspan=2>Category/List</th>
-		<th align=right width=100>Ad</th>
-		<th align=right width=100>List</th>
-		<th align=right width=100>Views</th>
+		<th style="border:1px #C0C0C0 solid; padding-left:2px" width=60>Delete</th>
+		<th style="border:1px #C0C0C0 solid; padding-left:2px" width=100>Move up/down</th>
+		<th style="border:1px #C0C0C0 solid; padding-left:2px" >Category/List</th>
+		<th style="border:1px #C0C0C0 solid; padding-left:2px" width=150>Number of ads</th>
+		<th style="border:1px #C0C0C0 solid; padding-left:2px" width=100>List</th>
+		<th style="border:1px #C0C0C0 solid; padding-left:2px" width=100>Views</th>
 	</tr>
 <?php
 	for ($x=0; $x<count($categories); $x++){
 		$category = $categories[$x];
 	?>
 		<tr>
-		<td><sup><h3><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupCategory&categories_id=<?php echo $category->categories_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownCategory&categories_id=<?php echo $category->categories_id;?>">&darr;</a> <?php
-		if (count($lists[$category->categories_id])<1){
-			?> <a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');" style="color: red; font-size: 10px;">[Delete]</a><?php
-		}
-		?></h3></sup></td>
-		<td colspan=2><h3><a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=<?php echo $category->categories_id;?>"><?php echo $category->name;?></a></h3></td>
-		<td colspan=3></td>
-			</tr>
-			<?php
-			$tfs = $lists[$category->categories_id];
-			for ($i=0; $i<count($tfs); $i++){
-				?>
-				<tr>
-					<td></td>
-					<td><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupList&lid=<?php echo $tfs[$i]->lists_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownList&lid=<?php echo $tfs[$i]->lists_id;?>">&darr;</a></td>
-					<td><span style="font-size: 10px;">(<?php echo $liststatuses[$tfs[$i]->status];?>)</span> <a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=<?php echo $tfs[$i]->lists_id;?>"><?php echo $tfs[$i]->name;?></a></td>
-					<td align=right><?php echo $tfs[$i]->ads_status;?></td>
-					<td align=right><?php echo $tfs[$i]->ads;?></td>
-					<td align=right><?php echo $tfs[$i]->ads_views;?></td>
+		<td style="border:1px #C0C0C0 solid; padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');"><img border=0 src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/delete.png"></a></td>
+		<td style="border:1px #C0C0C0 solid; padding-left:2px"><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupCategory&categories_id=<?php echo $category->categories_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownCategory&categories_id=<?php echo $category->categories_id;?>">&darr;</a> </sup></td>
+		<td colspan=4 style="border:1px #C0C0C0 solid; padding-left:2px"><a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=<?php echo $category->categories_id;?>"><?php echo $category->name;?></a></td>
+		</tr>
+		<?php
+		$tfs = $lists[$category->categories_id];
+		for ($i=0; $i<count($tfs); $i++){
+			?>
+			<tr>
+				<td></td>
+				<td style="padding-left:2px"><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupList&lid=<?php echo $tfs[$i]->lists_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownList&lid=<?php echo $tfs[$i]->lists_id;?>">&darr;</a></td>
+				<td style="padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteList('<?php echo $tfs[$i]->name; ?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteList&lid=<?php echo $tfs[$i]->lists_id;?>')"><img border=0 src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/delete.png"></a>&nbsp;(<?php echo $liststatuses[$tfs[$i]->status];?>) <a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=<?php echo $tfs[$i]->lists_id;?>"><?php echo $tfs[$i]->name;?></a></td>
+					<td style="padding-left:2px"><?php echo $tfs[$i]->ads_status;?></td>
+					<td style="padding-left:2px"><?php echo $tfs[$i]->ads;?></td>
+					<td style="padding-left:2px"><?php echo $tfs[$i]->ads_views;?></td>
 				</tr>
 				<?php
 			}
@@ -1096,7 +1102,7 @@ function adm_utilities_process(){
 			if($_tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
 				foreach ($_tables as $table){
 					$wpdb->query("DROP TABLE $table");
-					$msg .= '<font style="color: green;">';
+					$msg .= '<font style="color:green;">';
 					$msg .= 'Table ' . $table . ' has been deleted.';
 					$msg .= '</font><br />';
 				}
@@ -1128,9 +1134,9 @@ function adm_utilities_process(){
 		<div class="wrap">
 		<h2>Uninstall wpClassified</h2>
 		<p style="text-align: left;">Deactivating wpClassified plugin does not remove any data, which are created by installation. To completely remove the plugin, you can uninstall it here.</p>
-		<p style="text-align: left; color: red">
+		<p style="text-align: left; color:red">
 		<strong>WARNING:</strong><br />Once uninstalled, this cannot be undone. You should use a database backup of WordPress to back up all the classifieds data first.	</p>
-		<p style="text-align: left; color: red">
+		<p style="text-align: left; color:red">
 		<strong>The following WordPress Options/Tables will be DELETED:</strong><br />
 		</p>
 		<table width="70%"  border="0" cellspacing="3" cellpadding="3">
@@ -1138,7 +1144,7 @@ function adm_utilities_process(){
 			<td align="center"><strong>WordPress Tables</strong></td>
 		</tr>
 		<tr>
-		<td valign="top" style="background-color: #eee;">
+		<td valign="top" style="background-color:#eee;">
 			<ol>
 			<?php
 			if($tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
@@ -1203,7 +1209,7 @@ function wpClassified_search_highlight($keywords,$post,$bgcolors='yellow'){
 		foreach($matches[0] as $match){
 			preg_match("/$keyword/i", $match, $out);
 			$search_word = $out[0];
-			$newtext = str_replace($search_word,"<span style=\"background-color: ".$bgcolors[($word_no % $no_colors)].";\">$search_word</span>", $match);
+			$newtext = str_replace($search_word,"<span style=\"background-color:".$bgcolors[($word_no % $no_colors)].";\">$search_word</span>", $match);
 			$post = str_replace($match, $newtext, $post);
 		}
 		$word_no++;

@@ -259,7 +259,7 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		echo "</div>";
 		?>
 		<hr>
-		<table border=0 width=100%>
+		<table border=1 width=100%>
 			<tr>
 			<th></th>
 			<th align=left>Category/List</th>
@@ -540,6 +540,7 @@ function move_ad(){
 
 	return $msg;
 }
+
 
 
 function _move(){
