@@ -205,13 +205,18 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		}
 	}
 	?>
+	<style type="text/css">
+		table { background-color:#fafafa; border:1px #C0C0C0 double; border-collapse:collapse; }
+		th { border:1px #C0C0C0 solid; background-color:#fafafa; padding-left:2px; }
+		td { border:1px #C0C0C0 solid; padding-left:2px; }
+	</style>
 	<table width=100% cellpadding=3 cellspacing=0 border=0>
 	<tr>
-		<th align=left><?php echo __("Actions");?></th>
-		<th align=left><?php echo __("Ads");?></th>
-		<th align=left><?php echo __("Author");?></th>
-		<th align=right><?php echo __("Views");?></th>
-		<th align=right><?php echo __("Date");?></th>
+		<th><?php echo __("Actions");?></th>
+		<th><?php echo __("Ads");?></th>
+		<th><?php echo __("Author");?></th>
+		<th><?php echo __("Views");?></th>
+		<th><?php echo __("Date");?></th>
 	</tr>
 	<?php
 	for ($x=0; $x<count($ads); $x++){
@@ -258,21 +263,27 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		}	
 		echo "</div>";
 		?>
+
+		<P>
+		<style type="text/css">
+		table { background-color:#fafafa; border:1px #C0C0C0 double; border-collapse:collapse; }
+		th { border:1px #C0C0C0 solid; background-color:#fafafa; padding-left:2px; }
+		td { border:1px #C0C0C0 solid; padding-left:2px; }
+		</style>
 		<hr>
-		<table border=1 width=100%>
+		<table width=100%>
 			<tr>
-			<th></th>
-			<th align=left>Category/List</th>
-			<th align=right width=100>Subjects</th>
-			<th align=right width=100>Ads</th>
-			<th align=right width=100>Views</th>
+			<th>Category/List</th>
+			<th width=100>Subjects</th>
+			<th width=100>Ads</th>
+			<th width=100>Views</th>
 		</tr>
 		<?php
 			for ($x=0; $x<count($categories); $x++){
 				$category = $categories[$x];
 				?>
 				<tr>
-					<td colspan=2><h3><?php echo $category->name;?></h3></td>
+					<td><h3><?php echo $category->name;?></h3></td>
 					<td colspan=3></td>
 				</tr>
 				<?php
@@ -280,11 +291,10 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 				for ($i=0; $i<count($catIds); $i++){
 					?>
 					<tr>
-					<td></td>
 					<td><small>(<?php echo $liststatuses[$catIds[$i]->status]; ?>)</small> <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GET['adm_arg'];?>&lid=<?php echo $catIds[$i]->lists_id;?>"><?php echo $catIds[$i]->name;?></a></td>
-					<td align=right><?php echo $catIds[$i]->ads_status;?></td>
-					<td align=right><?php echo $catIds[$i]->ads;?></td>
-					<td align=right><?php echo $catIds[$i]->ads_views;?></td>
+					<td><?php echo $catIds[$i]->ads_status;?></td>
+					<td><?php echo $catIds[$i]->ads;?></td>
+					<td><?php echo $catIds[$i]->ads_views;?></td>
 				</tr>
 				<?php
 			}
@@ -441,7 +451,6 @@ function edit_ad(){
 			ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads.author
 			WHERE ads_id = '".(int)$_GET['aid']."'");
 
-       
 	$rec = $rec[0];
 	?>
 
