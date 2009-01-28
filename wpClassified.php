@@ -1418,10 +1418,13 @@ function widget_wpClassified_init() {
 		$wpcSettings = get_option('wpClassified_data');	
 		echo $before_widget;
 		echo $before_title . $wpcSettings['widget_title'] . $after_title;
-		echo '<ul><li>';
-		echo _widget_display($wpcSettings['widget_format']);
-		echo '</li></ul>'.$after_widget;
-		echo $after_widget;
+
+		$fieldsPre="wpc_";
+		$before_tag=stripslashes(get_option($fieldsPre.'before_Tag'));
+		$after_tag=stripslashes(get_option($fieldsPre.'after_Tag'));
+
+		//echo $before_tag . _widget_display($wpcSettings['widget_format']) . $after_tag;
+		echo '<ul>' . _widget_display($wpcSettings['widget_format']) . '</ul>'; 
 	}
 
 

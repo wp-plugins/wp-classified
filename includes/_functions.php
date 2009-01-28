@@ -768,16 +768,17 @@ function get_last_ads($format) {
 	global $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
+	if ($format == 'y') $wpcSettings['count_last_ads'] = 5;
 
 	$start = 0;
 	$out ='';
 
-    	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+   	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
  	$lastAds = $wpdb->get_results($sql);
 
 	foreach ($lastAds as $lastAd) {
 		$link=create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
-		$out .= $link;
+		$out .= '<li>'.$link;
 		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
 		$rec = $wpdb->get_row($sql);
 		$array = split('###', $rec->image_file);
@@ -789,7 +790,7 @@ function get_last_ads($format) {
 			}
 			$out .= "&nbsp;<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
 		}
-		$out .= "<BR />";
+		$out .= "</li>\n";
 	}	
 	return $out;
 }
