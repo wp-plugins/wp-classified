@@ -506,7 +506,7 @@ function _email_notifications($userId, $author_name, $listId, $subject, $post, $
 
 function checkInput($input){ 
 	if (!checkLength($input,30)) return false;
-	if (ereg('[^A-Za-z0-9]', $input)) {
+	if (eregi('[^A-Za-z0-9]', $input)) {
 		return true;
 	} 
 	return false;

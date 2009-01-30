@@ -312,8 +312,7 @@ function _edit_ad(){
 			}
 		}
 		$_POST['wpClassified_data'][subject] = preg_replace("/(\<)(.*?)(\>)/mi", "", $_POST['wpClassified_data'][subject]);
-		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])=='' || 
-			!checkInput($_POST['wpClassified_data'][subject])){
+		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])=='' || !checkInput($_POST['wpClassified_data'][subject])){
 			$msg = $lang['_INVALIDTITLE'];
 			$addPost = false;
 		}
