@@ -179,4 +179,9 @@ Localization by:
 
 	$lang['_MAIN'] = "Main";
 
+// from 1.3.1-b
+	$lang['_APPROVE'] = "Thank You for using our Classified Ads.<br>Your classified ad has been sucessfully submitted for review!<br>Feel free to submit another ad.";
+	$lang['_APPROVEREPLY'] = "This ad was already submitted. We will check it as soon as possible.";
+
+
 ?>

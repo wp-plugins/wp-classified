@@ -63,21 +63,16 @@ onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php
 <?php
 
 $array = split('###', $postinfo->image_file);
-$img = $array[0];
-
-if ($img !='') { 
-	foreach($array as $f) {
-		include (dirname(__FILE__).'/js/viewer.js.php');
-		echo '<td align="center">';
-		echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a>";
-	?>
-		<!-- Image Upload -->
-		<br><?php echo $f; ?>
-		</td>
-	<?php
-	}
+foreach($array as $f) {
+	include (dirname(__FILE__).'/js/viewer.js.php');
+	echo '<td align="center">';
+	echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a>";
+?>
+	<!-- Image Upload -->
+	<br><?php echo $f; ?>
+	</td>
+<?php
 }
-
 ?>
 </tr></table>
 <tr><td colspan=2 align="center">

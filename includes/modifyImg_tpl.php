@@ -49,20 +49,15 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<h3><?php echo $lang['_DELIMAGE'];?></h3>
 	<table><tr>
 <?php
-$img = $array[0];
-
-	
-if ($img !='') { 
-	foreach($array as $f) {
-	?>
-	<td align="center">
-		<!-- Image Upload -->
-		<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $f; ?>" class="imgMiddle"  width="120" height="100"><br>
-		<?php echo create_public_link("di",array("aid"=>$post->ads_id, "name"=>$lang['_DELETE'], "file"=>$f ));
-		echo "&nbsp;(" . $f . ")"; ?>
-		</td>
-	<?php
-	}
+foreach($array as $f) {
+?>
+<td align="center">
+	<!-- Image Upload -->
+	<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $f; ?>" class="imgMiddle"  width="120" height="100"><br>
+	<?php echo create_public_link("di",array("aid"=>$post->ads_id, "name"=>$lang['_DELETE'], "file"=>$f ));
+	echo "&nbsp;(" . $f . ")"; ?>
+	</td>
+<?php
 }
 ?>
 </tr>

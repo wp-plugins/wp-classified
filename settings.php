@@ -8,12 +8,12 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.1-a
+* @version 1.3.1-b
 */
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3.1-a';
+$wpClassified_version = '1.3.1-b';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;

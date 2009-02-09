@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author:Mohammad Forgani
-Version: 1.3.1-a
+Version: 1.3.1-b
 Requires at least:2.3.x
 Author URI: http://www.forgani.com
 
@@ -61,13 +61,17 @@ Changes 1.3.1-a - Jan 20/01/2009
 - It covers changes between WordPress Version 2.6 and Version 2.7
 - fixed the widget
 
+Changes 1.3.1-b - Feb 09/02/2009
+- Modify to approve posts before they are published
+- fixed thumbnail image width
+
 
 Permalink structure:
 You will find an example for .htaccess file that uses to redirect 
 to wpClassified in the README file
 */
 
-ERROR_REPORTING(0); 
+//ERROR_REPORTING(0); 
 require_once(dirname(__FILE__).'/settings.php');
 
 add_filter("the_content", "wpClassified_page_handle_content");
@@ -203,6 +207,9 @@ $imgPosition=array ('1' => 'Images on right');
 		<tr>
 			<th align="right" valign="top">Number of image columns: </th>
 			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
+		</tr>
+		<th></th>
+		<td><input type=checkbox name="wpClassified_data[approve]" value="y"<?php echo ($wpcSettings['approve']=='y')?" checked":"";?>>posts must be pre-approved before being published.</td>
 		</tr>
 
 		<tr>
@@ -623,6 +630,7 @@ function wpClassified_install(){
 	$wpcSettings['wpClassified_version'] = $wpClassified_version;
 	$wpcSettings['userfield'] = get_wpc_user_field();
 	$wpcSettings['show_credits'] = 'y';
+	$wpClassified_data['approve]'] = 'y';
 	$wpcSettings['wpClassified_slug'] = 'Classifieds';
 	$wpcSettings['description'] = '';
 	$wpcSettings['must_registered_user'] = 'n';
@@ -713,11 +721,18 @@ function adm_structure_process(){
 			}
 			$msg = "List Saved!";
 		break;
-		case "deleteCategory":
+		case "deleteCategory":			
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id NOT IN (SELECT categories_id FROM {$table_prefix}wpClassified_categories)");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_ads_subjects_id NOT IN (SELECT lists_id FROM {$table_prefix}wpClassified_lists)");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 		break;
 		case "deleteList":
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE wpClassified_lists_id NOT IN (SELECT lists_id FROM {$table_prefix}wpClassified_lists)");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 		break;
 		case "moveupCategory":
 			$ginfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'", ARRAY_A);

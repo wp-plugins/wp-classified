@@ -35,7 +35,7 @@ $array = split('###', $post->image_file);
 $img = $array[0];
 if ($img !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img1\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" style=\"width: 120px; height: 100px\"></a></div>";
+	echo "<div class=\"show_ad_img1\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" style=\"width: ". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
 }
 ?>
 
@@ -56,11 +56,11 @@ Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-cl
 <?php
 if ($array[1] !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" style=\"width: 120px; height: 100px\"></a></div>"; //<br>" .$array[1] . "
+	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[1] . "
 } 
 if ($array[2] !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" style=\"width: 120px; height: 100px\"></a></div>"; //<br>" .$array[2] . "
+	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[2] . "
 } 
 ?>
 

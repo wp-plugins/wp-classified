@@ -174,21 +174,19 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		$_GET['start'] = 0;
 	}
 
-	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+	$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}wpClassified_ads.status as adstatus
+		 FROM {$table_prefix}wpClassified_ads_subjects
 		 LEFT JOIN {$table_prefix}users
 		 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
 		 LEFT JOIN {$table_prefix}wpClassified_ads
 		 ON {$table_prefix}wpClassified_ads.ads_ads_subjects_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_id
 		 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."'
-				&& {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
-		 ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,
-			    {$table_prefix}wpClassified_ads_subjects.date DESC
-		 LIMIT ".($_GET['start']).", ".($wpcSettings['count_ads_per_page']);
+		 AND {$table_prefix}wpClassified_ads_subjects.status != 'deleted'
+		 ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC, {$table_prefix}wpClassified_ads_subjects.date DESC";
+
 
 	$ads = $wpdb->get_results($sql);
-
-
-	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."' && status != 'deleted'");
+	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."' AND status != 'deleted'");
 	?>
 	<p><a href="javascript:javascript:history.go(-1)">back to previous page</a>&nbsp;&nbsp;<a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GET['adm_arg'];?>">back to main page</a></p>
 
@@ -223,15 +221,17 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		$ad = $ads[$x];
 		$url = $PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&lid=".$_GET['lid']."&";
 		$slab = ($ad->sticky!='y')?"Sticky":"Unsticky";
-		$act = ($ad->status=='open')?"De-activate":"Activate";
+		$act = ($ad->adstatus=='inactive')?"De-activate":"Activate";
 		$links = array(
 		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=editAd&aid=".$ad->ads_id."\">".__("Edit")."</a>",
 		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=stickyAd&aid=".$ad->ads_id."\">".__($slab)."</a>",
 		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=activateAd&aid=".$ad->ads_id."\">".__($act)."</a>",
 		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=deleteAd&aid=".$ad->ads_id."\">".__("Delete")."</a>",
 		"<a href=\"".$url."asid=".$ad->ads_subjects_id."&adm_action=move&aid=".$ad->ads_id."\">".__("Move")."</a>");
+		if ($ad->adstatus=='inactive') $color='#F5D0A9';
+		else $color ='#fff';
 		?>
-		<tr>
+		<tr style="background-color:<?php echo $color; ?>";>
 			<td><small><?php echo @implode(" | ", $links);?></small></td>
 			<td align=left><strong><a href="<?php echo $url;?>asid=<?php echo $ad->ads_subjects_id;?>"><?php echo $ad->subject;?></a></strong></td>
 			<td align=left><?php echo create_ads_subject_author($ad);?></td>
@@ -245,17 +245,18 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		<?php
 		} elseif ($loadpage==true){
 			$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
-			$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists ORDER BY position ASC");
+			$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id IN (SELECT categories_id FROM {$table_prefix}wpClassified_categories) ORDER BY position ASC");
 			for ($i=0; $i<count($tlists); $i++){
 				$lists[$tlists[$i]->wpClassified_lists_id][] = $tlists[$i];
 			}
+
+
 		if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
-		
 		echo "<div class=\"wrap\"><h2>Edit/Remove Ads</h2><div class=\"wpc_footer\">";
 		echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
 		$start = 0;
-
-		$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+		// top lst 8 ads
+		$sql ="SELECT ADS.*, A.status, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_ads A, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id AND C.categories_id = L.wpClassified_lists_id AND ADS.ads_subjects_id=A.ads_ads_subjects_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
 		$lastAds = $wpdb->get_results($sql);
 		foreach ($lastAds as $lastAd) {
 			echo "<a href=\"".$PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&lid=&asid=" .$lastAd->ads_subjects_id."\">".$lastAd->subject."</a>";
@@ -274,9 +275,8 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		<table width=100%>
 			<tr>
 			<th>Category/List</th>
-			<th width=100>Subjects</th>
 			<th width=100>Ads</th>
-			<th width=100>Views</th>
+			<th width=100>Status</th>
 		</tr>
 		<?php
 			for ($x=0; $x<count($categories); $x++){
@@ -292,9 +292,14 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 					?>
 					<tr>
 					<td><small>(<?php echo $liststatuses[$catIds[$i]->status]; ?>)</small> <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GET['adm_arg'];?>&lid=<?php echo $catIds[$i]->lists_id;?>"><?php echo $catIds[$i]->name;?></a></td>
-					<td><?php echo $catIds[$i]->ads_status;?></td>
-					<td><?php echo $catIds[$i]->ads;?></td>
-					<td><?php echo $catIds[$i]->ads_views;?></td>
+					<td>
+					<?php
+					$sql= "SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects ADS WHERE ADS.ads_subjects_list_id=". $catIds[$i]->lists_id;
+					$adsCount = $wpdb->get_var($sql);
+					echo $adsCount;
+					?>
+					</td>
+					<td><?php echo $catIds[$i]->status;?></td>
 				</tr>
 				<?php
 			}
@@ -309,7 +314,7 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 
 function adm_count_ads($id){
 	global $wpdb, $table_prefix;
-	$ads = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$id)."' && status = 'active'")-1;
+	$ads = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$id)."' AND status = 'active'")-1;
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET ads = '".$ads."' WHERE ads_subjects_id = '".((int)$id)."'");
 }
 
@@ -323,7 +328,6 @@ function set_sticky_ad_subject($id){
 
 function delete_ad(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
-
 	$linkb = $PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&adm_action=deleteAd&lid=".$_GET['lid']."&aid=".$_GET['aid'];
 	
 	if ($_POST['deleteid']>0){
@@ -332,6 +336,7 @@ function delete_ad(){
 		$wpdb->query($sql);
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".((int)$_POST['deleteid'])."'");
 		adm_sync_count($_GET['lid']);
+		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 		return true;
 	} else {
 	?>
@@ -389,7 +394,8 @@ function activate_ad($id){
 	global $table_prefix, $wpdb;
 	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".$id."'");
 	$new = ($cur=='active')?"inactive":"active";
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET status = '".$new."' WHERE ads_id = '".$id."'");
+	$sql = "UPDATE {$table_prefix}wpClassified_ads SET status = '".$new."' WHERE ads_id = '".$id."'";
+	$wpdb->query($sql);
 	adm_count_ads($id);
 }
 

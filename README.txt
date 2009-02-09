@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.1-a
+name: wpClassified Wordpress plugins version 1.3.1-b
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -77,6 +77,11 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 Changelog:
+
+
+Changes 1.3.1-b - Feb 09/02/2009
+- modify to approve posts before they are published
+- fixed thumbnail image width
 
 Changes 1.3.1-a - Jan 20/01/2009
 - It covers changes between WordPress Version 2.6 and Version 2.7
