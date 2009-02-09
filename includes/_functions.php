@@ -763,7 +763,6 @@ function get_last_ads($format) {
 	global $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
-	if ($format == 'y') $wpcSettings['count_last_ads'] = 5;
 
 	$start = 0;
 	$out ='';
@@ -785,7 +784,7 @@ function get_last_ads($format) {
 				include (dirname(__FILE__).'/js/viewer.js.php');
 				$out .= "&nbsp;<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
 			}
-			$out .= "&nbsp;<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
+			$out .= "&nbsp;-<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
 		}
 		$out .= "</li>\n";
 	}	
