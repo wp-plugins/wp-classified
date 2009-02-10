@@ -82,10 +82,11 @@ function _add_ad(){
 				$ok = (substr($_FILES['image_file']['type'],0,5)=="image")?true:false;
 				if ($ok==true){
 					$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
-					if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
-						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
-						 $msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
-						$addPost=false;	
+					if ($imginfo[0] && 
+						($imginfo[0]>(int)$wpcSettings["image_width"] ||
+						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0))	{
+						$msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
+						$addPost=false;
 					} else {
 						$fp = @fopen($_FILES['image_file']['tmp_name'],"r");
 						$content = @fread($fp,$_FILES['image_file']['size']);
