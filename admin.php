@@ -174,7 +174,8 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		$_GET['start'] = 0;
 	}
 
-	$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}wpClassified_ads.status as adstatus
+	$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$table_prefix}wpClassified_ads.ads_id,
+		{$table_prefix}wpClassified_ads.status as adstatus
 		 FROM {$table_prefix}wpClassified_ads_subjects
 		 LEFT JOIN {$table_prefix}users
 		 ON {$table_prefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
