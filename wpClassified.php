@@ -1335,27 +1335,34 @@ function create_ads_input($content=""){
 			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='80' rows='20'>".str_replace("<", "&lt;", $content)."</textarea>";
 		break;
 		case "tinymce":
-			 $mode="advanced";
-			 if ($wpcSettings['editor_toolbar_basic']=='y') $mode="simple";
 	
 			echo '<script language="javascript" type="text/javascript" src="' .get_bloginfo('wpurl').  '/wp-content/plugins/wp-classified/includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>';
 
+// directionality: "rtl",
 		?>
-
 <script language="javascript" type="text/javascript">
-	tinyMCE.init({
-    	mode: "exact",
-    	elements : "wpClassified_data[post]",
-    	theme_advanced_toolbar_location : "top",
-    	theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,"
-    	+ "justifyleft,justifycenter,justifyright,justifyfull,formatselect,"
-    	+ "bullist,numlist,outdent,indent",
-    	theme_advanced_buttons2 : "link,unlink,anchor,image,separator,"
-    	+"undo,redo,cleanup,code,separator,sub,sup,charmap",
-    	theme_advanced_buttons3 : "",
-    	onchange_callback: "myCustomOnChangeHandler",
-	<?php echo "theme : \"" . $mode ."\"" ?>
-	});
+        tinyMCE.init({
+mode : "textareas",
+elements : "wpClassified_data[post]",
+			<?php 
+				if ($wpcSettings['editor_toolbar_basic']=='y') 
+				echo "theme : \"simple\",";
+				else
+				echo "theme : \"advanced\",";
+			?>
+plugins: "contextmenu,directionality,paste,emotions",
+theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,separator,bullist ,numlist,separator,link,unlink,separator,forecolor,backcolor,separator,emotions,separator,ltr,rtl",
+theme_advanced_buttons2 : "",
+theme_advanced_buttons3 : "",
+theme_advanced_toolbar_location : "top",
+theme_advanced_resizing : true,
+theme_advanced_resize_horizontal : false,
+theme_advanced_resizing_use_cookie : false,
+accessibility_warnings : false,
+entity_encoding : "raw",
+verify_html : false,
+button_tile_map : true
+});
 
 var maxchars ="<?php echo $wpcSettings['count_ads_max_limit'] ?>";
 
@@ -1439,7 +1446,7 @@ function widget_wpClassified_init() {
 		$after_tag=stripslashes(get_option($fieldsPre.'after_Tag'));
 
 		//echo $before_tag . _widget_display($wpcSettings['widget_format']) . $after_tag;
-		echo '<ul>' . _widget_display($wpcSettings['widget_format']) . '</ul>'; 
+		echo '<p><ul>' . _widget_display($wpcSettings['widget_format']) . '</ul></p>'; 
 	}
 
 
