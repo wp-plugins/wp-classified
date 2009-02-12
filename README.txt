@@ -47,17 +47,6 @@ You will need to make the following folders writeable (chmod 777) :
    3. Activate the plugin from your Wordpress admin panel.
    4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
 
-== Database Upgrade ==
-
-Upgrading wpClassified tables from version 1.1.x to 1.2.x
-
-Using phpMyAdmin (or other database manager) run these sql queries on your existing database.
-
-- So first start the phpMyAdmin console...
-- Select the right Database
-- Click on "Export" tab and choose the file upgrade1_1to1_2.sql and Go
-
-
 
 == Frequently Asked Questions ==
 
