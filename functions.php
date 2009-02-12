@@ -477,7 +477,7 @@ function _email_notifications($userId,$author_name,$listId,$subject,$post,$image
 		$post_content = stripslashes($post_content);
 		# admin message
 
-		$msg .= ("This e-mail has been sent to notify you that a Ad has been posted at your site '" .get_option('blogname'). "',and is pending review/approval.");
+		$msg .= ("This e-mail has been sent to notify you that an Ad has been posted at your site '" .get_option('blogname'). "',and is pending review/approval.");
 		$msg .= $eol . $eol . "The Ad and user information is as follows: " . $eol;
 		$msg.= $lang['_FROM'] . ': ' . $author_name . $eol;
 		$msg.= 'Title: ' . $subject . $eol;
