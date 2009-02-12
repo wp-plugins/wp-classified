@@ -257,11 +257,16 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
 		$start = 0;
 		// top lst 8 ads
-		$sql ="SELECT ADS.*, A.status, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_ads A, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id AND C.categories_id = L.wpClassified_lists_id AND ADS.ads_subjects_id=A.ads_ads_subjects_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+		$sql ="SELECT ADS.*, A.status as adstatus, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_ads A, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id AND C.categories_id = L.wpClassified_lists_id AND ADS.ads_subjects_id=A.ads_ads_subjects_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
 		$lastAds = $wpdb->get_results($sql);
+		
 		foreach ($lastAds as $lastAd) {
+			if ($lastAd->adstatus=='inactive') $color='#DF0101';
+			else $color ='#000';
 			echo "<a href=\"".$PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&lid=&asid=" .$lastAd->ads_subjects_id."\">".$lastAd->subject."</a>";
-			echo " - <span class=\"smallTxt\"><i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span><BR />";
+			echo " - <span class=\"smallTxt\" style=\"color:". $color . "\"><i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")";
+			if ($lastAd->adstatus=='inactive') echo " INACTIVE";
+			echo "</span><BR />";
 		}	
 		echo "</div>";
 		?>
