@@ -71,7 +71,7 @@ You will find an example for .htaccess file that uses to redirect
 to wpClassified in the README file
 */
 
-//ERROR_REPORTING(0); 
+ERROR_REPORTING(0); 
 require_once(dirname(__FILE__).'/settings.php');
 
 add_filter("the_content", "wpClassified_page_handle_content");
