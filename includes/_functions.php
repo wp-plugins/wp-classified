@@ -139,11 +139,6 @@ function get_wpc_list($msg){
 function wpc_read_not_allowed(){
 	global $user_level;
 	get_currentuserinfo();
-
-	$tpl->assign('user_level', "<!--".($user_level)."-->");
-	$tpl->assign('access_denied', "Read Access Denied");
-	$tpl->assign('access_denied_reason', "These classifieds require you to be a registered user in order to view them. If you are already registered you must log in before trying to view the classifieds.");
-	$tpl->display('permission_denied.tpl');
 }
 
 function wpc_footer(){
