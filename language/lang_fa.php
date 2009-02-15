@@ -1,7 +1,7 @@
 <?php
 // Translated to Arabic by GPME Hosting
-// Web site:  http://www.gpmehosting.com
-// Email: support@gpmehosting.com
+// Web site:  http://www.farsi-news.com
+// Email: info@forgani.com
 
     $lang=array();
 	//
