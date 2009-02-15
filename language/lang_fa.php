@@ -1,5 +1,5 @@
 <?php
-// Translated to Arabic by GPME Hosting
+// Translated to Farsi by M. Forgani
 // Web site:  http://www.farsi-news.com
 // Email: info@forgani.com
 
