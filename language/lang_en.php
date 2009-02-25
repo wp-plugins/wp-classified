@@ -1,4 +1,8 @@
 <?php
+// Translated 
+// Web site:  http://www.forgani.com
+// Email: info@forgani.com
+
     $lang=array();
 	//
 	$lang['_OR'] = "or";
