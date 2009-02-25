@@ -1,4 +1,8 @@
 <?php
+// Translated 
+// Web site:  http://www.forgani.com
+// Email: info@forgani.com
+
     $lang=array();
 	//
 	$lang['_OR'] = "or";
@@ -132,8 +136,8 @@
 
 //// from 1.2.0-h
 	$lang['_DATEFORMAT'] = "Date Format String:";
-	$lang['_ALLOWRSS'] = "Allow RSS Feeds";
-	$lang['_COMFCODE'] = "Show the confirmation code";
+	$lang['_ALLOWRSS'] = "Allow RSS Feeds:";
+	$lang['_COMFCODE'] = "Show the confirmation code:";
 	$lang['_NOPOSTS'] = "Number of Recent Posts to feed:";
 
 //// from 1.2.1
@@ -155,9 +159,14 @@
 
 	$lang['_INVALIDURL'] = "Please enter a valid URL!";
 	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
-	$lang['_INVALIDTITLE'] = "Invalid character!, The Title should contain letters and numbers";
 
+// from 1.3.1-b
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long";
+	$lang['_MAIN'] = "Main";
 
+// from 1.3.1-b
+	$lang['_APPROVE'] = "Thank You for using our Classified Ads.<br>Your classified ad has been sucessfully submitted for review!<br>Feel free to submit another ad.";
+	$lang['_APPROVEREPLY'] = "This ad was already submitted. We will check it as soon as possible.";
 
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
