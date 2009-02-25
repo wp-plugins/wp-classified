@@ -1,5 +1,5 @@
 <?php
-// Translated to slovenian by Upanje je v naših odločitvah.
+// Translated to slovenian by Andrej Znidarsic
 // Web site:  
 // Email: 
 
