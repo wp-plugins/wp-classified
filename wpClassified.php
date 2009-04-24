@@ -4,7 +4,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author:Mohammad Forgani
-Version: 1.3.1-c
+Version: 1.3.1-b
 Requires at least:2.3.x
 Author URI: http://www.forgani.com
 
@@ -71,7 +71,7 @@ You will find an example for .htaccess file that uses to redirect
 to wpClassified in the README file
 */
 
-ERROR_REPORTING(0); 
+//ERROR_REPORTING(0); 
 require_once(dirname(__FILE__).'/settings.php');
 
 add_filter("the_content", "wpClassified_page_handle_content");
@@ -185,7 +185,7 @@ function wpcOptions_process(){
 	</tr>		
 	<tr>
 		<th align="right" valign="top">Classifieds Description: </th>
-		<td><input type="text" size=80 name="wpClassified_data[description]" value="<?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?>"></td>
+		<td><textarea cols=80 rows=3 name="wpClassified_data[description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?></textarea></td>
 	</tr>
 	<tr>
 	<th></th>
@@ -1351,7 +1351,7 @@ elements : "wpClassified_data[post]",
 				echo "theme : \"advanced\",";
 			?>
 plugins: "contextmenu,directionality,paste,emotions",
-theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,separator,bullist ,numlist,separator,link,unlink,separator,forecolor,backcolor,separator,emotions,separator,ltr,rtl",
+theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,separator,bullist ,numlist,separator,link,unlink,separator,forecolor,backcolor,separator,emotions,formatselect,separator,hr,removeformat,separator,ltr,rtl",
 theme_advanced_buttons2 : "",
 theme_advanced_buttons3 : "",
 theme_advanced_toolbar_location : "top",
