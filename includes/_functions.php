@@ -57,16 +57,15 @@ function wpc_header(){
 	$rmRecords = $wpdb->get_results($sql);
 	foreach ($rmRecords as $rmRecord) { 
 		list ($adExpire, $contactBy) = split('###', $rmRecord->txt);
-		if (!$adExpire) { $adExpire=$wpcSettings['ad_expiration']; };
-		if (!$adExpire || $adExpire < 1 ) {
-			$adExpire=365;
-		}
-		$second = $adExpire*24*60*60; // second
-		$l = $today-$second;
-		if ($rmRecord->date < $l) {
-			$asid = $rmRecord->ads_subjects_id;
-			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
-			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+		if (!$adExpire) { $adExpire=$wpcSettings[ad_expiration]; };
+		if ($adExpire && $adExpire > 0 ) {
+			$second = $adExpire*24*60*60; // second
+			$l = $today-$second;
+			if ($rmRecord->date < $l) {
+				$asid = $rmRecord->ads_subjects_id;
+				$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+				$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+			}
 		}
 	}	
 }
@@ -369,8 +368,8 @@ function _edit_ad(){
 			phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
 			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$_POST['wpClassified_data'][contactBy]."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";
 
-				$wpdb->query($sql);
-				get_wpc_list($lang['_UPDATE']);
+			$wpdb->query($sql);
+			get_wpc_list($lang['_UPDATE']);
 		} else {
 			$displayform = true;
 		}

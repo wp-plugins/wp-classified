@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.1-c
+name: wpClassified Wordpress plugins version 1.3.1-b
 Contributors: Mohammad Forgani
 Requires at least: 2.5
 Tested up to: 2.5
@@ -46,6 +46,17 @@ You will need to make the following folders writeable (chmod 777) :
    2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
    3. Activate the plugin from your Wordpress admin panel.
    4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
+
+== Database Upgrade ==
+
+Upgrading wpClassified tables from version 1.1.x to 1.2.x
+
+Using phpMyAdmin (or other database manager) run these sql queries on your existing database.
+
+- So first start the phpMyAdmin console...
+- Select the right Database
+- Click on "Export" tab and choose the file upgrade1_1to1_2.sql and Go
+
 
 
 == Frequently Asked Questions ==

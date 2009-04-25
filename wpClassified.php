@@ -484,7 +484,9 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 	<tr>
 		<th align="right" valign="top"><?php echo $lang['_NEWADDEFAULT'];?></th>
 		<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will be auto-removed after these
-			number of days since creation. default:365 days</span></td>
+			number of days since creation. default:365 days<br />
+			The expiration will be disabled if you set this value to 0.
+</span></td>
 	</tr>
 	<tr>
 		<th align="right" valign="top"><?php echo $lang['_SENDREMIDE'];?></th>

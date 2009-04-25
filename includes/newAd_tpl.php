@@ -74,29 +74,33 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<td>
 	</tr>
 	
-	<tr>
-	<td class="wpc_label_right"><?php echo $lang['_HOW_LONG']; ?></td>
-	<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php echo (int)$wpcSettings["ad_expiration"]; ?>"/><br><span class="smallTxt">(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
-	</tr>
-
+	<?php 
+	if ( $wpcSettings['ad_expiration'] && $wpcSettings['ad_expiration'] > 0 ) {
+		echo '<tr><td class="wpc_label_right">'. $lang['_HOW_LONG'] .'</td>';
+		echo '<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="'.(int)$wpcSettings["ad_expiration"].'"/><br>';
+		echo '<span class="smallTxt">('.(int)$wpcSettings["ad_expiration"].$lang['_DAY'].')</span></td></tr>';
+	}
+	?>
 	<tr>
 	<td class="wpc_label_right"><?php echo $lang['_TERM']; ?></td>
 	<td><input value="1" type="checkbox" name="wpClassified_data[term]" checked /></td>
 	</tr>
+
 	<?php
 	if($wpcSettings['confirmation_code']=='y'){ 
-	$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-	$oVisualCaptcha = new _captcha($aFonts);
-	$captcha = rand(1, 50) . ".png";
-	$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
-	?>
-	<tr>
-	<td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td>
-	<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
-	<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
-	</tr>
+		$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+		$oVisualCaptcha = new _captcha($aFonts);
+		$captcha = rand(1, 50) . ".png";
+		$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+		?>
+		<tr>
+		<td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td>
+		<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
+		<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
+		</tr>
 	<?php
 	} ?>
+
 	<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD'];?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td></tr>
 	</form>
 	</table>

@@ -83,11 +83,18 @@ foreach($array as $f) {
 <div style="text-align: center;"><?php create_ads_input($postinfo->post);?></div>
 </td></tr>
 
-<tr>
-<td class="wpc_label_right"><?php echo $lang['_HOW_LONG']; ?></td>
-<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><br><span class ="smallTxt">(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
-</tr>
-<?php
+<?php 
+if ( $wpcSettings[ad_expiration] && $wpcSettings[ad_expiration] > 0 ) {
+	echo '<tr><td class="wpc_label_right">'.$lang['_HOW_LONG']. '</td>';
+	echo '<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="';
+	if ($adExpire) {
+		echo $adExpire;
+	} else {
+		echo (int)$wpcSettings[ad_expiration];
+	} 
+	echo '"/><br><span class ="smallTxt">('.(int)$wpcSettings[ad_expiration].$lang['_DAY'].')</span></td></tr>';
+}
+
 if($wpcSettings['confirmation_code']=='y') { 
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
