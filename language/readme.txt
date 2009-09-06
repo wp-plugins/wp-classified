@@ -18,3 +18,7 @@ please send me the language file so that I can add to the next version of the pl
 
 Thanks,
 4gani
+
+// Translated to Russian by
+M.Comfi,
+http://www.comfi.com <http://www.comfi.com>
