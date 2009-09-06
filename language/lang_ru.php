@@ -1,6 +1,7 @@
 
 <?php
 // Translated to Russian by
+// M.Comfi, http://www.comfi.com 
 
 $lang['_OR'] = "или"; 
 $lang['_CAT'] = "Категория :"; 
