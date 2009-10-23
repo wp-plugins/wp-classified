@@ -4,17 +4,16 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 Author:Mohammad Forgani
-Version: 1.3.1-b
-Requires at least:2.3.x
+Version: 1.3.2-a
+Requires at least:2.8.x
 Author URI: http://www.forgani.com
 
-I create and tested on Wordpress version 2.3.2 
+I create and tested on Wordpress version 2.8.5 
 on default and unchanged Permalink structure.
-
-demo: http://www.bazarcheh.de/?page_id=92
 
 
 Release Notes:
+
 
 release 1.2.0-e - Augst 20/08/2008
 
@@ -64,6 +63,10 @@ Changes 1.3.1-a - Jan 20/01/2009
 Changes 1.3.1-b - Feb 09/02/2009
 - Modify to approve posts before they are published
 - fixed thumbnail image width
+
+Changes 1.3.2-a - Oct 25/10/2009
+- Fixed bug with auto-install on wordpress 2.8.5
+
 
 
 Permalink structure:
@@ -132,7 +135,7 @@ function wpcOptions_process(){
 			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
 			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
 			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
-				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_category, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '0', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
+				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
 			}
 		}
 	}

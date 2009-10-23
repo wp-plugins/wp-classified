@@ -1,20 +1,20 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.1-b
+name: wpClassified Wordpress plugins version 1.3.2-a
 Contributors: Mohammad Forgani
-Requires at least: 2.5
-Tested up to: 2.5
+Requires at least: 2.8.x
+Tested up to: 2.8.x
 Stable tag: 1.1.0
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
-Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 == Description ==
 
 This plugin allows you to add a simple classified page in to your wordpress blog. 
 
-The plugin has been create and successfully tested on Wordpress version 2.5.1 with 
+The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
 default and unchanged Permalink structure.
-
+-> Support Iran's Green Revolution. <-
+Demo link: http://www.forgani.com/tools/wpclassified-plugins/
 
 == Installation ==
 
@@ -78,6 +78,8 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 Changelog:
 
+Changes 1.3.2-a - Oct 25/10/2009
+- Fixed bug with auto-install on wordpress 2.8.5
 
 Changes 1.3.1-b - Feb 09/02/2009
 - modify to approve posts before they are published
@@ -164,7 +166,7 @@ Example for htaccess code to redirect to wpClassified
 
 You need an .htaccess file that is created/modified by wordpress via the Permalink/mod-rewrite option. 
 
-By using  the ‘/%postname%’ or ‘/%category%/%postname%/’ as permalink
+By using the "/%postname%/" or "/%category%/%postname%/" as permalink
 structure the plugin must work correctly and you do not need change anything.
 
 For something else please edit the .htaccess file in the root folder of your Wordpress.
@@ -190,7 +192,7 @@ RewriteRule ^classified/([^/\(\)]*)/?  /index.php?pagename=classified [QSA,L,R,N
 
 
 have fun
-Regards from Isfahan ;-)
+Iran's green revolution.
 Mohammad Forgani, Oh Jung Su
-Juli 03/2008
+October 25/2009
 

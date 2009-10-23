@@ -5,15 +5,16 @@
 * settings.php
 *
 * This file is part of wp-classified
+* Support Iran's green revolution.
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.1-b
+* @version 1.3.2-a
 */
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3.1-b';
+$wpClassified_version = '1.3.2-a';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
