@@ -13,8 +13,12 @@ This plugin allows you to add a simple classified page in to your wordpress blog
 
 The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
 default and unchanged Permalink structure.
--> Support Iran's Green Revolution. <-
+
 Demo link: http://www.forgani.com/tools/wpclassified-plugins/
+
+-> Support Iran's Green Revolution. <-
+
+
 
 == Installation ==
 
