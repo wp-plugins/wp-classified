@@ -12,12 +12,13 @@ Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-cla
 This plugin allows you to add a simple classified page in to your wordpress blog. 
 
 The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
-default and unchanged Permalink structure.
+default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
 
 Demo link: http://www.forgani.com/tools/wpclassified-plugins/
 
--> Support Iran's Green Revolution. <-
+= Iran's Green Wave Movement =
 
+ 
 
 
 == Installation ==
@@ -196,7 +197,6 @@ RewriteRule ^classified/([^/\(\)]*)/?  /index.php?pagename=classified [QSA,L,R,N
 
 
 have fun
-Iran's green revolution.
+
 Mohammad Forgani, Oh Jung Su
 October 25/2009
-
