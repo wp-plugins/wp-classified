@@ -77,7 +77,7 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 	
 	$rec = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads 
 		WHERE ads_ads_subjects_id = $ad->ads_subjects_id");
-	$array = split('###', $rec->image_file);
+	$array = preg_split('/\#\#\#/', $rec->image_file);
 	$img = $array[0];
 
 	if ($img !='') {

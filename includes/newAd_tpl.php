@@ -20,7 +20,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	<?php
 } else {			
 	echo $quicktags;
-	if ($msg){echo "<p class=\"error\">".$msg."</p>";}
+	if (isset($msg)){echo "<p class=\"error\">".$msg."</p>";}
 	?>
 	<div class="wpc_container">
 	<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data" action="<?php echo create_public_link("paform", array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
@@ -36,31 +36,60 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	echo "<b>".$userdata->$userfield."</b>";
 	echo '<input type="hidden" name="wpClassified_data[author_name]" value="'.$userdata->$userfield.'">';
 	} 
-	?></td>
-	</tr>
+	?></td></tr>
 	
 	<td class="wpc_label_right"><?php echo $lang['_EMAIL']; ?></td>
-	<td><input type=text size=30 name="wpClassified_data[email]" onclick="checkEmail(this.form.wpClassified_data[email])" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['email']));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
-
+	<td><input type=text size=30 name="wpClassified_data['email']" onclick="checkEmail(this.form.wpClassified_data['email'])" id="wpClassified_data_email" value="
+	<?php 
+	if (!isset($_POST['wpClassified_data']) || !isset($_POST['wpClassified_data']['email'])) 
+		$_POST['wpClassified_data']['email']='';
+	$txt = stripslashes($_POST['wpClassified_data']['email']);
+	echo str_replace('"', '&quot;', $txt); 
+	?>
+	"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 	<tr>
 	<td class="wpc_label_right"><?php echo $lang['_CONTACTBY']; ?></td>
 	<td>
-	<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" checked/>
+	<input type="radio" name="wpClassified_data['contactBy']" value="<?php echo $lang['_YES_CONTACT']; ?>" checked/>
 	<?php echo $lang['_YES_CONTACT']; ?></option>
-	<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_NO_CONTACT']; ?>" />
+	<input type="radio" name="wpClassified_data['contactBy']" value="<?php echo $lang['_NO_CONTACT']; ?>" />
 	<?php echo $lang['_NO_CONTACT']; ?></option>
 	</td></tr>
 
-
 	<td class="wpc_label_right"><?php echo $lang['_WEB']; ?></td>
-	<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['web']));?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL'];?></span></td></tr>
+	<td><input type=text size=30 name="wpClassified_data['web']" id="wpClassified_data_web" value="
+	<?php 
+	if (!isset($_POST['wpClassified_data']) || !isset($_POST['wpClassified_data']['web'])) 
+		$_POST['wpClassified_data']['web']='';
+	$txt = stripslashes($_POST['wpClassified_data']['web']);
+	echo str_replace('"', '&quot;', $txt); 
+	?>
+	"><span class="smallTxt"><?php echo $lang['_OPTIONAL'];?></span></td></tr>
 	<td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-	<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data']['phone']));?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp; e.g. +98(231)12345</span></td></tr>
+	<td><input type=text size=30 name="wpClassified_data['phone']" id="wpClassified_data_phone" value="
+		
+	<?php 
+	if (!isset($_POST['wpClassified_data']) || !isset($_POST['wpClassified_data']['phone'])) 
+		$_POST['wpClassified_data']['phone']='';
+	$txt = stripslashes($_POST['wpClassified_data']['phone']);
+	echo str_replace('"', '&quot;', $txt); 
+	?>
+	
+	"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp; e.g. +98(231)12345</span></td></tr>
 	<tr><td></td><td><hr></td></tr>
 	<tr>
 	<!-- "the text input must contains only letters and numbers." -->
 	<td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
-	<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][subject]));?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
+	<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="
+		
+	<?php 
+	if (!isset($_POST['wpClassified_data']) || !isset($_POST['wpClassified_data']['subject'])) 
+		$_POST['wpClassified_data']['subject']='';
+	$txt = stripslashes($_POST['wpClassified_data']['subject']);
+	echo str_replace('"', '&quot;', $txt); 
+	?>
+	
+	"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td></tr>
 	<tr>
 	<td class="wpc_label_right"><?php echo $lang['_PIC']; ?></td>
 	<td><input type=file name="image_file"><br /><span class="smallTxt">
@@ -70,6 +99,9 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	
 	<tr>
 	<td colspan=2><?php echo $lang['_DESC']; ?><br>
+	<?php
+		if (!isset($_POST['wpClassified_data']['post'])) $_POST['wpClassified_data']['post']='';
+	?>
 	<div style="text-align: center;"><?php create_ads_input($_POST['wpClassified_data']['post']); ?></div>
 	<td>
 	</tr>

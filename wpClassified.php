@@ -1,4 +1,9 @@
 <?php
+
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+
+
 /*
 Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
@@ -515,7 +520,9 @@ if (!$wpcSettings[inform_user_expiration]) $wpcSettings[inform_user_expiration]=
 
 function wpClassified_process(){
 	global $_GET, $_POST, $table_prefix, $wpdb, $user_ID, $user_identity;
+	if (!isset($msg)) $msg='';
 	$wpcSettings = get_option('wpClassified_data');
+	if (!isset($_GET['_action'])) $_GET['_action']='';
 	if (is_user_logged_in()) { 
 		get_currentuserinfo();	
 		//_e('Hello, ');
@@ -662,12 +669,12 @@ function wpClassified_install(){
 	$wpcSettings['GADformat'] = '468x60';
 	$wpcSettings['GADLformat'] = '468x15';
 	$wpcSettings['GADtype'] = 'text';
-	$wpcSettings[GADcolor_border]= 'FFFFFF';
-	$wpcSettings[GADcolor_link]= '0000FF';
-	$wpcSettings[GADcolor_bg]= 'E4F2FD';
-	$wpcSettings[GADcolor_text]= '000000';
-	$wpcSettings[GADcolor_url]= 'FF0000';
-	$wpcSettings[GADposition] = 'btn';
+	$wpcSettings['GADcolor_border']= 'FFFFFF';
+	$wpcSettings['GADcolor_link']= '0000FF';
+	$wpcSettings['GADcolor_bg']= 'E4F2FD';
+	$wpcSettings['GADcolor_text']= '000000';
+	$wpcSettings['GADcolor_url']= 'FF0000';
+	$wpcSettings['GADposition'] = 'btn';
 	$wpcSettings['count_last_ads'] = 5;
 	$wpcSettings['wpClassified_unread_color'] = '#FF0000';
 	$wpcSettings['image_alignment'] = 'left';
@@ -1256,9 +1263,10 @@ function create_post_html($post){
 	if ($wpcSettings['wpClassified_filter_posts']=='y'){
 		$post->post = apply_filters('comment_text', nl2br($post->post));
 	}
-	$keyword = explode(" ",$_GET['search_words']);
-	$colors[0]=$wpcSettings['wpClassified_highlight_color'];
-	$post->post = wpClassified_search_highlight($keyword,$post->post,$colors);
+	if (isset($_GET['search_words'])){
+		$keyword = explode(" ", $_GET['search_words']);
+	} else $keyword = '';
+	
 	return $post->post;
 
 }
