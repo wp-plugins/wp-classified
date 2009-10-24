@@ -590,6 +590,7 @@ function wpcAdmpage(){
 	$wpcSettings = get_option('wpClassified_data');
 	for ($i=0; $i<count($adm_links); $i++){
 		$tlink = $adm_links[$i];
+		if (!isset($tlink['prg'])) $tlink['prg']='';
 		add_submenu_page(__FILE__,$tlink['name'],$tlink['name'],8,$tlink['arg'],$tlink['prg']);
 	}
 }
