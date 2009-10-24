@@ -11,7 +11,7 @@
 * @version 1.3.1-a
 */
 
-require('captcha_class.php');
+require_once('captcha_class.php');
 
 function _add_ad(){
 	global $_GET,$_POST,$userdata,$user_ID,$table_prefix,$wpdb,$quicktags,$lang;
