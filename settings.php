@@ -57,12 +57,10 @@ $adm_links = array(
 
 function get_wpClassified_pageinfo(){
 	global $wpdb, $wpc_page_info, $table_prefix;
-	if ($wpc_page_info == false){
-		$wpc_page_info = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
-			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-		if ($wpc_page_info["post_title"]!="[[WP_CLASSIFIED]]"){
-			return false;
-		}
+	$wpc_page_info = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
+		WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
+	if ($wpc_page_info["post_title"] != "[[WP_CLASSIFIED]]"){
+		return false;
 	}
 	return $wpc_page_info;
 }

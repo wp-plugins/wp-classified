@@ -11,7 +11,7 @@ function wpClassified_db(){
 	global $wpdb, $table_prefix, $wpClassified_version;
 
 	$wpClassified_sql[$table_prefix.'wpClassified_lists'] = "
-	CREATE TABLE `{$table_prefix}wpClassified_lists` (
+	CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_lists` (
 	`lists_id` int(11) NOT NULL auto_increment,
 	`wpClassified_lists_id` int(11) NOT NULL default '0',
 	`position` int(11) NOT NULL default '0',
@@ -25,7 +25,7 @@ function wpClassified_db(){
 	)";
 	
 	$wpClassified_sql[$table_prefix.'wpClassified_categories'] = "
-	CREATE TABLE `{$table_prefix}wpClassified_categories` (
+	CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_categories` (
 	`categories_id` int(11) NOT NULL auto_increment,
 	`name` varchar(150) NOT NULL default 'Unnamed',
 	`photo` varchar(150) NOT NULL default 'Unnamed',
@@ -36,7 +36,7 @@ function wpClassified_db(){
 	
 	
 	$wpClassified_sql[$table_prefix.'wpClassified_ads'] = "
-	CREATE TABLE `{$table_prefix}wpClassified_ads` (
+	CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_ads` (
 	`ads_id` int(20) NOT NULL auto_increment,
 	`ads_ads_subjects_id` int(11) NOT NULL default '0',
 	`date` int(20) NOT NULL default '0',
@@ -50,7 +50,7 @@ function wpClassified_db(){
 	PRIMARY KEY  (`ads_id`)
 	)";	
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_ads_subjects'] = "CREATE TABLE `{$table_prefix}wpClassified_ads_subjects` (
+	$wpClassified_sql[$table_prefix.'wpClassified_ads_subjects'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_ads_subjects` (
 	`ads_subjects_id` int(11) NOT NULL auto_increment,
 	`ads_subjects_list_id` int(11) NOT NULL default '0',
 	`date` int(20) NOT NULL default '0',
@@ -74,19 +74,19 @@ function wpClassified_db(){
 	PRIMARY KEY  (`ads_subjects_id`)
 	)";
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_user_info'] = "CREATE TABLE `{$table_prefix}wpClassified_user_info` (
+	$wpClassified_sql[$table_prefix.'wpClassified_user_info'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_user_info` (
 	`user_info_user_ID` bigint(20) NOT NULL default '0',
 	`user_info_permission` enum('none','moderator','administrator') NOT NULL default 'none',
 	`user_info_post_count` int(11) NOT NULL default '0',
 	`user_info_title` varchar(200) NOT NULL default '', PRIMARY KEY  (`user_info_user_ID`)
 	)";
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_read'] = "CREATE TABLE `{$table_prefix}wpClassified_read` (
+	$wpClassified_sql[$table_prefix.'wpClassified_read'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_read` (
 	`read_user_id` bigint(20) NOT NULL default '0',
 	`read_ads_subjects_id` bigint(20) NOT NULL default '0'
 	)";
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_read_ads'] = "CREATE TABLE `{$table_prefix}wpClassified_read_ads` (
+	$wpClassified_sql[$table_prefix.'wpClassified_read_ads'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_read_ads` (
 	`read_ads_user_id` bigint(20) NOT NULL default '0',
 	`read_ads_ads_subjects_id` bigint(20) NOT NULL default '0',
 	`read_ads_id` bigint(20) NOT NULL default '0'

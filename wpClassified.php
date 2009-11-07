@@ -100,6 +100,17 @@ function wpcOptions_process(){
 	<?php
 	switch ($_GET['adm_action']){
 		case "savesettings":
+
+		$pageinfo = get_wpClassified_pageinfo();
+		if ($pageinfo == false){
+			$dt = date("Y-m-d");
+			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
+			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
+			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
+				$wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
+			}
+		}
+
 			foreach ($_POST["wpClassified_data"] as $k=>$v){
 				$_POST["wpClassified_data"][$k] = stripslashes($v);
 			}
@@ -129,7 +140,7 @@ function wpcOptions_process(){
 
 	$t = $table_prefix.'wpClassified';
 	if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
-		wpClassified_install();
+		wpClassified_setOption();
 		$pageinfo = get_wpClassified_pageinfo();
 		if ($pageinfo == false){
 			$dt = date("Y-m-d");
@@ -626,7 +637,7 @@ function wpClassified_adm_page(){
 
 // install function 
 // create the db tables.
-function wpClassified_install(){
+function wpClassified_setOption(){
 	global $wpClassified_version, $wp_rewrite;
 
 	$wpcSettings = array();
