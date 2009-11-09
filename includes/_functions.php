@@ -13,7 +13,7 @@ if (!isset($_SESSION)) session_start();
 function wpc_header(){
 	global $_GET, $_POST, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
-	if ($wpcSettings['count_ads_per_page'] < 1) { 
+	if ($wpcSettings['count_ads_per_page'] < 1) {
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
 	echo '<div class="wpc_head">';
@@ -93,9 +93,7 @@ function wpc_index(){
 			$rlists[$readtest[$i]->ads_subjects_list_id] = 'y';
 		} 
 	}
-	
 	include(dirname(__FILE__)."/main_tpl.php");
-	
 }
 
 

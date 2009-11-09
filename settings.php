@@ -165,11 +165,16 @@ function wpc_get_top_lnks(){
 
 
 function get_wpc_header_link(){
-	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER;
+	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, 
+	$wpdb, $_SERVER, $lang, $wp_rewrite;
+	
 	$pageinfo = get_wpClassified_pageinfo();
-# fix for WPMU version
-//	if (basename($_SERVER['PHP_SELF'])!='index.php')
-//		return "[[WP_CLASSIFIED]]";
+	$page_id = $pageinfo['ID'];
+	if($wp_rewrite->using_permalinks()) $delim = "?";
+	else $delim = "&amp;";
+	$perm = get_permalink($page_id);
+	$main_link = $perm . $delim;
+
 	$wpClassified_settings = get_option('wpClassified_data');
 	if ($_POST['search_terms']) {
 		$_GET['_action'] = "search";
@@ -179,7 +184,7 @@ function get_wpc_header_link(){
 	switch ($_GET['_action']){
 		default:
 		case "classified":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a>";
+			return "<a href=\"".$main_link."_action=classified\">Main</a>";
 		break;
 		case "search":
 			$search_title = "Searching for: ".$_POST['search_terms'];
@@ -198,7 +203,7 @@ function get_wpc_header_link(){
 				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Add a new Ad in this category";
+			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - " . $lang['_ADDANNONCE'];
 		break;
 		case "ea":
 			$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects

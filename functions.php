@@ -304,9 +304,19 @@ function _delete_img() {
 
 
 function create_public_link($action,$vars){
-	global $wpdb,$table_prefix,$lang;
+	global $wpdb,$table_prefix,$lang, $wp_rewrite;
+	
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = get_wpClassified_pageinfo();
+	
+	$page_id = $pageinfo['ID'];
+	if($wp_rewrite->using_permalinks()) $delim = "?";
+	else $delim = "&amp;";
+	$perm = get_permalink($page_id);
+	
+	$main_link = $perm . $delim;
+	
+	
 	if (!isset($vars['post_jump'])) {
 		$lastAd = ($action=="lastAd")?"#lastpost":"";
 	} else {
@@ -315,41 +325,41 @@ function create_public_link($action,$vars){
 	$action = ($action=="lastAd")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">" . $lang['_MAIN'] . "</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
+			return "<a href=\"".$main_link."_action=classified\">" . $lang['_MAIN'] . "</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
 		break;
 		case "classified":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+			return "<a href=\"".$main_link."_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
 		case "pa":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+			return "<a href=\"".$main_link."_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
 		break;
 		case "paform":
-			return get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=pa&lid=".$vars['lid'];
+			return $main_link."_action=pa&lid=".$vars['lid'];
 		break;
 		case "ads_subject":			
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&lid=".$vars['lid']."&asid=".$vars['asid'].$lastAd."\">".$vars['name']."</a>";
+			return "<a href=\"".$main_link."_action=va&lid=".$vars['lid']."&asid=".$vars['asid'].$lastAd."\">".$vars['name']."</a>";
 		break;
 		case "ea":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+			return "<a href=\"".$main_link."_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "da":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+			return "<a href=\"".$main_link."_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "eaform":
 			return 
-			get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+			$main_link."_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
 		break;
 		case "searchform":
-			return get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=search";
+			return $main_link."_action=search";
 		break;
 		case "mi": //modify Images
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
+			return "<a href=\"".$main_link."_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
 		break;
 		case "miform":
-			return get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=mi&aid="."&aid=".((int)$vars['aid']);
+			return $main_link."_action=mi&aid=".((int)$vars['aid']);
 		break;
 		case "di": //delete Images
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
+			return "<a href=\"".$main_link."_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
 		break;
 	}
 }
