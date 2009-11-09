@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
@@ -83,12 +84,10 @@ add_filter("the_title", "wpClassified_page_handle_title");
 add_filter("wp_list_pages", "wpClassified_page_handle_titlechange");
 add_filter("single_post_title", "wpClassified_page_handle_pagetitle");
 
-if (function_exists('add_action')) {
-	add_action('admin_menu', 'wpcAdmpage');
-}
-
-
+add_action('admin_menu', 'wpcAdmpage');
+add_action("admin_head", "admin_header");
 add_action('template_redirect', 'rss_feed');
+add_action('init', 'widget_wpClassified_init');
 
 // wpClassified settings 
 function wpcOptions_process(){
@@ -589,6 +588,15 @@ function adm_sync_count($id){
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET ads = '".$posts."', ads_status = '".$ads."' WHERE lists_id = '".$id."'");
 }
 
+$adm_links = array(
+	array('name'=>'Settings & Options','arg'=>'wpcOptions','prg'=>'wpcOptions_process'),
+	array('name'=>'Add/Edit Categories','arg'=>'wpcStructure','prg'=>'adm_structure_process'),
+	array('name'=>'Edit/Remove Ads','arg'=>'wpcModify','prg'=>'adm_modify_process'),
+	array('name'=>'Users Admin','arg'=>'wpcUsers','prg'=>'adm_users_process'),
+	array('name'=>'Utilities','arg'=>'wpcUtilities','prg'=>'adm_utilities_process'),
+	);
+
+
 function wpcAdmpage(){
 	global $wpc_admin_menu, $wpc_admin_menu, $wpc_user_level, $adm_links;
 	$wpcSettings = get_option('wpClassified_data');
@@ -602,6 +610,13 @@ function wpcAdmpage(){
 	}
 }
 
+// ... and some styling and meta
+function admin_header(){
+	echo "<link rel='stylesheet' href='".get_bloginfo('wpurl')."/wp-content/plugins/".WPCLASSIFIED."/wpf_admin.css' type='text/css' media='screen'  />"; 
+	?><script language="JavaScript" type="text/javascript" src="<?php echo WPCDIR . 'js/script.js'?>"></script><?php
+}
+
+	
 function wpClassified_adm_page(){
 	global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix;
 	get_currentuserinfo();
@@ -638,12 +653,11 @@ function wpClassified_adm_page(){
 // install function 
 // create the db tables.
 function wpClassified_setOption(){
-	global $wpClassified_version, $wp_rewrite;
+	global $wpClassified_version;
 
 	$wpcSettings = array();
 	$wpcSettings = $_POST['wpClassified_data'];
 	update_option('wpClassified_data', $wpcSettings);
-	//$wp_rewrite->flush_rules(); // is the bug 1052????
 	$wpcSettings = get_option('wpClassified_data');
 	wpClassified_check_db();
 	$wpcSettings['wpClassified_installed'] = 'y';
@@ -1504,6 +1518,6 @@ function _widget_display() {
 	return $out;
 }
 
-add_action('init', 'widget_wpClassified_init');
+
 
 ?>

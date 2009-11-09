@@ -1,20 +1,14 @@
 <?php
 
 /*
-* $Id: *
 * settings.php
-*
 * This file is part of wp-classified
-* Support Iran's green revolution.
 * @author Mohammad Forgani 2008
-* Author Website : http://www.forgani.com
-* Licence Type   : GPL
-* @version 1.3.2-a
 */
 
 // user level
 $wpc_user_level = 8;
-$wpClassified_version = '1.3.2-b';
+$wpClassified_version = '1.3.0-g';
 $wpc_user_field = false;
 $wpc_admin_menu = 'wpClassified';
 $wpc_page_info = false;
@@ -22,7 +16,7 @@ $wpc_page_info = false;
 // include 
 
 $locale = get_locale();
-list ($lng, $loc) = preg_split('/[_]/', $locale);
+list ($lng, $loc) = split('_', $locale);
 $languageFile = dirname(__FILE__).'/language/lang_'. $lng . '.php';
 if (file_exists($languageFile)) {	
 	require_once($languageFile);
@@ -35,32 +29,32 @@ require_once(dirname(__FILE__)."/functions.php");
 require_once (dirname(__FILE__).'/admin.php');
 
 
-if (!isset($_GET)) $_GET = $HTTP_GET_VARS;
-if (!isset($_POST)) $_POST = $HTTP_POST_VARS;
-if (!isset($_SERVER)) $_SERVER = $HTTP_SERVER_VARS;
-if (!isset($_COOKIE)) $_COOKIE = $HTTP_COOKIE_VARS;
+if (!$_GET)$_GET = $HTTP_GET_VARS;
+if (!$_POST)$_POST = $HTTP_POST_VARS;
+if (!$_SERVER)$_SERVER = $HTTP_SERVER_VARS;
+if (!$_COOKIE)$_COOKIE = $HTTP_COOKIE_VARS;
+
 
 global $table_prefix, $wpdb, $wpmuBaseTablePrefix;
 	if (!$table_prefix) $table_prefix = $wpdb->prefix;
-	if (!$wpmuBaseTablePrefix) 
-		$wpmuBaseTablePrefix=$table_prefix;
+	if (!$wpmuBaseTablePrefix) $wpmuBaseTablePrefix=$table_prefix;
 
 $adm_links = array(
-	array('name'=>'Settings & Options','arg'=>'wpcOptions','prg'=>'wpcOptions_process'),
-	array('name'=>'Add/Edit Categories','arg'=>'wpcStructure','prg'=>'adm_structure_process'),
-	array('name'=>'Edit/Remove Ads','arg'=>'wpcModify','prg'=>'adm_modify_process'),
-	array('name'=>'Users Admin','arg'=>'wpcUsers','prg'=>'adm_users_process'),
-	array('name'=>'Utilities','arg'=>'wpcUtilities','prg'=>'adm_utilities_process'),
+	array(name=>'Classified Options',arg=>'wpcOptions'),
+	array(name=>'Add/Edit Categories',arg=>'wpcStructure'),
+	array(name=>'Edit/Remove Ads',arg=>'wpcModify'),
+	array(name=>'Users Admin',arg=>'wpcUsers'),
+	array(name=>'Utilities',arg=>'wpcUtilities'),
 	);
-
-
 
 function get_wpClassified_pageinfo(){
 	global $wpdb, $wpc_page_info, $table_prefix;
-	$wpc_page_info = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
-		WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-	if ($wpc_page_info["post_title"] != "[[WP_CLASSIFIED]]"){
-		return false;
+	if ($wpc_page_info == false){
+		$wpc_page_info = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
+			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
+		if ($wpc_page_info["post_title"]!="[[WP_CLASSIFIED]]"){
+			return false;
+		}
 	}
 	return $wpc_page_info;
 }
@@ -171,14 +165,13 @@ function wpc_get_top_lnks(){
 
 
 function get_wpc_header_link(){
-	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER, $lang;
+	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $_SERVER;
 	$pageinfo = get_wpClassified_pageinfo();
-	# fix for WPMU version
-	//	if (basename($_SERVER['PHP_SELF'])!='index.php')
-	//		return "[[WP_CLASSIFIED]]";
+# fix for WPMU version
+//	if (basename($_SERVER['PHP_SELF'])!='index.php')
+//		return "[[WP_CLASSIFIED]]";
 	$wpClassified_settings = get_option('wpClassified_data');
-	if (!isset($_GET['_action'])) $_GET['_action']='';
-	if (isset($_POST['search_terms'])) {
+	if ($_POST['search_terms']) {
 		$_GET['_action'] = "search";
 	} else {
 		$_POST['search_terms'] = '';
@@ -186,7 +179,7 @@ function get_wpc_header_link(){
 	switch ($_GET['_action']){
 		default:
 		case "classified":
-			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">" . $lang['_MAIN'] . "</a>";
+			return "<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=classified\">Main</a>";
 		break;
 		case "search":
 			$search_title = "Searching for: ".$_POST['search_terms'];
@@ -205,7 +198,7 @@ function get_wpc_header_link(){
 				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
 
-			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - " . $lang['_ADDANNONCE'];
+			return create_public_link("index", array("name"=>"Classified"))." ".create_public_link("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Add a new Ad in this category";
 		break;
 		case "ea":
 			$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
