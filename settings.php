@@ -37,8 +37,7 @@ if (!$_COOKIE)$_COOKIE = $HTTP_COOKIE_VARS;
 
 global $table_prefix, $wpdb, $wpmuBaseTablePrefix;
 	if (!$table_prefix) $table_prefix = $wpdb->prefix;
-	if (!$wpmuBaseTablePrefix) 
-		$wpmuBaseTablePrefix=$table_prefix;
+	if (!$wpmuBaseTablePrefix) $wpmuBaseTablePrefix=$table_prefix;
 
 $adm_links = array(
 	array(name=>'Classified Options',arg=>'wpcOptions'),
