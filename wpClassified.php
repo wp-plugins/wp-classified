@@ -76,27 +76,25 @@ You will find an example for .htaccess file that uses to redirect
 to wpClassified in the README file
 */
 
-//ERROR_REPORTING(0); 
+ERROR_REPORTING(0); 
 require_once(dirname(__FILE__).'/settings.php');
+
+
+add_action('wp_head', 'wpcAddhead');
+add_action('admin_menu', 'wpcAdmpage');
+//add_action('template_redirect', 'rss_feed');
+add_action('init', 'widget_wpClassified_init');
 
 add_filter("the_content", "wpClassified_page_handle_content");
 add_filter("the_title", "wpClassified_page_handle_title");
 add_filter("wp_list_pages", "wpClassified_page_handle_titlechange");
 add_filter("single_post_title", "wpClassified_page_handle_pagetitle");
 
-add_action('admin_menu', 'wpcAdmpage');
-add_action("admin_head", "admin_header");
-add_action('template_redirect', 'rss_feed');
-add_action('init', 'widget_wpClassified_init');
-
 // wpClassified settings 
 function wpcOptions_process(){
 	global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $wpClassified_version, $wp_version, $lang;
 
 	javaShowCategoryImg();
-	?>
-	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
-	<?php
 	switch ($_GET['adm_action']){
 		case "savesettings":
 
@@ -535,9 +533,6 @@ function wpClassified_process(){
 		//echo $user_identity;
 		//_e('!');
 	}
-	?>
-	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl');?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
-	<?php
 	switch ($_GET['_action']){
 		default:
 		case "classified": wpc_index();	break;
@@ -610,11 +605,7 @@ function wpcAdmpage(){
 	}
 }
 
-// ... and some styling and meta
-function admin_header(){
-	echo "<link rel='stylesheet' href='".get_bloginfo('wpurl')."/wp-content/plugins/".WPCLASSIFIED."/wpf_admin.css' type='text/css' media='screen'  />"; 
-	?><script language="JavaScript" type="text/javascript" src="<?php echo WPCDIR . 'js/script.js'?>"></script><?php
-}
+
 
 	
 function wpClassified_adm_page(){
@@ -1275,8 +1266,6 @@ function create_post_html($post){
 		default:
 			$post->post = nl2br(str_replace("<", "&lt;", $post->post));
 			break;
-		case "html":
-		case "quicktags":
 		case "tinymce":
 			$post->post = nl2br($post->post);
 			break;
@@ -1369,22 +1358,116 @@ function create_ads_input($content=""){
 		default:
 			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='80' rows='20'>".str_replace("<", "&lt;", $content)."</textarea>";
 		break;
-		case "tinymce":
-	
-			echo '<script language="javascript" type="text/javascript" src="' .get_bloginfo('wpurl').  '/wp-content/plugins/wp-classified/includes/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>';
-
 // directionality: "rtl",
 		?>
-<script language="javascript" type="text/javascript">
+		<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" cols="80" style="width: 100%" rows='20' tinyMCE_this="true"><?php echo htmlentities($content);?></textarea><br />
+		<SPAN class="smallTxt" id="msgCounter">Maximum of <SCRIPT language="javascript">document.write(maxchars);</SCRIPT> characters allowed</SPAN><BR/>
+	<?php
+	break;
+	}
+}
+
+function javaShowCategoryImg() {
+echo "<script type=\"text/javascript\">\n";
+	echo "<!--\n\n";
+	echo "function showimage() {\n";
+	echo "if (!document.images)\n";
+	echo "return\n";
+	echo "document.images.avatar.src=\n";
+	echo "'".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/' + document.wpcOptions.topImage.options[document.wpcOptions.topImage.selectedIndex].value;\n";
+	echo 'document.wpcOptions.elements["wpClassified_data[classified_top_image]"].value = document.wpcOptions.topImage.options[document.wpcOptions.topImage.selectedIndex].value;';
+		echo "}\n\n";
+
+	echo "function showCatimage() {\n";
+	echo "if (!document.images)\n";
+	echo "return\n";
+	echo "document.images.avatar.src=\n";
+	echo "'".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/' + document.admCatStructure.topImage.options[document.admCatStructure.topImage.selectedIndex].value;\n";
+	echo 'document.admCatStructure.elements["wpClassified_data[photo]"].value = document.admCatStructure.topImage.options[document.admCatStructure.topImage.selectedIndex].value;';
+		echo "}\n\n";
+		echo "//-->\n";
+		echo "</script>\n"; 
+}
+
+
+
+
+// Widget stuff
+function widget_wpClassified_init() {
+	if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
+		return;
+	function widget_wpClassified($args) {
+		extract($args);
+		$wpcSettings = get_option('wpClassified_data');	
+		echo $before_widget;
+		echo $before_title . $wpcSettings['widget_title'] . $after_title;
+
+		$fieldsPre="wpc_";
+		$before_tag=stripslashes(get_option($fieldsPre.'before_Tag'));
+		$after_tag=stripslashes(get_option($fieldsPre.'after_Tag'));
+
+		//echo $before_tag . _widget_display($wpcSettings['widget_format']) . $after_tag;
+		echo '<p><ul>' . _widget_display($wpcSettings['widget_format']) . '</ul></p>'; 
+	}
+
+
+	function widget_wpClassified_control() {
+		$wpcSettings = $newoptions = get_option('wpClassified_data');
+		if ( $_POST["wpClassified-submit"] ) {
+			$newoptions['widget_title'] = strip_tags(stripslashes($_POST['widget_title']));
+			$newoptions['widget_format'] = $_POST['widget_format'];
+			if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
+		}
+		if ( $wpcSettings != $newoptions ) {
+			$wpcSettings = $newoptions;
+			update_option('wpClassified_data', $wpcSettings);
+		}
+		$title = htmlspecialchars($wpcSettings['widget_title'], ENT_QUOTES);
+		if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
+		if ( empty($newoptions['widget_format']) ) $newoptions['widget_format'] = 'y';
+		?>
+		<label for="wpClassified-widget_title"><?php _e('Title:'); ?><input style="width: 200px;" id="widget_title" name="widget_title" type="text" value="<?php echo htmlspecialchars($wpcSettings['widget_title']); ?>" /></label></p>
+		<br />
+		<label for="wpClassified-widget_format">
+		<input class="checkbox" id="widget_format" name="widget_format" type="checkbox" value="y" <?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label><br />
+		<input type="hidden" id="wpClassified-submit" name="wpClassified-submit" value="1" />
+		<?php
+	}
+	
+	register_sidebar_widget('wpClassified', 'widget_wpClassified', null, 'wpClassified');
+	register_widget_control('wpClassified', 'widget_wpClassified_control');
+}
+
+
+function _widget_display() {
+	$wpcSettings = get_option('wpClassified_data');
+	$out = get_last_ads($wpcSettings['widget_format']);
+	return $out;
+}
+
+
+function wpcAddhead(){
+	$wpcSettings = get_option('wpClassified_data');
+	?>
+	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
+	<?php
+	  if($wpcSettings['wpc_edit_style']==null || $wpcSettings['wpc_edit_style']=='plain') {
+                //echo "<script src='" . get_bloginfo( "wpurl" ). "/wp-content/plugins/wpcareer/includes/wysiwyg.js' type='text/javascript'></script>";
+                //echo "<script src='" . get_bloginfo( "wpurl" ). "/wp-content/plugins/wpcareer/includes/wysiwyg-settings.js' type='text/javascript'></script>";
+    } elseif($wpcSettings['wpc_edit_style']=='tinymce') {
+                // activate these includes if the user chooses tinyMCE on the settings page
+?>
+                <script type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-includes/js/tinymce/tiny_mce.js"></script>
+					 <script language="javascript" type="text/javascript">
         tinyMCE.init({
-mode : "textareas",
-elements : "wpClassified_data[post]",
-			<?php 
-				if ($wpcSettings['editor_toolbar_basic']=='y') 
-				echo "theme : \"simple\",";
-				else
-				echo "theme : \"advanced\",";
-			?>
+	 mode : "textareas",
+	 elements : "wpClassified_data[post]",
+		<?php 
+			if ($wpcSettings['editor_toolbar_basic']=='y') 
+			echo "theme : \"simple\",";
+			else
+			echo "theme : \"advanced\",";
+		?>
 plugins: "contextmenu,directionality,paste,emotions",
 theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,separator,bullist ,numlist,separator,link,unlink,separator,forecolor,backcolor,separator,emotions,formatselect,separator,hr,removeformat,separator,ltr,rtl",
 theme_advanced_buttons2 : "",
@@ -1437,85 +1520,20 @@ function checknumberofcharacters(texttocheck,inst){
 }
 
 </script>
-<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" cols="80" style="width: 100%" rows='20' tinyMCE_this="true"><?php echo htmlentities($content);?></textarea><br />
-<SPAN class="smallTxt" id="msgCounter">Maximum of <SCRIPT language="javascript">document.write(maxchars);</SCRIPT> characters allowed</SPAN><BR/>
-	<?php
-	break;
-	}
-}
-
-function javaShowCategoryImg() {
-echo "<script type=\"text/javascript\">\n";
-	echo "<!--\n\n";
-	echo "function showimage() {\n";
-	echo "if (!document.images)\n";
-	echo "return\n";
-	echo "document.images.avatar.src=\n";
-	echo "'".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/' + document.wpcOptions.topImage.options[document.wpcOptions.topImage.selectedIndex].value;\n";
-	echo 'document.wpcOptions.elements["wpClassified_data[classified_top_image]"].value = document.wpcOptions.topImage.options[document.wpcOptions.topImage.selectedIndex].value;';
-		echo "}\n\n";
-
-	echo "function showCatimage() {\n";
-	echo "if (!document.images)\n";
-	echo "return\n";
-	echo "document.images.avatar.src=\n";
-	echo "'".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/' + document.admCatStructure.topImage.options[document.admCatStructure.topImage.selectedIndex].value;\n";
-	echo 'document.admCatStructure.elements["wpClassified_data[photo]"].value = document.admCatStructure.topImage.options[document.admCatStructure.topImage.selectedIndex].value;';
-		echo "}\n\n";
-		echo "//-->\n";
-		echo "</script>\n"; 
-}
-
-// Widget stuff
-function widget_wpClassified_init() {
-	if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
-		return;
-	function widget_wpClassified($args) {
-		extract($args);
-		$wpcSettings = get_option('wpClassified_data');	
-		echo $before_widget;
-		echo $before_title . $wpcSettings['widget_title'] . $after_title;
-
-		$fieldsPre="wpc_";
-		$before_tag=stripslashes(get_option($fieldsPre.'before_Tag'));
-		$after_tag=stripslashes(get_option($fieldsPre.'after_Tag'));
-
-		//echo $before_tag . _widget_display($wpcSettings['widget_format']) . $after_tag;
-		echo '<p><ul>' . _widget_display($wpcSettings['widget_format']) . '</ul></p>'; 
-	}
-
-
-	function widget_wpClassified_control() {
-		$wpcSettings = $newoptions = get_option('wpClassified_data');
-		if ( $_POST["wpClassified-submit"] ) {
-			$newoptions['widget_title'] = strip_tags(stripslashes($_POST['widget_title']));
-			$newoptions['widget_format'] = $_POST['widget_format'];
-			if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
-		}
-		if ( $wpcSettings != $newoptions ) {
-			$wpcSettings = $newoptions;
-			update_option('wpClassified_data', $wpcSettings);
-		}
-		$title = htmlspecialchars($wpcSettings['widget_title'], ENT_QUOTES);
-		if ( empty($newoptions['widget_title']) ) $newoptions['widget_title'] = 'Last Classifieds Ads';
-		if ( empty($newoptions['widget_format']) ) $newoptions['widget_format'] = 'y';
-		?>
-		<label for="wpClassified-widget_title"><?php _e('Title:'); ?><input style="width: 200px;" id="widget_title" name="widget_title" type="text" value="<?php echo htmlspecialchars($wpcSettings['widget_title']); ?>" /></label></p>
-		<br />
-		<label for="wpClassified-widget_format">
-		<input class="checkbox" id="widget_format" name="widget_format" type="checkbox" value="y" <?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label><br />
-		<input type="hidden" id="wpClassified-submit" name="wpClassified-submit" value="1" />
-		<?php
-	}
-	
-	register_sidebar_widget('wpClassified', 'widget_wpClassified', null, 'wpClassified');
-	register_widget_control('wpClassified', 'widget_wpClassified_control');
-}
-
-function _widget_display() {
-	$wpcSettings = get_option('wpClassified_data');
-	$out = get_last_ads($wpcSettings['widget_format']);
-	return $out;
+<?php
+/*
+                echo '<script type="text/javascript">
+                        <!--
+                        tinyMCE.init({
+                        theme : "advanced",
+                        mode : "none",
+                        width : "565",
+                        height : "200"
+                        });
+                        -->
+                        </script>';
+*/
+    }
 }
 
 
