@@ -79,7 +79,7 @@ foreach($array as $f) {
 <?php echo create_public_link("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
 </td></tr>
 
-<tr><td colspan=2><?php echo $lang['_DESC']; ?><br>
+<tr><td colspan=2><h3><?php echo $lang['_DESC']; ?></h3><br>
 <div style="text-align: center;"><?php create_ads_input($postinfo->post);?></div>
 </td></tr>
 

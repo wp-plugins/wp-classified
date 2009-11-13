@@ -1448,6 +1448,7 @@ function _widget_display() {
 
 function wpcAddhead(){
 	$wpcSettings = get_option('wpClassified_data');
+	// ltr,rtl
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 	<?php
@@ -1468,8 +1469,7 @@ function wpcAddhead(){
 			else
 			echo "theme : \"advanced\",";
 		?>
-plugins: "contextmenu,directionality,paste,emotions",
-theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,separator,bullist ,numlist,separator,link,unlink,separator,forecolor,backcolor,separator,emotions,formatselect,separator,hr,removeformat,separator,ltr,rtl",
+theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,separator,bullist ,numlist,separator,separator,forecolor,backcolor,separator,emotions,formatselect,separator,hr,removeformat,separator",
 theme_advanced_buttons2 : "",
 theme_advanced_buttons3 : "",
 theme_advanced_toolbar_location : "top",

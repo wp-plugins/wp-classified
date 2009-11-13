@@ -1,0 +1,12 @@
+/*  
+* Author: M. Forgani
+* wpclassified wordpress plugin
+* Author URI: http://www.forgani.com/
+*/
+
+fieldset {
+	  padding: 1em;
+	  font:12px;
+	  font-weight:normal;
+	  border:1px solid #ddd;
+}
