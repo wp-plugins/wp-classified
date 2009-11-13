@@ -1,24 +1,31 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.0-g
+name: wpClassified Wordpress plugins version 1.3.2-a
 Contributors: Mohammad Forgani
-Requires at least: 2.5
-Tested up to: 2.5
+Requires at least: 2.8.x
+Tested up to: 2.8.x
 Stable tag: 1.1.0
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
-Donate link: http://forgani.com/index.php/tools/wpclassified-plugins/
 
 == Description ==
 
 This plugin allows you to add a simple classified page in to your wordpress blog. 
 
-The plugin has been create and successfully tested on Wordpress version 2.5.1 with 
-default and unchanged Permalink structure.
+The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
+default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
+
+Demo link: http://www.forgani.com/tools/wpclassified-plugins/
+
+= Iran's Green Wave Movement =
+
+ 
 
 
 == Installation ==
 
 This section describes how to install the plugin and get it working.
+Please test the plugin with your theme on a develop machine or a local machine, 
+if the test is successful then install it on the production machine.
 
 e.g.
 
@@ -75,6 +82,20 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 Changelog:
+
+Changes 1.3.2-a - Oct 25/10/2009
+- Fixed bug with auto-install on wordpress 2.8.5
+
+Changes 1.3.1-b - Feb 09/02/2009
+- modify to approve posts before they are published
+- fixed thumbnail image width
+
+Changes 1.3.1-a - Jan 20/01/2009
+- It covers changes between WordPress Version 2.6 and Version 2.7
+- fixed the widget control
+
+Changes 1.3.0-g - Nov 26/11/2008
+Bugfix release
 
 Changes 1.3.0-f - Nov 05/11/2008
 - fixed the login problem for wmpu and buddypress
@@ -150,10 +171,14 @@ Example for htaccess code to redirect to wpClassified
 
 You need an .htaccess file that is created/modified by wordpress via the Permalink/mod-rewrite option. 
 
-Please edit the .htaccess file in the root folder of your Wordpress.
+By using the "/%postname%/" or "/%category%/%postname%/" as permalink
+structure the plugin must work correctly and you do not need change anything.
+
+For something else please edit the .htaccess file in the root folder of your Wordpress.
 You can edit the .htaccess file by FTP.
 You use the default .htaccess file and modify the file as follow:
 The redirect should look something like this
+
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
@@ -165,17 +190,13 @@ RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule . /index.php [L]
 ##########
 RewriteRule !classified/ /index.php [L]
-RewriteRule !(classified|odlinks)/ /index.php [L]
-RewriteRule ^classified/([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/?([^/\(\)]*)/? /index.php?pagename=classified [QSA,L,R,NS]
+RewriteRule ^classified/([^/\(\)]*)/?  /index.php?pagename=classified [QSA,L,R,NS]
 </IfModule>
 # END WordPress
 
 
 
-
-
 have fun
-Regards from Isfahan ;-)
-Mohammad Forgani, Oh Jung Su
-Juli 03/2008
 
+Mohammad Forgani, Oh Jung Su
+October 25/2009

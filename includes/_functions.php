@@ -6,36 +6,39 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.0-c
+* @version 1.3.1-a
 */
 
-if (!$_SESSION) session_start();
-
+if (!isset($_SESSION)) session_start();
 function wpc_header(){
 	global $_GET, $_POST, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
-	if ($wpcSettings['count_ads_per_page'] < 1) { 
+	if ($wpcSettings['count_ads_per_page'] < 1) {
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
 	echo '<div class="wpc_head">';
+	if (!isset($lnks)) $lnks = '';
+	if ($lnks == ''){$lnks = get_wpc_header_link();}
+	echo '<h3>' . $lnks. '</h3>';
+	echo "<table width=90% border=0 cellspacing=0 cellpadding=8><tr>";
 	if ($wpcSettings['classified_top_image']!=''){
+		
 		$img=preg_replace('/\s+/','',$wpcSettings['classified_top_image']);
-		echo '<img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '">';
+		echo '<td><img src="'.get_bloginfo('wpurl').'/wp-content/plugins/wp-classified/images/topic/' .$img. '"></td>';
 	}
 	if ($wpcSettings['description']!=''){
-		echo '<p>'.$wpcSettings['description'] . "&nbsp;</p>";
+		echo '<td valign=middle>'.$wpcSettings['description'] . "</td>";
 	}
-	if ($lnks==""){$lnks = get_wpc_header_link();}
-	echo '<h3>' . $lnks. '</h3>';
-?>
+	echo "</tr></table>";
+	?>
 	<div class="wpc_search">
 		<form action="<?php echo create_public_link("searchform", array());?>" method="post">
 		<input type="text" name="search_terms" VALUE="">
-		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);">
+		<input type="submit" value="<?php echo $lang['_SEARCH']; ?>">
 		</form>
 	</div>
 	<?php
-	if ($wpcSettings[GADposition] == 'top' || $wpcSettings[GADposition] == 'bth') {
+	if ($wpcSettings['GADposition'] == 'top' || $wpcSettings['GADposition'] == 'bth') {
 		$gAd = get_GADlink();
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
@@ -44,22 +47,24 @@ function wpc_header(){
 <?php
 
 	
+	//
+	cleanUpIpTempImages();
+
 
 	$today = time();
 	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
 	$rmRecords = $wpdb->get_results($sql);
 	foreach ($rmRecords as $rmRecord) { 
-		list ($adExpire, $contactBy) = split('###', $rmRecord->txt);
-		if (!$adExpire) { $adExpire=$wpcSettings['ad_expiration']; };
-		if (!$adExpire || $adExpire < 1 ) {
-			$adExpire=365;
-		}
-		$second = $adExpire*24*60*60; // second
-		$l = $today-$second;
-		if ($rmRecord->date < $l) {
-			$asid = $rmRecord->ads_subjects_id;
-			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
-			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+		list ($adExpire, $contactBy) = preg_split('/\#\#\#/', $rmRecord->txt);
+		if (!isset($adExpire)) { $adExpire=$wpcSettings[ad_expiration]; };
+		if ($adExpire && $adExpire > 0 ) {
+			$second = $adExpire*24*60*60; // second
+			$l = $today-$second;
+			if ($rmRecord->date < $l) {
+				$asid = $rmRecord->ads_subjects_id;
+				$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+				$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+			}
 		}
 	}	
 }
@@ -69,9 +74,7 @@ function wpc_header(){
 function wpc_index(){
 	global $_GET, $user_ID, $table_prefix, $wpdb;
 	get_currentuserinfo();
-	$wpcSettings = get_option('wpClassified_data');
-
-	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
+	$liststatuses = array('active'=>'Open','inactive'=>'Closed','readonly'=>'Read-Only');
 	$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
 	$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists WHERE status != 'inactive' ORDER BY position ASC");
 	if ((int)$user_ID){
@@ -90,13 +93,7 @@ function wpc_index(){
 			$rlists[$readtest[$i]->ads_subjects_list_id] = 'y';
 		} 
 	}
-	
-	if (!file_exists(ABSPATH . INC . "/main_tpl.php")){ 
-		include(dirname(__FILE__)."/main_tpl.php");
-	} else {
-		include(ABSPATH . INC . "/main_tpl.php");
-	}
-	
+	include(dirname(__FILE__)."/main_tpl.php");
 }
 
 
@@ -112,28 +109,22 @@ function get_wpc_list($msg){
 	}
 	$userfield = get_wpc_user_field();
 	//update_views($_GET['lid']);
-	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
+	$liststatuses = array('active'=>'Open','inactive'=>'Closed','readonly'=>'Read-Only');
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 		LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id	 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
 	
 	$read = (_is_usr_loggedin())?$wpdb->get_col("SELECT read_ads_subjects_id FROM {$table_prefix}wpClassified_read WHERE read_user_id = ".$user_ID):array();
 
-	$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$wpmuBaseTablePrefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author	LEFT JOIN {$wpmuBaseTablePrefix}users AS lu ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."' && {$table_prefix}wpClassified_ads_subjects.status != 'deleted' GROUP BY ads_subjects_id ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,{$table_prefix}wpClassified_ads_subjects.date DESC";
+$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$wpmuBaseTablePrefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author	LEFT JOIN {$wpmuBaseTablePrefix}users AS lu ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author LEFT JOIN {$table_prefix}wpClassified_ads ON {$table_prefix}wpClassified_ads.ads_ads_subjects_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_id  WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."' AND {$table_prefix}wpClassified_ads_subjects.status != 'deleted' AND {$table_prefix}wpClassified_ads.status='active' GROUP BY ads_subjects_id ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,{$table_prefix}wpClassified_ads_subjects.date DESC";
 
-	$ads = $wpdb->get_results($sql);
-	
-	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."'	&& status != 'deleted'");
+	$ads = $wpdb->get_results($sql);	
+	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."' && status != 'deleted'");
 
-	if (!file_exists(ABSPATH . INC . "/listAds_tpl.php")){ 
-		include(dirname(__FILE__)."/listAds_tpl.php");
-	} else {
-		include(ABSPATH . INC . "/listAds_tpl.php");
-	}
+	include(dirname(__FILE__)."/listAds_tpl.php");
 }
 
 function wpc_read_not_allowed(){
 	global $user_level;
-	$wpcSettings = get_option('wpClassified_data');
 	get_currentuserinfo();
 }
 
@@ -141,7 +132,7 @@ function wpc_footer(){
 	global $wpClassified_version, $table_prefix, $wpdb, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins (Version '.$wpClassified_version.') powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
-	if ($wpcSettings[GADposition] == 'btn' || $wpcSettings[GADposition] == 'bth') {
+	if ($wpcSettings['GADposition'] == 'btn' || $wpcSettings['GADposition'] == 'bth') {
 		$gAd = get_GADlink();
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
@@ -269,7 +260,7 @@ function _edit_ad(){
 		return;
 	}
 
-	list ($adExpire, $contactBy) = split('###',  $adsInfo["txt"]);
+	list ($adExpire, $contactBy) = preg_split('/\#\#\#\/',  $adsInfo["txt"]);
 	$displayform = true;
 	if ($_POST['wpClassified_edit_ad']=='yes'){
 		$addPost = true;
@@ -287,6 +278,24 @@ function _edit_ad(){
 		} 
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
 			$msg = $lang['_INVALIDEMAIL2'];
+			$addPost = false;
+		}
+
+		if ($_POST['wpClassified_data'][web]) {
+			if (!checkUrl($_POST['wpClassified_data'][web])){
+				$msg = $lang['_INVALIDURL'];
+				$addPost = false;
+			}
+		}
+		if ($_POST['wpClassified_data'][phone]) {
+			if (!validate_phone($_POST['wpClassified_data'][phone])) {
+				$msg = $lang['_INVALIDPHONE'];
+				$addPost = false;
+			}
+		}
+		$_POST['wpClassified_data'][subject] = preg_replace("/(\<)(.*?)(\>)/mi", "", $_POST['wpClassified_data'][subject]);
+		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])=='' || !checkInput($_POST['wpClassified_data'][subject])){
+			$msg = $lang['_INVALIDTITLE'];
 			$addPost = false;
 		}
 		if($wpcSettings['confirmation_code']=='y'){ 
@@ -309,8 +318,9 @@ function _edit_ad(){
 			$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 			if ($ok==true){
 				$imginfo = @getimagesize($_FILES['image_file']['tmp_name']);
-				if ($imginfo[0]>(int)$wpcSettings["image_width"]  ||
-					$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0){
+				if ($imginfo[0] && 
+						($imginfo[0]>(int)$wpcSettings["image_width"] ||
+						$imginfo[1]>(int)$wpcSettings["image_height"] || $imginfo[0] == 0))	{
 					 $msg = $lang['_INVALIDIMG'] . $lang['_INVALIDMSG2'] .(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"]. $lang['_INVALIDMSG3'].$lang['_YIMG']. " " . $imginfo[0]."x".$imginfo[1];
 					$addPost=false;	
 				} else {
@@ -329,9 +339,6 @@ function _edit_ad(){
 			$displayform = false;
 
 			$web = $_POST['wpClassified_data'][web];
-			if($web && !eregi("http://",$web)){ 
-				$web = 'http://' . $web;
-			}
 
 			$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 			$sql = "update {$table_prefix}wpClassified_ads
@@ -350,8 +357,8 @@ function _edit_ad(){
 			phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
 			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][adExpire])).'###'.$_POST['wpClassified_data'][contactBy]."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";
 
-				$wpdb->query($sql);
-				get_wpc_list($lang['_UPDATE']);
+			$wpdb->query($sql);
+			get_wpc_list($lang['_UPDATE']);
 		} else {
 			$displayform = true;
 		}
@@ -362,12 +369,8 @@ function _edit_ad(){
 
 		$postinfos = $wpdb->get_results($sql);
 		$postinfo = $postinfos[0];
-
-		if (!file_exists(ABSPATH . INC . "/editAd_tpl.php")){ 
-			include(dirname(__FILE__)."/editAd_tpl.php");
-		} else {
-			include(ABSPATH . INC . "/editAd_tpl.php");
-		}
+ 
+		include(dirname(__FILE__)."/editAd_tpl.php");
 	}
 }
 
@@ -387,7 +390,7 @@ function _print_ad(){
 	$phone = $post->phone;
 	$photo = $post->image_file;
 
-	$array = split('###', $post->image_file);
+	$array = preg_split('/\#\#\#/', $post->image_file);
 	$submitter = get_post_author($post);
 	//wpc_header();
 	echo "<html><head><title>".$wpcSettings['wpClassified_slug']."</title></head>";
@@ -518,7 +521,7 @@ function _send_ad(){
 	$msg=$post->post;
 	$subject=$post->subject;
 	$displayform = true;
-	if ($_POST['wpClassified_send_ad']=='yes'){
+	if (isset($_POST['wpClassified_send_ad']) && $_POST['wpClassified_send_ad']=='yes'){
 		$sendAd = true;
 		$yourname=$_POST['wpClassified_data'][yourname];
 		$mailfrom=$_POST['wpClassified_data'][mailfrom];
@@ -566,11 +569,7 @@ function _send_ad(){
 	}
 
 	if ($displayform==true){
-		if (!file_exists(ABSPATH . INC . "/sendAd_tpl.php")){ 
-			include(dirname(__FILE__)."/sendAd_tpl.php");
-		} else {
-			include(ABSPATH . INC . "/sendAd_tpl.php");
-		}
+		include(dirname(__FILE__)."/sendAd_tpl.php");
 	}	
 }
 
@@ -604,11 +603,7 @@ function _display_ad(){
 
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_user_info ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID WHERE {$table_prefix}wpClassified_ads.ads_ads_subjects_id = '".(int)$_GET['asid']."' && {$table_prefix}wpClassified_ads.status = 'active' ORDER BY {$table_prefix}wpClassified_ads.date ASC";
 	
-
 	$posts = $wpdb->get_results($sql);
-
-
-	
 	
 	if (count($posts)>$wpcSettings['count_ads_per_page']){
 		$hm = $wpcSettings['count_ads_per_page'];
@@ -650,14 +645,10 @@ function _display_ad(){
 			$post->image_file = get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/".$post->image_file;
 		}
 
-		if (!file_exists(ABSPATH . INC . "/showAd_tpl.php")){ 
-			include(dirname(__FILE__)."/showAd_tpl.php");
-		} else {
-			include(ABSPATH . INC . "/showAd_tpl.php");
-		}
+		include(dirname(__FILE__)."/showAd_tpl.php");
 	}
 
-	if (count($setasread)>0){
+	if (isset($setasread) && count($setasread)>0){
 		$wpdb->query("INSERT INTO {$table_prefix}wpClassified_read_ads (read_ads_user_id, read_ads_ads_subjects_id, read_ads_id) VALUES ".@implode(", ", $setasread));
 	}
 	//if ($wpcSettings['must_registered_user']!="y" || _is_usr_loggedin()){	}
@@ -667,7 +658,6 @@ function _display_ad(){
 function display_search($term){
 	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang;
 	get_currentuserinfo();
-	$wpcSettings = get_option('wpClassified_data');
 	$userfield = get_wpc_user_field();
 
 	#
@@ -677,11 +667,7 @@ function display_search($term){
 
 	$results = $wpdb->get_results($sql);
 
-	if (!file_exists(ABSPATH . INC . "/searchRes_tpl.php")){ 
-		include(dirname(__FILE__)."/searchRes_tpl.php");
-	} else {
-		include(ABSPATH . INC . "/searchRes_tpl.php");
-	}
+	include(dirname(__FILE__)."/searchRes_tpl.php");
 }
 
 
@@ -689,11 +675,11 @@ function get_GADlink() {
 	$wpcSettings = get_option('wpClassified_data');
 	$key_code = $wpcSettings['googleID']; 
 	if ( $wpcSettings['GADproduct']=='link' )	{
-		$format = $wpcSettings[GADLformat] . '_0ads_al'; // _0ads_al_s  5 Ads Per Unit
-		list($width,$height,$null) = split('[x]',$wpcSettings[GADLformat]);
+		$format = $wpcSettings['GADLformat'] . '_0ads_al'; // _0ads_al_s  5 Ads Per Unit
+		list($width,$height) = preg_split('/[x]/',$wpcSettings['GADLformat']);
 	} else {
-		$format = $wpcSettings[GADformat] . '_as';
-		list($width,$height,$null) = split('[x]',$wpcSettings[GADformat]);
+		$format = $wpcSettings['GADformat'] . '_as';
+		list($width,$height,$null) = preg_split('/[x]/',$wpcSettings['GADformat']);
 	}
 
 	$code = "\n" . '<script type="text/javascript"><!--' . "\n";
@@ -701,10 +687,10 @@ function get_GADlink() {
 	$code.= 'google_ad_width="' . $width . '"; ' . "\n";
 	$code.= 'google_ad_height="' . $height . '"; ' . "\n";
 	$code.= 'google_ad_format="' . $format . '"; ' . "\n";
-	if($settings['alternate_url']!=''){ 
+	if(isset($settings['alternate_url']) && $settings['alternate_url']!=''){ 
 		$code.= 'google_alternate_ad_url="' . $settings['alternate_url'] . '"; ' . "\n";
 	} else {
-		if($settings['alternate_color']!='') { 
+		if(isset($settings['alternate_color']) && $settings['alternate_color']!='') { 
 			$code.= 'google_alternate_color="' . $settings['alternate_color'] . '"; ' . "\n";
 		}
 	}				
@@ -716,11 +702,11 @@ function get_GADlink() {
 		// '6' => 'Slightly rounded corners'
 	    	// '10' => 'Very rounded corners'
 	}
-	$code.= 'google_color_border="' . $wpcSettings[GADcolor_border] . '"' . ";\n";
-	$code.= 'google_color_bg="' . $wpcSettings[GADcolor_bg] . '"' . ";\n";
-	$code.= 'google_color_link="' . $wpcSettings[GADcolor_link] . '"' . ";\n";
-	$code.= 'google_color_text="' . $wpcSettings[GADcolor_text] . '"' . ";\n";
-	$code.= 'google_color_url="' . $wpcSettings[GADcolor_url] . '"' . ";\n";
+	$code.= 'google_color_border="' . $wpcSettings['GADcolor_border'] . '"' . ";\n";
+	$code.= 'google_color_bg="' . $wpcSettings['GADcolor_bg'] . '"' . ";\n";
+	$code.= 'google_color_link="' . $wpcSettings['GADcolor_link'] . '"' . ";\n";
+	$code.= 'google_color_text="' . $wpcSettings['GADcolor_text'] . '"' . ";\n";
+	$code.= 'google_color_url="' . $wpcSettings['GADcolor_url'] . '"' . ";\n";
 	$code.= '//--></script>' . "\n";
 	$code.= '<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>' . "\n";
 	return $code;
@@ -743,31 +729,64 @@ function _filter_content($content, $searchvalue) {
 
 function get_last_ads($format) {
 	global $table_prefix, $wpdb, $lang;
+	$wpcSettings = get_option('wpClassified_data');
 	if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
 
 	$start = 0;
 	$out ='';
 
-    	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id = L.wpClassified_lists_id ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+   	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_ads AD, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id=L.wpClassified_lists_id AND AD.ads_ads_subjects_id=ADS.ads_subjects_id AND AD.status='active' ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+
+
  	$lastAds = $wpdb->get_results($sql);
 
 	foreach ($lastAds as $lastAd) {
 		$link=create_public_link("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
-		$out .= $link;
-		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
+		$out .= '<li>'.$link;
+		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE status='active' and ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
 		$rec = $wpdb->get_row($sql);
-		$array = split('###', $rec->image_file);
+		$array = preg_split('/\#\#\#/', $rec->image_file);
 		$img = $array[0];
 		if (!$format) {
 			if ($img !='') {
 				include (dirname(__FILE__).'/js/viewer.js.php');
 				$out .= "&nbsp;<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
 			}
-			$out .= "&nbsp;<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
+			$out .= "&nbsp;-<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
 		}
-		$out .= "<BR />";
+		$out .= "</li>\n";
 	}	
 	return $out;
 }
+
+
+function cleanUpIpTempImages()  {
+	$dir = ABSPATH."wp-content/plugins/wp-classified/images/cpcc/";
+	$deleteTimeDiff=50;
+	if (!($dh = opendir($dir)))
+	echo 'Unable to open cache directory "'.$dir.'"';
+	$result = true;
+	while ($file = readdir($dh)) {
+	if (($file != '.') && ($file != '..')) {
+		$file2 = $dir.DIRECTORY_SEPARATOR.$file;
+		if (is_file($file2)) {
+			if ((mktime() - @filemtime($file2)) < $deleteTimeDiff)
+				@unlink( $strDir.$strFile );
+			}
+		}
+	}
+}
+
+
+function validate_phone($phone){
+	$phoneregexp ='/^(\+[1-9][0-9]*(\([0-9]*\)|-[0-9]*-))?[0]?[1-9][0-9\- ]*$/';
+	$phonevalid = false;
+    if (preg_match($phoneregexp, $phone)) {
+		$phonevalid = true;
+	}
+	return $phonevalid;
+}
+
+
 
 ?>

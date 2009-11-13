@@ -14,7 +14,7 @@ $wpcSettings = get_option('wpClassified_data');
 wpc_header();
 
 $yourname = get_post_author($post);
-if ($sendMsg){echo "<p class=\"error\">".$sendMsg."</p>";}
+if (isset($sendMsg)){echo "<p class=\"error\">".$sendMsg."</p>";}
 ?>
 <div class="wpc_container">
 <div class="editform">

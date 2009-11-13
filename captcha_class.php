@@ -5,19 +5,20 @@
 * PhpCaptcha CAPTCHA generation library from Edward Eliot.
 * class defaults - change to effect globally
 */
-   session_start();
-   define('CAPCC_WIDTH', 120); // max 500
-   define('CAPCC_HEIGHT', 50); // max 200
-   define('CAPCC_NUM_CHARS', 4);
-   define('CAPCC_NUM_LINES', 20);
-   define('CAPCC_CHAR_SHADOW', false);
-   define('CAPCC_CHAR_SET', ''); // defaults to A-Z
-   define('CAPCC_CASE_INSENSITIVE', true);
-   define('CAPCC_BACKGROUND_IMAGES', '');
-   define('CAPCC_MIN_FONT_SIZE', 12);
-   define('CAPCC_MAX_FONT_SIZE', 20);
-   define('CAPCC_USE_COLOUR', true);
-   define('CAPCC_FILE_TYPE', 'png');
+   // session_start(); A session had already been started
+   define('WPC_CAPCC_WIDTH', 120); // max 500
+   define('WPC_CAPCC_HEIGHT', 50); // max 200
+   define('WPC_CAPCC_NUM_CHARS', 4);
+   define('WPC_CAPCC_NUM_LINES', 20);
+   define('WPC_CAPCC_CHAR_SHADOW', false);
+   define('WPC_CAPCC_CHAR_SET', ''); // defaults to A-Z
+   define('WPC_CAPCC_CASE_INSENSITIVE', true);
+   define('WPC_CAPCC_BACKGROUND_IMAGES', '');
+   define('WPC_CAPCC_CASE_INSENSITIVEE', 12);
+   define('WPC_CAPCC_MAX_FONT_SIZE', 20);
+   define('WPC_CAPCC_SESSION_ID', '');
+   define('WPC_CAPCC_USE_COLOUR', true);
+   define('WPC_CAPCC_FILE_TYPE', 'png');
    
    /************************ End Default Options **********************/
    
@@ -25,8 +26,8 @@
    
    class _captcha {
       var $oImage;
-      var $iWidth = CAPCC_WIDTH;
-      var $iHeight = CAPCC_HEIGHT;
+      var $iWidth = WPC_CAPCC_WIDTH;
+      var $iHeight = WPC_CAPCC_HEIGHT;
       var $aFonts;
       var $iNumChars;
       var $iNumLines;
@@ -45,18 +46,18 @@
       function _captcha($aFonts) {
          // get parameters
          $this->aFonts = $aFonts;
-         $this->SetNumChars(CAPCC_NUM_CHARS);
-         $this->SetNumLines(CAPCC_NUM_LINES);
-         $this->DisplayShadow(CAPCC_CHAR_SHADOW);
-         $this->SetCharSet(CAPCC_CHAR_SET);
-         $this->CaseInsensitive(CAPCC_CASE_INSENSITIVE);
-         $this->SetBackgroundImages(CAPCC_BACKGROUND_IMAGES);
-         $this->SetMinFontSize(CAPCC_MIN_FONT_SIZE);
-         $this->SetMaxFontSize(CAPCC_MAX_FONT_SIZE);
-         $this->UseColour(CAPCC_USE_COLOUR);
-         $this->SetFileType(CAPCC_FILE_TYPE);   
-         $this->SetWidth(CAPCC_WIDTH);
-         $this->SetHeight(CAPCC_HEIGHT);
+         $this->SetNumChars(WPC_CAPCC_NUM_CHARS);
+         $this->SetNumLines(WPC_CAPCC_NUM_LINES);
+         $this->DisplayShadow(WPC_CAPCC_CHAR_SHADOW);
+         $this->SetCharSet(WPC_CAPCC_CHAR_SET);
+         $this->CaseInsensitive(WPC_CAPCC_CASE_INSENSITIVE);
+         $this->SetBackgroundImages(WPC_CAPCC_BACKGROUND_IMAGES);
+         $this->SetMinFontSize(WPC_CAPCC_CASE_INSENSITIVEE);
+         $this->SetMaxFontSize(WPC_CAPCC_MAX_FONT_SIZE);
+         $this->UseColour(WPC_CAPCC_USE_COLOUR);
+         $this->SetFileType(WPC_CAPCC_FILE_TYPE);   
+         $this->SetWidth(WPC_CAPCC_WIDTH);
+         $this->SetHeight(WPC_CAPCC_HEIGHT);
       }
       
       function CalculateSpacing() {
@@ -177,9 +178,9 @@
          }
          // save code in session variable
          if ($this->bCaseInsensitive) {
-            $_SESSION[CAPCC_SESSION_ID] = strtoupper($this->sCode);
+            $_SESSION['WPC_CAPCC_SESSION_ID'] = strtoupper($this->sCode);
          } else {
-            $_SESSION[CAPCC_SESSION_ID] = $this->sCode;
+            $_SESSION['WPC_CAPCC_SESSION_ID'] = $this->sCode;
          }
       }
       
@@ -288,9 +289,9 @@
          if ($bCaseInsensitive) {
             $sUserCode = strtoupper($sUserCode);
          }
-         if (!empty($_SESSION[CAPCC_SESSION_ID]) && $sUserCode == $_SESSION[CAPCC_SESSION_ID]) {
+         if (!empty($_SESSION['WPC_CAPCC_SESSION_ID']) && $sUserCode == $_SESSION['WPC_CAPCC_SESSION_ID']) {
             // clear to prevent re-use
-            unset($_SESSION[CAPCC_SESSION_ID]);
+            unset($_SESSION['WPC_CAPCC_SESSION_ID']);
             return true;
          }
          return false;

@@ -1,11 +1,17 @@
 <?php
 
+/*
+* admin.php
+* This file is part of wp-classified
+* @author Mohammad Forgani 2008
+* @version 1.3.1-a
+*/
 
 function wpClassified_db(){
 	global $wpdb, $table_prefix, $wpClassified_version;
 
 	$wpClassified_sql[$table_prefix.'wpClassified_lists'] = "
-	CREATE TABLE `{$table_prefix}wpClassified_lists` (
+	CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_lists` (
 	`lists_id` int(11) NOT NULL auto_increment,
 	`wpClassified_lists_id` int(11) NOT NULL default '0',
 	`position` int(11) NOT NULL default '0',
@@ -15,24 +21,22 @@ function wpClassified_db(){
 	`ads_status` int(11) NOT NULL default '0',
 	`ads` int(11) NOT NULL default '0',
 	`ads_views` int(11) NOT NULL default '0',
-	PRIMARY KEY  (`lists_id`),
-	KEY `lists_id` (`lists_id`)
+	PRIMARY KEY  (`lists_id`)
 	)";
 	
 	$wpClassified_sql[$table_prefix.'wpClassified_categories'] = "
-	CREATE TABLE `{$table_prefix}wpClassified_categories` (
+	CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_categories` (
 	`categories_id` int(11) NOT NULL auto_increment,
 	`name` varchar(150) NOT NULL default 'Unnamed',
 	`photo` varchar(150) NOT NULL default 'Unnamed',
 	`position` int(11) NOT NULL default '0',
 	`status` enum('active','inactive') NOT NULL default 'inactive',
-	PRIMARY KEY  (`categories_id`),
-	KEY `categories_id` (`categories_id`)
+	PRIMARY KEY  (`categories_id`)
 	)";
 	
 	
 	$wpClassified_sql[$table_prefix.'wpClassified_ads'] = "
-	CREATE TABLE `{$table_prefix}wpClassified_ads` (
+	CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_ads` (
 	`ads_id` int(20) NOT NULL auto_increment,
 	`ads_ads_subjects_id` int(11) NOT NULL default '0',
 	`date` int(20) NOT NULL default '0',
@@ -46,7 +50,7 @@ function wpClassified_db(){
 	PRIMARY KEY  (`ads_id`)
 	)";	
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_ads_subjects'] = "CREATE TABLE `{$table_prefix}wpClassified_ads_subjects` (
+	$wpClassified_sql[$table_prefix.'wpClassified_ads_subjects'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_ads_subjects` (
 	`ads_subjects_id` int(11) NOT NULL auto_increment,
 	`ads_subjects_list_id` int(11) NOT NULL default '0',
 	`date` int(20) NOT NULL default '0',
@@ -70,19 +74,19 @@ function wpClassified_db(){
 	PRIMARY KEY  (`ads_subjects_id`)
 	)";
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_user_info'] = "CREATE TABLE `{$table_prefix}wpClassified_user_info` (
+	$wpClassified_sql[$table_prefix.'wpClassified_user_info'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_user_info` (
 	`user_info_user_ID` bigint(20) NOT NULL default '0',
 	`user_info_permission` enum('none','moderator','administrator') NOT NULL default 'none',
 	`user_info_post_count` int(11) NOT NULL default '0',
 	`user_info_title` varchar(200) NOT NULL default '', PRIMARY KEY  (`user_info_user_ID`)
 	)";
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_read'] = "CREATE TABLE `{$table_prefix}wpClassified_read` (
+	$wpClassified_sql[$table_prefix.'wpClassified_read'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_read` (
 	`read_user_id` bigint(20) NOT NULL default '0',
 	`read_ads_subjects_id` bigint(20) NOT NULL default '0'
 	)";
 	
-	$wpClassified_sql[$table_prefix.'wpClassified_read_ads'] = "CREATE TABLE `{$table_prefix}wpClassified_read_ads` (
+	$wpClassified_sql[$table_prefix.'wpClassified_read_ads'] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}wpClassified_read_ads` (
 	`read_ads_user_id` bigint(20) NOT NULL default '0',
 	`read_ads_ads_subjects_id` bigint(20) NOT NULL default '0',
 	`read_ads_id` bigint(20) NOT NULL default '0'
@@ -105,6 +109,8 @@ function wpClassified_db(){
 		$tables[] = $tabs[$i][0];
 	}
 	@reset($wpClassified_sql);
+	echo '<div class="wrap"><h2>Installation the wpClassified</h2>';
+	
 	while (list($k, $v) = @each($wpClassified_sql)){
 		if (!@in_array($k, $tables)){
 			echo " - create table: " .  $k . "<BR>"; 
@@ -112,6 +118,8 @@ function wpClassified_db(){
 		}
 		$wpcSettings['wpClassified_installed'] = 'y';
 	}
+	echo "<h3>The tables have been created successfully. Now please save the settings!</h3>";
+	echo '</div>';
 }
 
 ?>

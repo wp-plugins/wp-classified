@@ -31,11 +31,11 @@ if (($i+1)==$hm){
 <div class="show_ad">
 <div class="show_ad_header">
 <?php
-$array = split('###', $post->image_file);
+$array = preg_split('/\#\#\#/', $post->image_file);
 $img = $array[0];
 if ($img !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img1\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" style=\"width: 120px; height: 100px\"></a></div>";
+	echo "<div class=\"show_ad_img1\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" style=\"width: ". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
 }
 ?>
 
@@ -54,13 +54,13 @@ Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-cl
 </div><!-- header -->
 
 <?php
-if ($array[1] !=''){
+if (isset($array[1]) && $array[1] !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" style=\"width: 120px; height: 100px\"></a></div>"; //<br>" .$array[1] . "
+	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[1] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[1] . "
 } 
-if ($array[2] !=''){
+if (isset($array[2]) && $array[2] !=''){
 	include (dirname(__FILE__).'/js/viewer.js.php');
-	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" style=\"width: 120px; height: 100px\"></a></div>"; //<br>" .$array[2] . "
+	echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $array[2] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[2] . "
 } 
 ?>
 
@@ -86,17 +86,17 @@ if ($array[2] !=''){
 
 <?php
 
-list ($adExpire, $contactBy) = split('###', $adsInfo[txt]);
+list ($adExpire, $contactBy) = preg_split('/\#\#\#/', $adsInfo['txt']);
 
 echo "<hr><div class=\"info\"><div class=\"left\">";
-if ($adsInfo[email] && $contactBy==$lang['_YES_CONTACT']) {
-	echo '<a href="mailto:' . $adsInfo[email] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/email.jpg" class="imgMiddle">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
+if (isset($adsInfo['email']) && $contactBy==$lang['_YES_CONTACT']) {
+	echo '<a href="mailto:' . $adsInfo['email'] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/email.jpg" class="imgMiddle">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
 }
-if ($adsInfo[web]) {
-	echo "<a href=\"" . $adsInfo[web] . "\" target=_blank><img src=\"" . get_bloginfo('wpurl') . "/wp-content/plugins/wp-classified/images/topic/web.jpg\" class=\"imgMiddle\"></a>";
+if (isset($adsInfo['web'])) {
+	echo "<a href=\"" . $adsInfo['web'] . "\" target=_blank><img src=\"" . get_bloginfo('wpurl') . "/wp-content/plugins/wp-classified/images/topic/web.jpg\" class=\"imgMiddle\"></a>";
 }
-if ($adsInfo[phone]) {
-	echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/phone.jpg" title="'.$adsInfo[phone].'" class="imgMiddle">';
+if (isset($adsInfo['phone'])) {
+	echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/phone.jpg" title="'.$adsInfo['phone'].'" class="imgMiddle">';
 }
 $pageinfo = get_wpClassified_pageinfo();
 $printAd = '<a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=prtad&aid='.$post->ads_id.'"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/print.jpg" class="imgMiddle"></a>'; 

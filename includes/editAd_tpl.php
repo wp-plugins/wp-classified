@@ -5,7 +5,7 @@
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
-* @version 1.2.1
+* @version 1.3.1-a
 * 
 */
 
@@ -52,7 +52,7 @@ onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php
 
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td></tr>
+<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp;e.g. +98(231)12345</span></td></tr>
 <tr><td></td><td><hr></td></tr>
 <tr>
 <td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
@@ -83,11 +83,18 @@ foreach($array as $f) {
 <div style="text-align: center;"><?php create_ads_input($postinfo->post);?></div>
 </td></tr>
 
-<tr>
-<td class="wpc_label_right"><?php echo $lang['_HOW_LONG']; ?></td>
-<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="<?php if ($adExpire) {echo $adExpire;} else {echo (int)$wpcSettings["ad_expiration"];} ?>"/><br><span class ="smallTxt">default(<?php echo (int)$wpcSettings["ad_expiration"].$lang['_DAY']; ?>)</span></td>
-</tr>
-<?php
+<?php 
+if ( $wpcSettings[ad_expiration] && $wpcSettings[ad_expiration] > 0 ) {
+	echo '<tr><td class="wpc_label_right">'.$lang['_HOW_LONG']. '</td>';
+	echo '<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="';
+	if ($adExpire) {
+		echo $adExpire;
+	} else {
+		echo (int)$wpcSettings[ad_expiration];
+	} 
+	echo '"/><br><span class ="smallTxt">('.(int)$wpcSettings[ad_expiration].$lang['_DAY'].')</span></td></tr>';
+}
+
 if($wpcSettings['confirmation_code']=='y') { 
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
   $oVisualCaptcha = new _captcha($aFonts);
@@ -101,7 +108,7 @@ if($wpcSettings['confirmation_code']=='y') {
 </tr>
 <?php
 } ?>
-<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="Reset" /></td></tr>
+<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td></tr>
 </form></table>
 </div>
 </div>

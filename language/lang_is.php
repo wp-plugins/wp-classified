@@ -161,4 +161,13 @@ Localization by: Hákon Orri Ásgeirsson
 	//$lang['_DISPO'] = "expires on";
 	//$lang['_NOMAIL'] = "We do not give out users email addresses, to contact them by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address. ";
 
+// from 1.3.1
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long";
+	$lang['_MAIN'] = "Main";
+
+// from 1.3.1-b
+	$lang['_APPROVE'] = "Thank You for using our Classified Ads.<br>Your classified ad has been sucessfully submitted for review!<br>Feel free to submit another ad.";
+	$lang['_APPROVEREPLY'] = "This ad was already submitted. We will check it as soon as possible.";
+
+
 ?>

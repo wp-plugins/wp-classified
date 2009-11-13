@@ -37,12 +37,14 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
   $addtopicImg = '<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg">';
   if ($wpcSettings["must_registered_user"]=="y" && !_is_usr_loggedin() ) { 
 	echo $addtopicImg;
-	echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?>
+	echo "<span sytle=\"font-size:13px\">".create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>"
+	?>;
 	<?php
   } else {
 	echo $addtopicImg;
-	echo create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE']));?><?php
-  } 
+	echo "<span sytle=\"font-size:13px\">".create_public_link("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
+	?><?php
+  }
   ?>
   </div><!--list_ads_top-->
   <div id="main_col_title">
@@ -76,8 +78,8 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 	<?php
 	
 	$rec = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads 
-		WHERE ads_ads_subjects_id = $ad->ads_subjects_id ");
-	$array = split('###', $rec->image_file);
+		WHERE ads_ads_subjects_id = $ad->ads_subjects_id");
+	$array = preg_split('/\#\#\#/', $rec->image_file);
 	$img = $array[0];
 
 	if ($img !='') {

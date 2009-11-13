@@ -5,7 +5,7 @@
 * This file is part of wp-classified
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
-* @version 1.2.1
+* @version 1.3.1
 * show the Main page
 */
 
@@ -73,7 +73,7 @@ if ($catCnt!="0"){
 			?>
 			<div class="wpc_main">
 			<?php
-			if ($rlists[$catlist[$i]->lists_id]=='y' && $user_ID>0){
+			if (isset($rlists[$catlist[$i]->lists_id]) && $rlists[$catlist[$i]->lists_id]=='y' && $user_ID>0){
 				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/unread.gif\">\n";
 			} else {
 				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/read.gif\">\n";
