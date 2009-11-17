@@ -14,9 +14,8 @@ This plugin allows you to add a simple classified page in to your wordpress blog
 The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
 default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
 
-Demo link: http://www.forgani.com/classified/
+Demo link: http://www.forgani.com/tools/wpclassified-plugins/
 
-= Iran's Green Wave Movement =
 
  
 
@@ -82,6 +81,9 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 Changelog:
+
+Changes 1.3.2-g - Nov 12/11/2009
+- A new version for wordpress 2.8.6
 
 Changes 1.3.2-a - Oct 25/10/2009
 - Fixed bug with auto-install on wordpress 2.8.5

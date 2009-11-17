@@ -8,6 +8,69 @@ Author:Mohammad Forgani
 Version: 1.3.2-a
 Requires at least:2.8.x
 Author URI: http://www.forgani.com
+
+
+Release Notes:
+
+
+release 1.2.0-e - Augst 20/08/2008
+
+User Side
+- added language file (The work is Not Finished!) 
+- Fixed search problem
+- Fixed to image showing by editing and setting.
+- added the default value for expire
+
+Admin Side
+- implement the maximum character limit
+- added two directory within the “/images” directory cpcc and topic. 
+You will need to make the folders writable (chmod 777).
+- option to deactivate the confirmation code
+- added google AdSense
+
+release 1.3.0 - Sep 10/09/2008
+
+- Update to  display-style classified ads in one column
+- Added the ad images viewer
+- Allowed more images per ad
+- All the pages using templates
+- Added style sheet for page layout 
+
+Changes 1.3.0-b - Sep 13/10/2008
+- Modify to expand and collapses the Categories
+- Modify to show the last post in footer
+- fix the URL faking bug
+
+Changes 1.3.0-c - Sep 27/10/2008
+- extending the Administration Interface
+
+Changes 1.3.0-e - Nov 03/11/2008
+- include the links of photo to the last ads's list
+- NEW: You can now place the last ads history on the sidebar as a widget
+
+Changes 1.3.0-f,g - Nov 05/11/2008
+- fixed the login problem wmpu and buddypress and wp v2.6.3
+
+Changes 1.3.0-h - Nov 26/11/2008
+Bugfix release
+
+Changes 1.3.1-a - Jan 20/01/2009
+- It covers changes between WordPress Version 2.6 and Version 2.7
+- fixed the widget
+
+Changes 1.3.1-b - Feb 09/02/2009
+- Modify to approve posts before they are published
+- fixed thumbnail image width
+
+Changes 1.3.2-a - Oct 25/10/2009
+- Fixed bug with auto-install on wordpress 2.8.5
+
+Changes 1.3.2-a - Oct 25/10/2009
+- Fixed bug with auto-install on wordpress 2.8.5
+
+Changes 1.3.2-g - Nov 12/11/2009
+- A new version for wordpress 2.8.6
+
 */
 
 require_once(dirname(__FILE__).'/settings.php');
