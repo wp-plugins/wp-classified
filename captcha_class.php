@@ -24,7 +24,7 @@
    
    // don't edit below this line (unless you want to change the class!)
    
-   class _captcha {
+   class wpcCaptcha {
       var $oImage;
       var $iWidth = WPC_CAPCC_WIDTH;
       var $iHeight = WPC_CAPCC_HEIGHT;
@@ -43,7 +43,7 @@
       var $sCode = '';
       
     
-      function _captcha($aFonts) {
+      function wpcCaptcha($aFonts) {
          // get parameters
          $this->aFonts = $aFonts;
          $this->SetNumChars(WPC_CAPCC_NUM_CHARS);
@@ -301,10 +301,10 @@
    
 
    // example sub class
-   class _captchaColour extends _captcha {
+   class _captchaColour extends wpcCaptcha {
       function _captchaColour($aFonts) {
          // call parent constructor
-         parent::_captcha($aFonts);
+         parent::wpcCaptcha($aFonts);
          
          // set options
          $this->UseColour(true);

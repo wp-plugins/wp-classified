@@ -9,10 +9,7 @@
 * 
 */
 
-global $lang, $quicktags;
-$wpcSettings = get_option('wpClassified_data');
-
-wpc_header();
+wpcHeader();
 
 
 if ($msg){echo "<p class=\"error\">".$msg."</p>";}
@@ -25,12 +22,12 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 <h3><?php echo $adsInfo["subject"]; ?></h3>
 
 <table>
-<form method="post" id="ead_form" name="ead_form" enctype="multipart/form-data"
-onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php echo create_public_link("eaform", array("lid"=>$lists["lists_id"], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$adsInfo["subject"], "aid"=>$_GET['aid']));?>">
-<input type="hidden" name="wpClassified_edit_ad" value="yes">
+<form method="post" id="wpClassifiedForm" name="wpClassifiedForm" enctype="multipart/form-data"
+onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php echo wpcPublicLink("eaform", array("lid"=>$lists["lists_id"], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$adsInfo["subject"], "aid"=>$_GET['aid']));?>">
+<input type="hidden" name="edit_ad" value="yes">
 <tr><td class="wpc_label_right"><?php echo $lang['_AUTHOR']; ?></td>
-<td><?php echo get_post_author($postinfo); ?>
-<input type="hidden" name="wpClassified_data[author_name]" value="<?php echo get_post_author($postinfo); ?>">
+<td><?php echo wpcPostAuthor($postinfo); ?>
+<input type="hidden" name="wpClassified_data[author_name]" value="<?php echo wpcPostAuthor($postinfo); ?>">
 </td>
 </tr>
 <tr>
@@ -62,7 +59,7 @@ onsubmit="this.sub.disabled=true;this.sub.value='Saving Post...';" action="<?php
 <table width=90%><tr>
 <?php
 
-$array = split('###', $postinfo->image_file);
+$array = preg_split('/###/', $postinfo->image_file);
 foreach($array as $f) {
 	include (dirname(__FILE__).'/js/viewer.js.php');
 	echo '<td align="center">';
@@ -76,28 +73,28 @@ foreach($array as $f) {
 ?>
 </tr></table>
 <tr><td colspan=2 align="center">
-<?php echo create_public_link("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
+<?php echo wpcPublicLink("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
 </td></tr>
 
-<tr><td colspan=2><h3><?php echo $lang['_DESC']; ?></h3><br>
-<div style="text-align: center;"><?php create_ads_input($postinfo->post);?></div>
+<tr><td colspan=2><?php echo $lang['_DESC']; ?><br>
+<div style="text-align: center;"><?php wpcAdInput($postinfo->post);?></div>
 </td></tr>
 
 <?php 
-if ( $wpcSettings[ad_expiration] && $wpcSettings[ad_expiration] > 0 ) {
+if ( isset($wpcSettings['ad_expiration']) && $wpcSettings['ad_expiration'] > 0 ) {
 	echo '<tr><td class="wpc_label_right">'.$lang['_HOW_LONG']. '</td>';
-	echo '<td><input type="text" name="wpClassified_data[adExpire]" size="3" maxlength="3" value="';
+	echo '<td><input type="text" name="wpClassified_data[ad_expiration]" size="3" maxlength="3" value="';
 	if ($adExpire) {
 		echo $adExpire;
 	} else {
-		echo (int)$wpcSettings[ad_expiration];
+		echo (int)$wpcSettings['ad_expiration'];
 	} 
-	echo '"/><br><span class ="smallTxt">('.(int)$wpcSettings[ad_expiration].$lang['_DAY'].')</span></td></tr>';
+	echo '"/><br><span class ="smallTxt">('.(int)$wpcSettings['ad_expiration'].$lang['_DAY'].')</span></td></tr>';
 }
 
 if($wpcSettings['confirmation_code']=='y') { 
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-  $oVisualCaptcha = new _captcha($aFonts);
+  $oVisualCaptcha = new wpcCaptcha($aFonts);
   $captcha = rand(1, 50) . ".png";
   $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
@@ -108,10 +105,10 @@ if($wpcSettings['confirmation_code']=='y') {
 </tr>
 <?php
 } ?>
-<tr><td></td><td><br><input type=submit value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td></tr>
+<tr><td></td><td><br><input type="submit" name="submit" value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td></tr>
 </form></table>
 </div>
 </div>
 <?php
-wpc_footer();
+wpcFooter();
 ?>

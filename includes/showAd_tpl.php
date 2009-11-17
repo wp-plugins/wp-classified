@@ -9,14 +9,13 @@
 * display advertisement information
 */
 
-global $lang;
-$wpcSettings = get_option('wpClassified_data');
+//global $lang, $wpClassified;
+//$wpcSettings = get_option('wpClassified_data');
+wpcHeader();
 
-wpc_header();
-
-if ($wpcSettings["view_must_register"]=="y" && !_is_usr_loggedin()){
-	wpc_read_not_allowed();
-	wpc_footer();
+if ($wpcSettings["view_must_register"]=="y" && !$wpClassified->is_usr_loggedin()){
+	wpcReadAllowed();
+	wpcFooter();
 	return;
 }
 	
@@ -43,11 +42,11 @@ if ($img !=''){
 <?php echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a>
 </div>
 <div class="show_ad_info">
-Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/user.gif"><?php echo get_post_author($post);?> on <img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/cal.gif"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
+Posted By<img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/user.gif"><?php echo wpcPostAuthor($post);?> on <img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/topic/cal.gif"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
 </div>
 <?php if ($editlink){
 	echo '<p class="smallTxt"><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</span></p>';
-	if ($wpcSettings['wpClassified_display_titles']=='y'){
+	if ($wpcSettings['display_titles']=='y'){
 		echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
 	}
 } ?>
@@ -68,11 +67,11 @@ if (isset($array[2]) && $array[2] !=''){
 	function addtext_<?php echo $post->ads_id;?>() {
 	<?php 
 	?>
-	var newtext_<?php echo $post->ads_id;?> = "<?php echo get_post_author($post);?> said:\n\"<?php echo wpClassified_commment_quote($post);?>\"\n\n";
+	var newtext_<?php echo $post->ads_id;?> = "<?php echo wpcPostAuthor($post);?> said:\n\"<?php echo wpcCommmentQuote($post);?>\"\n\n";
 	document.ead_form["wpClassified_data[post]"].value += newtext_<?php echo $post->ads_id;?>;
 
 	<?php
-	if ($wpcSettings["wpc_edit_style"]=="tinymce"){
+	if ($wpcSettings["edit_style"]=="tinymce"){
 		echo "tinyMCE.triggerSave(true, true);";
 		echo "document.getElementById('wpClassified_data[post]').value = newtext_".$post->ads_id.";";
 		echo "tinyMCE.updateContent('wpClassified_data[post]');";
@@ -82,11 +81,11 @@ if (isset($array[2]) && $array[2] !=''){
 </script>
 
 
-<p class="justify"><?php echo create_post_html($post);?></p>
+<p class="justify"><?php echo wpcPostHtml($post);?></p>
 
 <?php
 
-list ($adExpire, $contactBy) = preg_split('/\#\#\#/', $adsInfo['txt']);
+list ($adExpire, $contactBy) = preg_split('/###/', $adsInfo['txt']);
 
 echo "<hr><div class=\"info\"><div class=\"left\">";
 if (isset($adsInfo['email']) && $contactBy==$lang['_YES_CONTACT']) {
@@ -98,7 +97,7 @@ if (isset($adsInfo['web'])) {
 if (isset($adsInfo['phone'])) {
 	echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/phone.jpg" title="'.$adsInfo['phone'].'" class="imgMiddle">';
 }
-$pageinfo = get_wpClassified_pageinfo();
+$pageinfo = $wpClassified->get_pageinfo();
 $printAd = '<a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=prtad&aid='.$post->ads_id.'"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/print.jpg" class="imgMiddle"></a>'; 
 echo $printAd;
 echo "</div><div class=\"right\">";
@@ -116,6 +115,6 @@ if ($wpcSettings['banner_code']) {
 	echo "<div class=\"show_ad_banner\">" . stripslashes($wpcSettings['banner_code']) . "</div>";
 }
 echo '</div>';
-wpc_footer();
+wpcFooter();
 ?>
 

@@ -9,14 +9,15 @@
 * 
 */
 
-global $lang;
-$wpcSettings = get_option('wpClassified_data');
-wpc_header();
+//global $lang, $wpClassified;
+//$wpcSettings = get_option('wpClassified_data');
+wpcHeader();
+
 ?>
 <div class="wpc_container">
 <div class="list_ads">
 <?php
-if ($wpcSettings['view_must_register']=="y" && !_is_usr_loggedin()){
+if ($wpcSettings['view_must_register']=="y" && !$wpClassified->is_usr_loggedin()){
 	wpc_read_not_allowed();
 	echo "</div></div>";
 	wpc_footer();
@@ -47,7 +48,7 @@ if(! $results) {
 			$post_pstart = (ceil($post_pstart)*$wpcSettings['count_ads_per_page'])-$wpcSettings['count_ads_per_page'];
 		}
 		echo '<div class="list_ads_sub">';
-		echo create_public_link("lastAd", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$wpcSettings['search_terms']));
+		echo wpcPublicLink("lastAd", array("name"=>$result->name, "lid"=>$result->lists_id, "asid"=>$result->ads_subjects_id, "name"=>$new_subject_name, "start"=>$post_pstart, "post_jump"=>$result->ads_id, "search_words"=>$wpcSettings['search_terms']));
 		?>
 		</div>
 		<div class="main_col_left_btn"><?php echo $lang['_FROM'];?> <?php echo $result->display_name; ?></div>
@@ -58,6 +59,6 @@ if(! $results) {
 	echo '<input type="button" value="' . $lang['_BACK'] .'" onClick="history.back();">';
 }
 echo "</div></div>";
-wpc_footer();
+wpcFooter();
 
 ?>

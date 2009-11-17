@@ -8,11 +8,12 @@
 */
 
 
-global $lang, $quicktags;
-$wpcSettings = get_option('wpClassified_data');
-wpc_header();
+//global $lang, $quicktags, $wpClassified;
+//$wpcSettings = get_option('wpClassified_data');
+wpcHeader();
+
 echo "<div class=\"wpc_container\">";
-if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
+if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()){
 	?>
 	<br><br><?php echo __("Sorry, you must be registered and logged in to post in these classifieds.");?><br><br>
 	<a href="<?php echo get_bloginfo('wpurl');?>/wp-register.php"><?php echo __("Register Here");?></a><br><br>- <?php echo __("OR");?> -<br><br>
@@ -30,7 +31,7 @@ if ($wpcSettings['must_registered_user']=='y' && !_is_usr_loggedin()){
 	
 	<div class="editform">
 	<h3><?php echo $lang['_ADDIMAGE'];?></h3>
-	<form method="post" id="addImg" name="addImg" enctype="multipart/form-data" action="<?php echo create_public_link("miform", array("aid"=>$post->ads_id));?>">
+	<form method="post" id="addImg" name="addImg" enctype="multipart/form-data" action="<?php echo wpcPublicLink("miform", array("aid"=>$post->ads_id));?>">
 	<table><tr>
 	<td class="wpc_label_right"><?php echo $lang['_PIC'];?></td>
 	<td>
@@ -54,7 +55,7 @@ foreach($array as $f) {
 <td align="center">
 	<!-- Image Upload -->
 	<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $f; ?>" class="imgMiddle"  width="120" height="100"><br>
-	<?php echo create_public_link("di",array("aid"=>$post->ads_id, "name"=>$lang['_DELETE'], "file"=>$f ));
+	<?php echo wpcPublicLink("di",array("aid"=>$post->ads_id, "name"=>$lang['_DELETE'], "file"=>$f ));
 	echo "&nbsp;(" . $f . ")"; ?>
 	</td>
 <?php
@@ -64,11 +65,11 @@ foreach($array as $f) {
 	
 	</table>
 	<p><hr>
-	<b><?php echo $lang['_BACK']; ?> to <?php echo create_public_link("ads_subject", array("name"=>$post->subject, "lid"=>$_GET['lid'], "asid"=>$post->ads_ads_subjects_id)); ?></b></p>
+	<b><?php echo $lang['_BACK']; ?> to <?php echo wpcPublicLink("ads_subject", array("name"=>$post->subject, "lid"=>$_GET['lid'], "asid"=>$post->ads_ads_subjects_id)); ?></b></p>
 	<p>&nbsp;</p>
 	</div>
 	</div>
 <?php
 }
-wpc_footer();
+wpcFooter();
 ?>

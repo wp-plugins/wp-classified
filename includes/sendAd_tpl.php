@@ -9,11 +9,11 @@
 * 
 */
 
-global $lang;
-$wpcSettings = get_option('wpClassified_data');
-wpc_header();
+//global $lang;
+//$wpcSettings = get_option('wpClassified_data');
+wpcHeader();
 
-$yourname = get_post_author($post);
+$yourname = wpcPostAuthor($post);
 if (isset($sendMsg)){echo "<p class=\"error\">".$sendMsg."</p>";}
 ?>
 <div class="wpc_container">
@@ -29,7 +29,7 @@ if (isset($sendMsg)){echo "<p class=\"error\">".$sendMsg."</p>";}
 <?php
 if($wpcSettings['confirmation_code']=='y'){ 
   $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-  $oVisualCaptcha = new _captcha($aFonts);
+  $oVisualCaptcha = new wpcCaptcha($aFonts);
   $captcha = rand(1, 50) . ".png";
   $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
@@ -43,6 +43,6 @@ if($wpcSettings['confirmation_code']=='y'){
 </div>
 </div>
 <?php
-wpc_footer();
+wpcFooter();
 
 ?>

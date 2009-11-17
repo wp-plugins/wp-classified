@@ -116,7 +116,7 @@ function wpClassified_db(){
 			echo " - create table: " .  $k . "<BR>"; 
 			$wpdb->query($v);
 		}
-		$wpcSettings['wpClassified_installed'] = 'y';
+		$wpcSettings['installed'] = 'y';
 	}
 	echo "<h3>The tables have been created successfully. Now please save the settings!</h3>";
 	echo '</div>';

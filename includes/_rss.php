@@ -8,12 +8,14 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) {
 	die('You are not allowed to call this page directly.'); 
 }
 
-global $wpdb, $table_prefix;
+global $wpdb, $table_prefix, $wpClassified;
 
 $wpcSettings = get_option('wpClassified_data');
 
 $limit=$wpcSettings['rss_feed_num'];
 if(!isset($limit)) $limit=15;
+
+$pageinfo = $wpClassified->get_pageinfo();
 
 $feed= $_GET['wpcfeed'];
 # Get Data
@@ -51,7 +53,7 @@ if($posts)	{
 		$item->description=$post_content;
 		*/
 
-		$item->guid=create_rss_link("ads_subject", array("name"=>$ad->subject, "lid"=>$post->lists_id, "asid"=>$ad->ads_subjects_id));
+		$item->guid=wpcRssLink("ads_subject", array("name"=>$ad->subject, "lid"=>$post->lists_id, "asid"=>$ad->ads_subjects_id));
 		$rssItem[]=$item;
 	}
 }
@@ -66,19 +68,19 @@ echo'<?xml version="1.0" ?>';
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-	<title><?php rss_filter($rssTitle) ?></title>
+	<title><?php wpcRssFilter($rssTitle) ?></title>
 	<link><?php $rssLink ?></link>
-	<description><![CDATA[<?php rss_filter($rssDescription) ?>]]></description>
-	<generator><?php rss_filter($rssGenerator) ?></generator>
-	<atom:link href="<?php rss_filter($atomLink) ?>" rel="self" type="application/rss+xml" />
+	<description><![CDATA[<?php wpcRssFilter($rssDescription) ?>]]></description>
+	<generator><?php wpcRssFilter($rssGenerator) ?></generator>
+	<atom:link href="<?php wpcRssFilter($atomLink) ?>" rel="self" type="application/rss+xml" />
 <?php foreach($rssItem as $item): ?>
 <item>
-	<title><?php rss_filter($item->title) ?></title>
+	<title><?php wpcRssFilter($item->title) ?></title>
 	<link><?php $item->link ?></link>
-	<category><?php rss_filter($item->category) ?></category>
-	<guid isPermaLink="true"><?php rss_filter($item->guid) ?></guid>
-	<description><![CDATA[<?php rss_filter($item->description) ?>]]></description>
-	<pubDate><?php rss_filter($item->pubDate) ?></pubDate>
+	<category><?php wpcRssFilter($item->category) ?></category>
+	<guid isPermaLink="true"><?php wpcRssFilter($item->guid) ?></guid>
+	<description><![CDATA[<?php wpcRssFilter($item->description) ?>]]></description>
+	<pubDate><?php wpcRssFilter($item->pubDate) ?></pubDate>
 </item>
 <?php endforeach; ?>
 </channel>

@@ -6,84 +6,80 @@
 * @version 1.3.1-a
 */
 
-function wpClassified_spam_filter($name, $email, $subject, $post, $userID){
-	global $ksd_api_host, $ksd_api_port;
 
-	$spamcheck = array(
-		"user_ip"=> $_SERVER['REMOTE_ADDR'],
-		"user_agent"=> $_SERVER['HTTP_USER_AGENT'],
-		"referrer"=> $_SERVER['HTTP_REFERER'],
-		"blog"=> get_option('home'),
-		"comment_author"=> rawurlencode($name),
-		"comment_author_email"=> rawurlencode($email),
-		"comment_author_url"=> "http://",
-		"comment_content"=> str_replace("%20", "+", rawurlencode($subject))."+".str_replace("%20", "+", rawurlencode($post)),
-		"comment_type"=> "",
-		"user_ID"=> $userID
-		);
 
-	$query_string = '';
-	foreach ($spamcheck as $k=>$v){
-		$query_string .= $k.'='.urlencode(stripslashes($v)).'&';
-	}
-
-	// into akismet's spam protection
-	if (function_exists('ksd_http_post')){
-		$response = ksd_http_post($query_string, $ksd_api_host, '/1.1/comment-check', $ksd_api_port);
-		if ('true' == $response[1]){
-			return true;
-		}
-	} 
-	return false;
+	//array('name'=>'Classified Options','arg'=>'process_settings'),
+function wpcAdminMenu(){
+  global $wpcAdminMenu, $PHP_SELF;
+  $head = '<div class="wrap"><h2>Wordpress Classified</h2><p>';
+  $head .= '<div style="text-align: right;"><a href="http://www.forgani.com/">Support this software</a><br>Read my opinion</div>';
+  $menu = '<a href=' . $PHP_SELF . '?page=' . 'wpcSettings' . '>Settings & Options</a> | ';
+  for ($i=0; $i<count($wpcAdminMenu); $i++){
+    $tlink = $wpcAdminMenu[$i];
+    if (!isset($_GET['adm_arg'])) $_GET['adm_arg']='';
+	 
+	 $sel = "";
+	 // TOTO
+	 /*
+    if ($tlink['arg']==$_GET['adm_arg'] || ($_GET['adm_arg'] == '' && $i==0)){
+      $sel = " class=\"current\"";
+      $pagelabel = $tlink['name'];
+    } else {
+      $sel = "";
+    }
+	 */
+    $menu .= '<a href=' . $PHP_SELF . '?page=' .$tlink['arg']. ' ' . $sel .'>'.$tlink['name']. '</a> | ';
+  }
+  return $head . $menu . '<p><hr style="display: block; border:1px solid #e18a00;"></p>';
 }
 
 
 function adm_modify_process(){
-	global $_GET, $_POST, $table_prefix, $PHP_SELF, $wpdb;
-
+	global $_GET, $_POST, $table_prefix, $PHP_SELF, $wpdb, $wpClassified;
+	print wpcAdminMenu();
 	$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
 	$wpcSettings = get_option('wpClassified_data');
 	$loadpage = true;
 	switch ($_GET['adm_action']){
 		case "deleteAd":
-			$loadpage = delete_ad();
+			$loadpage = wpcAdmDeleteAd();
 		break;
 		case "deleteImg":
-			$loadpage = delete_img();
+			$loadpage = wpcAdmDeleteImg();
 		break;
 		case "deleteAdSubject":
-			$loadpage = delete_ad_subject();
+			$loadpage = wpcAdmDeleteAdSubject();
 		break;
 		case "activateAd":
-			activate_ad($_GET['aid']);
+			wpcAdmActivateAd($_GET['aid']);
 			unset($_GET['aid']);
 		break;
 		case "activateAdSubject":
-			activate_ad_subject($_GET['asid']);
+			wpcAdmActivateAdSubject($_GET['asid']);
 			unset($_GET['asid']);
 		break;
 		case "stickyAdSubject":
-			set_sticky_ad_subject($_GET['asid']);
+			wpcAdmStickyAdSubject($_GET['asid']);
 			unset($_GET['asid']);
 		break;
 		case "move":
-			_move();
+			wpcAdmMove();
 			$loadpage = false;
 		break;
 		case "moveAd":
-			move_ad();
+			wpcAdmMoveAd();
 			unset($_GET['asid']);
 			$loadpage = true;
 		break;
 		case "saveAd":
-			save_ad();
+			wpcAdmSaveAd();
 		break;
 		case "editAdSubject":
-			edit_ad_subject();
+			wpcAdmEditAdSubject();
 			$loadpage = false;
 		break;
 		case "editAd":
-		 	edit_ad();	
+		 	wpcAdmEditAd();	
 			$loadpage = false;
 		break;
 	}
@@ -132,7 +128,7 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 				<div class="entry" id="post-<?php echo $i;?>-entry">
 					<div class="title" id="post-<?php echo $i;?>-title">
 						<h2><?php echo str_replace("<", "&lt;", $ad->subject);?></h2>
-						<small><?php echo __("Posted By:");?> <strong><?php echo create_admin_post_author($ad);?></strong> on <?php echo __(@date($wpcSettings['date_format'], $ad->date));?></small>
+						<small><?php echo __("Posted By:");?> <strong><?php echo wpcPostAuthor($ad);?></strong> on <?php echo __(@date($wpcSettings['date_format'], $ad->date));?></small>
 					</div>
 					<p id="post-<?php echo $i;?>-content"><?php echo nl2br(str_replace("<", "&lt;", $ad->post));?></p>
 				</div>
@@ -235,7 +231,7 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		<tr style="background-color:<?php echo $color; ?>";>
 			<td><small><?php echo @implode(" | ", $links);?></small></td>
 			<td align=left><strong><a href="<?php echo $url;?>asid=<?php echo $ad->ads_subjects_id;?>"><?php echo $ad->subject;?></a></strong></td>
-			<td align=left><?php echo create_ads_subject_author($ad);?></td>
+			<td align=left><?php echo $wpClassified->create_ads_subject_author($ad);?></td>
 			<td align=right><?php echo $ad->views;?></td>
 			<td align=right><?php echo @date($wpcSettings['date_format'], $ad->date);?></td>
 			</tr>
@@ -317,22 +313,21 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 }
 
 
-
-function adm_count_ads($id){
+function wpcAdmCountAds($id){
 	global $wpdb, $table_prefix;
 	$ads = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$id)."' AND status = 'active'")-1;
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET ads = '".$ads."' WHERE ads_subjects_id = '".((int)$id)."'");
 }
 
 
-function set_sticky_ad_subject($id){
+function wpcAdmStickyAdSubject($id){
 	global $table_prefix, $wpdb;
 	$cur = $wpdb->get_var("SELECT sticky FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".$id."'");
 	$new = ($cur=='y')?"n":"y";
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET sticky = '".$new."' WHERE ads_subjects_id = '".$id."'");
 }
 
-function delete_ad(){
+function wpcAdmDeleteAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 	$linkb = $PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&adm_action=deleteAd&lid=".$_GET['lid']."&aid=".$_GET['aid'];
 	
@@ -341,7 +336,7 @@ function delete_ad(){
 		 (SELECT ads_ads_subjects_id FROM {$table_prefix}wpClassified_ads WHERE ads_id =".((int)$_POST['deleteid']).")";
 		$wpdb->query($sql);
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".((int)$_POST['deleteid'])."'");
-		adm_sync_count($_GET['lid']);
+		wpcSyncCount($_GET['lid']);
 		$wpdb->query("DELETE FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 		return true;
 	} else {
@@ -360,7 +355,7 @@ function delete_ad(){
 }
 
 
-function delete_img(){
+function wpcAdmDeleteImg(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 
 	$linkb = $PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&adm_action=deleteImg&aid=".$_GET['aid']."&file=".$_GET[file];
@@ -396,24 +391,24 @@ function delete_img(){
 }
 
 
-function activate_ad($id){
+function wpcAdmActivateAd($id){
 	global $table_prefix, $wpdb;
 	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".$id."'");
 	$new = ($cur=='active')?"inactive":"active";
 	$sql = "UPDATE {$table_prefix}wpClassified_ads SET status = '".$new."' WHERE ads_id = '".$id."'";
 	$wpdb->query($sql);
-	adm_count_ads($id);
+	wpcAdmCountAds($id);
 }
 
-function activate_ad_subject($id){
+function wpcAdmActivateAdSubject($id){
 	global $table_prefix, $wpdb, $_GET;
 	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".$id."'");
 	$new = ($cur=='open')?"closed":"open";
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET status = '".$new."' WHERE ads_subjects_id = '".$id."'");
-	adm_sync_count($_GET['lid']);
+	wpcSyncCount($_GET['lid']);
 }
 
-function delete_ad_subject(){
+function wpcAdmDeleteAdSubject(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 	$url = $PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&adm_action=deleteAd&lid=".$_GET['lid'];
 	//adm_arg=wpcModify&lid=7&asid=47&adm_action=deleteAd&aid=47 ok
@@ -421,7 +416,7 @@ function delete_ad_subject(){
 	if ($_POST['deleteid']>0){
 		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET status = 'inactive' WHERE ads_ads_subjects_id = '".((int)$_POST['deleteid'])."'");
 		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET status = 'deleted' WHERE ads_subjects_id = '".((int)$_POST['deleteid'])."'");
-		adm_sync_count($_GET['lid']);
+		wpcSyncCount($_GET['lid']);
 		return true;
 	} else {
 		?>
@@ -437,7 +432,7 @@ function delete_ad_subject(){
 		return false;
 	}
 }
-function edit_ad_subject(){
+function wpcAdmEditAdSubject(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 
 	$rec = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
@@ -456,7 +451,7 @@ function edit_ad_subject(){
 }
 
 
-function edit_ad(){
+function wpcAdmEditAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 	$rec = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
 			LEFT JOIN {$table_prefix}users
@@ -467,22 +462,6 @@ function edit_ad(){
 	?>
 
 	<P>
-	<style type="text/css">
-	fieldset {
-	  padding: 1em;
-	  font:12px;
-	  font-weight:bold;
-	  border:1px solid #ddd;
-	}
-	label {
-	  float:left;
-	  width:15%;
-	  margin-right:0.5em;
-	  padding-top:0.2em;
-	  text-align:right;
-	  font-weight:bold;}
-	 </style>
-
 	<form method="post" id="ead_form" name="ead_form" onsubmit="this.sub.disabled=true;this.sub.value='Saving Ad...';" action="<?php echo $PHP_SELF."?page=wpcModify&adm_arg=".$_GET['adm_arg']."&adm_action=saveAd&aid=".$_GET['aid'];?>">
 	<input type="hidden" name="modify_ad" value="true">
 	<fieldset>
@@ -508,7 +487,7 @@ function edit_ad(){
 
 
 
-function save_ad(){
+function wpcAdmSaveAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 	$mod = $_POST['modify_ad'];
 	if ($mod=="true"){
@@ -523,7 +502,7 @@ function save_ad(){
 }
 
 
-function move_ad(){
+function wpcAdmMoveAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix;
 	list($olst, $ocat) = split(' -> ', $_POST['lstCatNames']);
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET ads_subjects_list_id = 
@@ -564,7 +543,7 @@ function move_ad(){
 
 
 
-function _move(){
+function wpcAdmMove(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
     ?>
 	<p><a href="javascript:javascript:history.go(-1)">back to previous page</a>&nbsp;&nbsp;<a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GET['adm_arg'];?>">back to main page</a></p>
