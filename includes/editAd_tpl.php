@@ -76,7 +76,7 @@ foreach($array as $f) {
 <?php echo wpcPublicLink("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
 </td></tr>
 
-<tr><td colspan=2><?php echo $lang['_DESC']; ?><br>
+<tr ><td colspan=2 bgcolor="#eee"><?php echo $lang['_DESC']; ?><br>
 <div style="text-align: center;"><?php wpcAdInput($postinfo->post);?></div>
 </td></tr>
 

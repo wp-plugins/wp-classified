@@ -99,7 +99,7 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 	<tr>
 	
 	<tr>
-	<td colspan=2><?php echo $lang['_DESC']; ?><br>
+	<td colspan=2 bgcolor="#eee"><?php echo $lang['_DESC']; ?><br>
 	<?php
 		if (!isset($_POST['wpClassified_data']['post'])) $_POST['wpClassified_data']['post']='';
 	?>

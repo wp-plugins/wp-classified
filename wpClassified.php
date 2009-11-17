@@ -801,23 +801,6 @@ class WP_Classified {
 		  } elseif($wpcSettings['edit_style']=='tinymce') {
 			
 			$this->getInitJS();
-			/* ?>
-			<script type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-includes/js/tinymce/tiny_mce.js"></script>
-			<script type="text/javascript">
-					tinyMCE.init({
-					mode : "exact",
-					elements : "wpClassified_data[post]",
-					theme : "advanced",
-					theme_advanced_toolbar_location : "top",
-					plugins : "spellchecker,media,preview",
-					theme_advanced_buttons3_add : "spellchecker,media,preview",
-					spellchecker_languages : "+English=en",
-					plugin_preview_width : "600",
-					plugin_preview_height : "200"
-					});
-			</script>
-			<?php
-			*/
 		}
 	}
 
@@ -854,6 +837,7 @@ class WP_Classified {
 
 	function getInitJS($debugMode=0) {
 		global $locale;
+
 		?>
 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-includes/js/tinymce/tiny_mce.js"></script>
 		<script type="text/javascript">
@@ -868,8 +852,8 @@ class WP_Classified {
 				theme : "advanced",
 				plugins : "spellchecker,media,preview",
 				spellchecker_languages : "+English=en",
-				theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat",
-				theme_advanced_buttons2 : "",
+				theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
+				theme_advanced_buttons2:"",
 				theme_advanced_buttons3 : "",
 				theme_advanced_toolbar_location: "top",
 				theme_advanced_toolbar_align : "left",
