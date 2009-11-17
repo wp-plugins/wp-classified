@@ -854,56 +854,14 @@ class WP_Classified {
 
 	function getInitJS($debugMode=0) {
 		global $locale;
-
-		$options['rtl'] = '1';
-      $options['viewhtml'] = 1;
-      //$options['buttons'] = $buttons;
-      //$options['plugins'] = $plugins;
-      //$options['css'] = trim($_POST['css']);
-		
-      if ($debugMode == 1)  $le = "\n";
-      $options['buttons'] = 'bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat';
-      $initArray = array (
-				'mode' => 'exact',
-				'elements' => 'wpClassified_data[post]',
-				'theme' => 'advanced',
-				'theme_advanced_buttons1' => $options['buttons'],
-				'theme_advanced_buttons2' => "",
-				'theme_advanced_buttons3' => "",
-				'theme_advanced_toolbar_location' => "top",
-				'theme_advanced_toolbar_align' => "left",
-				'theme_advanced_statusbar_location' => 'none',
-				'theme_advanced_resizing' => 'false',
-				'theme_advanced_resize_horizontal' => false,
-				'theme_advanced_disable' => ($options['viewhtml'] ? '':'code'),
-				'force_p_newlines' => false,
-				'force_br_newlines' => true,
-				'forced_root_block' => "p",
-				'gecko_spellcheck' => true,
-				'skin' => 'default',
-				'content_css' => get_option('siteurl') . '/wp-includes/js/tinymce/themes/advanced/skins/wp_theme/content.css',
-				'directionality' => ($options['rtl'] ? 'rtl' : 'ltr'),
-				'save_callback' => "brstonewline",
-				'entity_encoding' => "raw",
-				'plugins' => "safari,inlinepopups,spellchecker,paste,wordpress,media,fullscreen,wpeditimage,wpgallery,tabfocus",
-				'plugin_preview_width' => "600",
-				'plugin_preview_height' => "200",
-           //'extended_valid_elements' => "a[name|href|title],hr[class|width|size|noshade],font[face|size|color|	style],span[class|align|style],blockquote[cite]",'.$le;
-			'language' => $locale,
-		);
-		foreach ( $initArray as $k => $v ) $res .= $k . ':"' . $v . '", ';
 		?>
 		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-includes/js/tinymce/tiny_mce.js"></script>
-		
-					
-		
 		<script type="text/javascript">
 		/* <![CDATA[ */
 		function brstonewline(element_id, html, body) {
 			html = html.replace(/<br\s*\/>/gi, "\n");
 			return html;
 		}
-		
 		tinyMCE.init({
 				mode : "exact",
 				elements : "wpClassified_data[post]",
@@ -919,7 +877,7 @@ class WP_Classified {
 				theme_advanced_resizing : false,
 				theme_advanced_resize_horizontal : false,
 				gecko_spellcheck : true,
-				skin : "default",
+				skin : "wp_theme",
 				save_callback : "brstonewline",
 				entity_encoding : "raw",
 		});
