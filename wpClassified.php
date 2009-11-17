@@ -101,7 +101,7 @@ class WP_Classified {
 		$this->plugin_home_url = 'http://www.forgani.com/wp-classified';
 		$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
 		$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.plugin_basename(dirname(__FILE__));
-		$this->version = '1.3.0-i';
+		$this->version = '1.3.2-g';
 		// todo
 	}
 	
