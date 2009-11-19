@@ -14,12 +14,16 @@
 wpcHeader();
 
 $yourname = wpcPostAuthor($post);
-if (isset($sendMsg)){echo "<p class=\"error\">".$sendMsg."</p>";}
+if (isset($msg)){echo "<p class=\"error\">".$msg."</p>";}
 ?>
+
 <div class="wpc_container">
 <div class="editform">
+
 <?php echo $lang['_FRIENDSEND']; ?>(<?php echo $aid;?>) <b>'<?php echo $post->subject;?>'</b><?php echo $lang['_TOAFRIEND']; ?>
+
 <form method="post" enctype="multipart/form-data" id="sndad" name="sndad" action="<?php echo $link_snd;?>">
+
 <table>
 <tr><td class="wpc_label_right"><?php echo $lang['_YOURNAME']; ?></td><td><input size=35 type="text" name="wpClassified_data[yourname]" value="<?php echo $yourname; ?>"/></td></tr>
 <tr><td class="wpc_label_right"><?php echo $lang['_YOUREMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailfrom]" value="<?php echo $post->email;?>" /></td></tr>
@@ -28,16 +32,17 @@ if (isset($sendMsg)){echo "<p class=\"error\">".$sendMsg."</p>";}
 <tr><td class="wpc_label_right"><?php echo $lang['_FRIENDMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
 <?php
 if($wpcSettings['confirmation_code']=='y'){ 
-  $aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-  $oVisualCaptcha = new wpcCaptcha($aFonts);
-  $captcha = rand(1, 50) . ".png";
-  $oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+	$wpClassified->remaveCPCC();
+	$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
+	$oVisualCaptcha = new wpcCaptcha($aFonts);
+	$captcha = rand(1, 50) . ".png";
+	$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>
 <tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
 <tr><td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
 <?php
 } ?>
-<input type="hidden" name="wpClassified_send_ad" value="yes">
+<input type="hidden" name="send_ad" value="yes">
 <tr><td></td><td><input type=submit value="<?php echo $lang['_SENDEMAIL']; ?>"></td></tr>
 </form></table>
 </div>

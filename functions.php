@@ -118,23 +118,27 @@ function wpcAddAd(){
 				} else {$status = 'active';}
 				$sql = "SELECT count(*) as count FROM {$table_prefix}wpClassified_ads WHERE author_ip = '" . getenv('REMOTE_ADDR') . "' AND subject = '" . $wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."'";
 				$checkPost = $wpdb->get_results($sql);
+
+				$description = $_POST['wpClassified_data'][post];
+				if($wpcSettings['edit_style'] != 'tinymce') $description = $wpClassified->html2Text($description);
+
 				if ( $checkPost[0]->count > 0){
 					$message = $lang['_APPROVEREPLY'];
 				} else {
-	$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
-	(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
-	('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][author_name]))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][author_name]))."', '".getenv('REMOTE_ADDR')."',
-	'".$web."',
-	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',	'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][ad_expiration])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."','".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
+					$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
+					(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
+					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][author_name]))."' , '".getenv('REMOTE_ADDR')."' , '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."' , 0, 0 , 'n' , '".(($isSpam)?"deleted":"open")."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][author_name]))."', '".getenv('REMOTE_ADDR')."',
+					'".$web."',
+					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',	'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][ad_expiration])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data'][contactBy]))."','".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."')";
 					$wpdb->query($sql);
 					$tid = $wpdb->get_var("SELECT last_insert_id()");
-	$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
-	(ads_ads_subjects_id, date, author, author_name, author_ip, status, subject, image_file, post) VALUES
-	('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][author_name]))."', 
-	'".getenv('REMOTE_ADDR')."', '" . $status . "', 
-	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
-	'".$wpdb->escape(stripslashes($setImage))."',
-	'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][post]))."')");
+					$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
+					(ads_ads_subjects_id, date, author, author_name, author_ip, status, subject, image_file, post) VALUES
+					('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape(stripslashes($_POST['wpClassified_data'][author_name]))."', 
+					'".getenv('REMOTE_ADDR')."', '" . $status . "', 
+					'".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
+					'".$wpdb->escape(stripslashes($setImage))."',
+					'".$description."')");
 					do_action('wpClassified_new_ads',$tid);
 					$out = wpcEmailNotifications($user_ID,$_POST['wpClassified_data'][author_name],
 					$_GET['lid'],$_POST['wpClassified_data'][subject],$_POST['wpClassified_data'][post],$setImage,$tid);
@@ -342,8 +346,10 @@ function wpcPublicLink($action,$vars){
 			return "<a href=\"".$main_link."_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
 		break;
 		case "eaform":
-			return 
-			$main_link."_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+			return $main_link."_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+		break;
+		case "sndform":
+			return $main_link."_action=sndad&aid=".((int)$vars['aid']);
 		break;
 		case "searchform":
 			return $main_link."_action=search";
@@ -560,8 +566,6 @@ function wpcCheckUrl($url) {
    $_POST['wpClassified_data'][web]=$url;
    return true;
 }
-
-
 
 
 function wpcLastAdSubject(){
