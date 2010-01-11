@@ -654,7 +654,7 @@ function adm_users_process(){
 							WHERE {$wpmuBaseTablePrefix}users.ID = '".(int)$_GET['id']."'", ARRAY_A);
 
 			$user = $user[0];
-			$namefield = get_wpc_user_field();
+			$namefield = $wpClassified->get_user_field();
 
 			$permissions = array("none"=>"User", "moderator"=>"Moderator", "administrator"=>"Administrator");
 
