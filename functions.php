@@ -28,6 +28,7 @@ function wpcAddAd(){
 	$displayform = true;
 
 	$web = $_POST['wpClassified_data']['web'];
+	$phone = $_POST['wpClassified_data']['phone'];
 	$subject = stripslashes($_POST['wpClassified_data']['subject']);
 	$description = $_POST['wpClassified_data']['post'];
 	$author_name = $_POST['wpClassified_data']['author_name'];
@@ -68,16 +69,16 @@ function wpcAddAd(){
 					$web = wpcCheckUrl($web);
 				}
 			}
-			if (isset($_POST['wpClassified_data']['phone']) && !preg_match('/^\s*$/',$_POST['wpClassified_data']['phone']) ) {
-				str_replace('^\s+/',"",$_POST['wpClassified_data']['phone']);
-				str_replace('\s+$/',"",$_POST['wpClassified_data']['phone']);
-				if ( strlen($_POST['wpClassified_data']['phone']) > 1 && !wpcValidatePhone($_POST['wpClassified_data']['phone'])) {
+			if (isset($phone) && !preg_match('/^\s*$/',$phone) ) {
+				str_replace('/^\s+/',"",$phone);
+				str_replace('/\s+$/',"",$phone);
+				if ( strlen($phone) > 1 && !wpcValidatePhone($phone)) {
 					$msg = $lang['_INVALIDPHONE'];
 					$addPost = false;
 				}
 			}
 			/*
-			$_POST['wpClassified_data']['subject'] = preg_replace("/(\<)(.*?)(\>)/mi","",$_POST['wpClassified_data']['subject']);
+			$subject = preg_replace("/(\<)(.*?)(\>)/mi","",$_POST['wpClassified_data']['subject']);
 			if (! wpcCheckInput($_POST['wpClassified_data']['subject'])){
 				$msg = $lang['_INVALIDTITLE'];
 			}
@@ -117,14 +118,13 @@ function wpcAddAd(){
 						@fwrite($fp,$content);
 						@fclose($fp);
 						@chmod(dirname(__FILE__)."/images/".(int)$user_ID."-".$_FILES['image_file']['name'],0777);
-						echo "--->" . $user_ID."-".$_FILES['image_file']['name'];
 						$setImage = (int)$user_ID."-".$_FILES['image_file']['name'];
 					}
 				}
 			}
 			if ($addPost==true){
 				$displayform = false;
-				$isSpam = wpcSpamFilter(stripslashes($author_name),'',$subject,stripslashes($description),$user_ID);
+				$isSpam = wpcSpamFilter(stripslashes($author_name),'',$subject, $description, $user_ID);
 				if ($wpcSettings['approve']=='y'){
 					$status = 'inactive';
 				} else {$status = 'active';}
@@ -143,7 +143,7 @@ function wpcAddAd(){
 					'".(($isSpam)?"deleted":"open")."', '".$user_ID."', 
 					'".$wpdb->escape(stripslashes($author_name))."', '".getenv('REMOTE_ADDR')."',
 					'".$web."',
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['phone']))."',
+					'".$wpdb->escape($phone)."',
 					'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data']['ad_expiration'])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data']['contactBy']))."',
 					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['email']))."')";
 					$wpdb->query($sql);

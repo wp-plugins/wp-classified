@@ -72,10 +72,12 @@ Changes 1.3.2-g - Nov 12/11/2009
 - A new version for wordpress 2.8.6
 
 
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1); 
+
 
 */
+
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1); 
 
 require_once(dirname(__FILE__).'/settings.php');
 

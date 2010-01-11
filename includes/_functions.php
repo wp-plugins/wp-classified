@@ -117,7 +117,7 @@ function wpcList($msg){
 	
 	$read = ($wpClassified->is_usr_loggedin())?$wpdb->get_col("SELECT read_ads_subjects_id FROM {$table_prefix}wpClassified_read WHERE read_user_id = ".$user_ID):array();
 
-$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$wpmuBaseTablePrefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author	LEFT JOIN {$wpmuBaseTablePrefix}users AS lu ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author LEFT JOIN {$table_prefix}wpClassified_ads ON {$table_prefix}wpClassified_ads.ads_ads_subjects_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_id  WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."' AND {$table_prefix}wpClassified_ads_subjects.status != 'deleted' AND {$table_prefix}wpClassified_ads.status='active' GROUP BY ads_subjects_id ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,{$table_prefix}wpClassified_ads_subjects.date DESC";
+	$sql = "SELECT {$table_prefix}wpClassified_ads_subjects.*, {$wpmuBaseTablePrefix}users.*, lu.$userfield AS lastuser FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author	LEFT JOIN {$wpmuBaseTablePrefix}users AS lu ON lu.ID = {$table_prefix}wpClassified_ads_subjects.last_author LEFT JOIN {$table_prefix}wpClassified_ads ON {$table_prefix}wpClassified_ads.ads_ads_subjects_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_id  WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id = '".($_GET['lid'])."' AND {$table_prefix}wpClassified_ads_subjects.status != 'deleted' AND {$table_prefix}wpClassified_ads.status='active' GROUP BY ads_subjects_id ORDER BY {$table_prefix}wpClassified_ads_subjects.sticky ASC,{$table_prefix}wpClassified_ads_subjects.date DESC";
 
 	$ads = $wpdb->get_results($sql);	
 	$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_list_id = '".($_GET['lid'])."' && status != 'deleted'");
@@ -247,13 +247,19 @@ function wpcEditAd(){
 	$postinfos = $wpdb->get_results($sql, ARRAY_A);
 	$postinfo = $postinfos[0];
 
+	$phone = $_POST['wpClassified_data']['phone'];
+	$subject = stripslashes($_POST['wpClassified_data']['subject']);
+	$web = $_POST['wpClassified_data']['web'];
+	$author_name = $_POST['wpClassified_data']['author_name'];
+	$description = $_POST['wpClassified_data']['post'];
+
 	$permission=false;
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$postinfo['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
 		$permission=true;
-        }
+   }
 	if (!$permission) {
 		if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
-	}	
+	}
 	if (!$permission) {
 		wpcPermissionDenied();
 		return;
@@ -262,11 +268,11 @@ function wpcEditAd(){
 	$displayform = true;
 	if ($_POST['edit_ad']=='yes'){
 		$addPost = true;
-		if (str_replace(" ", "", $_POST['wpClassified_data'][author_name])=='' && !$wpClassified->is_usr_loggedin()){
+		if (str_replace(" ", "", $author_name)=='' && !$wpClassified->is_usr_loggedin()){
 			$msg = $lang['_INVALIDNAME'];
 			$addPost = false;
 		}
-		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])==''){
+		if (str_replace(" ", "", $subject)==''){
 			$msg = $lang['_INVALIDSUBJECT'];
 			$addPost = false;
 		}
@@ -274,47 +280,54 @@ function wpcEditAd(){
 			$msg = $lang['_INVALIDEMAIL'];
 			$addPost = false;
 		} 
+		/*
 		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
 			$msg = $lang['_INVALIDEMAIL2'];
 			$addPost = false;
 		}
-
-		if ($_POST['wpClassified_data'][web]) {
-			if (!wpcCheckUrl($_POST['wpClassified_data'][web])){
+		*/
+		if (strlen($_POST['wpClassified_data']['web']) > 1) {
+			if (!wpcCheckUrl($web)) {
 				$msg = $lang['_INVALIDURL'];
 				$addPost = false;
+			} else {
+				$web = wpcCheckUrl($web);
 			}
 		}
-		if (isset($_POST['wpClassified_data'][phone]) && !preg_match('/^\s*$/',$_POST['wpClassified_data'][phone]) ) {
-			str_replace('/^\s+/',"",$_POST['wpClassified_data'][phone]);
-			str_replace('/\s+$/',"",$_POST['wpClassified_data'][phone]);
-			if ( strlen($_POST['wpClassified_data']['phone']) > 1 && !wpcValidatePhone($_POST['wpClassified_data'][phone])) {
+		if (isset($phone) && !preg_match('/^\s*$/',$phone) ) {
+			str_replace('/^\s+/',"",$phone);
+			str_replace('/\s+$/',"",$phone);
+			if ( strlen($phone) > 1 && !wpcValidatePhone($phone)) {
 				$msg = $lang['_INVALIDPHONE'];
 				$addPost = false;
 			}
 		}
-		
-		$_POST['wpClassified_data'][subject] = preg_replace("/(\<)(.*?)(\>)/mi", "", $_POST['wpClassified_data'][subject]);
-		if (str_replace(" ", "", $_POST['wpClassified_data'][subject])=='' || !wpcCheckInput($_POST['wpClassified_data'][subject])){
-			$msg = $lang['_INVALIDTITLE'];
-			$addPost = false;
-		}
+		/*
+			$subject = preg_replace("/(\<)(.*?)(\>)/mi", "", $subject);
+			if (str_replace(" ", "", $subject)=='' || !wpcCheckInput($subject)){
+				$msg = $lang['_INVALIDTITLE'];
+				$addPost = false;
+			}
+		*/
 		if($wpcSettings['confirmation_code']=='y'){ 
 			if (! wpcCaptcha::Validate($_POST['wpClassified_data'][confirmCode])) {
    				$msg = $lang['_INVALIDCONFIRM'];
 				$addPost = false;
   			}
 		}
-		if (str_replace(" ", "", $_POST['wpClassified_data'][post])==''){
+
+		if (!isset($description) ||
+			str_replace(" ","",$description)==''){
 			$msg = $lang['_INVALIDCOMMENT'];
 			$addPost = false;
 		}
 
+		/*
 		if ($_POST['wpClassified_data'][maxchars_limit] > $wpcSettings['maxchars_limit']){
 			$msg = "Classified Text must be less than or equal to ". $wpcSettings['maxchars_limit'] . " characters in length";
 			$addPost = false;
 		}
-
+		*/
 		if ($_FILES['image_file']!=''){
 			$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 			if ($ok==true){
@@ -339,26 +352,24 @@ function wpcEditAd(){
 		if ($addPost==true) {
 			$displayform = false;
 
-			$web = $_POST['wpClassified_data'][web];
-
 			$_FILES['image_file'] = $id."-".$_FILES['image_file']['name'];
 			$sql = "update {$table_prefix}wpClassified_ads
-				set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',";
+				set subject='".$wpdb->escape($subject)."',";
 			if ($_FILES['image_file'] =='') {
 				$sql .= "image_file='".$wpdb->escape(stripslashes($setImage))."',";
 			}
-			$description = $_POST['wpClassified_data'][post];
+
 			if($wpcSettings['edit_style'] != 'tinymce') $description = $wpClassified->html2Text($description);
 			$sql .= "post='".$description."'
 				WHERE ads_id='".(int)$_GET['aid']."' ";
 			$wpdb->query($sql);
 
 			$sql = "update {$table_prefix}wpClassified_ads_subjects
-			set subject='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][subject]))."',
-			email='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][email]))."',
+			set subject='".$wpdb->escape($subject)."',
+			email='".$wpdb->escape(stripslashes($_POST['wpClassified_data']['email']))."',
 			web='".$web."',
-			phone='".$wpdb->escape(stripslashes($_POST['wpClassified_data'][phone]))."',
-			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data'][ad_expiration])).'###'.$_POST['wpClassified_data'][contactBy]."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";
+			phone='".$wpdb->escape(stripslashes($phone))."',
+			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data']['ad_expiration'])).'###'.$_POST['wpClassified_data']['contactBy']."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";
 
 			$wpdb->query($sql);
 			wpcList($lang['_UPDATE']);
@@ -397,9 +408,8 @@ function wpcPrintAad(){
 	$submitter = get_post_author($post);
 	//wpc_header();
 	echo "<html><head><title>".$wpcSettings['slug']."</title></head>";
-
 	
-    	echo "<body bgcolor=\"#FFFFFF\" text=\"#000000\">";
+   echo "<body bgcolor=\"#FFFFFF\" text=\"#000000\">";
 	echo "<table border=0><tr><td><table border=0 width=100% cellpadding=0 cellspacing=1 bgcolor=\"#000000\"><tr><td>";
     	echo "<table border=0 width=100% cellpadding=15 cellspacing=1 bgcolor=\"#FFFFFF\"><tr><td>";
 	echo "<br /><br /><table width=99% border=0><tr><td>".$lang['_CLASSIFIED_AD']."(No. $aid)<br />" .$lang['_FROM']. "<br /><br />";
