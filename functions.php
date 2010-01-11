@@ -621,20 +621,19 @@ function wpcLastAdSubject(){
 // function that echo's the textarea/whatever for post input 
 function wpcAdInput($content=""){
 	global $wpdb, $table_prefix, $wp_filesystem;
-
 	$wpcSettings = get_option('wpClassified_data');
-
 	switch ($wpcSettings['edit_style']){
 		case "plain":
 		default:
 			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='60' rows='20'>".str_replace("<", "&lt;", $content)."</textarea>";
 		break;
 		case "tinymce":
-		?>
-		<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" mce_editable="true" class="mceEditor" cols="100%" rows="10" tabindex="4">
-		<?php echo htmlentities($content); ?>
-		</textarea><br />
-		<?php break;
+			?>
+			<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" class="mceEditor" cols="60" rows="10" tabindex="4">
+			<?php echo htmlentities($content); ?>
+			</textarea><br />
+			<?php 
+		break;
 	}
 	?> <SPAN class="smallTxt" id="msgCounter">Maximum of <?php echo $wpcSettings['maxchars_limit']; ?> characters allowed</SPAN><BR/> <?php
 }

@@ -161,7 +161,7 @@
 	$lang['_INVALIDPHONE'] = "Please enter a valid phone number!";
 
 // from 1.3.1-b
-	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and not more than about 30 letters long";
+	$lang['_INVALIDTITLE'] = "The Title should contain only letters and numbers and beetwen 5 and 30 letters long";
 	$lang['_MAIN'] = "Main";
 
 // from 1.3.1-b

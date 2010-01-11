@@ -43,9 +43,9 @@
       var $sCode = '';
       
     
-      function wpcCaptcha($aFonts) {
+      function wpcCaptcha() {
          // get parameters
-         $this->aFonts = $aFonts;
+         $this->aFonts = array( ABSPATH . "wp-content/plugins/wp-classified/fonts/arial.ttf");
          $this->SetNumChars(WPC_CAPCC_NUM_CHARS);
          $this->SetNumLines(WPC_CAPCC_NUM_LINES);
          $this->DisplayShadow(WPC_CAPCC_CHAR_SHADOW);
@@ -302,9 +302,9 @@
 
    // example sub class
    class _captchaColour extends wpcCaptcha {
-      function _captchaColour($aFonts) {
+      function _captchaColour() {
          // call parent constructor
-         parent::wpcCaptcha($aFonts);
+         parent::wpcCaptcha();
          
          // set options
          $this->UseColour(true);

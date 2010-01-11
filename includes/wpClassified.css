@@ -304,6 +304,8 @@ div.info div.left{float:left}
 	margin-top: 10px; 
 }
 
+
+
 .editform img {
 	border:0;
 }
@@ -331,7 +333,10 @@ div.info div.left{float:left}
 	vertical-align: top;
 }
 
-.editform .input, .editform select, .editform textarea{
+/*.editform .input, .editform select, */
+
+.editform textarea{
+	border-top: 1px solid #efefef;
 }
 
 .wpc_footer{

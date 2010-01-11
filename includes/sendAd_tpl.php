@@ -33,8 +33,7 @@ if (isset($msg)){echo "<p class=\"error\">".$msg."</p>";}
 <?php
 if($wpcSettings['confirmation_code']=='y'){ 
 	$wpClassified->remaveCPCC();
-	$aFonts = array(ABSPATH."wp-content/plugins/wp-classified/fonts/arial.ttf");
-	$oVisualCaptcha = new wpcCaptcha($aFonts);
+	$oVisualCaptcha = new wpcCaptcha();
 	$captcha = rand(1, 50) . ".png";
 	$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
 ?>

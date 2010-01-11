@@ -84,7 +84,7 @@ add_action('admin_head', array(&$wpClassified, 'add_admin_head'));
 add_filter("the_content", array(&$wpClassified,"page_handle_content"));
 add_filter("the_title", array(&$wpClassified,"page_handle_title"));
 add_filter("wp_list_pages", array(&$wpClassified,"page_handle_titlechange"));
-add_filter("single_post_title", array(&$wpClassified,"handle_pagetitle"));
+add_filter("single_post_title", array(&$wpClassified,"page_handle_pagetitle"));
 
 class WP_Classified {
   // Sets the version number.
@@ -101,7 +101,7 @@ class WP_Classified {
 		$this->plugin_home_url = 'http://www.forgani.com/wp-classified';
 		$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
 		$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.plugin_basename(dirname(__FILE__));
-		$this->version = '1.3.2-g';
+		$this->version = '1.3.2-h';
 		// todo
 	}
 	
@@ -844,20 +844,17 @@ class WP_Classified {
 				mode : "exact",
 				elements : "wpClassified_data[post]",
 				theme : "advanced",
-				plugins : "spellchecker,media,preview",
-				spellchecker_languages : "+English=en",
-				theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
+				width : "500",
+				height : "200",
+				theme_advanced_buttons1: "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
 				theme_advanced_buttons2:"",
-				theme_advanced_buttons3 : "",
+				theme_advanced_buttons3: "",
 				theme_advanced_toolbar_location: "top",
-				theme_advanced_toolbar_align : "left",
-				theme_advanced_statusbar_location : "none",
-				theme_advanced_resizing : false,
-				theme_advanced_resize_horizontal : false,
-				gecko_spellcheck : true,
-				skin : "wp_theme",
-				save_callback : "brstonewline",
-				entity_encoding : "raw",
+				theme_advanced_toolbar_align: "left",
+				theme_advanced_statusbar_location: "none",
+				theme_advanced_resizing: false,
+				onchange_callback	 : "tinyMceOnChange",
+				handle_event_callback : "tinyMceEventHandler"
 		});
 		</script>
 		<script type="text/javascript">
@@ -942,14 +939,18 @@ class WP_Classified {
 		//strip extra whitespace except between <pre> and <textarea> tags
 		$str = preg_split( "/<\/?pre[^>]*>/i", $goodStr );
 		for( $x = 0; is_string( $str[$x] ); $x++ ) {
-			if( $x % 2 ) { $str[$x] = '<pre>'.$str[$x].'</pre>'; } else {
-					$goodStr = preg_split( "/<\/?textarea[^>]*>/i", $str[$x] );
-					for( $z = 0; is_string( $goodStr[$z] ); $z++ ) {
-						if( $z % 2 ) { $goodStr[$z] = '<textarea>'.$goodStr[$z].'</textarea>'; } else {
-							$goodStr[$z] = preg_replace( "/\s+/", ' ', $goodStr[$z] );
-					} }
-					$str[$x] = implode('',$goodStr);
-		} }
+			if( $x % 2 ) { 
+				$str[$x] = '<pre>'.$str[$x].'</pre>'; } 
+			else {
+				$goodStr = preg_split( "/<\/?textarea[^>]*>/i", $str[$x] );
+				for( $z = 0; is_string( $goodStr[$z] ); $z++ ) {
+					if( $z % 2 ) { $goodStr[$z] = '<textarea>'.$goodStr[$z].'</textarea>'; } else {
+						$goodStr[$z] = preg_replace( "/\s+/", ' ', $goodStr[$z] );
+					} 
+				}
+				$str[$x] = implode('',$goodStr);
+			} 
+		}
 		$goodStr = implode('',$str);
 		//remove all options from select inputs
 		$goodStr = preg_replace( "/<option[^>]*>[^<]*/i", '', $goodStr );
