@@ -25,7 +25,7 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 	?>
 	<div class="wpc_container">
 		<div class="editform">
-		<form method="post" id="wpClassifiedForm" name="wpClassifiedForm" 
+		<form method="POST" enctype="multipart/form-data"  id="wpClassifiedForm" name="wpClassifiedForm" 
 			action="<?php echo wpcPublicLink("paform", 	array("lid"=>$_GET['lid'], "name"=>$lists["name"]));?>">
 		<h3>Details</h3>
 		<input type="hidden" name="add_ad" value="yes">
@@ -95,7 +95,7 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 			</tr>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_PIC']; ?></td>
-				<td><input type=file name="image_file"><br /><span class="smallTxt">
+				<td><input type="file" name="image_file" size="20"><br /><span class="smallTxt">
 				<?php echo $lang['_OPTIONAL'].$lang['_INVALIDMSG4']." (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel )"; ?></span></td>
 			</tr>
 			<tr>
