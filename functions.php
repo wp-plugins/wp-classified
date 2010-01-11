@@ -660,7 +660,7 @@ function wpcAdInput($content=""){
 	global $wpdb, $table_prefix, $wp_filesystem;
 	$wpcSettings = get_option('wpClassified_data');
 	if (!isset($wpcSettings['edit_style'])) $wpcSettings['edit_style']= 'plain';
-		echo '<script type="text/javascript" src="' . WPC_PLUGIN_URL . '/include/js/jquery.limit.js"></script>';
+		echo '<script type="text/javascript" src="' . WPC_PLUGIN_URL . '/includes/js/jquery.limit.js"></script>';
 		
 	?>
 	<script type='text/javascript'>
@@ -698,6 +698,7 @@ function wpcAdInput($content=""){
   theme_advanced_toolbar_align: "left",
   theme_advanced_statusbar_location: "none",
   theme_advanced_resizing: false,
+  language : "",
   onchange_callback	 : "tinyMceOnChange",
   handle_event_callback : "tinyMceEventHandler"
  });
