@@ -92,6 +92,10 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 Changelog:
 
+Changes 1.3.3 - Jan 12 2010
+- Check in the complete source code into SVN.
+
+
 Changes 1.3.2-g - Nov 12/11/2009
 - A new version for wordpress 2.8.6
 
