@@ -76,24 +76,14 @@ Changes 1.3.2-g - Nov 12/11/2009
 
 */
 
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1); 
-
 require_once(dirname(__FILE__).'/settings.php');
 
 define('WPC_PLUGIN_DIR', ABSPATH .  'wp-content/plugins/wp-classified');
-define('WPC_PLUGIN_URL', get_option('siteurl').'/wp-content/plugins/wp-classified');
+define('WPC_PLUGIN_URL', plugins_url('wp-classified'));
+
 
 add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpClassified = new WP_Classified();'));
-add_action('init', array(&$wpClassified, 'widget_init'));
-add_action('admin_menu', array(&$wpClassified, 'add_admin_pages'));
-add_action('wp_head', array(&$wpClassified, 'add_head'));
-add_action('admin_head', array(&$wpClassified, 'add_admin_head'));
-//add_action('template_redirect', 'rss_feed');
-add_filter("the_content", array(&$wpClassified,"page_handle_content"));
-add_filter("the_title", array(&$wpClassified,"page_handle_title"));
-add_filter("wp_list_pages", array(&$wpClassified,"page_handle_titlechange"));
-add_filter("single_post_title", array(&$wpClassified,"page_handle_pagetitle"));
+
 
 class WP_Classified {
   // Sets the version number.
@@ -111,6 +101,16 @@ class WP_Classified {
 		$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
 		$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.plugin_basename(dirname(__FILE__));
 		$this->version = '1.3.2-h';
+
+		add_action('init', array(&$this, 'widget_init'));
+		add_action('admin_menu', array(&$this, 'add_admin_pages'));
+		add_action('wp_head', array(&$this, 'add_head'));
+		add_action('admin_head', array(&$this, 'add_admin_head'));
+		//add_action('template_redirect', 'rss_feed');
+		add_filter("the_content", array(&$this,"page_handle_content"));
+		add_filter("the_title", array(&$this,"page_handle_title"));
+		add_filter("wp_list_pages", array(&$this,"page_handle_titlechange"));
+		add_filter("single_post_title", array(&$this,"page_handle_pagetitle"));
 		// todo
 	}
 	
@@ -149,13 +149,10 @@ class WP_Classified {
 	 switch ($_GET['adm_action']){
 		case "saveSettings":
 		$pageinfo = $this->get_pageinfo();
-		if ($pageinfo == false){
+		if ( empty($pageinfo) ) {
 			$dt = date("Y-m-d");
-			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
-			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
-				 $wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
-			}
+			$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
+			$wpdb->query($sql);
 		}
 		foreach ($_POST["wpClassified_data"] as $k=>$v){
 			$_POST["wpClassified_data"][$k] = stripslashes($v);
@@ -809,8 +806,7 @@ class WP_Classified {
 
 	function get_pageinfo(){
 		global $wpdb, $table_prefix;
-		$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-		return $p;
+		return $wpdb->get_var("SELECT post_title FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
 	}
 
 	function is_usr_admin(){
