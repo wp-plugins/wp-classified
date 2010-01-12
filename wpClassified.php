@@ -143,59 +143,58 @@ class WP_Classified {
 		<?php
   }
   
-  // wpClassified settings 
-  function wpcSettings(){
-	 global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $lang;
+	// wpClassified settings 
+	function wpcSettings(){
+		global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $lang;
 
-	 print wpcAdminMenu();
-	 $this->showCategoryImg();
+		print wpcAdminMenu();
+		$this->showCategoryImg();
 
-	$pageinfo = $this->get_pageinfo();
+		$pageinfo = $this->get_pageinfo();
 
-	if ( empty($pageinfo) ) {
-		echo "---1->". $pageinfo;
-		$dt = date("Y-m-d");
-		$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
-		$wpdb->query($sql);
-	}
-	switch ($_GET['adm_action']){
-		case "saveSettings":
-		
-		foreach ($_POST["wpClassified_data"] as $k=>$v){
-			$_POST["wpClassified_data"][$k] = stripslashes($v);
+		if ( empty($pageinfo) ) {
+			$dt = date("Y-m-d");
+			$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
+			$wpdb->query($sql);
 		}
-	
-		$null_values = array('must_registered_user', 'display_titles', 'filter_posts', 'view_must_register', 'approve');
-		foreach ( $null_values as $v) {
-			if (!isset($_POST['wpClassified_data'][$v]))
-				$_POST['wpClassified_data'][$v]='n';
-		}
+			switch ($_GET['adm_action']){
+				case "saveSettings":
 		
-		$_POST['wpClassified_data']['userfield'] =  $this->get_user_field();
-		$_POST['wpClassified_data']['installed'] = 'y';
-		update_option('wpClassified_data', $_POST['wpClassified_data']);
-		$msg = "Settings Updated!";
-		break;
-		case "install":
-			include("wpClassified_db.php");
-			wpClassified_db();
-		break;	
-	}
+					foreach ($_POST["wpClassified_data"] as $k=>$v){
+						$_POST["wpClassified_data"][$k] = stripslashes($v);
+					}
+				
+					$null_values = array('must_registered_user', 'display_titles', 'filter_posts', 'view_must_register', 'approve');
+					foreach ( $null_values as $v) {
+						if (!isset($_POST['wpClassified_data'][$v]))
+							$_POST['wpClassified_data'][$v]='n';
+					}
+					
+					$_POST['wpClassified_data']['userfield'] =  $this->get_user_field();
+					$_POST['wpClassified_data']['installed'] = 'y';
+					update_option('wpClassified_data', $_POST['wpClassified_data']);
+					$msg = "Settings Updated!";
+				break;
+			case "install":
+				include("wpClassified_db.php");
+				wpClassified_db();
+			break;	
+		}
 
-	if ($msg!=''){
-		?>
-		<p>
-		<div id="message" class="updated fade"><?php echo $msg; ?></div>
-		</p>
-		<?php
-	}
+		if ($msg!=''){
+			?>
+			<p>
+			<div id="message" class="updated fade"><?php echo $msg; ?></div>
+			</p>
+			<?php
+		}
 
-	$wpcSettings = get_option('wpClassified_data');
-	$t = $table_prefix.'wpClassified';
-	if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
-		// TODO
-		$this->set_default_option();
-	}
+		$wpcSettings = get_option('wpClassified_data');
+		$t = $table_prefix.'wpClassified';
+		if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+			// TODO
+			$this->set_default_option();
+		}
 
 		$url = "<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=classified\">".get_bloginfo('wpurl')."/index.php?pagename=classified</a>";
 		?>
@@ -557,13 +556,10 @@ class WP_Classified {
 		</fieldset>
 		</td></tr></table></div>
 		<p><input type=submit value="Update wpClassifieds Settings"></p>
-		
-		
-			 </form>
-			 </p>
-			 <?php
+		</form>
+		</p>
+		<?php
 	}
-
 
 	function create_ads_subject_author($ad){
 		$wpcSettings = get_option('wpClassified_data');
