@@ -76,6 +76,9 @@ Changes 1.3.2-g - Nov 12/11/2009
 
 */
 
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1); 
+
 require_once(dirname(__FILE__).'/settings.php');
 
 define('WPC_PLUGIN_DIR', ABSPATH .  'wp-content/plugins/wp-classified');
@@ -146,14 +149,18 @@ class WP_Classified {
 
 	 print wpcAdminMenu();
 	 $this->showCategoryImg();
-	 switch ($_GET['adm_action']){
+
+	$pageinfo = $this->get_pageinfo();
+
+	if ( empty($pageinfo) ) {
+		echo "---1->". $pageinfo;
+		$dt = date("Y-m-d");
+		$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
+		$wpdb->query($sql);
+	}
+	switch ($_GET['adm_action']){
 		case "saveSettings":
-		$pageinfo = $this->get_pageinfo();
-		if ( empty($pageinfo) ) {
-			$dt = date("Y-m-d");
-			$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
-			$wpdb->query($sql);
-		}
+		
 		foreach ($_POST["wpClassified_data"] as $k=>$v){
 			$_POST["wpClassified_data"][$k] = stripslashes($v);
 		}
@@ -186,17 +193,9 @@ class WP_Classified {
 	$wpcSettings = get_option('wpClassified_data');
 	$t = $table_prefix.'wpClassified';
 	if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+		// TODO
 		$this->set_default_option();
-		$pageinfo = $this->get_pageinfo();
-		if ($pageinfo == false){
-			$dt = date("Y-m-d");
-			$p = $wpdb->get_row("SELECT * FROM {$table_prefix}posts 
-			WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-			if ($p["post_title"]!="[[WP_CLASSIFIED]]"){
-				 $wpdb->query("insert into {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, post_type, menu_order) values ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]', 'publish', '', '', '', 'classified', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', 'page', '0')");
-				}
-			 }
-		}
+	}
 
 		$url = "<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=classified\">".get_bloginfo('wpurl')."/index.php?pagename=classified</a>";
 		?>
@@ -806,7 +805,7 @@ class WP_Classified {
 
 	function get_pageinfo(){
 		global $wpdb, $table_prefix;
-		return $wpdb->get_var("SELECT post_title FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
+		return $wpdb->get_var("SELECT post_title FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'");
 	}
 
 	function is_usr_admin(){
