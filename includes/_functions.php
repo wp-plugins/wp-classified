@@ -47,8 +47,6 @@ function wpcHeader(){
 	?>
 	</div><!--wpc_head-->
 	<?php
-
-	
 	//
 	wpcCleanUpIpTempImages();
 
@@ -388,69 +386,38 @@ function wpcEditAd(){
 	}
 }
 
-function wpcPrintAad(){
-	global $_GET, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang, $wpClassified;
+
+function wpcPrintAd() {
+	global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang, $postinfo, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = $wpClassified->get_user_field();
 	$pageinfo = $wpClassified->get_pageinfo();
 	$aid = (int)$_GET['aid'];
 
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" . $aid;
-
 	$post = $wpdb->get_row($sql);
 
-	$subject = $post->subject;
-	$desctext = $post->post;
+	$message=$post->post;
+	$subject=$post->subject;
+	$displayform = true;
 	$phone = $post->phone;
 	$photo = $post->image_file;
+	$web = $post->web;
 
 	$array = preg_split('/\#\#\#/', $post->image_file);
-	$submitter = get_post_author($post);
+	$submitter = $postinfo['author'];
 	//wpc_header();
-	echo "<html><head><title>".$wpcSettings['slug']."</title></head>";
-	
-   echo "<body bgcolor=\"#FFFFFF\" text=\"#000000\">";
-	echo "<table border=0><tr><td><table border=0 width=100% cellpadding=0 cellspacing=1 bgcolor=\"#000000\"><tr><td>";
-    	echo "<table border=0 width=100% cellpadding=15 cellspacing=1 bgcolor=\"#FFFFFF\"><tr><td>";
-	echo "<br /><br /><table width=99% border=0><tr><td>".$lang['_CLASSIFIED_AD']."(No. $aid)<br />" .$lang['_FROM']. "<br /><br />";
-	echo " <b>" . $lang['_TITLE']. "</b> <i>" .$subject. "</i><br />";
-	
-	foreach($array as $f) {
-		if ($f !=''){
-			include (dirname(__FILE__).'/js/viewer.js.php');
-			echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a><br>" .$f . "</div>";
-		} 
-	} 
-	
-
-	echo "<p class=\"justify\"><b>".$lang['_DESC']."</b><br /><br />".$desctext."</p>";
-	if ($phone) {
-		echo "<br /><b>".$lang['_TEL']."</b>" . $phone . "<br />";
+	$displayform = true;
+	if ($displayform == true) {
+		include(dirname(__FILE__)."/printAd_tpl.php");
 	}
-	if ($web) {
-		echo"<b>".$lang['_WEB']."</b> ". $web ;
-	}
-	?>
-	<hr />
-	<?php echo $lang['_TOCONTACTBY'];?>
-	<?php
-	echo " <a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=va&asid=".$post->ads_subjects_id."\">".$subject."</a>";
-	echo "<br /><br />".$lang['_ADSADDED']. " " . "<nobr>" . @date($wpcSettings['date_format'], $post->date) ."</nobr>";
-	?>
-	<br /><?php echo $lang['_ADLINKINFO'];?> <a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?>.</a>
-	</td></tr></table>
-	</td></tr></table></td></tr></table>
-    	</td></tr></table>
-	<?php
-	//wpc_footer();
 }
 
 
 
 
-
 function wpcSendAd(){
-    global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang, $wpClassified;
+   global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = $wpClassified->get_user_field();
 	$pageinfo = $wpClassified->get_pageinfo();
@@ -468,23 +435,23 @@ function wpcSendAd(){
 	$displayform = true;
 	if (isset($_POST['send_ad']) && $_POST['send_ad']=='yes'){
 		$sendAd = true;
-		$yourname=$_POST['wpClassified_data'][yourname];
-		$mailfrom=$_POST['wpClassified_data'][mailfrom];
-		$mailto=$_POST['wpClassified_data'][mailto];
+		$yourname=$_POST['wpClassified_data']['yourname'];
+		$mailfrom=$_POST['wpClassified_data']['mailfrom'];
+		$mailto=$_POST['wpClassified_data']['mailto'];
 
 		if (!preg_match('/^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$/',	$_POST['wpClassified_data']['mailto'])) {
 			$msg = $lang['_INVALIDEMAIL2'];
 			$sendAd = false;
 		}
 		if($wpcSettings['confirmation_code']=='y'){ 
-			if (! wpcCaptcha::Validate($_POST['wpClassified_data'][confirmCode])) {
+			if (! wpcCaptcha::Validate($_POST['wpClassified_data']['confirmCode'])) {
    			$msg = $lang['_INVALIDCONFIRM'];
 				$sendAd = false;
   			}
 		}
 		if ($sendAd == true) {
 			$displayform = false;
-			$message = "Dear " .$_POST['wpClassified_data'][fname]. "<br>";
+			$message = "Dear " .$_POST['wpClassified_data']['fname']. "<br>";
 			$message .= "your friend " . $yourname . " send you this interesting advertisement about " . $subject . "<br><br>";
 			$message .= $lang['_ADDETAIL']. "<BR>" . $msg . "<BR><BR>";
 			$message .= $lang['_FRIENDBTN1'];
@@ -516,8 +483,6 @@ function wpcSendAd(){
 		include(dirname(__FILE__)."/sendAd_tpl.php");
 	}
 }
-
-
 
 // function to display advertisement information
 function wpcDisplayAd(){
@@ -597,6 +562,7 @@ function wpcDisplayAd(){
 	}
 	//if ($wpcSettings['must_registered_user']!="y" || _is_usr_loggedin()){	}
 }
+
 
 
 function wpcSearch($term){

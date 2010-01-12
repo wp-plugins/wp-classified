@@ -72,18 +72,13 @@ Changes 1.3.2-g - Nov 12/11/2009
 - A new version for wordpress 2.8.6
 
 
-
-
 */
 
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1); 
 
 require_once(dirname(__FILE__).'/settings.php');
 
 define('WPC_PLUGIN_DIR', ABSPATH .  'wp-content/plugins/wp-classified');
 define('WPC_PLUGIN_URL', plugins_url('wp-classified'));
-
 
 add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpClassified = new WP_Classified();'));
 
@@ -855,8 +850,10 @@ class WP_Classified {
 				onchange_callback	 : "tinyMceOnChange",
 				handle_event_callback : "tinyMceEventHandler"
 		});
+				/* ]]> */
 		</script>
 		<script type="text/javascript">
+		/* <![CDATA[ */
 		var maxchars ="<?php echo $wpcSettings['maxchars_limit'] ?>";
 		var textcounter = new Object, textcounterwarning = new Object,textcountercurrentinst,textcounting_maxcharacters=maxchars;
 		function myCustomOnChangeHandler(inst) {
@@ -883,6 +880,7 @@ class WP_Classified {
 				checknumberofcharacters(texttocheck,inst);
 			}
 		}
+		/* <![CDATA[ */
 		</script>	
 	<?php
 	}

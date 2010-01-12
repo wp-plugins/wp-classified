@@ -100,6 +100,21 @@ if (isset($adsInfo['phone'])) {
 $pageinfo = $wpClassified->get_pageinfo();
 $printAd = '<a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=prtad&aid='.$post->ads_id.'"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/print.jpg" class="imgMiddle"></a>'; 
 echo $printAd;
+
+?>
+
+<script language=”JavaScript”>
+var thePopup = window.open('<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/print.php', 'myPopupFile','width = 250, height = 250');
+</script>
+
+<form>
+<input type="button" value="Print the Popup" onClick="thePopup.print()">
+</form>
+
+
+
+<?php
+
 echo "</div><div class=\"right\">";
 $sendAd = '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/send.jpg" class="imgMiddle"><a href="'.get_bloginfo('wpurl').'/?page_id=' . $pageinfo["ID"].'&_action=sndad&aid=' . $post->ads_id.'">' . $lang['_SENDTOF'].'</a>'; 
 echo $sendAd . "</div>";

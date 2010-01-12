@@ -37,8 +37,6 @@ global $table_prefix, $wpdb, $wpmuBaseTablePrefix;
 	if (!$wpmuBaseTablePrefix) $wpmuBaseTablePrefix=$table_prefix;
 
 
-
-
 $wpcAdminMenu = array(
 	array('name'=>'Add/Edit Categories','arg'=>'wpcStructure'),
 	array('name'=>'Edit/Remove Ads','arg'=>'wpcModify'),
