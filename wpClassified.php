@@ -150,8 +150,8 @@ class WP_Classified {
 		print wpcAdminMenu();
 		$this->showCategoryImg();
 
-		$page_id = $this->get_pageinfo();
-		if ( empty($page_id) ) {
+		$page = $this->get_pageinfo();
+		if ( empty($page['post_title']) ) {
 			$dt = date("Y-m-d");
 			$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
 			$wpdb->query($sql);
@@ -800,8 +800,7 @@ class WP_Classified {
 
 	function get_pageinfo(){
 		global $wpdb, $table_prefix;
-		$page =  $wpdb->get_row("SELECT * FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
-		return $page['post_title'];
+		return  $wpdb->get_row("SELECT * FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'", ARRAY_A);
 	}
 
 	function is_usr_admin(){
