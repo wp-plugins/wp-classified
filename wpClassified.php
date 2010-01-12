@@ -75,6 +75,7 @@ Changes 1.3.2-g - Nov 12/11/2009
 */
 
 
+
 require_once(dirname(__FILE__).'/settings.php');
 
 define('WPC_PLUGIN_DIR', ABSPATH .  'wp-content/plugins/wp-classified');

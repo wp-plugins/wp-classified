@@ -24,18 +24,19 @@
 ?>
 
 <div class="wpc_container">
-	<table border=0 width=100% cellpadding=15 cellspacing=1 bgcolor="#FFFFFF">
-		<tr><td>
-			<br /><br /><table width=99% border=0><tr>
+	<table width="650" border=0>
+		<tr>
 			<td><?php echo $lang['_CLASSIFIED_AD']; ?> (No. <?php echo  $aid; ?>)<br /><?php echo $lang['_FROM']; ?><br /><br />
-			<b><?php echo $lang['_TITLE']; ?></b> <i><?php echo $subject; ?></i><br />
+			<b><?php echo $lang['_TITLE']; ?></b> <i><?php echo $subject; ?></i></td></tr>
 			<?php
 			foreach($array as $f) {
 				if ($f !=''){
-					include (dirname(__FILE__).'/js/viewer.js.php');
-					echo "<div class=\"show_ad_img12\"><a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a><br>" .$f . "</div>";
+					echo "<tr><td>";
+					echo "<div class=\"show_ad_img12\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a><br>" .$f . "</div>";
+					echo "</td></tr>";
 				} 
 			} 
+			echo "<tr><td>";
 			echo "<p class=\"justify\"><b>".$lang['_DESC']."</b><br /><br />".$message."</p>";
 			if ($phone) {
 				echo "<br /><b>".$lang['_TEL']."</b>" . $phone . "<br />";

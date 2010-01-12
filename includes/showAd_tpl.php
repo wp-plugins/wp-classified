@@ -103,15 +103,6 @@ echo $printAd;
 
 ?>
 
-<script language=”JavaScript”>
-var thePopup = window.open('<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/print.php', 'myPopupFile','width = 250, height = 250');
-</script>
-
-<form>
-<input type="button" value="Print the Popup" onClick="thePopup.print()">
-</form>
-
-
 
 <?php
 
