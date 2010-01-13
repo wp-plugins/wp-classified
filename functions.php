@@ -638,9 +638,68 @@ function wpcAdInput($content=""){
 		case "plain":
 			default:
 			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='60' rows='20'>".str_replace("<", "&lt;", $content)."</textarea>";
+			echo '<span class ="smallTxt"><span id="charLeft"> <SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . 'characters allowed</SPAN><BR/>';
 		break;
 		case "tinymce":
-			echo '<textarea name="wpClassified_data[post]" id="mceEditor" rows="8" cols="60">'. htmlentities($content) .'</textarea><br />';
+			?>
+			<script type="text/javascript">
+			/* <![CDATA[ */
+			tinyMCE.init({
+				mode: "exact",
+				theme: "advanced",
+				elements : "wpClassified_data[post]",
+				width : "500",
+				height : "200",
+				theme_advanced_buttons1: "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
+				theme_advanced_buttons2:"",
+				theme_advanced_buttons3: "",
+				theme_advanced_toolbar_location: "top",
+				theme_advanced_toolbar_align: "left",
+				theme_advanced_statusbar_location: "none",
+				theme_advanced_resizing: false,
+				onchange_callback	 : "tinyMceOnChange",
+				handle_event_callback : "tinyMceEventHandler"
+			});
+			var _form = "<?php echo $form ?>";
+			var intMaxLength="<?php echo $wpca_settings['excerpt_length'] ?>";
+			var tinyMceBuffers = new Object();
+			var tinyMceCharCounts = new Object();
+			function tinyMceOnChange(inst){ tinyMceCheckContentLength(inst.id,intMaxLength); }
+			function tinyMceEventHandler(e){
+				switch (e.type) {
+					case 'keyup': tinyMceOnChange(tinyMCE.activeEditor); break;
+				}
+				return true;
+			}
+			// Strips all html tags from a given string, leaving only plain text
+			function stripHtmlTags(strContent) { return strContent.replace(/(<([^>]+)>)/ig, ""); }
+			function tinyMceCheckContentLength(strEditorId, intMaxLength) {
+				var editorInstance = tinyMCE.get(strEditorId);
+				if (editorInstance == null || editorInstance	== undefined) { alert('NO EDITOR'); }
+				var contentContainer = editorInstance.getBody();
+				if (contentContainer == null || contentContainer == undefined) { alert('NO CONTENT CONTAINER'); }
+				var strContent = contentContainer.innerHTML;
+				var intContentLength = strContent.length;
+				var intCharCount = stripHtmlTags(strContent).length;
+				if (intContentLength <= intMaxLength) {
+					tinyMceBuffers[strEditorId] = strContent;
+					tinyMceCharCounts[strEditorId] = intCharCount;
+				} else {
+					var bm = editorInstance.selection.getBookmark(); // Stores a bookmark of the current selection
+					editorInstance.setContent((tinyMceBuffers[strEditorId]) ? tinyMceBuffers[strEditorId] : strContent.substring(0, intMaxLength - 10));
+					var intDelta = intCharCount - tinyMceCharCounts[strEditorId];
+					if (bm['start'] && bm['start'] > intDelta) {
+						bm['start'] -= intDelta;
+						bm['end'] = bm['start'];
+					}
+					editorInstance.selection.moveToBookmark(bm); // Restore the selection bookmark
+					alert('You have exceeded the maximum size for this text and we have undone your last change.');
+				}
+			}
+			/* ]]> */
+			</script>
+			<?php
+			echo '<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" rows="8" cols="60">'. htmlentities($content) .'</textarea><br />';
 			echo '<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . 'characters allowed</SPAN><BR/>';
 		break;
 	}

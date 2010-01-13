@@ -784,14 +784,21 @@ class WP_Classified {
 		?>
 		<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/admin.css" type="text/css" media="screen" />
 		<?php
-  }
+	}
 
   function add_head(){
-
 	$wpcSettings = get_option('wpClassified_data');
 	?>
 	<link rel="stylesheet" href="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/wpClassified.css" type="text/css" media="screen" />
 		<?php
+		if($wpcSettings['edit_style']==null || $wpcSettings['edit_style']=='plain') {
+			// nothing
+		} elseif($wpca_settings['edit_style']=='tinymce') {
+			// activate these includes if the user chooses tinyMCE on the settings page
+			$mce_path = get_option('siteurl');
+			$mce_path .= '/wp-includes/js/tinymce/tiny_mce.js';
+			echo '<script type="text/javascript" src="' . $mce_path . '"></script>';
+		}
 	}
 
 	function get_pageinfo(){
@@ -826,64 +833,8 @@ class WP_Classified {
 
 	function getInitJS($debugMode=0) {
 		global $locale;
-
-		?>
-		<script type="text/javascript" src="<?php echo get_bloginfo('wpurl'); ?>/wp-includes/js/tinymce/tiny_mce.js"></script>
-		<script type="text/javascript">
-		/* <![CDATA[ */
-		function brstonewline(element_id, html, body) {
-			html = html.replace(/<br\s*\/>/gi, "\n");
-			return html;
-		}
-		tinyMCE.init({
-				mode : "exact",
-				elements : "wpClassified_data[post]",
-				theme : "advanced",
-				width : "500",
-				height : "200",
-				theme_advanced_buttons1: "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
-				theme_advanced_buttons2:"",
-				theme_advanced_buttons3: "",
-				theme_advanced_toolbar_location: "top",
-				theme_advanced_toolbar_align: "left",
-				theme_advanced_statusbar_location: "none",
-				theme_advanced_resizing: false,
-				onchange_callback	 : "tinyMceOnChange",
-				handle_event_callback : "tinyMceEventHandler"
-		});
-				/* ]]> */
-		</script>
-		<script type="text/javascript">
-		/* <![CDATA[ */
-		var maxchars ="<?php echo $wpcSettings['maxchars_limit'] ?>";
-		var textcounter = new Object, textcounterwarning = new Object,textcountercurrentinst,textcounting_maxcharacters=maxchars;
-		function myCustomOnChangeHandler(inst) {
-			checknumberofcharacters(inst.getBody().innerHTML.length,inst);
-		}
-
-		function checknumberofcharacters(texttocheck,inst){
-			if(textcounter[inst.editorId]){
-				textcounter[inst.editorId] = texttocheck;
-				if ( textcounter[inst.editorId] >= textcounting_maxcharacters && textcounterwarning[inst.editorId] == false){
-					inst.getWin().document.body.style.backgroundColor='#F6CECC';
-					textcounterwarning[inst.editorId] = true;
-					textcountercurrentinst = inst.editorId;
-					setTimeout("alert('Your element has exceeded the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters. If you add anymore text it may be truncated when saved.')",2);
-				} else if(textcounter[inst.editorId] < textcounting_maxcharacters && textcounterwarning[inst.editorId] == true){
-					inst.getWin().document.body.style.backgroundColor='#FFFFFF';
-					textcounterwarning[inst.editorId] = false;
-					textcountercurrentinst = inst.editorId;
-					setTimeout("alert('The number of characters in your element has been reduced below the '+textcounting_maxcharacters+' character limit.  You are currently using '+textcounter[textcountercurrentinst]+' characters.')",2);
-				}
-			} else {
-				textcounter[inst.editorId] = texttocheck;
-				textcounterwarning[inst.editorId]=false;
-				checknumberofcharacters(texttocheck,inst);
-			}
-		}
-		/* <![CDATA[ */
-		</script>	
-	<?php
+		// TODO
+		return 1;
 	}
 
 	function remaveCPCC() {
