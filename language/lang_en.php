@@ -73,7 +73,7 @@
 	$lang['_YES'] = "Yes";
 	$lang['_NO'] = "No";
 	$lang['_BACK'] = "Back";
-	$lang['_CANCEL'] = "Cancel";
+	$lang['_CANCEL'] = "Reset Form";
 	$lang['_CONFDEL'] = "Confirmation to delete";
 	$lang['_SURDELANN'] = "ATTENTION : Are you sure you want to delete this advertisement?";
 	$lang['_ADSADDED'] = "This Classified Ad was added";
