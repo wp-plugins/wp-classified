@@ -150,7 +150,7 @@ function wpcFooter(){
 		echo "<div class=\"smallTxt\">&nbsp;&nbsp;" .stripslashes($wpcSettings['credit_line']) . "</div>";
 	}
 	echo "</div>";
-	if($wpcSettings['edit_style']=='tinymce') print $wpClassified->getInitJS();
+	//if($wpcSettings['edit_style']=='tinymce') print $wpClassified->getInitJS();
 }
 
 function wpcRssFilter($text)
