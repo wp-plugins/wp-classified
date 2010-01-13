@@ -89,7 +89,7 @@ list ($adExpire, $contactBy) = preg_split('/###/', $adsInfo['txt']);
 
 echo "<hr><div class=\"info\"><div class=\"left\">";
 if (isset($adsInfo['email']) && $contactBy==$lang['_YES_CONTACT']) {
-	echo '<a href="mailto:' . $adsInfo['email'] . '"><img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/email.jpg" class="imgMiddle">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
+	echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/images/topic/email.jpg" class="imgMiddle"><a href="mailto:' . $adsInfo['email'] . '">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
 }
 if (isset($adsInfo['web'])) {
 	echo "<a href=\"" . $adsInfo['web'] . "\" target=_blank><img src=\"" . get_bloginfo('wpurl') . "/wp-content/plugins/wp-classified/images/topic/web.jpg\" class=\"imgMiddle\"></a>";
