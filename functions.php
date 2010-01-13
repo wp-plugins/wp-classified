@@ -661,7 +661,7 @@ function wpcAdInput($content=""){
 				handle_event_callback : "tinyMceEventHandler"
 			});
 			var _form = "<?php echo $form ?>";
-			var intMaxLength="<?php echo $wpca_settings['excerpt_length'] ?>";
+			var intMaxLength="<?php echo $wpcSettings['maxchars_limit'] ?>";
 			var tinyMceBuffers = new Object();
 			var tinyMceCharCounts = new Object();
 			function tinyMceOnChange(inst){ tinyMceCheckContentLength(inst.id,intMaxLength); }

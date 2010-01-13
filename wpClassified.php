@@ -793,7 +793,7 @@ class WP_Classified {
 		<?php
 		if($wpcSettings['edit_style']==null || $wpcSettings['edit_style']=='plain') {
 			// nothing
-		} elseif($wpca_settings['edit_style']=='tinymce') {
+		} elseif($wpcSettings['edit_style']=='tinymce') {
 			// activate these includes if the user chooses tinyMCE on the settings page
 			$mce_path = get_option('siteurl');
 			$mce_path .= '/wp-includes/js/tinymce/tiny_mce.js';
