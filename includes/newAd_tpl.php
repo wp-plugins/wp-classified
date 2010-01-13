@@ -102,8 +102,8 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 				<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
 				<td>
 				<?php
-				if (!isset($_POST['wpClassified_data']['post'])) $_POST['wpClassified_data']['post']='';
-				wpcAdInput($_POST['wpClassified_data']['post']); ?>
+				if (!isset($_POST['description'])) $_POST['description']='';
+				wpcAdInput($_POST['description']); ?>
 				</td>
 			</tr>
 			<?php 

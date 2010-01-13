@@ -68,13 +68,13 @@ if (isset($array[2]) && $array[2] !=''){
 	<?php 
 	?>
 	var newtext_<?php echo $post->ads_id;?> = "<?php echo wpcPostAuthor($post);?> said:\n\"<?php echo wpcCommmentQuote($post);?>\"\n\n";
-	document.ead_form["wpClassified_data[post]"].value += newtext_<?php echo $post->ads_id;?>;
+	document.ead_form["description"].value += newtext_<?php echo $post->ads_id;?>;
 
 	<?php
 	if ($wpcSettings["edit_style"]=="tinymce"){
 		echo "tinyMCE.triggerSave(true, true);";
-		echo "document.getElementById('wpClassified_data[post]').value = newtext_".$post->ads_id.";";
-		echo "tinyMCE.updateContent('wpClassified_data[post]');";
+		echo "document.getElementById('description').value = newtext_".$post->ads_id.";";
+		echo "tinyMCE.updateContent('description');";
 	}
 	?>
 	}

@@ -30,7 +30,7 @@ function wpcAddAd(){
 	$web = $_POST['wpClassified_data']['web'];
 	$phone = $_POST['wpClassified_data']['phone'];
 	$subject = stripslashes($_POST['wpClassified_data']['subject']);
-	$description = $_POST['wpClassified_data']['post'];
+	$description = $_POST['description'];
 	$author_name = $_POST['wpClassified_data']['author_name'];
 
 	if (isset($_POST['add_ad']) && $_POST['add_ad']=='yes') {
@@ -293,14 +293,14 @@ function wpcDeleteImg() {
 		$newstring = substr($txt,0,-3);
 		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($newstring)) . "' WHERE ads_id=" . $_GET['aid'] );
 
-		$file = ABSPATH."wp-content/plugins/wp-classified/images/" . $_GET[file];
+		$file = ABSPATH . "wp-content/plugins/wp-classified/images/" . $_GET[file];
 		unlink($file);
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
 		$post = $postinfo[0];
-		if (!file_exists(ABSPATH . INC . "/modifyImg_tpl.php")){ 
-			include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
+		if (!file_exists(ABSPATH . "wp-content/plugins/wp-classified/includes/modifyImg_tpl.php")){ 
+			include(dirname(__FILE__)."wp-content/plugins/wp-classified/includes/modifyImg_tpl.php");
 		} else {
-			include(ABSPATH . INC . "/modifyImg_tpl.php");
+			include(ABSPATH . "wp-content/plugins/wp-classified//includes/modifyImg_tpl.php");
 		}
 	} else {
 	?>
@@ -634,11 +634,28 @@ function wpcLastAdSubject(){
 function wpcAdInput($content=""){
 	global $wpdb, $table_prefix, $wp_filesystem;
 	$wpcSettings = get_option('wpClassified_data');
+	echo '<script type="text/javascript" src="' . get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/includes/js/jquery.limit.js"></script>';
+	?>
+	<script type='text/javascript'>
+		/* <![CDATA[ */
+		var intMaxLength="<?php echo $wpcSettings['maxchars_limit'] ?>";
+		$(document).ready(function() {
+		$('#description').keyup(function() {
+			var len = this.value.length;
+			if (len >= intMaxLength) {
+			this.value = this.value.substring(0, intMaxLength);
+			}
+			$('#charLeft').text(intMaxLength - len);
+		});
+	});
+	/* ]]> */
+	</script>
+	<?php
 	switch ($wpcSettings['edit_style']){
 		case "plain":
 			default:
-			echo "<textarea name='wpClassified_data[post]' id='wpClassified_data[post]' cols='60' rows='20'>".str_replace("<", "&lt;", $content)."</textarea>";
-			echo '<span class ="smallTxt"><span id="charLeft"> <SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . 'characters allowed</SPAN><BR/>';
+			echo "<textarea name='description' id='description' cols='60' rows='20'>".str_replace("<", "&lt;", $content)."</textarea><br />";
+			echo '<span class ="smallTxt">(<span id="charLeft"> </span>)&nbsp;<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
 		break;
 		case "tinymce":
 			?>
@@ -647,7 +664,7 @@ function wpcAdInput($content=""){
 			tinyMCE.init({
 				mode: "exact",
 				theme: "advanced",
-				elements : "wpClassified_data[post]",
+				elements : "description",
 				width : "500",
 				height : "200",
 				theme_advanced_buttons1: "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
@@ -699,8 +716,8 @@ function wpcAdInput($content=""){
 			/* ]]> */
 			</script>
 			<?php
-			echo '<textarea name="wpClassified_data[post]" id="wpClassified_data[post]" rows="8" cols="60">'. htmlentities($content) .'</textarea><br />';
-			echo '<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . 'characters allowed</SPAN><BR/>';
+			echo '<textarea name="description" id="description" rows="8" cols="60">'. htmlentities($content) .'</textarea><br />';
+			echo '<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
 		break;
 	}
 }

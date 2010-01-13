@@ -249,7 +249,7 @@ function wpcEditAd(){
 	$subject = stripslashes($_POST['wpClassified_data']['subject']);
 	$web = $_POST['wpClassified_data']['web'];
 	$author_name = $_POST['wpClassified_data']['author_name'];
-	$description = $_POST['wpClassified_data']['post'];
+	$description = $_POST['description'];
 
 	$permission=false;
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$postinfo['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
