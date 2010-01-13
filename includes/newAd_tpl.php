@@ -132,7 +132,7 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 			} ?>
 
 			<tr><td></td>
-				<td><br><input type=submit value="<?php echo $lang['_SAVEAD'];?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td>
+				<td><br><input type=submit value="<?php echo $lang['_SAVEAD'];?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset"  id="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td>
 			</tr>
 			</table>
 			</form>

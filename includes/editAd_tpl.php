@@ -100,7 +100,7 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		<?php
 		} ?>
 		<tr>
-			<td></td><td><br><input type="submit" name="submit" value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td>
+			<td></td><td><br><input type="submit" name="submit" value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset"  id="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td>
 		</tr>
 		
 		</table>
