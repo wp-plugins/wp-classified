@@ -319,7 +319,7 @@ function wpcDeleteImg() {
 
 
 function wpcPublicLink($action,$vars){
-	global $wpdb,$table_prefix,$lang, $wp_rewrite, $wpClassified;
+	global $wpdb, $table_prefix, $lang, $wp_rewrite, $wpClassified;
 	
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = $wpClassified->get_pageinfo();
@@ -655,7 +655,7 @@ function wpcAdInput($content=""){
 		case "plain":
 			default:
 			echo "<textarea name='description' id='description' cols='60' rows='20'>".str_replace("<", "&lt;", $content)."</textarea><br />";
-			echo '<span class ="smallTxt">(<span id="charLeft"> </span>)&nbsp;<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
+			echo '<span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
 		break;
 		case "tinymce":
 			?>
