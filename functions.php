@@ -27,11 +27,11 @@ function wpcAddAd(){
 				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".((int)$_GET['lid'])."'",ARRAY_A);
 	$displayform = true;
 
-	$web = $_POST['wpClassified_data']['web'];
-	$phone = $_POST['wpClassified_data']['phone'];
-	$subject = stripslashes($_POST['wpClassified_data']['subject']);
-	$description = $_POST['description'];
-	$author_name = $_POST['wpClassified_data']['author_name'];
+	if ( isset($web) && !empty($web) )  $web = $_POST['wpClassified_data']['web'];
+	if ( isset($phone) && !empty($phone) ) $phone = $_POST['wpClassified_data']['phone'];
+	if ( isset($subject) && !empty($subject) )  $subject = stripslashes($_POST['wpClassified_data']['subject']);
+	if ( isset($description) && !empty($description) )  $description = $_POST['description'];
+	if ( isset($author_name) && !empty($author_name) ) $author_name = $_POST['wpClassified_data']['author_name'];
 
 	if (isset($_POST['add_ad']) && $_POST['add_ad']=='yes') {
 		if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()) {
