@@ -1,6 +1,6 @@
 === wp-classified ===
 
-name: wpClassified Wordpress plugins version 1.3.2-a
+name: wpClassified Wordpress plugins Version: 1.3.3-b
 Contributors: Mohammad Forgani
 Requires at least: 2.8.x
 Tested up to: 2.8.x
