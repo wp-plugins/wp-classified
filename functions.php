@@ -27,9 +27,9 @@ function wpcAddAd(){
 				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".((int)$_GET['lid'])."'",ARRAY_A);
 	$displayform = true;
 
-	$web = $_POST['wpClassified_data']['web'];
-	$phone = $_POST['wpClassified_data']['phone'];
-	$subject = stripslashes($_POST['wpClassified_data']['subject']);
+	$web = trim($_POST['wpClassified_data']['web']);
+	$phone = trim($_POST['wpClassified_data']['phone']);
+	$subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
 	$description = $_POST['description'];
 	$author_name = $_POST['wpClassified_data']['author_name'];
 	if (isset($_POST['add_ad']) && $_POST['add_ad']=='yes') {
