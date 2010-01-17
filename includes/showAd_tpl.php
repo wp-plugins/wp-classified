@@ -33,7 +33,7 @@ if (!empty($post->image_file) ) {
 	$array = preg_split('/###/', $post->image_file);
 }
 $file = $wpClassified->public_dir ."/". $array[0];
-if ( file_exists($file) ){
+if ( !empty($array[0]) && file_exists($file) ){
 	include (dirname(__FILE__).'/js/viewer.js.php');
 	echo "<div class=\"show_ad_img1\"><a href=\"" . $wpClassified->public_url ."/" . $array[0] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url. "/" . $array[0] . "\" style=\"width: ". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
 }
@@ -56,12 +56,12 @@ Posted By<img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?p
 <?php
 
 $file = $wpClassified->public_dir ."/". $array[1];
-if ( file_exists($file) ){
+if ( !empty($array[1]) && file_exists($file) ){
 	include (dirname(__FILE__).'/js/viewer.js.php');
 	echo "<div class=\"show_ad_img12\"><a href=\"". $wpClassified->public_url . "/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[1] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[1] . "
 } 
 $file = $wpClassified->public_dir ."/". $array[2];
-if ( file_exists($file) ){
+if ( !empty($array[2]) && file_exists($file) ){
 	include (dirname(__FILE__).'/js/viewer.js.php');
 	echo "<div class=\"show_ad_img12\"><a href=\"". $wpClassified->public_url . "/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[2] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[2] . "
 } 
