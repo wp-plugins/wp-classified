@@ -56,11 +56,14 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 			<table width=90%>
 				<tr>
 					<?php
-					$array = preg_split('/###/', $postinfo->image_file);
+					preg_replace(array('/\s/'), '', $postinfo->image_file);
+					if (!empty($postinfo->image_file) ) {
+						$array = preg_split('/###/', $postinfo->image_file);
+					}
 					foreach($array as $f) {
 						include (dirname(__FILE__).'/js/viewer.js.php');
 						echo '<td align="center">';
-						echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" rel=\"thumbnail\"><img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $f . "\" style=\"width: 120px; height: 100px\"></a><br />";
+						echo "<a href=\"". $wpClassified->public_url."/" . $f . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url."/" . $f . "\" style=\"width: 120px; height: 100px\"></a><br />";
 						//Image Upload 
 						echo $f;
 						echo "</td>";
@@ -90,11 +93,11 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		if($wpcSettings['confirmation_code']=='y') { 
 			$oVisualCaptcha = new wpcCaptcha();
 			$captcha = rand(1, 50) . ".png";
-			$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+			$oVisualCaptcha->create( $wpClassified->cache_dir ."/" . $captcha);
 		?>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td>
-			<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
+			<td><img src="<?php echo $wpClassified->cache_url. "/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 			<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
 		</tr>
 		<?php

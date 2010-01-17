@@ -11,7 +11,7 @@ enableAnimation: false, //Enable nimation?
  //Define HTML for footer interface
 <?php 
 	echo "definefooter: '<div class=\"footerbar\">" . get_bloginfo('wpurl') . " | close</div>',";
-	echo "defineLoading: '<img src=\"" . get_bloginfo('wpurl') . "/wp-content/plugins/wp-classified/images/topic/loading.gif\" /> Loading Image...', "; 
+	echo "defineLoading: '<img src=\"" . $wpClassified->plugin_url . "/images/loading.gif\" /> Loading Image...', "; 
 ?>
 ///No need to edit beyond here
 scrollbarwidth: 16,

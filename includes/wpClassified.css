@@ -68,14 +68,14 @@ div.info div.left{float:left}
 .wpc_footer p {margin-top:5px;}
 .wpc_footer h3 {border-bottom:1px solid #ddd;}
 .rssIcon {border:none;margin-left:5px;padding-left:17px;
-background:url(/wp-content/plugins/wp-classified/images/topic/rss.png) no-repeat;} 
+background:url(/wp-content/plugins/wp-classified/images/rss.png) no-repeat;} 
 .smallRed{color:red;font-size:8pt;}
-.delete{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/topic/delete.jpg) no-repeat;
+.delete{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/delete.jpg) no-repeat;
 vertical-align:middle;padding:0 2px 4px 20px;float:right;border:none;}
 .edit{background-color:transparent;
-background:url(/wp-content/plugins/wp-classified/images/topic/edit.jpg) no-repeat;
+background:url(/wp-content/plugins/wp-classified/images/edit.jpg) no-repeat;
 padding:0 2px 4px 20px;float:left;vertical-align:middle;border:none;}
-.print{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/topic/print.jpg) no-repeat;
+.print{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/print.jpg) no-repeat;
 vertical-align:middle;padding-left:20px;float:right;border:none;}
 .imgMiddle{vertical-align:middle;padding:0 2px 0 2px;border:none;}
 .rightCell{margin-top:4px;padding:8px 5px 2px 0;float:right;text-align:right;vertical-align:middle;font-weight:bold;}

@@ -27,12 +27,11 @@ function wpcAddAd(){
 				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".((int)$_GET['lid'])."'",ARRAY_A);
 	$displayform = true;
 
-    $web = $_POST['wpClassified_data']['web'];
-    $phone = $_POST['wpClassified_data']['phone'];
-    $subject = stripslashes($_POST['wpClassified_data']['subject']);
-    $description = $_POST['description'];
-    $author_name = $_POST['wpClassified_data']['author_name'];
-
+	$web = $_POST['wpClassified_data']['web'];
+	$phone = $_POST['wpClassified_data']['phone'];
+	$subject = stripslashes($_POST['wpClassified_data']['subject']);
+	$description = $_POST['description'];
+	$author_name = $_POST['wpClassified_data']['author_name'];
 	if (isset($_POST['add_ad']) && $_POST['add_ad']=='yes') {
 		if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()) {
 			die($lang['_MUSTLOGIN']);
@@ -89,8 +88,7 @@ function wpcAddAd(){
 					$addPost = false;
   				}
 			}
-			if (!isset($description) ||
-				str_replace(" ","",$description)==''){
+			if ( empty($description) || str_replace(" ","",$description)==''){
 				$msg = $lang['_INVALIDCOMMENT'];
 				$addPost = false;
 			}
@@ -114,10 +112,10 @@ function wpcAddAd(){
 						$fp = @fopen($_FILES['image_file']['tmp_name'],"r");
 						$content = @fread($fp,$_FILES['image_file']['size']);
 						@fclose($fp);
-						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$user_ID."-".$_FILES['image_file']['name'],"w");
+						$fp = @fopen( $wpClassified->public_dir . "/".(int)$user_ID."-".$_FILES['image_file']['name'],"w");
 						@fwrite($fp,$content);
 						@fclose($fp);
-						@chmod(dirname(__FILE__)."/images/".(int)$user_ID."-".$_FILES['image_file']['name'],0777);
+						@chmod( $wpClassified->public_dir . "/".(int)$user_ID."-".$_FILES['image_file']['name'],0777);
 						$setImage = (int)$user_ID."-".$_FILES['image_file']['name'];
 					}
 				}
@@ -184,7 +182,7 @@ function wpcAddAd(){
 
 
 function wpcModifyImg() {
-	global $_GET,$_POST,$userdata,$user_ID,$table_prefix,$wpdb,$quicktags,$lang, $wpClassified;
+	global $_GET, $_POST, $userdata, $user_ID, $table_prefix, $wpdb, $quicktags, $lang, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = $wpClassified->get_user_field();
 	get_currentuserinfo();
@@ -192,8 +190,6 @@ function wpcModifyImg() {
 	$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
 	$post = $postinfo[0];
 	$displayform = true;
-
-	
 	if ($_POST['add_img']=='yes'){
 		if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()){
 			die($lang['_MUSTLOGIN']);
@@ -211,10 +207,10 @@ function wpcModifyImg() {
 						$fp = @fopen($_FILES['addImage']['tmp_name'],"r");
 						$content = @fread($fp,$_FILES['addImage']['size']);
 						@fclose($fp);
-						$fp = @fopen(ABSPATH."wp-content/plugins/wp-classified/images/".(int)$user_ID."-".$_FILES['addImage']['name'],"w");
+						$fp = @fopen( $wpClassified->public_dir . "/".(int)$user_ID."-".$_FILES['addImage']['name'],"w");
 						@fwrite($fp,$content);
 						@fclose($fp);
-						@chmod(dirname(__FILE__)."/images/".(int)$user_ID."-".$_FILES['addImage']['name'],0777);
+						@chmod( $wpClassified->public_dir . "/".(int)$user_ID."-".$_FILES['addImage']['name'],0777);
 						$setImage = (int)$user_ID."-".$_FILES['addImage']['name'];
 					}
 				} else {
@@ -226,9 +222,14 @@ function wpcModifyImg() {
 			}
 			if ($addPost==true){
 				$displayform = false;
-				$isSpam = wpcSpamFilter(stripslashes($_POST['wpClassified_data'][author_name]),'',stripslashes($_POST['wpClassified_data'][subject]),stripslashes($_POST['wpClassified_data'][post]),$user_ID);
-				if (isset($post->image_file)) $array = preg_split('/###/',$post->image_file);
-				$curcount = count ($array);
+				$isSpam = wpcSpamFilter(stripslashes($_POST['wpClassified_data'][author_name]),'',
+						stripslashes($_POST['wpClassified_data'][subject]),
+						stripslashes($_POST['wpClassified_data'][post]),$user_ID);
+				preg_replace(array('/\s/'), '', $post->image_file);
+				if (!empty($post->image_file) ) {
+					$array = preg_split('/###/', $post->image_file);
+					$curcount = count ($array);
+				}
 				if ( $setImage !='' && $curcount < $wpcSettings['number_of_image']) {
 					if  ($post->image_file !=''){
 						$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file = '". $post->image_file . "###" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
@@ -249,14 +250,13 @@ function wpcModifyImg() {
 	if ($addPost==true){
 		$displayform = false;
 	}
-	if ($displayform==true){
-			include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
-	}
+	if ($displayform==true) include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
 }
 
 
 function wpcDeleteImg() {
-	global $_GET,$_POST,$userdata,$user_ID,$table_prefix, $wpmuBaseTablePrefix, $wpdb, $wpClassified, $lang;
+	global $_GET,$_POST,$userdata,$user_ID,$table_prefix, 
+			$wpmuBaseTablePrefix, $wpdb, $wpClassified, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = $wpClassified->get_pageinfo();
 	$userfield = $wpClassified->get_user_field();
@@ -269,7 +269,7 @@ function wpcDeleteImg() {
 	$permission=false;
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$post['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
 		$permission=true;
-        }
+	}
 	if (!$permission) {
 		if (getenv('REMOTE_ADDR')==$post['author_ip']) $permission=true;
 	}	
@@ -287,14 +287,14 @@ function wpcDeleteImg() {
 		foreach($array as $f) {
 			if ($f == $_GET[file]){
 			} else {
-			  $txt .= $f . '###';
+				$txt .= $f . '###';
 			}
 		}
 		$newstring = substr($txt,0,-3);
 		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($newstring)) . "' WHERE ads_id=" . $_GET['aid'] );
 
-		$file = ABSPATH . "wp-content/plugins/wp-classified/images/" . $_GET[file];
-		unlink($file);
+		$file = $wpClassified->public_dir . "/" . $_GET[file];
+		if (!isset($file)) unlink($file);
 		$postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
 		$post = $postinfo[0];
 		if (!file_exists(ABSPATH . "wp-content/plugins/wp-classified/includes/modifyImg_tpl.php")){ 
@@ -340,7 +340,7 @@ function wpcPublicLink($action,$vars){
 	$action = ($action=="lastAd")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			return "<a href=\"".$main_link."_action=classified\">" . $lang['_MAIN'] . "</a><img src=\"" .get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/topic/arrow.gif\" class=\"imgMiddle\">";
+			return "<a href=\"".$main_link."_action=classified\">" . $lang['_MAIN'] . "</a><img src=\"" . $wpClassified->plugin_url . "/images/arrow.gif\" class=\"imgMiddle\">";
 		break;
 		case "classified":
 			return "<a href=\"".$main_link."_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";

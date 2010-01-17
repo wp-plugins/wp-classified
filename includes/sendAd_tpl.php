@@ -9,8 +9,6 @@
 * 
 */
 
-//global $lang;
-//$wpcSettings = get_option('wpClassified_data');
 wpcHeader();
 
 $yourname = wpcPostAuthor($post);
@@ -32,12 +30,11 @@ if (isset($msg)){echo "<p class=\"error\">".$msg."</p>";}
 <tr><td class="wpc_label_right"><?php echo $lang['_FRIENDMAIL']; ?></td><td><input size=35 type="text" name="wpClassified_data[mailto]" /></td></tr>
 <?php
 if($wpcSettings['confirmation_code']=='y'){ 
-	$wpClassified->remaveCPCC();
 	$oVisualCaptcha = new wpcCaptcha();
 	$captcha = rand(1, 50) . ".png";
-	$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+	$oVisualCaptcha->create( $wpClassified->cache_dir ."/" . $captcha);
 ?>
-<tr><td></td><td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
+<tr><td></td><td><img src="<?php echo $wpClassified->cache_url . "/" .$captcha ?>" alt="ConfirmCode" align="middle"/></td></Tr>
 <tr><td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td><td><input size=10 type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></tr>
 <?php
 } ?>

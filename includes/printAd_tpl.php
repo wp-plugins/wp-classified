@@ -44,7 +44,7 @@
 			foreach($array as $f) {
 				?>
 				
-				<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $f; ?>" class="imgMiddle"  width="120" height="100">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<img valign=absmiddle src="<?php echo $wpClassified->public_url; ?>/<?php echo $f; ?>" class="imgMiddle"  width="120" height="100">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<?php
 			}
 			?>

@@ -255,7 +255,7 @@ function adm_structure_process(){
 				$wpdb->query("
 					UPDATE {$table_prefix}wpClassified_categories 
 					SET name = '".$wpdb->escape($_POST['wpClassified_data']['name'])."',
-				    photo = '".$wpdb->escape($_POST['wpClassified_data']['photo'])."' WHERE categories_id = '".($_GET['categories_id']*1)."'");
+						photo = '".$wpdb->escape($_POST['wpClassified_data']['photo'])."' WHERE categories_id = '".($_GET['categories_id']*1)."'");
 			}
 			$msg = "Classifieds Category Saved!";
 		break;
@@ -341,8 +341,8 @@ function adm_structure_process(){
 	<input type=hidden name="wpClassified_data[photo]" value="<?php echo $categoryinfo['photo'];?>">
 	<?php
 
-	echo "\n<select name=\"topImage\" onChange=\"showCatimage()\">";	  
-	$rep = ABSPATH."wp-content/plugins/wp-classified/images/";
+	echo "\n<select name=\"topImage\" onChange=\"showCatimage()\">";
+	$rep = $wpClassified->plugin_dir . '/images/';
 	$handle=opendir($rep);
 	while ($file = readdir($handle)) {
 		$filelist[] = $file;
@@ -360,7 +360,7 @@ function adm_structure_process(){
 			}
 		}
 	}
-	echo "\n</select>&nbsp;&nbsp;<img name=\"avatar\" src=\"". get_bloginfo('wpurl') . "/wp-content/plugins/wp-classified/" . $categoryinfo['photo'] ."\" class=\"imgMiddle\"><br />";
+	echo "\n</select>&nbsp;&nbsp;<img name=\"avatar\" src=\"". $wpClassified->plugin_url . "/" . $categoryinfo['photo'] ."\" class=\"imgMiddle\"><br />";
 	?>		
 	<span class="smallTxt">images from plugins/wp-classified/images directory</span></td>
 	 </tr>	
@@ -451,7 +451,7 @@ function adm_structure_process(){
 		}
   ?>
   <hr>
-  <img src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/delete.png"> - delete category, including and all lists within.<p>  
+  <img src="<?php echo $wpClassified->plugin_url; ?>/images/delete.png"> - delete category, including and all lists within.<p>  
   <table style="width: 100%; background-color:#fafafa; border:1px #C0C0C0 solid; border-spacing:1px;">
 	<tr>
 		<th style="border:1px #C0C0C0 solid; padding-left:2px" width=60>Delete</th>
@@ -466,7 +466,7 @@ function adm_structure_process(){
 		$category = $categories[$x];
 	?>
 		<tr>
-		<td style="border:1px #C0C0C0 solid; padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');"><img border=0 src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/delete.png"></a></td>
+		<td style="border:1px #C0C0C0 solid; padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');"><img border=0 src="<?php echo $wpClassified->plugin_url; ?>/images/delete.png"></a></td>
 		<td style="border:1px #C0C0C0 solid; padding-left:2px"><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupCategory&categories_id=<?php echo $category->categories_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownCategory&categories_id=<?php echo $category->categories_id;?>">&darr;</a> </sup></td>
 		<td colspan=4 style="border:1px #C0C0C0 solid; padding-left:2px"><a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=<?php echo $category->categories_id;?>"><?php echo $category->name;?></a></td>
 		</tr>
@@ -477,7 +477,7 @@ function adm_structure_process(){
 			<tr>
 				<td></td>
 				<td style="padding-left:2px"><a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=moveupList&lid=<?php echo $tfs[$i]->lists_id;?>">&uarr;</a> - <a style="text-decoration: none;" href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=movedownList&lid=<?php echo $tfs[$i]->lists_id;?>">&darr;</a></td>
-				<td style="padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteList('<?php echo $tfs[$i]->name; ?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteList&lid=<?php echo $tfs[$i]->lists_id;?>')"><img border=0 src="<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/images/delete.png"></a>&nbsp;(<?php echo $liststatuses[$tfs[$i]->status];?>) <a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=<?php echo $tfs[$i]->lists_id;?>"><?php echo $tfs[$i]->name;?></a></td>
+				<td style="padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteList('<?php echo $tfs[$i]->name; ?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteList&lid=<?php echo $tfs[$i]->lists_id;?>')"><img border=0 src="<?php echo $wpClassified->plugin_url; ?>/images/delete.png"></a>&nbsp;(<?php echo $liststatuses[$tfs[$i]->status];?>) <a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=<?php echo $tfs[$i]->lists_id;?>"><?php echo $tfs[$i]->name;?></a></td>
 					<td style="padding-left:2px"><?php echo $tfs[$i]->ads_status;?></td>
 					<td style="padding-left:2px"><?php echo $tfs[$i]->ads;?></td>
 					<td style="padding-left:2px"><?php echo $tfs[$i]->ads_views;?></td>

@@ -9,7 +9,7 @@
 * show the Main page
 */
 
-global $lang;
+global $lang, $wpClassified;
 $wpcSettings = get_option('wpClassified_data');
 
 
@@ -36,18 +36,18 @@ showAll();
 }
 
 function hideAll(dt) {
-var aDD=(dt)? dt.parentNode.getElementsByTagName('dd') : document.getElementsByTagName('dd');
-for(var i=0; i<aDD.length; i++) {
-	if(aDD[i]!=dt) {aDD[i].style.display='none';}
-    }
-if(dt) {dt.style.display=(dt.style.display=='none')? '' : 'none';}
+	var aDD=(dt)? dt.parentNode.getElementsByTagName('dd') : document.getElementsByTagName('dd');
+	for(var i=0; i<aDD.length; i++) {
+		if(aDD[i]!=dt) {aDD[i].style.display='none';}
+	}
+	if(dt) {dt.style.display=(dt.style.display=='none')? '' : 'none';}
 }
 
 function showAll() {
-var aDD=document.getElementsByTagName('dd');
-for(var i=0; i<aDD.length; i++) {
-	aDD[i].style.display='';
-    }
+	var aDD=document.getElementsByTagName('dd');
+	for(var i=0; i<aDD.length; i++) {
+		aDD[i].style.display='';
+	}
 }
 
 </script>
@@ -58,14 +58,13 @@ for(var i=0; i<aDD.length; i++) {
 <?php
 if ($catCnt!="0"){
 	for ($x=0; $x<$catCnt; $x++){
-        echo "<div class=\"list-content\">\n";
+		echo "<div class=\"list-content\">\n";
 		$category = $categories[$x];
-		$img = get_bloginfo('wpurl');
 		if ($category->photo)
-		echo "<img class=\"catphoto\" src=\"" . $img . "/wp-content/plugins/wp-classified/" . $category->photo . "\">\n";
+		echo "<img class=\"catphoto\" src=\"" . $wpClassified->plugin_url . "/" . $category->photo . "\">\n";
 		?>
 		<dl id="group">
-		<dt><img src="<?php echo $img; ?>/wp-content/plugins/wp-classified/images/topic/colapse.gif" border="0">&nbsp;<?php echo $category->name;?></dt>
+		<dt><img src="<?php echo $wpClassified->plugin_url; ?>/images/colapse.gif" border="0">&nbsp;<?php echo $category->name;?></dt>
 		<dd>
 		<?php
 		$catlist = $lists[$category->categories_id];
@@ -74,9 +73,9 @@ if ($catCnt!="0"){
 			<div class="wpc_main">
 			<?php
 			if (isset($rlists[$catlist[$i]->lists_id]) && $rlists[$catlist[$i]->lists_id]=='y' && $user_ID>0){
-				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/unread.gif\">\n";
+				echo "<img src=\"". $wpClassified->plugin_url . "/images/unread.gif\">\n";
 			} else {
-				echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/read.gif\">\n";
+				echo "<img src=\"". $wpClassified->plugin_url . "/images/read.gif\">\n";
 			}
 			echo wpcPublicLink("classified", array("name"=>$catlist[$i]->name, "lid"=>$catlist[$i]->lists_id));
 			$numAds = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads_subjects WHERE STATUS = 'open' AND sticky = 'n' AND ads_subjects_list_id = " .  $catlist[$i]->lists_id );

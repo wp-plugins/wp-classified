@@ -1,10 +1,10 @@
 === wp-classified ===
-
-name: wpClassified Wordpress plugins Version: 1.3.3-b
+name: wpClassified Wordpress plugins Version: 1.4
 Contributors: Mohammad Forgani
+Donate link: http://www.forgani.com/root/wpclassified-plugins/
 Requires at least: 2.8.x
 Tested up to: 2.8.x
-Stable tag: 1.1.0
+Stable tag: 1.2
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
 
 == Description ==
@@ -15,13 +15,7 @@ The plugin has been create and successfully tested on Wordpress version 2.8.5 wi
 default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
 
 
-
-
-
 Demo link: http://www.forgani.com/classified/
-
-
- 
 
 
 
@@ -47,19 +41,36 @@ You have now there a new tab called "wpClassified" to configure the plugin.
 
 You will need to make the following folders writeable (chmod 777) :
 
-/wp-classified/images
-/wp-classified/images/topic
-/wp-classified/images/cpcc
+wp-content//wp-classified/
+wp-content/plugins/wp-classified/cache
 
 
 
 == Upgrade Instructions  ==
+
 
    1. Deactivate the plugin from your Wordpress admin panel.
    2. Backup Database tables *_wpClassified_* and files
    2. Upload the files to your /wp-content/plugins/ folder and overwrite the existing file.
    3. Activate the plugin from your Wordpress admin panel.
    4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
+
+
+== Upgrade Notice ==
+
+
+Manual Process
+
+You will have to:
+
+* Download the latest plugin version
+* Uncompress the file 
+* Deactivate the plugin you currently have on your website (Admin Dashboard->Plugins->Deactivate)
+* Upload/Replace the plugin in your wp-content->plugins
+* Reactivate the plugin
+
+
+
 
 == Database Upgrade ==
 
@@ -90,7 +101,14 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 == Changelog ==
 
-Changelog:
+
+= bugfix version 1.4 =
+Jan 17/01/2010
+fixed for plugin auto-upgrade 
+Note: This bugfix release hove to install Manually.
+- fixed for the plugin auto-upgrade. (must test with the next coming version)
+- moved directories public resources to wp-content
+
 
 Changes 1.3.3 - Jan 12 2010
 - Check in the complete source code into SVN.

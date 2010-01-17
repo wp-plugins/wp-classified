@@ -148,7 +148,7 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 		?>
 			<td>
 			<!-- Image Upload -->
-			<img valign=absmiddle src="<?php echo get_bloginfo('wpurl') ?>/wp-content/plugins/wp-classified/images/<?php echo $f; ?>" class="imgMiddle" width="120" height="100"><br>
+			<img valign=absmiddle src="<?php echo $wpClassified->public_url ?>/<?php echo $f; ?>" class="imgMiddle" width="120" height="100"><br>
 		<?php
 			echo "<a href=\"".$url."adm_action=deleteImg&aid=".$ad->ads_id."&file=".$f."\">Delete Image</a></td>";
 		}
@@ -372,7 +372,7 @@ function wpcAdmDeleteImg(){
 		}
 		$newstring = substr($txt, 0, -3);
 		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($newstring)) . "' WHERE ads_id=" . $_GET['aid'] );
-		$file = ABSPATH."wp-content/plugins/wp-classified/images/" . $_GET[file];
+		$file = $wpClassified->public_dir ."/" . $_GET[file];
 		if ($_GET[file]) unlink($file);
 		return true;
 	} else {

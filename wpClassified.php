@@ -3,14 +3,19 @@
 /*
 Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
-Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
+Description:  Note: This bugfix release hove to install Manually.
 Author:Mohammad Forgani
-Version: 1.3.3-b
+Version: 1.4
 Requires at least:2.8.x
 Author URI: http://www.forgani.com
 
 
 Release Notes:
+
+fixed for plugin auto-upgrade 
+Note: This bugfix release hove to install Manually.
+- fixed for the plugin auto-upgrade. (must test with the next coming version)
+- moved directories public resources to wp-content
 
 
 release 1.2.0-e - Augst 20/08/2008
@@ -41,44 +46,19 @@ Changes 1.3.0-b - Sep 13/10/2008
 - Modify to show the last post in footer
 - fix the URL faking bug
 
-Changes 1.3.0-c - Sep 27/10/2008
-- extending the Administration Interface
-
-Changes 1.3.0-e - Nov 03/11/2008
-- include the links of photo to the last ads's list
-- NEW: You can now place the last ads history on the sidebar as a widget
-
-Changes 1.3.0-f,g - Nov 05/11/2008
-- fixed the login problem wmpu and buddypress and wp v2.6.3
-
-Changes 1.3.0-h - Nov 26/11/2008
-Bugfix release
-
-Changes 1.3.1-a - Jan 20/01/2009
-- It covers changes between WordPress Version 2.6 and Version 2.7
-- fixed the widget
-
-Changes 1.3.1-b - Feb 09/02/2009
-- Modify to approve posts before they are published
-- fixed thumbnail image width
-
-Changes 1.3.2-a - Oct 25/10/2009
-- Fixed bug with auto-install on wordpress 2.8.5
-
-Changes 1.3.2-a - Oct 25/10/2009
-- Fixed bug with auto-install on wordpress 2.8.5
-
-Changes 1.3.2-g - Nov 12/11/2009
-- A new version for wordpress 2.8.6
 
 
 */
 
+// Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
+
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
 
 
 require_once(dirname(__FILE__).'/settings.php');
 
-define('WPC_PLUGIN_DIR', ABSPATH .  'wp-content/plugins/wp-classified');
+define('WPC_PLUGIN_DIR', ABSPATH . 'wp-content/plugins/wp-classified');
 define('WPC_PLUGIN_URL', plugins_url('wp-classified'));
 
 add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpClassified = new WP_Classified();'));
@@ -86,20 +66,27 @@ add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpCla
 
 class WP_Classified {
   // Sets the version number.
-  var $version;
+  var $version = "1.4";
   var $menu_name = 'wpClassified';
   var $plugin_name = 'wp-classified';
   var $plugin_home_url;
   var $plugin_dir;
   var $plugin_url;
+  var $public_dir;
+  var $public_url;
   var $country;
+  var $cache_dir;
+  var $cache_url;
   
   function WP_Classified() {
 		// initialize all the variables
 		$this->plugin_home_url = 'http://www.forgani.com/wp-classified';
 		$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
 		$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.plugin_basename(dirname(__FILE__));
-		$this->version = '1.3.3-b';
+		$this->public_dir = WP_CONTENT_DIR.'/public/wp-classified/';
+		$this->public_url = get_option("siteurl").'/wp-content/public/wp-classified';
+		$this->cache_dir = $this->plugin_dir . '/cache/';
+		$this->cache_url = get_option("siteurl").'/wp-content/plugins/wp-classified/cache/';
 
 		add_action('init', array(&$this, 'widget_init'));
 		add_action('admin_menu', array(&$this, 'add_admin_pages'));
@@ -116,7 +103,7 @@ class WP_Classified {
 	function add_admin_pages(){
 		global $wpcAdminPages;
 		// TODO Welcome
-		add_menu_page($this->menu_name , $this->menu_name ,'administrator', __FILE__, array(&$this, 'welcome'), '../wp-content/plugins/wp-classified/images/wpc.gif');
+		add_menu_page($this->menu_name , $this->menu_name ,'administrator', __FILE__, array(&$this, 'welcome'), $this->plugin_url . '/images/wpc.gif');
 		add_submenu_page(__FILE__, 'wpclassified_settings', 'wpclassified_settings', 'administrator', 'wpcSettings', array(&$this, 'wpcSettings'));
 		for ($i=0; $i<count($wpcAdminPages); $i++){
 		  $link = $wpcAdminPages[$i];
@@ -131,21 +118,33 @@ class WP_Classified {
 		<div style="float:left;width:70%;">
 		<div class="wrap">
 		<h2>Welcome to Wordpress Classifieds</h2>
-		<p>This plugin allows you to add a <b>simple classified page</b> into your wordpress blog.</p>
+		<p>This plugin allows you to add a<b>simple classified page</b> into your wordpress blog.</p>
 
 		<p>The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
 		default and unchanged Permalink structure. It may work with earlier versions too I have not tested.<br />
-		<p>Demo link: <a href="http://www.forgani.com/classified/" target=_blank>www.forgani.com/classified/</a></p>
+		<p>Demo link:<a href="http://www.forgani.com/classified/" target=_blank>www.forgani.com/classified/</a></p>
 		<?php
   }
-  
+
 	// wpClassified settings 
 	function wpcSettings(){
 		global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $lang;
-
 		print wpcAdminMenu();
-		$this->showCategoryImg();
 
+		$dir = $this->plugin_dir . '/cache/';
+		if( ! is_writable( $dir ) || ! is_readable( $dir ) ) {
+			echo "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
+			echo "<font color='#FF0000'>Check Directory Permission ! =>".$dir."</font><br />\n" ;
+			echo "</fieldset>"; 
+		}
+		$dir = $this->public_dir . '/';
+		if( ! is_writable( $dir ) || ! is_readable( $dir ) ) {
+			echo "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
+			echo "<font color='#FF0000'>Check Directory Permission ! =>".$dir."</font><br />\n" ;
+			echo "</fieldset>";
+		}
+
+		$this->showCategoryImg();
 		$page = $this->get_pageinfo();
 		if ( empty($page['post_title']) ) {
 			$dt = date("Y-m-d");
@@ -202,50 +201,50 @@ class WP_Classified {
 		<legend class="legend"><strong>Classifeds Page Details</strong></legend>
 		<table width="99%">
 		<tr>
-			 <th align="right" valign="top">wpClassified Version: </label></th>
-			 <td><?php echo $this->version; ?></td>
+			<th align="right" valign="top">wpClassified Version:</label></th>
+			<td><?php echo $this->version; ?></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>wpClassified URL: </label></th>
-			 <td><?php echo $url;?></td>
+			<th align="right" valign="top"><label>wpClassified URL:</label></th>
+			<td><?php echo $url;?></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Classified Top Image: </label></th>
-			 <td>
+			<th align="right" valign="top"><label>Classified Top Image:</label></th>
+			<td>
 		<input type=hidden name="wpClassified_data[top_image]" value="<?php echo $wpcSettings['top_image'];?>">
 		<?php
 		echo "\n<select name=\"topImage\" onChange=\"showimage()\">";	  
-		$rep = ABSPATH."wp-content/plugins/wp-classified/images/";
+		$rep = $this->plugin_dir . "/images/";
 		$handle=opendir($rep);
 		while ($file = readdir($handle)) {
-			 $filelist[] = $file;
+			$filelist[] = $file;
 		}
 		asort($filelist);
 		while (list ($key, $file) = each ($filelist)) {
-			 if (!ereg(".gif|.jpg|.png",$file)) {
+			if (!ereg(".gif|.jpg|.png",$file)) {
 				if ($file == "." || $file == "..") $a=1;
-			 } else {
+			} else {
 				if ($file == $wpcSettings['top_image']) {
 					 echo "\n<option value=\"$file\" selected>$file</option>\n";
 				} else {
 					 echo "\n<option value=\"$file\">$file</option>\n";
 				}
-			 }
+			}
 		}
-		echo "\n</select>&nbsp;&nbsp;<img name=\"avatar\" src=\"". get_bloginfo('wpurl') . "/wp-content/plugins/wp-classified/images/" . $wpcSettings['top_image'] ."\" class=\"imgMiddle\"><br />";
+		echo "\n</select>&nbsp;&nbsp;<img name=\"avatar\" src=\"". $this->plugin_url . "/images/" . $wpcSettings['top_image'] ."\" class=\"imgMiddle\"><br />";
 		?>		
 		<span class="smallTxt">images from plugins/wp-classified/images directory</span></td>
 		</tr>		
 		<tr>
-			 <th align="right" valign="top"><label>Classifieds Description: </label></th>
-			 <td><textarea cols=80 rows=3 name="wpClassified_data[description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?></textarea></td>
+			<th align="right" valign="top"><label>Classifieds Description:</label></th>
+			<td><textarea cols=80 rows=3 name="wpClassified_data[description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?></textarea></td>
 		</tr>
 		<tr>
 		<th><label></label></th>
 		<td><input type=checkbox name="wpClassified_data[show_credits]" value="y"<?php echo ($wpcSettings['show_credits']=='y')?" checked":"";?>> Display wpClassified credit line at the bottom of page.</td>
 		</tr>
 		<tr>
-		<th align="right" valign="top"><label>Classifieds Page Link Name: </label></th>
+		<th align="right" valign="top"><label>Classifieds Page Link Name:</label></th>
 		<td><input type="text" name="wpClassified_data[slug]" value="<?php echo $wpcSettings['slug'];?>"></td>
 		</tr>	
 
@@ -258,8 +257,8 @@ class WP_Classified {
 		?>
 
 		<tr>
-			 <th align="right" valign="top"><label>Number of image columns: </label></th>
-			 <td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
+			<th align="right" valign="top"><label>Number of image columns:</label></th>
+			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
 		</tr>
 		<th><label></label></th>
 		<td><input type=checkbox name="wpClassified_data[approve]" value="y"<?php echo ($wpcSettings['approve']=='y')?" checked":"";?>>posts must be pre-approved before being published.</td>
@@ -268,58 +267,58 @@ class WP_Classified {
 		<tr>
 		<th align="right" valign="top"><label>Image Display</label></th>
 		<td>
-			 <select name="wpClassified_data[image_position]">
-			 <?php
-			 foreach($imgPosition as $key=>$value)	{
+			<select name="wpClassified_data[image_position]">
+			<?php
+			foreach($imgPosition as $key=>$value)	{
 				if ($key == $wpcSettings[image_position]) {
-					 echo "\n<option value='$key' selected='selected'>$value</option>\n";
+					echo "\n<option value='$key' selected='selected'>$value</option>\n";
 				} else {
 					 echo "\n<option value='$key'>$value</option>\n";
 				}
-			 }
-			 ?>
-			 </select>
-			 </td>
+			}
+			?>
+			</select>
+			</td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Max. Ad image size: </label></th>
-			 <td>Width: <input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height:<input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
+			<th align="right" valign="top"><label>Max. Ad image size:</label></th>
+			<td>Width:<input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height:<input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Thumbnail Width: </label></th>
-			 <td><input type="text" size="5" name="wpClassified_data[thumbnail_image_width]" value="<?php echo $wpcSettings['thumbnail_image_width'];?>"><br /><span class="smallTxt">example: 120</span></td>
+			<th align="right" valign="top"><label>Thumbnail Width:</label></th>
+			<td><input type="text" size="5" name="wpClassified_data[thumbnail_image_width]" value="<?php echo $wpcSettings['thumbnail_image_width'];?>"><br /><span class="smallTxt">example: 120</span></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Ad first Image Alignment:</label></th>
-			 <td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><span class="smallTxt">choose: left or right</span></td>
+			<th align="right" valign="top"><label>Ad first Image Alignment:</label></th>
+			<td><input type=text size=11 name="wpClassified_data[image_alignment]" value="<?php echo ($wpcSettings['image_alignment']);?>"><br /><span class="smallTxt">choose: left or right</span></td>
 		</tr>
 		<tr>
-		  <th><label></label></th>
-		  <td><input type=checkbox name="wpClassified_data[must_registered_user]" value="y"<?php echo ($wpcSettings['must_registered_user']=='y')?" checked":"";?>> Unregistered visitors cannot post.</td>	
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[must_registered_user]" value="y"<?php echo ($wpcSettings['must_registered_user']=='y')?" checked":"";?>> Unregistered visitors cannot post.</td>	
 		</tr>
 		<tr>
-		  <th><label></label></th>
-		  <td><input type=checkbox name="wpClassified_data[view_must_register]" value="y"<?php echo ($wpcSettings['view_must_register']=='y')?" checked":"";?>> Unregistered visitors cannot view.</td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[view_must_register]" value="y"<?php echo ($wpcSettings['view_must_register']=='y')?" checked":"";?>> Unregistered visitors cannot view.</td>
 		</tr>
 		<tr>
-		  <th><label></label></th>
-		  <td><input type=checkbox name="wpClassified_data[display_unregistered_ip]" value="y"<?php echo ($wpcSettings['display_unregistered_ip']=='y')?" checked":"";?>> Display first 3 octets of unregistered visitors ip.</td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[display_unregistered_ip]" value="y"<?php echo ($wpcSettings['display_unregistered_ip']=='y')?" checked":"";?>> Display first 3 octets of unregistered visitors ip.</td>
 		</tr>
 		<tr>
-			 <th><label></label></th>
-			 <td><input type=checkbox name="wpClassified_datadisplay_titles]" value="y"<?php echo ($wpcSettings['display_titles']=='y')?" checked":"";?>> Display user titles on classified.</td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_datadisplay_titles]" value="y"<?php echo ($wpcSettings['display_titles']=='y')?" checked":"";?>> Display user titles on classified.</td>
 		</tr>
 		<tr>
-			 <th><label></label></th>
-			 <td><input type=checkbox name="wpClassified_data[filter_posts]" value="y"<?php echo ($wpcSettings['filter_posts']=='y')?" checked":"";?>> Apply WP Ad/comment filters to classified posts.</td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[filter_posts]" value="y"<?php echo ($wpcSettings['filter_posts']=='y')?" checked":"";?>> Apply WP Ad/comment filters to classified posts.</td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Number of last post to show: </label></th>
-			 <td><input type="text" size="3" name="wpClassified_data[count_last_ads]" value="<?php echo $wpcSettings['count_last_ads'];?>"><br /><span class="smallTxt">example: 5</span></td>
+			<th align="right" valign="top"><label>Number of last post to show:</label></th>
+			<td><input type="text" size="3" name="wpClassified_data[count_last_ads]" value="<?php echo $wpcSettings['count_last_ads'];?>"><br /><span class="smallTxt">example: 5</span></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Banner Code: </label></th>
-			 <td><textarea cols=80 rows=3 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
+			<th align="right" valign="top"><label>Banner Code:</label></th>
+			<td><textarea cols=80 rows=3 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
 		</tr>			
 		</table>
 		</fieldset>
@@ -338,52 +337,52 @@ class WP_Classified {
 		$textarea=array ('tinymce' => 'HTML with TinyMCE (inline wysiwyg)','plain' => 'No HTML, No BBCode');	
 		?>
 		<tr>
-			 <th align="right"><label>Posting Style: </label></th>
-			 <td><select name="wpClassified_data[edit_style]">
-			 <?php
-			 foreach($textarea as $key=>$value)	{
+			<th align="right"><label>Posting Style:</label></th>
+			<td><select name="wpClassified_data[edit_style]">
+			<?php
+			foreach($textarea as $key=>$value)	{
 				if ($key == $wpcSettings[edit_style]) {
 					 echo "\n<option value='$key' selected='selected'>$value</option>\n";
 				} else {
 					 echo "\n<option value='$key'>$value</option>\n";
 				}
-			 }
-			 ?>
-			 </select></td>
+			}
+			?>
+			</select></td>
 		</tr>
-			 
+			
 		<tr>
-			 <th align="right" valign="top"><label><?php echo $lang['_ADMAXLIMIT'];?></label></th>
-			 <td><input type=text size=4 name="wpClassified_data[maxchars_limit]" value="<?php echo ($wpcSettings['maxchars_limit']);?>"><br/><span class="smallTxt"><?php echo $lang['_ADMAXLIMITTXT']; ?></span></td>
-		</tr>
-		<tr>
-			 <th><label></label></th>
-			 <td><input type=checkbox name="wpClassified_data[editor_toolbar_basic]" value="y"<?php echo ($wpcSettings['editor_toolbar_basic']=='y')?" checked":"";?>> Use basic toolbars in editor.</td>
+			<th align="right" valign="top"><label><?php echo $lang['_ADMAXLIMIT'];?></label></th>
+			<td><input type=text size=4 name="wpClassified_data[maxchars_limit]" value="<?php echo ($wpcSettings['maxchars_limit']);?>"><br/><span class="smallTxt"><?php echo $lang['_ADMAXLIMITTXT']; ?></span></td>
 		</tr>
 		<tr>
-			 <th><label></label></th>
-			 <td><input type=checkbox name="wpClassified_data[notify]" value="y"<?php echo ($wpcSettings['notify']=='y')?" checked":"";?>> Notify Admin (email) on new Topic/Post</td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[editor_toolbar_basic]" value="y"<?php echo ($wpcSettings['editor_toolbar_basic']=='y')?" checked":"";?>> Use basic toolbars in editor.</td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label>Ads displayed per page: </label></th>
-			 <td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><span class="smallTxt">default:10</span></td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[notify]" value="y"<?php echo ($wpcSettings['notify']=='y')?" checked":"";?>> Notify Admin (email) on new Topic/Post</td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label><?php echo $lang['_DATEFORMAT'];?></label></th>
-			 <td><input type=text size=11 name="wpClassified_data[date_format]" value="<?php echo ($wpcSettings['date_format']);?>"><br><span class="smallTxt">example: m-d-Y g:i a</span></td>
+			<th align="right" valign="top"><label>Ads displayed per page:</label></th>
+			<td><input type=text size=4 name="wpClassified_data[count_ads_per_page]" value="<?php echo ($wpcSettings['count_ads_per_page']);?>"><br /><span class="smallTxt">default:10</span></td>
 		</tr>
 		<tr>
-			 <th><label></label></th>
-			 <td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>> <?php echo $lang['_ALLOWRSS'];?></td>
+			<th align="right" valign="top"><label><?php echo $lang['_DATEFORMAT'];?></label></th>
+			<td><input type=text size=11 name="wpClassified_data[date_format]" value="<?php echo ($wpcSettings['date_format']);?>"><br><span class="smallTxt">example: m-d-Y g:i a</span></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label><?php echo $lang['_NOPOSTS'];?></label></th>
-			 <td><input type=text size=4 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
-			 <span class="smallTxt"> example: 15</span></td>
+			<th><label></label></th>
+			<td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>><?php echo $lang['_ALLOWRSS'];?></td>
 		</tr>
 		<tr>
-			 <th><label></label></th>	
-			 <td><input type=checkbox name="wpClassified_data[confirmation_code]" value="y"<?php echo ($wpcSettings['confirmation_code']=='y')?" checked":"";?>> <?php echo $lang['_COMFCODE'];?></td>
+			<th align="right" valign="top"><label><?php echo $lang['_NOPOSTS'];?></label></th>
+			<td><input type=text size=4 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
+			<span class="smallTxt"> example: 15</span></td>
+		</tr>
+		<tr>
+			<th><label></label></th>	
+			<td><input type=checkbox name="wpClassified_data[confirmation_code]" value="y"<?php echo ($wpcSettings['confirmation_code']=='y')?" checked":"";?>><?php echo $lang['_COMFCODE'];?></td>
 		</tr>
 		</table>
 		</fieldset>
@@ -404,118 +403,118 @@ class WP_Classified {
 		$GADpos = array ('top' => 'top','btn' => 'bottom', 'bth' => 'both','no' => 'none');
 		?>
 		<table width="99%"><tr>
-			 <th align="right" valign="top"><a href='https://www.google.com/adsense/' target='google'>Google AdSense Account ID: </a></label></th>
-			 <td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> example: no, pub-2844370112691023 or ...
-			 </span></td></tr>
-			 
-			 <tr>
-				<th align="right" valign="top"><label>Google Ad Position: </label></th>
+			<th align="right" valign="top"><a href='https://www.google.com/adsense/' target='google'>Google AdSense Account ID:</a></label></th>
+			<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> example: no, pub-2844370112691023 or ...
+			</span></td></tr>
+			
+			<tr>
+				<th align="right" valign="top"><label>Google Ad Position:</label></th>
 				<td>
-					 <select name="wpClassified_data[GADposition]" tabindex="1">
-					 <?php
-					 foreach($GADpos as $key=>$value)	{
+					<select name="wpClassified_data[GADposition]" tabindex="1">
+					<?php
+					foreach($GADpos as $key=>$value)	{
 						if ($key == $wpcSettings[GADposition]) {
 							 echo "\n<option value='$key' selected='selected'>$value</option>\n";
 						} else {
 							 echo "\n<option value='$key'>$value</option>\n";
 						}
-					 }
-					 ?>
-					 </select>&nbsp;&nbsp;<span class="smallTxt">(If this value is assigned to 'none' then the Google Ads will not show up)</small>
+					}
+					?>
+					</select>&nbsp;&nbsp;<span class="smallTxt">(If this value is assigned to 'none' then the Google Ads will not show up)</small>
 				</td>
-			 </tr>
+			</tr>
 
-			 <?php
-			 $share = '10'; // my smallest cut on ad revenue is 10% -  
-			 while($share<101){
-			 if($share==$wpcSettings['share']){
-				$share_list .= "<option value='$share' selected='selected'>$share%\n";
-			 }else{
-				$share_list .= "<option value='$share'>$share%\n";
-			 }
-			 ++$share;
-		 }
-		$products=array ('ad' => 'Ad Unit','link' => 'Link Unit');	
-		$formats=array ('728x90'  => '728 x 90  ' . 'Leaderboard', '468x60'  => '468 x 60  ' . 'Banner','234x60'  => '234 x 60  ' . 'Half Banner');
-		$lformats=array ('728x15'  => '728 x 15', '468x15' => '468 x 15');
-		$adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'text' => 'Text Only');
-		?>
-		<tr><th align="left" colspan=2><label>Layout</label></th></tr>
-			 <tr><td colspan=2 align="center">
-			 <table style="border-width:thin; border-color:#888; border-style:solid; padding:5px; width:800px"><tr>
-			 <th><label>Ad Product: </label></th>
-			 <td><select name="wpClassified_data[GADproduct]">
+			<?php
+			$share = '10'; // my smallest cut on ad revenue is 10% -  
+			while($share<101){
+				if($share==$wpcSettings['share']){
+					$share_list .= "<option value='$share' selected='selected'>$share%\n";
+				}else{
+					$share_list .= "<option value='$share'>$share%\n";
+				}
+				++$share;
+			}
+			$products=array ('ad' => 'Ad Unit','link' => 'Link Unit');	
+			$formats=array ('728x90' => '728 x 90  ' . 'Leaderboard', '468x60'  => '468 x 60  ' . 'Banner','234x60'  => '234 x 60  ' . 'Half Banner');
+			$lformats=array ('728x15' => '728 x 15', '468x15' => '468 x 15');
+			$adtypes=array ('text_image' => 'Text &amp; Image', 'image' => 'Image Only', 'text' => 'Text Only');
+			?>
+			<tr><th align="left" colspan=2><label>Layout</label></th></tr>
+			<tr><td colspan=2 align="center">
+			<table style="border-width:thin; border-color:#888; border-style:solid; padding:5px; width:800px"><tr>
+			<th><label>Ad Product:</label></th>
+			<td><select name="wpClassified_data[GADproduct]">
 				<?php
 				foreach($products as $key=>$value)	{
-					 if ($key == $wpcSettings[GADproduct]) {
+					if ($key == $wpcSettings[GADproduct]) {
 						echo "\n<option value='$key' selected='selected'>$value</option>\n";
-					 } else {
+					} else {
 						echo "\n<option value='$key'>$value</option>\n";
-					 }
+					}
 				}
 				?>
-			 </select></td>
-			 <th><label> Ad Format: </label></th>
-			 <td><select name="wpClassified_data[GADformat]">
+			</select></td>
+			<th><label> Ad Format:</label></th>
+			<td><select name="wpClassified_data[GADformat]">
 				<optgroup label='Horizontal'>
 				<?php
 				foreach($formats as $key=>$value)	{
-					 if ($key == $wpcSettings[GADformat]) {
+					if ($key == $wpcSettings[GADformat]) {
 						echo "\n<option value='$key' selected='selected'>$value</option>\n";
-					 } else {
+					} else {
 						echo "\n<option value='$key'>$value</option>\n";
-					 }
+					}
 				}
 				?>
 				</optgroup>
-			 </select></td>	
-			 <th><label>Ad Type: </label></th>
-			 <td><select name="wpClassified_data[GADtype]">
+			</select></td>	
+			<th><label>Ad Type:</label></th>
+			<td><select name="wpClassified_data[GADtype]">
 				<?php
 				foreach($adtypes as $key=>$value)	{
-					 if ($key == $wpcSettings[GADtype]) {
+					if ($key == $wpcSettings[GADtype]) {
 						echo "\n<option value='$key' selected='selected'>$value</option>\n";
-					 } else {
+					} else {
 						echo "\n<option value='$key'>$value</option>\n";
-					 }
+					}
 				}
 				?>
-			 </select></td>	
-			 <th><label>Link Format: </label></th>
-			 <td><select name="wpClassified_data[GADLformat]">
+			</select></td>	
+			<th><label>Link Format:</label></th>
+			<td><select name="wpClassified_data[GADLformat]">
 				<?php
 				foreach($lformats as $key=>$value)	{
-					 if ($key == $wpcSettings[GADLformat]) {
+					if ($key == $wpcSettings[GADLformat]) {
 						echo "\n<option value='$key' selected='selected'>$value</option>\n";
-					 } else {
+					} else {
 						echo "\n<option value='$key'>$value</option>\n";
-					 }
+					}
 				}
 				?>
-			 </select></td>	
-			 </tr>
-			 </td></tr></table>
+			</select></td>	
+			</tr>
+			</td></tr></table>
 		</td></tr>
 		<tr><th align="left" colspan=2><label>Ad Colours</label></th></tr>
-			 <tr><td colspan=2 align="center">
-			 <table style="border-width:thin; border-color:#888; border-style:solid; padding:5px; width:800px"><tr>
-			 <th><label>Border: </label></th>
-			 <td><input name='wpClassified_data[GADcolor_border]' id='wpClassified_data[GADcolor_border]' size='6' value='<?php echo $wpcSettings[GADcolor_border]; ?>'/>
-			 </td>
-			 <th><label>Title/Link: </label></th>
-			 <td><input name='wpClassified_data[GADcolor_link]' id='wpClassified_data[GADcolor_link]' size='6' value='<?php echo $wpcSettings[GADcolor_link]; ?>'/>
-			 </td>
-			 <th><label>Background: </label></th>
-			 <td><input name='wpClassified_data[GADcolor_bg]' id='wpClassified_data[GADcolor_bg]' size='6' value='<?php echo $wpcSettings[GADcolor_bg]; ?>'/>
-			 </td>
-			 <th><label>Text: </label></th>
-			 <th><input name='wpClassified_data[GADcolor_text]' id='wpClassified_data[GADcolor_text]' size='6' value='<?php echo $wpcSettings[GADcolor_text]; ?>'/>
-			 </td>
-			 <th><label>URL: </label></th>
-			 <td><input name='wpClassified_data[GADcolor_url]' id='wpClassified_data[GADcolor_url]' size='6' value='<?php echo $wpcSettings[GADcolor_url]; ?>'/>
-			 </td>
-			 </tr>
-			 </td></tr></table>
+			<tr><td colspan=2 align="center">
+			<table style="border-width:thin; border-color:#888; border-style:solid; padding:5px; width:800px"><tr>
+			<th><label>Border:</label></th>
+			<td><input name='wpClassified_data[GADcolor_border]' id='wpClassified_data[GADcolor_border]' size='6' value='<?php echo $wpcSettings[GADcolor_border]; ?>'/>
+			</td>
+			<th><label>Title/Link:</label></th>
+			<td><input name='wpClassified_data[GADcolor_link]' id='wpClassified_data[GADcolor_link]' size='6' value='<?php echo $wpcSettings[GADcolor_link]; ?>'/>
+			</td>
+			<th><label>Background:</label></th>
+			<td><input name='wpClassified_data[GADcolor_bg]' id='wpClassified_data[GADcolor_bg]' size='6' value='<?php echo $wpcSettings[GADcolor_bg]; ?>'/>
+			</td>
+			<th><label>Text:</label></th>
+			<th><input name='wpClassified_data[GADcolor_text]' id='wpClassified_data[GADcolor_text]' size='6' value='<?php echo $wpcSettings[GADcolor_text]; ?>'/>
+			</td>
+			<th><label>URL:</label></th>
+			<td><input name='wpClassified_data[GADcolor_url]' id='wpClassified_data[GADcolor_url]' size='6' value='<?php echo $wpcSettings[GADcolor_url]; ?>'/>
+			</td>
+			</tr>
+			</td></tr></table>
 		</td></tr>
 		</table>
 		</fieldset>
@@ -528,24 +527,24 @@ class WP_Classified {
 		<fieldset class="fieldset">
 		<legend class="legend"><strong><?php echo $lang['_NEWADDURATION'];?></strong></legend>
 		<table width="99%"><tr><td>
-			 <tr>
-			 <th align="right" valign="top"><label><?php echo $lang['_NEWADDEFAULT'];?></label></th>
-			 <td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will be auto-removed after these
+			<tr>
+			<th align="right" valign="top"><label><?php echo $lang['_NEWADDEFAULT'];?></label></th>
+			<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will be auto-removed after these
 				number of days since creation. default:365 days<br />
 				The expiration will be disabled if you set this value to 0.
 		</span></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label><?php echo $lang['_SENDREMIDE'];?></label></th>
-			 <td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">example:7 days</span></td>
+			<th align="right" valign="top"><label><?php echo $lang['_SENDREMIDE'];?></label></th>
+			<td><input type=text size=4 name="wpClassified_data[inform_user_expiration]" value="<?php echo ($wpcSettings['inform_user_expiration']);?>"><br><span class="smallTxt">example:7 days</span></td>
 		</tr>
 		<tr>
-			 <th align="right" valign="top"><label><?php echo $lang['_NOTMESSAGE'];?></label></th>
-			 <td><?php echo $lang['_NOTMESSAGESUBJECT'];?>&nbsp;&nbsp;<span class="smallTxt">(is currently not implemented!)</span><br />
-			 <span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
-			 <textarea cols=60 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
-			 <span class="smallTxt">example: !sitename reminder:classified ads expiring soon! </span></td></tr>
-			 <tr><th align="right" valign="top"><label><?php echo $lang['_NOTMESSAGEBODY'];?></label></th><td><textarea cols=60 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
+			<th align="right" valign="top"><label><?php echo $lang['_NOTMESSAGE'];?></label></th>
+			<td><?php echo $lang['_NOTMESSAGESUBJECT'];?>&nbsp;&nbsp;<span class="smallTxt">(is currently not implemented!)</span><br />
+			<span class="smallTxt">Substitution variables: !sitename = your website name, !siteurl = your site's base URL, !user_ads_url = link to user's classified ads list.</span><br />
+			<textarea cols=60 rows=5 name="wpClassified_data[inform_user_subject]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_subject']));?></textarea><br/>
+			<span class="smallTxt">example: !sitename reminder:classified ads expiring soon!</span></td></tr>
+			<tr><th align="right" valign="top"><label><?php echo $lang['_NOTMESSAGEBODY'];?></label></th><td><textarea cols=60 rows=5 name="wpClassified_data[inform_user_body]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['inform_user_body']));?></textarea><br><span class="smallTxt">example: One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.</span></td>
 		</tr>
 		</table>
 		</fieldset>
@@ -603,7 +602,7 @@ class WP_Classified {
 		$wpcSettings['show_credits'] = 'y';
 		$wpcSettings['approve]'] = 'y';
 		$wpcSettings['slug'] = 'Classifieds';
-		$wpcSettings['description'] = "Feel free to <b>submit your classified ads</b>, Promote your Business or website by posting free ads. <br>You don't have to pay anything, it's totally free, your ads stay 365 days here for free";
+		$wpcSettings['description'] = "Feel free to<b>submit your classified ads</b>, Promote your Business or website by posting free ads.<br>You don't have to pay anything, it's totally free, your ads stay 365 days here for free";
 		$wpcSettings['must_registered_user'] = 'n';
 		$wpcSettings['view_must_register'] = 'n';
 		$wpcSettings['display_unregistered_ip'] = 'y';
@@ -709,7 +708,7 @@ class WP_Classified {
 		echo "if (!document.images)\n";
 		echo "return\n";
 		echo "document.images.avatar.src=\n";
-		echo "'".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/' + document.wpcSettings.topImage.options[document.wpcSettings.topImage.selectedIndex].value;\n";
+		echo "'". $this->plugin_url. "/images/' + document.wpcSettings.topImage.options[document.wpcSettings.topImage.selectedIndex].value;\n";
 		echo 'document.wpcSettings.elements["wpClassified_data[top_image]"].value = document.wpcSettings.topImage.options[document.wpcSettings.topImage.selectedIndex].value;';
 		echo "}\n\n";
 
@@ -761,7 +760,7 @@ class WP_Classified {
 			<label for="wpClassified-widget_title"><?php _e('Title:'); ?><input style="width: 200px;" id="widget_title" name="widget_title" type="text" value="<?php echo htmlspecialchars($wpcSettings['widget_title']); ?>" /></label></p>
 			<br />
 			<label for="wpClassified-widget_format">
-			<input class="checkbox" id="widget_format" name="widget_format" type="checkbox" value="y" <?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label><br />
+			<input class="checkbox" id="widget_format" name="widget_format" type="checkbox" value="y"<?php echo ($wpcSettings['widget_format']=='y')?" checked":"";?>>Small Format Output</label><br />
 			<input type="hidden" id="wpClassified-submit" name="wpClassified-submit" value="1" />
 			<?php
 		}
@@ -837,18 +836,19 @@ class WP_Classified {
 		return 1;
 	}
 
-	function remaveCPCC() {
-		$dir = ABSPATH."wp-content/plugins/wp-classified/images/cpcc/";
-		if ($handle = opendir($dir)) {
-			while (false !== ($file = readdir($handle))) {
-				if ($file[0] == '.' || is_dir("$dir/$file")) {
-					continue;
-				}
-				if ((time() - filemtime($file)) > (120)) {
-					unlink("$dir/$file");
+	function cleanUp() {
+		$deleteTimeDiff= 5 * 60; // second
+		if ( !($dh = opendir( $this->cache_dir )) )
+			echo 'Unable to open cache directory "' . $this->cache_dir . '"';
+		$result = true;
+		while ( $file = readdir($dh) ) {
+			if ( ($file != '.') && ($file != '..') ) {
+				$file2 = $this->cache_dir . $file;
+				if (isset($file2) && is_file($file2)) {
+					$diff = mktime() - @filemtime($file2);
+					if ($diff > $deleteTimeDiff) @unlink( $file2 );
 				}
 			}
-			closedir($handle);
 		}
 	}
 
@@ -885,7 +885,7 @@ class WP_Classified {
 		}
 		//now that the page is valid (I hope) for strip_tags, strip all unwanted tags
 		$goodStr = strip_tags( $goodStr, '<title><hr><h1><h2><h3><h4><h5><h6><div><p><pre><sup><ul><ol><br><dl><dt><table><caption><tr><li><dd><th><td><a><area><img><form><input><textarea><button><select><option>' );
-		//strip extra whitespace except between <pre> and <textarea> tags
+		//strip extra whitespace except between<pre> and<textarea> tags
 		$str = preg_split( "/<\/?pre[^>]*>/i", $goodStr );
 		for( $x = 0; is_string( $str[$x] ); $x++ ) {
 			if( $x % 2 ) { 

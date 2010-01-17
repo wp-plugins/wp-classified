@@ -9,7 +9,7 @@
 * list all ads already exist under a defined category
 */
 
-//global $_GET, $table_prefix, $wpdb, $lang, $wpClassified;
+global $wpClassified;
 //$wpcSettings = get_option('wpClassified_data');
 
 
@@ -34,7 +34,7 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 <div class="list_ads">
   <div class="list_ads_top">
   <?php 
-  $addtopicImg = '<img src="' .get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/images/topic/addtopic.jpg">';
+  $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
   if ($wpcSettings["must_registered_user"]=="y" && !$wpClassified->is_usr_loggedin() ) { 
 	echo $addtopicImg;
 	echo "<span sytle=\"font-size:13px\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>"
@@ -56,7 +56,7 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
   for ($x=0; $x<count($ads); $x++){
 	$ad = $ads[$x];
 	if (!@in_array($ad->ads_subjects_id, $read) && $wpClassified->is_usr_loggedin()){
-		$rour = "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/unread.gif\" class=\"imgMiddle\"> ";
+		$rour = "<img src=\"". $wpClassified->plugin_url . "/images/unread.gif\" class=\"imgMiddle\"> ";
 	} else {$rour = "";} // fix me
 	$pstart = 0;
 	$pstart = $ad->ads-($ad->ads%$wpcSettings["count_ads_per_page"]);
@@ -65,10 +65,10 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 	<?php
 	echo $rour;
 	if ($ad->sticky=='y'){
-		echo "<img src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/sticky.gif\" class=\"imgMiddle\" alt=\"".__("Sticky")."\"> ";
+		echo "<img src=\"". $wpClassified->plugin_url . "/images/sticky.gif\" class=\"imgMiddle\" alt=\"".__("Sticky")."\"> ";
 	}
 	echo wpcPublicLink("ads_subject", array("name"=>$ad->subject, "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
-	echo wpcPublicLink("lastAd", array("name"=>"<img class=\"imgMiddle\"  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/lastpost.gif"."\" border=\"0\">", "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id, "start"=>$pstart));
+	echo wpcPublicLink("lastAd", array("name"=>"<img class=\"imgMiddle\" src=\"". $wpClassified->plugin_url . "/images/lastpost.gif"."\" border=\"0\">", "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id, "start"=>$pstart));
 	?>
 	</div><!--list_ads_sub-->
 	<div class="main_col_left_btn"><?php echo $lang['_FROM'];?> <?php echo wpcAdAuthor($ad);?></div>
@@ -82,8 +82,8 @@ if ($numAds>$wpcSettings['count_ads_per_page']){
 
 	if ($img !='') {
 		include (dirname(__FILE__).'/js/viewer.js.php');
-		echo "<a href=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/" . $img . "\" rel=\"thumbnail\"><img  src=\"".get_bloginfo('wpurl')."/wp-content/plugins/wp-classified/images/topic/camera.gif"."\"></a>";
-    }
+		echo "<a href=\"". $wpClassified->public_url . "/" . $img . "\" rel=\"thumbnail\"><img  src=\"". $wpClassified->plugin_url ."/images/camera.gif"."\"></a>";
+	}
 	?>
 	&nbsp;<?php echo $ad->views;?></div>
 	<div class="main_col_right_btn"><nobr><?php echo @date($wpcSettings['date_format'], $ad->date);?></nobr></div><P>

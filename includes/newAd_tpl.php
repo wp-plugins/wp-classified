@@ -9,8 +9,6 @@
 * 
 */
 
-//global $lang, $quicktags, $wpClassified;
-#$wpcSettings = get_option('wpClassified_data');
 wpcHeader();
 if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()){
 	?>
@@ -121,11 +119,11 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 			if($wpcSettings['confirmation_code']=='y'){ 
 				$oVisualCaptcha = new wpcCaptcha();
 				$captcha = rand(1, 50) . ".png";
-				$oVisualCaptcha->create(ABSPATH."wp-content/plugins/wp-classified/images/cpcc/" . $captcha);
+				$oVisualCaptcha->create( $wpClassified->cache_dir ."/" . $captcha);
 			?>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td>
-				<td><img src="<?php echo get_bloginfo('wpurl'). "/wp-content/plugins/wp-classified/images/cpcc/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
+				<td><img src="<?php echo $wpClassified->cache_url . "/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 				<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10">
 			</tr>
 			<?php
