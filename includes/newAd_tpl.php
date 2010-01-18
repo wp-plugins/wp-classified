@@ -42,13 +42,7 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 			</tr>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_EMAIL']; ?></td>
-				<td><input type=text size=30 name="wpClassified_data[email]" onclick="checkEmail(this.form.wpClassified_data[email])" id="wpClassified_data_email" value="
-				<?php 
-				if (!empty($_POST['wpClassified_data']['email'])) {
-					$txt = trim($_POST['wpClassified_data']['email']);
-					echo $txt; 
-				}
-				?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td>
+				<td><input type=text size=30 name="wpClassified_data[email]" onclick="checkEmail(this.form.wpClassified_data[email])" id="wpClassified_data_email" value="<?php echo $email; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td>
 			</tr>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_CONTACTBY']; ?></td>
@@ -60,35 +54,17 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 			</tr>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_WEB']; ?></td>
-				<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="
-				<?php
-				if (!empty($_POST['wpClassified_data']['web'])) {
-					$txt = trim($_POST['wpClassified_data']['web']);
-					echo $txt; 
-				}
-				?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL'];?></span></td>
+				<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo $web; ?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL'];?></span></td>
 			</tr>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-				<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="
-				<?php 
-				if (!empty($_POST['wpClassified_data']['phone'])) { 
-					$txt = trim($_POST['wpClassified_data']['phone']);
-					echo $txt;
-				}
-				?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp; e.g. +98(231)12345</span></td>
+				<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo $phone; ?>"><span class="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp; e.g. +98(231)12345</span></td>
 			</tr>
 			<tr><td></td><td><hr></td></tr>
 			<tr>
 				<!-- "the text input must contains only letters and numbers." -->
 				<td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
-				<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="
-				<?php 
-				if (!isset($_POST['wpClassified_data']) || !isset($_POST['wpClassified_data']['subject'])) 
-					$_POST['wpClassified_data']['subject']='';
-				$txt = stripslashes($_POST['wpClassified_data']['subject']);
-				echo str_replace('"', '&quot;', $txt); 
-				?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td>
+				<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo $subject; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED']?></span></td>
 			</tr>
 			<tr>
 				<td class="wpc_label_right"><?php echo $lang['_PIC']; ?></td>
