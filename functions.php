@@ -74,12 +74,6 @@ function wpcAddAd(){
 					$addPost = false;
 				}
 			}
-			/*
-			$subject = preg_replace("/(\<)(.*?)(\>)/mi","",$_POST['wpClassified_data']['subject']);
-			if (! wpcCheckInput($_POST['wpClassified_data']['subject'])){
-				$msg = $lang['_INVALIDTITLE'];
-			}
-			*/
 			if(isset($wpcSettings['confirmation_code']) && $wpcSettings['confirmation_code']=='y'){ 
 				if (! wpcCaptcha::Validate($_POST['wpClassified_data']['confirmCode'])) {
    					$msg .= '-' . $lang['_INVALIDCONFIRM'] . '<br />';

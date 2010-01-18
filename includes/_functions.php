@@ -245,11 +245,12 @@ function wpcEditAd(){
 	$postinfos = $wpdb->get_results($sql, ARRAY_A);
 	$postinfo = $postinfos[0];
 
-	$phone = $_POST['wpClassified_data']['phone'];
-	$subject = stripslashes($_POST['wpClassified_data']['subject']);
-	$web = $_POST['wpClassified_data']['web'];
-	$author_name = $_POST['wpClassified_data']['author_name'];
+	$web = stripslashes(trim($_POST['wpClassified_data']['web']));
+   $email = stripslashes(trim($_POST['wpClassified_data']['email']));
+	$phone = stripslashes(trim($_POST['wpClassified_data']['phone']));
+	$subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
 	$description = $_POST['description'];
+	$author_name = $_POST['wpClassified_data']['author_name'];
 
 	$permission=false;
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$postinfo['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
@@ -267,26 +268,26 @@ function wpcEditAd(){
 	if ($_POST['edit_ad']=='yes'){
 		$addPost = true;
 		if (str_replace(" ", "", $author_name)=='' && !$wpClassified->is_usr_loggedin()){
-			$msg = $lang['_INVALIDNAME'];
+			$msg .= $lang['_INVALIDNAME'];
 			$addPost = false;
 		}
+
 		if (str_replace(" ", "", $subject)==''){
-			$msg = $lang['_INVALIDSUBJECT'];
+			$msg .= $lang['_INVALIDSUBJECT'] . '<br />';
 			$addPost = false;
 		}
-		if (str_replace(" ", "", $_POST['wpClassified_data'][email])==''){
-			$msg = $lang['_INVALIDEMAIL'];
-			$addPost = false;
-		} 
-		/*
-		if (!eregi("^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$", $_POST['wpClassified_data'][email])){
-			$msg = $lang['_INVALIDEMAIL2'];
+
+		if ( !isset($email) ) {
+				$msg .= '-' . $lang['_INVALIDEMAIL'] . '<br />';
+				$addPost = false;
+		}
+		if ( isset($email) && !preg_match('/^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$/', $email) ) {
+			$msg .= '-' . $lang['_INVALIDEMAIL2'] . '<br />';;
 			$addPost = false;
 		}
-		*/
-		if (strlen($_POST['wpClassified_data']['web']) > 1) {
-			if (!wpcCheckUrl($web)) {
-				$msg = $lang['_INVALIDURL'];
+		if ( strlen($web) > 1 ) {
+			if ( !wpcCheckUrl($web) ) {
+				$msg .= '-' . $lang['_INVALIDURL'] . '(optional)<br />';
 				$addPost = false;
 			} else {
 				$web = wpcCheckUrl($web);
@@ -296,36 +297,21 @@ function wpcEditAd(){
 			str_replace('/^\s+/',"",$phone);
 			str_replace('/\s+$/',"",$phone);
 			if ( strlen($phone) > 1 && !wpcValidatePhone($phone)) {
-				$msg = $lang['_INVALIDPHONE'];
+				$msg .= '-' . $lang['_INVALIDPHONE'] . '(optional)<br />';
 				$addPost = false;
 			}
 		}
-		/*
-			$subject = preg_replace("/(\<)(.*?)(\>)/mi", "", $subject);
-			if (str_replace(" ", "", $subject)=='' || !wpcCheckInput($subject)){
-				$msg = $lang['_INVALIDTITLE'];
-				$addPost = false;
-			}
-		*/
-		if($wpcSettings['confirmation_code']=='y'){ 
-			if (! wpcCaptcha::Validate($_POST['wpClassified_data'][confirmCode])) {
-   				$msg = $lang['_INVALIDCONFIRM'];
+		if(isset($wpcSettings['confirmation_code']) && $wpcSettings['confirmation_code']=='y'){ 
+			if (! wpcCaptcha::Validate($_POST['wpClassified_data']['confirmCode'])) {
+   			$msg .= '-' . $lang['_INVALIDCONFIRM'] . '<br />';
 				$addPost = false;
   			}
 		}
-
-		if (!isset($description) ||
-			str_replace(" ","",$description)==''){
-			$msg = $lang['_INVALIDCOMMENT'];
+		if ( empty($description) || str_replace(" ","",$description)==''){
+			$msg .= '-' . $lang['_INVALIDCOMMENT'] . '<br />';
 			$addPost = false;
 		}
 
-		/*
-		if ($_POST['wpClassified_data'][maxchars_limit] > $wpcSettings['maxchars_limit']){
-			$msg = "Classified Text must be less than or equal to ". $wpcSettings['maxchars_limit'] . " characters in length";
-			$addPost = false;
-		}
-		*/
 		if ($_FILES['image_file']!=''){
 			$ok = (substr($_FILES['image_file']['type'], 0, 5)=="image")?true:false;
 			if ($ok==true){

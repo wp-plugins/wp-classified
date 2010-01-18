@@ -29,7 +29,7 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_EMAIL']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->email));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
+			<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo $postinfo->email; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_CONTACTBY']; ?></td>
 			<td>
@@ -40,16 +40,16 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_WEB']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->web));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td>
+			<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo $postinfo->web; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td>
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->phone));?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp;e.g. +98(231)12345</span></td>
+			<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo $postinfo->phone; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp;e.g. +98(231)12345</span></td>
 		</tr>
 		<tr><td></td><td><hr></td></tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo str_replace('"', "&quot;", stripslashes($postinfo->subject));?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td>
+			<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo $postinfo->subject; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td>
 		</tr>
 		<tr><td colspan=2><p>Images:</p></td></tr>
 		<tr><td colspan=2>
