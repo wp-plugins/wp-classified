@@ -281,7 +281,7 @@ function wpcEditAd(){
 				$msg .= '-' . $lang['_INVALIDEMAIL'] . '<br />';
 				$addPost = false;
 		}
-		if ( isset($email) && !preg_match('/^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$/', $email) ) {
+		if (isset($email) && !is_email($email)) {
 			$msg .= '-' . $lang['_INVALIDEMAIL2'] . '<br />';;
 			$addPost = false;
 		}
@@ -350,7 +350,7 @@ function wpcEditAd(){
 
 			$sql = "update {$table_prefix}wpClassified_ads_subjects
 			set subject='".$wpdb->escape($subject)."',
-			email='".$wpdb->escape(stripslashes($_POST['wpClassified_data']['email']))."',
+			email='".$wpdb->escape($email)."',
 			web='".$web."',
 			phone='".$wpdb->escape(stripslashes($phone))."',
 			txt='".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data']['ad_expiration'])).'###'.$_POST['wpClassified_data']['contactBy']."'WHERE ads_subjects_id='".(int)$_GET['asid']."'";

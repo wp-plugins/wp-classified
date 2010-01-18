@@ -54,7 +54,8 @@ function wpcAddAd(){
 				$msg .= '-' . $lang['_INVALIDEMAIL'] . '<br />';
 				$addPost = false;
 			}
-			if ( isset($email) && !preg_match('/^[a-z0-9]+([-_\.]?[a-z0-9])+@[a-z0-9]+([-_\.]?[a-z0-9])+\.[a-z]{2,4}$/', $email) ) {
+
+			if (isset($email) && !is_email($email)) {
 				$msg .= '-' . $lang['_INVALIDEMAIL2'] . '<br />';;
 				$addPost = false;
 			}
@@ -121,19 +122,18 @@ function wpcAddAd(){
 				} else {
 					$sql = "INSERT INTO {$table_prefix}wpClassified_ads_subjects
 					(ads_subjects_list_id , date , author , author_name , author_ip , subject , ads , views , sticky , status, last_author, last_author_name, last_author_ip, web, phone, txt, email) VALUES
-					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape(stripslashes($author_name))."' , 
+					('".($_GET['lid']*1)."', '".time()."' , '".$user_ID."' , '".$wpdb->escape($author_name)."' , 
 					'".getenv('REMOTE_ADDR')."' , '".$wpdb->escape($subject)."' , 0, 0 , 'n' , 
 					'".(($isSpam)?"deleted":"open")."', '".$user_ID."', 
-					'".$wpdb->escape(stripslashes($author_name))."', '".getenv('REMOTE_ADDR')."',
+					'".$wpdb->escape($author_name)."', '".getenv('REMOTE_ADDR')."',
 					'".$web."',
 					'".$wpdb->escape($phone)."',
-					'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data']['ad_expiration'])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data']['contactBy']))."',
-					'".$wpdb->escape(stripslashes($_POST['wpClassified_data']['email']))."')";
+					'".(int)$wpdb->escape(stripslashes($_POST['wpClassified_data']['ad_expiration'])).'###'.$wpdb->escape(stripslashes($_POST['wpClassified_data']['contactBy']))."', '".$wpdb->escape($email)."')";
 					$wpdb->query($sql);
 					$tid = $wpdb->get_var("SELECT last_insert_id()");
 					$wpdb->query("INSERT INTO {$table_prefix}wpClassified_ads
 					(ads_ads_subjects_id, date, author, author_name, author_ip, status, subject, image_file, post) VALUES
-					('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape(stripslashes($author_name))."', 
+					('".$tid."', '".time()."', '".$user_ID."', '".$wpdb->escape($author_name)."', 
 					'".getenv('REMOTE_ADDR')."', '" . $status . "', 
 					'".$wpdb->escape($subject)."',
 					'".$wpdb->escape(stripslashes($setImage))."',
