@@ -29,6 +29,7 @@ function wpcAddAd(){
 
 	$web = stripslashes(trim($_POST['wpClassified_data']['web']));
    $email = stripslashes(trim($_POST['wpClassified_data']['email']));
+	$email = strtolower($email);
 	$phone = stripslashes(trim($_POST['wpClassified_data']['phone']));
 	$subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
 	$description = $_POST['description'];
@@ -639,7 +640,7 @@ function wpcAdInput($content=""){
 	switch ($wpcSettings['edit_style']){
 		case "plain":
 			default:
-			echo "<textarea name='description' id='description' cols='60' rows='20'>".str_replace("<", "&lt;", $content)."</textarea><br />";
+			echo "<textarea name='description' id='description' cols='50' rows='20'>".str_replace("<", "&lt;", $content)."</textarea><br />";
 			echo '<span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
 		break;
 		case "tinymce":
@@ -701,7 +702,7 @@ function wpcAdInput($content=""){
 			/* ]]> */
 			</script>
 			<?php
-			echo '<textarea name="description" id="description" rows="8" cols="60">'. htmlentities($content) .'</textarea><br />';
+			echo '<textarea name="description" id="description" rows="8" cols="50">'. htmlentities($content) .'</textarea><br />';
 			echo '<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
 		break;
 	}

@@ -247,6 +247,7 @@ function wpcEditAd(){
 
 	$web = stripslashes(trim($_POST['wpClassified_data']['web']));
    $email = stripslashes(trim($_POST['wpClassified_data']['email']));
+	$email = strtolower($email);
 	$phone = stripslashes(trim($_POST['wpClassified_data']['phone']));
 	$subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
 	$description = $_POST['description'];
