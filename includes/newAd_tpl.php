@@ -33,7 +33,7 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 				<td><?php 
 				if (!$wpClassified->is_usr_loggedin()){?>
 					<input type=text size=15 name="wpClassified_data[author_name]" value="<?php echo str_replace('"', "&quot;", stripslashes($_POST['wpClassified_data'][author_name]));?>"><br>
-					(<?php echo $lang['_GUEST']; ?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)
+					<span class="smallTxt">(<?php echo $lang['_GUEST']; ?> <a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("here");?></a> <?php echo __("to log in");?>.)</span>
 					<?php
 				} else {
 					echo "<b>".$userdata->$userfield."</b>";
