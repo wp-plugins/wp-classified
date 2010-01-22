@@ -146,8 +146,9 @@ function wpcFooter(){
 		$filename = $wpClassified->plugin_url . '/cache/wpclassified.xml';
 		?>
 		<script type="text/javascript">
-		function pop(file,windowname,features){
-		rsswindow = window.open(file,windowname,features);
+		function pop (file,name){
+		rsswindow = window.open (file,name,"location=1,status=1,scrollbars=1,width=680,height=800");
+		rsswindow.moveTo(0,0);
 		rsswindow.focus();
 		return false;
 		}
@@ -161,7 +162,6 @@ function wpcFooter(){
 		echo "<div class=\"smallTxt\">&nbsp;&nbsp;" .stripslashes($wpcSettings['credit_line']) . "</div>";
 	}
 	echo "</div>";
-	//if($wpcSettings['edit_style']=='tinymce') print $wpClassified->getInitJS();
 }
 
 function wpcRssFilter($text){echo convert_chars(ent2ncr($text));} 
@@ -171,7 +171,14 @@ function wpcRssLink($action, $vars) {
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = $wpClassified->get_pageinfo();
 
-	return ($rewrite)? get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']: get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&mp;_action=vl&mp;lid=".$vars['lid'];
+	$page_id = $pageinfo['ID'];
+	if($wp_rewrite->using_permalinks()) $delim = "?";
+	else $delim = "&amp;";
+	$perm = get_permalink($page_id);
+	$main_link = $perm . $delim;
+	return $main_link . "_action=va&amp;lid=" . $vars['lid'] . "&amp;asid=" . $vars['asid'];
+
+	//return ($rewrite)? get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']: get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;_action=vl&amp;lid=".$vars['lid'];
 }
 
 function wpcDeleteAd(){
@@ -180,13 +187,13 @@ function wpcDeleteAd(){
 	if (!$_GET['aid']) $_GET['aid']=$_POST['YesOrNo'];
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id =" .(int)$_GET['aid'];
 
-	 $postinfos = $wpdb->get_results($sql, ARRAY_A);
+	$postinfos = $wpdb->get_results($sql, ARRAY_A);
 
 	$postinfo = $postinfos[0];
 	$permission=false;
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$postinfo['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
 		$permission=true;
-        }
+	}
 	
 	if (!$permission) {
 		if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
@@ -397,9 +404,6 @@ function wpcPrintAd() {
 	}
 }
 
-
-
-
 function wpcSendAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
@@ -588,7 +592,7 @@ function wpcGADlink() {
 		$code.= 'google_ui_features="rc:6"' . ";\n";
 		// '0' => 'Square corners' 
 		// '6' => 'Slightly rounded corners'
-	    	// '10' => 'Very rounded corners'
+		// '10' => 'Very rounded corners'
 	}
 	$code.= 'google_color_border="' . $wpcSettings['GADcolor_border'] . '"' . ";\n";
 	$code.= 'google_color_bg="' . $wpcSettings['GADcolor_bg'] . '"' . ";\n";
