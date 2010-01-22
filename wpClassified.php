@@ -5,7 +5,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description:  Note: This bugfix release hove to install Manually.
 Author:Mohammad Forgani
-Version: 1.4
+Version: 1.4.1
 Requires at least:2.8.x
 Author URI: http://www.forgani.com
 
@@ -52,8 +52,6 @@ Changes 1.3.0-b - Sep 13/10/2008
 
 // Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1');
 
 
 require_once(dirname(__FILE__).'/settings.php');
@@ -66,7 +64,7 @@ add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpCla
 
 class WP_Classified {
   // Sets the version number.
-  var $version = "1.4";
+  var $version = "1.4.1";
   var $menu_name = 'wpClassified';
   var $plugin_name = 'wp-classified';
   var $plugin_home_url;

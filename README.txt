@@ -1,5 +1,5 @@
 === wp-classified ===
-name: wpClassified Wordpress plugins Version: 1.4
+name: wpClassified Wordpress plugins Version: 1.4.1
 Contributors: Mohammad Forgani
 Donate link: http://www.forgani.com/root/wpclassified-plugins/
 Requires at least: 2.8.x
@@ -9,7 +9,7 @@ Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-cla
 
 == Description ==
 
-This plugin allows you to add a simple classified page in to your wordpress blog. 
+This plugin allows you to add a simple classified page in to your wordpress blog.
 
 The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
 default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
@@ -102,7 +102,11 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 
-= bugfix version 1.4 =
+= version 1.4 =
+Jan 22/01/2010
+- fixed the email address checker and added the missing wpcSyncCount function
+- reduce the width of a textarea element (to the cols=50).
+
 Jan 17/01/2010
 fixed for plugin auto-upgrade 
 Note: This bugfix release hove to install Manually.
@@ -110,57 +114,29 @@ Note: This bugfix release hove to install Manually.
 - moved directories public resources to wp-content
 
 
-Changes 1.3.3 - Jan 12 2010
-- Check in the complete source code into SVN.
-
-
-Changes 1.3.2-g - Nov 12/11/2009
-- A new version for wordpress 2.8.6
-
-Changes 1.3.2-a - Oct 25/10/2009
-- Fixed bug with auto-install on wordpress 2.8.5
-
-Changes 1.3.1-b - Feb 09/02/2009
-- modify to approve posts before they are published
-- fixed thumbnail image width
+= version 1.3 =
 
 Changes 1.3.1-a - Jan 20/01/2009
 - It covers changes between WordPress Version 2.6 and Version 2.7
 - fixed the widget control
-
-Changes 1.3.0-g - Nov 26/11/2008
-Bugfix release
-
-Changes 1.3.0-f - Nov 05/11/2008
 - fixed the login problem for wmpu and buddypress
-
-Changes 1.3.0-e - Nov 03/11/2008
 - include the links of photo to the last ads's list
 - NEW: You can now place the last ads history on the sidebar as a widget
 - extending the Administration Interface
-
-
-Changes 1.3.0-b - Oct 10/10/2008
 - Modify to expanded and collapses the Categories
 - Modify to show the last post in footer
-
-
-Changes 1.3.0 - Sep 10/09/2008
-
 - Modify to display-style classified ads in one column
 - Added the ad images viewer
 - Allowed more images per ad
 - All the pages using templates
 - Added style sheet for page layout 
+- add Google AdSense for Classifieds
+- fixed language
 
 
-Changes 1.2.0-f - Sep 04/09/2008
-add Google AdSense for Classifieds
-fixed language
-
+= version 1.2 =
 
 Changes 1.2.0-e - August 10/2008
-
 User Side
 - implement the conformation code (captcha)
 - added sent to his friend's button
@@ -169,11 +145,11 @@ User Side
 - fixed search problem
 - fixed to image showing by editing and setting.
 - added two directory within the “/images” directory cpcc and topic. You will need to make the folders writable (chmod 777).
-
-Admin Side
 - expiration notice reminders to users (The work is Not Finished!) 
 - implement the maximum character limit
 
+
+= version 1.1 =
 
 Changes in 1.1.1 - June 20/2008
 - fix the search function
