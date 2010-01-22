@@ -131,16 +131,16 @@ class WP_Classified {
 		global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $lang;
 		print wpcAdminMenu();
 
-		$dir = $this->plugin_dir . '/cache/';
-		if( ! is_writable( $dir ) || ! is_readable( $dir ) ) {
+		$cache_dir = $this->plugin_dir . '/cache/';
+		if( ! is_writable( $cache_dir ) || ! is_readable( $cache_dir ) ) {
 			echo "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
-			echo "<font color='#FF0000'>Check Directory Permission ! =>".$dir."</font><br />\n" ;
+			echo "<font color='#FF0000'>Check Directory Permission ! =>".$cache_dir."</font><br />\n" ;
 			echo "</fieldset>"; 
 		}
-		$dir = $this->public_dir . '/';
-		if( ! is_writable( $dir ) || ! is_readable( $dir ) ) {
+		$public_dir = $this->public_dir;
+		if( ! is_writable( $public_dir ) || ! is_readable( $public_dir ) ) {
 			echo "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
-			echo "<font color='#FF0000'>Check Directory Permission ! =>".$dir."</font><br />\n" ;
+			echo "<font color='#FF0000'>Check Directory Permission ! =>".$public_dir."</font><br />\n" ;
 			echo "</fieldset>";
 		}
 
