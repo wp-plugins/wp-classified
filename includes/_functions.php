@@ -49,6 +49,7 @@ function wpcHeader(){
 	<?php
 	//
 	$wpClassified->cleanUp();
+	include (dirname(__FILE__).'/_rss.php');	
 
 
 	$today = time();
@@ -130,6 +131,7 @@ function wpcReadNotAllowed(){
 
 function wpcFooter(){
 	global $wpClassified, $table_prefix, $wpdb, $lang;
+
 	$wpcSettings = get_option('wpClassified_data');
 	$wpcSettings['credit_line'] = 'wpClassified plugins (Version '.$wpClassified->version.') powered by <a href=\"http://www.forgani.com\" target=\"_blank\"> M. Forgani</a>';
 	if ($wpcSettings['GADposition'] == 'btn' || $wpcSettings['GADposition'] == 'bth') {
@@ -141,9 +143,18 @@ function wpcFooter(){
 	echo wpcLastAds(false);
 	echo '<HR class="wpc_footer_hr">';
 	if($wpcSettings['rss_feed']=='y'){
-		$rssurl= wpcRssUrl();
-		$out = '<div class="rssIcon"><a href="'.$rssurl.'">' . $wpcSettings['slug'] . ' RSS</a></div>';
-		echo $out;
+		$filename = $wpClassified->plugin_url . '/cache/wpclassified.xml';
+		?>
+		<script type="text/javascript">
+		function pop(file,windowname,features){
+		rsswindow = window.open(file,windowname,features);
+		rsswindow.focus();
+		return false;
+		}
+		</script> 
+		<div class="rssIcon">
+		<a href="<?php echo $filename; ?>" target="_blank" onclick="return pop('<?php echo $filename; ?>','<?php echo $wpcSettings['slug'] ?>','f1,f2,f3');"><?php echo $wpcSettings['slug'] ?> RSS</a></div>
+		<?php
 	}
 
 	if ($wpcSettings['show_credits']=='y'){
@@ -153,28 +164,14 @@ function wpcFooter(){
 	//if($wpcSettings['edit_style']=='tinymce') print $wpClassified->getInitJS();
 }
 
-function wpcRssFilter($text)
-{echo convert_chars(ent2ncr($text));} 
-
-function wpcRssUrl() {
-	global $wpdb, $table_prefix;
-	$siteurl = trailingslashit(get_option('siteurl')); 
-	$url = $siteurl."?page=wpClassified&wpcfeed=all";
-	return $url;
-} 
-
-function wpcRssFeed() {
-	if(isset($_GET['wpcfeed'])) {
-		include (dirname(__FILE__).'/_rss.php');	
-		exit;
-	}
-} 
+function wpcRssFilter($text){echo convert_chars(ent2ncr($text));} 
 
 function wpcRssLink($action, $vars) {
 	global $wpdb, $table_prefix, $wp_rewrite, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = $wpClassified->get_pageinfo();
-	return ($rewrite)?"<a href=\"".get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']."/\">".$vars["name"]."</a>":"<a href=\"".get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+
+	return ($rewrite)? get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']: get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&mp;_action=vl&mp;lid=".$vars['lid'];
 }
 
 function wpcDeleteAd(){

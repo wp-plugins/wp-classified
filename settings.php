@@ -212,11 +212,8 @@ function wpClassified_process(){
 	if (!isset($msg)) $msg='';
 	$wpcSettings = get_option('wpClassified_data');
 	if (!isset($_GET['_action'])) $_GET['_action']='';
-	if (is_user_logged_in()) { 
-		get_currentuserinfo();	
-		//_e('Hello, ');
-		//echo $user_identity;
-		//_e('!');
+	if (is_user_logged_in()) {
+		get_currentuserinfo();
 	}
 	switch ($_GET['_action']){
 		default:

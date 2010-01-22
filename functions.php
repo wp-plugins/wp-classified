@@ -242,14 +242,14 @@ function wpcModifyImg() {
 
 function wpcDeleteImg() {
 	global $_GET,$_POST,$userdata,$user_ID,$table_prefix, 
-			$wpmuBaseTablePrefix, $wpdb, $wpClassified, $lang;
+		$wpmuBaseTablePrefix, $wpdb, $wpClassified, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = $wpClassified->get_pageinfo();
 	$userfield = $wpClassified->get_user_field();
 	get_currentuserinfo();
 
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
-	 $postinfo = $wpdb->get_results($sql,ARRAY_A);
+	$postinfo = $wpdb->get_results($sql,ARRAY_A);
 
 	$post = $postinfo[0];
 	$permission=false;
