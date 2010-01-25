@@ -44,7 +44,7 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo $postinfo->phone; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?>&nbsp;e.g. +98(231)12345</span></td>
+			<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo $postinfo->phone; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?><br />e.g.+98(231)12345</span></td>
 		</tr>
 		<tr><td></td><td><hr></td></tr>
 		<tr>

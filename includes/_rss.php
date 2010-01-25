@@ -12,35 +12,25 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) {
 
 $filename = $wpClassified->cache_dir . 'wpclassified.xml';
 $fp = fopen($filename, 'w');
-
-
 ob_start();
-
-
 $wpcSettings = get_option('wpClassified_data');
-
 $limit=$wpcSettings['rss_feed_num'];
 if(!isset($limit)) $limit=20;
-
 $pageinfo = $wpClassified->get_pageinfo();
 
 # Get Data
 $sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.status, {$table_prefix}wpClassified_ads.image_file,  {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$table_prefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id, {$table_prefix}wpClassified_ads.post FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$table_prefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$table_prefix}users.id = {$table_prefix}wpClassified_ads.author ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date AND {$table_prefix}wpClassified_ads.status='active' DESC LIMIT 0, ".$limit;
-
 
 $posts = $wpdb->get_results($sql);
 
 		
 # Define Channel Elements
 $rssTitle=get_bloginfo('name').' - '.__("Classified");
-$pageinfo = $wpClassified->get_pageinfo();
 $rssLink = get_bloginfo('wpurl'). "/?page_id=". $pageinfo["ID"]. "&mp;_action=wpcfeed";
 $atomLink= $rssLink;
 $rssDescription=get_bloginfo('description');
 $rssGenerator=__('wp-classified Version ') . '1.4';
-		
 $rssItem=array();
-	
 
 if($posts) {
 	foreach($posts as $post){
@@ -55,17 +45,7 @@ if($posts) {
 			$array = preg_split('/\#\#\#/', $post->image_file);
 			$item->photo = $array[0];
 		}
-
-		/*
-		# clean up the content for the plain text email
-		$post_content = html_entity_decode($post->post, ENT_QUOTES);
-		$post_content = _filter_content($post_content, '');
-		$post_content = _filter_nohtml_kses($post_content);
-		$post_content = stripslashes($post_content);
-		$item->description=$post_content;
-		*/
-
-		$item->guid=wpcRssLink("ads_subject", array("name"=>$ad->subject, "lid"=>$post->lists_id, "asid"=>$post->ads_subjects_id));
+		$item->guid=wpcRssLink(array("name"=>$post->subject, "lid"=>$post->lists_id, "asid"=>$post->ads_subjects_id));
 		$rssItem[]=$item;
 	}
 }

@@ -49,7 +49,7 @@ function wpcHeader(){
 	<?php
 	//
 	$wpClassified->cleanUp();
-	include (dirname(__FILE__).'/_rss.php');	
+	include_once (dirname(__FILE__).'/_rss.php');	
 
 
 	$today = time();
@@ -166,7 +166,7 @@ function wpcFooter(){
 
 function wpcRssFilter($text){echo convert_chars(ent2ncr($text));} 
 
-function wpcRssLink($action, $vars) {
+function wpcRssLink($vars) {
 	global $wpdb, $table_prefix, $wp_rewrite, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
 	$pageinfo = $wpClassified->get_pageinfo();
@@ -177,8 +177,6 @@ function wpcRssLink($action, $vars) {
 	$perm = get_permalink($page_id);
 	$main_link = $perm . $delim;
 	return $main_link . "_action=va&amp;lid=" . $vars['lid'] . "&amp;asid=" . $vars['asid'];
-
-	//return ($rewrite)? get_bloginfo('wpurl')."/".$pageinfo["post_name"]."/vl/".ereg_replace("[^[:alnum:]]", "-", $vars["name"])."/".$vars['lid']: get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&amp;_action=vl&amp;lid=".$vars['lid'];
 }
 
 function wpcDeleteAd(){

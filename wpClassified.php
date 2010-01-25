@@ -230,9 +230,9 @@ class WP_Classified {
 			}
 		}
 		echo "\n</select>&nbsp;&nbsp;<img name=\"avatar\" src=\"". $this->plugin_url . "/images/" . $wpcSettings['top_image'] ."\" class=\"imgMiddle\"><br />";
-		?>		
+		?>
 		<span class="smallTxt">images from plugins/wp-classified/images directory</span></td>
-		</tr>		
+		</tr>
 		<tr>
 			<th align="right" valign="top"><label>Classifieds Description:</label></th>
 			<td><textarea cols=80 rows=3 name="wpClassified_data[description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?></textarea></td>
