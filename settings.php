@@ -224,7 +224,6 @@ function wpClassified_process(){
 		case "ea": wpcEditAd(); break;
 		case "da": wpcDeleteAd(); break;
 		case "va": wpcDisplayAd(); break;
-		case "prtad": wpcPrintAd(); break;
 		case "sndad": wpcSendAd(); break;
 		case "mi": wpcModifyImg(); break;
 		case "di": wpcDeleteImg($_POST['file']); break;

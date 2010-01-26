@@ -102,7 +102,11 @@ if (isset($adsInfo['phone'])) {
 	echo '<img src="' . $wpClassified->plugin_url . '/images/phone.jpg" title="'.$adsInfo['phone'].'" class="imgMiddle">';
 }
 $pageinfo = $wpClassified->get_pageinfo();
-$printAd = '<a href="'.get_bloginfo('wpurl').'/?page_id='.$pageinfo["ID"].'&_action=prtad&aid='.$post->ads_id.'"><img src="' . $wpClassified->plugin_url . '/images/print.jpg" class="imgMiddle"></a>'; 
+$rand = rand(1000, 50000);
+$fileUrl = $wpClassified->plugin_url . '/cache/'. $rand . '.html';
+
+wpcPrintAd($rand, $post->ads_id);
+$printAd .= '<a href="'. $fileUrl .'" target="_blank" onclick="return popp('. $fileUrl . ','. $wpcSettings['slug']. ');"><img src="' . $wpClassified->plugin_url . '/images/print.jpg" class="imgMiddle"></a></div>';
 echo $printAd;
 
 ?>

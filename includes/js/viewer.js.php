@@ -3,6 +3,17 @@
 // Last updated: Jan 22nd, 2007
 ?>
 <script type="text/javascript">
+
+
+function pop(file,name){
+rss = window.open(file,name,"location=1,status=1,scrollbars=1,width=680,height=800");
+rss.moveTo(0,0);
+rss.focus();
+return false;
+}
+
+
+
 var thumbnailviewer={
 enableTitle: true, //Should "title" used as description?
 enableAnimation: false, //Enable nimation?

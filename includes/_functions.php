@@ -49,7 +49,7 @@ function wpcHeader(){
 	<?php
 	//
 	$wpClassified->cleanUp();
-	include_once (dirname(__FILE__).'/_rss.php');	
+	include_once (dirname(__FILE__).'/_rss.php');
 
 
 	$today = time();
@@ -145,19 +145,10 @@ function wpcFooter(){
 	if($wpcSettings['rss_feed']=='y'){
 		$filename = $wpClassified->plugin_url . '/cache/wpclassified.xml';
 		?>
-		<script type="text/javascript">
-		function pop (file,name){
-		rsswindow = window.open (file,name,"location=1,status=1,scrollbars=1,width=680,height=800");
-		rsswindow.moveTo(0,0);
-		rsswindow.focus();
-		return false;
-		}
-		</script> 
 		<div class="rssIcon">
-		<a href="<?php echo $filename; ?>" target="_blank" onclick="return pop('<?php echo $filename; ?>','<?php echo $wpcSettings['slug'] ?>','f1,f2,f3');"><?php echo $wpcSettings['slug'] ?> RSS</a></div>
+		<a href="<?php echo $filename; ?>" target="_blank" onclick="return pop('<?php echo $filename; ?>','<?php echo $wpcSettings['slug'] ?>');"><?php echo $wpcSettings['slug'] ?> RSS</a></div>
 		<?php
 	}
-
 	if ($wpcSettings['show_credits']=='y'){
 		echo "<div class=\"smallTxt\">&nbsp;&nbsp;" .stripslashes($wpcSettings['credit_line']) . "</div>";
 	}
@@ -365,23 +356,22 @@ function wpcEditAd(){
 		}
 	} 
 	if ($displayform==true){
-
 		$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id WHERE ads_id = '".(int)$_GET['aid']."'";
-
 		$postinfos = $wpdb->get_results($sql);
 		$postinfo = $postinfos[0];
- 
 		include(dirname(__FILE__)."/editAd_tpl.php");
 	}
 }
 
 
-function wpcPrintAd() {
+
+function wpcPrintAd($file, $aid) {
 	global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang, $postinfo, $wpClassified;
 	$wpcSettings = get_option('wpClassified_data');
+	$filename = $wpClassified->cache_dir . $file . '.html';
+	
 	$userfield = $wpClassified->get_user_field();
 	$pageinfo = $wpClassified->get_pageinfo();
-	$aid = (int)$_GET['aid'];
 
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$table_prefix}wpClassified_ads_subjects ON ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" . $aid;
 	$post = $wpdb->get_row($sql);
@@ -395,12 +385,14 @@ function wpcPrintAd() {
 
 	$array = preg_split('/\#\#\#/', $post->image_file);
 	$submitter = $postinfo['author'];
-	//wpc_header();
-	$displayform = true;
-	if ($displayform == true) {
-		include(dirname(__FILE__)."/printAd_tpl.php");
-	}
+
+	$fp = fopen($filename, 'w');
+	ob_start(); 
+	include(dirname(__FILE__)."/printAd_tpl.php");
+	$contents = ob_get_clean();
+	fwrite($fp, $contents);
 }
+
 
 function wpcSendAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $PHP_SELF, $lang, $wpClassified;

@@ -11,8 +11,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) {
 
 
 $filename = $wpClassified->cache_dir . 'wpclassified.xml';
-$fp = fopen($filename, 'w');
-ob_start();
+
 $wpcSettings = get_option('wpClassified_data');
 $limit=$wpcSettings['rss_feed_num'];
 if(!isset($limit)) $limit=20;
@@ -49,6 +48,10 @@ if($posts) {
 		$rssItem[]=$item;
 	}
 }
+
+$fp = fopen($filename, 'w');
+ob_start();
+
 if (empty($wp)) {
 	require_once('wp-config.php');
 	wp('feed=rss2');
@@ -69,11 +72,14 @@ xmlns:dc="http://purl.org/dc/elements/1.1/" <?php do_action('rss2_ns'); ?>>
 	<pubDate><?php echo date("D, d-M-Y"); ?> 00:00:00 UTC</pubDate>
 
 <?php
+
 $contents = ob_get_clean();
 fwrite($fp, $contents);
+
 /*
 	<atom:link href="<?php echo wpcRssFilter($atomLink) ?>" rel="self" type="application/rss+xml" />
 */
+
 ?>
 <?php do_action('rss2_head'); ?>
 <?php foreach($rssItem as $item): ?>

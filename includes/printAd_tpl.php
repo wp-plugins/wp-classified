@@ -10,8 +10,8 @@
 */
 
 ?>
-
 <html>
+<meta http-equiv="Content-Type" content="text/html; charset='<?php echo get_bloginfo('charset'); ?>'">
 <head>
 <title><?php echo $wpcSettings['wpClassified_slug']; ?></title>
 </head>
