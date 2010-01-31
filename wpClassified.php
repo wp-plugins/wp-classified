@@ -104,10 +104,10 @@ class WP_Classified {
 		add_menu_page($this->menu_name , $this->menu_name ,'administrator', __FILE__, array(&$this, 'welcome'), $this->plugin_url . '/images/wpc.gif');
 		add_submenu_page(__FILE__, 'wpclassified_settings', 'wpclassified_settings', 'administrator', 'wpcSettings', array(&$this, 'wpcSettings'));
 		for ($i=0; $i<count($wpcAdminPages); $i++){
-		  $link = $wpcAdminPages[$i];
-		  add_submenu_page(__FILE__, $link['name'], $link['name'], 'administrator', $link['arg'], $link['prg']);
+			$link = $wpcAdminPages[$i];
+			add_submenu_page(__FILE__, $link['name'], $link['name'], 'administrator', $link['arg'], $link['prg']);
 		}
-		add_management_page($this->menu_name, $this->menu_name, 'administrator', $this->plugin_name, 'wpclassified_admin_page'); 
+		//add_management_page($this->menu_name, $this->menu_name, 'administrator', $this->plugin_name, 'wpclassified_admin_page'); 
 	}
 	 
 	function welcome(){
