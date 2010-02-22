@@ -14,6 +14,7 @@ This plugin allows you to add a simple classified page in to your wordpress blog
 The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
 default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
 
+Please test the plugin with your theme on a develop machine or a local machine, if the test is successful install it on the production machine.
 
 Demo link: http://www.forgani.com/classified/
 
