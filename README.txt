@@ -38,10 +38,10 @@ e.g.
 4. Go to the "Manage" tab of your WP. 
 You have now there a new tab called "wpClassified" to configure the plugin.
 
+Add the public directory (the public folder must have write permission)
+and make the following folders writeable (chmod 777) :
 
-You will need to make the following folders writeable (chmod 777) :
-
-wp-content//wp-classified/
+wp-content/public/wp-classified/
 wp-content/plugins/wp-classified/cache
 
 
