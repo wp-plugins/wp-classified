@@ -314,9 +314,13 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&adm_arg=<?php echo $_GE
 
 
 function wpcAdmCountAds($id){
-	global $wpdb, $table_prefix;
-	$ads = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$id)."' AND status = 'active'")-1;
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET ads = '".$ads."' WHERE ads_subjects_id = '".((int)$id)."'");
+  global $wpdb, $table_prefix;
+  $ads = $wpdb->get_var("SELECT count(*) FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$id)."' AND status = 'active'")-1;
+  //echo "\n" . "--->" . $ads . "\n";
+  $sql = "UPDATE {$table_prefix}wpClassified_ads_subjects SET ads = '".$ads."' WHERE ads_subjects_id = '".((int)$id)."'";
+  //echo "\n" . "--->" . $sql . "\n";
+  $wpdb->query($sql);
+  
 }
 
 
@@ -392,11 +396,13 @@ function wpcAdmDeleteImg(){
 
 
 function wpcAdmActivateAd($id){
-	global $table_prefix, $wpdb;
-	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".$id."'");
+	global $_GET, $table_prefix, $wpdb;
+	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads WHERE ads_id =".$id);
 	$new = ($cur=='active')?"inactive":"active";
-	$sql = "UPDATE {$table_prefix}wpClassified_ads SET status = '".$new."' WHERE ads_id = '".$id."'";
-	$wpdb->query($sql);
+  
+	$updateSql = "UPDATE {$table_prefix}wpClassified_ads SET status = '".$new."' WHERE ads_id=".$id;
+   //echo $cur . "--->" . $updateSql;
+	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET status='".$new."' WHERE ads_id=".$id);
 	wpcAdmCountAds($id);
 }
 
