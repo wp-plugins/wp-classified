@@ -394,23 +394,23 @@ function wpcAdmDeleteImg(){
 	}
 }
 
-
 function wpcAdmActivateAd($id){
-	global $_GET, $table_prefix, $wpdb;
-	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads WHERE ads_id =".$id);
-	$new = ($cur=='active')?"inactive":"active";
-  
-	$updateSql = "UPDATE {$table_prefix}wpClassified_ads SET status = '".$new."' WHERE ads_id=".$id;
-   //echo $cur . "--->" . $updateSql;
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET status='".$new."' WHERE ads_id=".$id);
-	wpcAdmCountAds($id);
+   global $table_prefix, $wpdb;
+   $rec = $wpdb->get_row("SELECT status FROM {$table_prefix}wpClassified_ads WHERE ads_id=".$id);
+   $cur = $rec->status;
+   $new = ($cur=='active')?"inactive":"active";
+   $updateSql = "UPDATE {$table_prefix}wpClassified_ads SET status='".$new."' WHERE ads_id=".$id;
+   $wpdb->query($updateSql);
+   //echo $sql . "<br>1" . $rec->status . "-->" . $updateSql;
+   //wpcAdmCountAds($id);
 }
 
 function wpcAdmActivateAdSubject($id){
 	global $table_prefix, $wpdb, $_GET;
-	$cur = $wpdb->get_var("SELECT status FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = '".$id."'");
+   $sql = "SELECT status FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ".$id;
+	$cur = $wpdb->get_var($wpdb->prepare($sql));
 	$new = ($cur=='open')?"closed":"open";
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET status = '".$new."' WHERE ads_subjects_id = '".$id."'");
+	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET status='".$new."' WHERE ads_subjects_id=".$id);
 	wpcSyncCount($_GET['lid']);
 }
 
@@ -438,6 +438,7 @@ function wpcAdmDeleteAdSubject(){
 		return false;
 	}
 }
+
 function wpcAdmEditAdSubject(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 
