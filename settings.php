@@ -11,9 +11,9 @@
 //error_reporting(E_ALL);
 
 // include 
-$locale = get_locale();
-list ($lng, $loc) = preg_split('/\_/', $locale);
-$languageFile = dirname(__FILE__).'/language/lang_'. $lng . '.php';
+$locale=get_locale();
+list ($lng, $loc)=preg_split('/\_/', $locale);
+$languageFile=dirname(__FILE__).'/language/lang_'. $lng . '.php';
 if (file_exists($languageFile)) {	
 	require_once($languageFile);
 } else {
@@ -26,25 +26,25 @@ require_once (dirname(__FILE__).'/admin.php');
 require_once (dirname(__FILE__).'/captcha_class.php');
 
 
-if (!isset($_GET)) $_GET = $HTTP_GET_VARS;
-if (!isset($_POST)) $_POST = $HTTP_POST_VARS;
-if (!isset($_SERVER)) $_SERVER = $HTTP_SERVER_VARS;
-if (!isset($_COOKIE)) $_COOKIE = $HTTP_COOKIE_VARS;
+if (!isset($_GET)) $_GET=$HTTP_GET_VARS;
+if (!isset($_POST)) $_POST=$HTTP_POST_VARS;
+if (!isset($_SERVER)) $_SERVER=$HTTP_SERVER_VARS;
+if (!isset($_COOKIE)) $_COOKIE=$HTTP_COOKIE_VARS;
 
 
 global $table_prefix, $wpdb, $wpmuBaseTablePrefix;
-	if (!$table_prefix) $table_prefix = $wpdb->prefix;
+	if (!$table_prefix) $table_prefix=$wpdb->prefix;
 	if (!$wpmuBaseTablePrefix) $wpmuBaseTablePrefix=$table_prefix;
 
 
-$wpcAdminMenu = array(
+$wpcAdminMenu=array(
 	array('name'=>'Add/Edit Categories','arg'=>'wpcStructure'),
 	array('name'=>'Edit/Remove Ads','arg'=>'wpcModify'),
 	array('name'=>'Users Admin','arg'=>'wpcUsers'),
 	array('name'=>'Utilities','arg'=>'wpcUtilities'),
 );
 
-$wpcAdminPages = array(
+$wpcAdminPages=array(
 	array('name'=>'Add/Edit Categories','arg'=>'wpcStructure','prg'=>'adm_structure_process'),
 	array('name'=>'Edit/Remove Ads','arg'=>'wpcModify','prg'=>'adm_modify_process'),
 	array('name'=>'Users Admin','arg'=>'wpcUsers','prg'=>'adm_users_process'),
@@ -57,9 +57,9 @@ function wpcTopLink(){
 	if (basename($_SERVER['PHP_SELF'])!='index.php'){
 		return "[[WP_CLASSIFIED]]";
 	} else {
-		$wpClassified_settings = get_option('wpClassified_data');
+		$wpClassified_settings=get_option('wpClassified_data');
 		if ($_POST['search_terms']) {
-			$_GET['_action'] = "search";
+			$_GET['_action']="search";
 		}
 		switch ($_GET['_action']){
 			default:
@@ -67,40 +67,40 @@ function wpcTopLink(){
 				return "Classified";
 			break;
 			case "search":
-				$search_title = "Searching For: ".$_POST['search_terms'];
+				$search_title="Searching For: ".$_POST['search_terms'];
 				return $search_title;
 			break;
 			case "vl":
-				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
+				$lists=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				 LEFT JOIN {$table_prefix}wpClassified_categories
-				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+				 ON {$table_prefix}wpClassified_categories.categories_id={$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id='".($_GET['lid']*1)."'", ARRAY_A);
 				return wpcPublicLink("index", array("name"=>"Classified"))." ".$lists['name'];
 			break;
 			case "pa":
-				$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
+				$lists=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 					 LEFT JOIN {$table_prefix}wpClassified_categories
-					 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-					 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+					 ON {$table_prefix}wpClassified_categories.categories_id={$table_prefix}wpClassified_lists.wpClassified_lists_id
+					 WHERE {$table_prefix}wpClassified_lists.lists_id='".($_GET['lid']*1)."'", ARRAY_A);
 					return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - Ads New Ads";
 			break;
 			case "ea":
-				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+				$adsInfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
-					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
+					 ON {$table_prefix}wpClassified_lists.lists_id={$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$wpmuBaseTablePrefix}users
-					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+					 ON {$wpmuBaseTablePrefix}users.ID={$table_prefix}wpClassified_ads_subjects.author
+					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id='".($_GET['asid']*1)."'", ARRAY_A);
 
 				return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".wpcPublicLink("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
 			break;
 			case "va":
-				$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+				$adsInfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
-					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
+					 ON {$table_prefix}wpClassified_lists.lists_id={$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$wpmuBaseTablePrefix}users
-					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+					 ON {$wpmuBaseTablePrefix}users.ID={$table_prefix}wpClassified_ads_subjects.author
+					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id='".($_GET['asid']*1)."'", ARRAY_A);
 				return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified", array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
 				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
 			break;
@@ -114,18 +114,18 @@ function wpcHeaderLink(){
 	global $_GET, $_POST, $table_prefix, $wpmuBaseTablePrefix, 
 	$wpdb, $_SERVER, $lang, $wp_rewrite, $wpClassified;
 	
-	$pageinfo = $wpClassified->get_pageinfo();
-	$page_id = $pageinfo['ID'];
-	if($wp_rewrite->using_permalinks()) $delim = "?";
-	else $delim = "&amp;";
-	$perm = get_permalink($page_id);
-	$main_link = $perm . $delim;
+	$pageinfo=$wpClassified->get_pageinfo();
+	$page_id=$pageinfo['ID'];
+	if($wp_rewrite->using_permalinks()) $delim="?";
+	else $delim="&amp;";
+	$perm=get_permalink($page_id);
+	$main_link=$perm . $delim;
 
-	$wpClassified_settings = get_option('wpClassified_data');
+	$wpClassified_settings=get_option('wpClassified_data');
 	if (isset($_POST['search_terms'])) {
-		$_GET['_action'] = "search";
+		$_GET['_action']="search";
 	} else {
-		$_POST['search_terms'] = '';
+		$_POST['search_terms']='';
 	}
 	switch ($_GET['_action']){
 		default:
@@ -133,40 +133,40 @@ function wpcHeaderLink(){
 			return "<a href=\"".$main_link."_action=classified\">Main</a>";
 		break;
 		case "search":
-			$search_title = "Searching for: ".$_POST['search_terms'];
+			$search_title="Searching for: ".$_POST['search_terms'];
 			return $search_title;
 		break;
 		case "vl":
-			$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
+			$lists=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 			LEFT JOIN {$table_prefix}wpClassified_categories
-			ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-			WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+			ON {$table_prefix}wpClassified_categories.categories_id={$table_prefix}wpClassified_lists.wpClassified_lists_id
+			WHERE {$table_prefix}wpClassified_lists.lists_id='".($_GET['lid']*1)."'", ARRAY_A);
 				return wpcPublicLink("index", array("name"=>"Classified"))." ".$lists['name'];
 		break;
 		case "pa":
-			$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
+			$lists=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
 				 LEFT JOIN {$table_prefix}wpClassified_categories
-				 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
-				 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+				 ON {$table_prefix}wpClassified_categories.categories_id={$table_prefix}wpClassified_lists.wpClassified_lists_id
+				 WHERE {$table_prefix}wpClassified_lists.lists_id='".($_GET['lid']*1)."'", ARRAY_A);
 
 			return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified", array("name"=>$lists["name"], "name"=>$lists["name"], "lid"=>$lists['lists_id']))." - " . $lang['_ADDANNONCE'];
 		break;
 		case "ea":
-			$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+			$adsInfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 				 LEFT JOIN {$table_prefix}wpClassified_lists
-				 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
+				 ON {$table_prefix}wpClassified_lists.lists_id={$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 				 LEFT JOIN {$wpmuBaseTablePrefix}users
-				 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-				 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+				 ON {$wpmuBaseTablePrefix}users.ID={$table_prefix}wpClassified_ads_subjects.author
+				 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id='".($_GET['asid']*1)."'", ARRAY_A);
 			return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".wpcPublicLink("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." - Edit Ads";
 		break;
 		case "va":
-			$adsInfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
+			$adsInfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
 					 LEFT JOIN {$table_prefix}wpClassified_lists
-					 ON {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
+					 ON {$table_prefix}wpClassified_lists.lists_id={$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
 					 LEFT JOIN {$wpmuBaseTablePrefix}users
-					 ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author
-					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".($_GET['asid']*1)."'", ARRAY_A);
+					 ON {$wpmuBaseTablePrefix}users.ID={$table_prefix}wpClassified_ads_subjects.author
+					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id='".($_GET['asid']*1)."'", ARRAY_A);
 
 			return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified",
 				array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
@@ -178,7 +178,7 @@ function wpcHeaderLink(){
 function wpClassified_adm_page(){
 	global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix;
 	get_currentuserinfo();
-	$wpcSettings = get_option('wpClassified_data');
+	$wpcSettings=get_option('wpClassified_data');
 	?>
 	
 	<div class="wrap">
@@ -210,7 +210,7 @@ function wpClassified_adm_page(){
 function wpClassified_process(){
 	global $_GET, $_POST, $table_prefix, $wpdb, $user_ID, $user_identity;
 	if (!isset($msg)) $msg='';
-	$wpcSettings = get_option('wpClassified_data');
+	$wpcSettings=get_option('wpClassified_data');
 	if (!isset($_GET['_action'])) $_GET['_action']='';
 	if (is_user_logged_in()) {
 		get_currentuserinfo();
@@ -234,15 +234,15 @@ function adm_structure_process(){
 	global $_GET, $_POST, $table_prefix, $PHP_SELF, $wpdb, $wpClassified;
 	print wpcAdminMenu();
 	$wpClassified->showCategoryImg();
-	$t = $table_prefix.'wpClassified';
-	$tab = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'");
+	$t=$table_prefix.'wpClassified';
+	$tab=$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'");
 	if(!$tab) {
 		echo "<h3>No wpClassified tables found in database, May be you simply forget to save settings?</h3>";
 	}	
 	switch ($_GET['adm_action']){
 		case "saveCategory":
 			if ($_GET['categories_id']==0){
-				$position = $wpdb->get_var("SELECT MAX(position) FROM {$table_prefix}wpClassified_categories")+1;
+				$position=$wpdb->get_var("SELECT MAX(position) FROM {$table_prefix}wpClassified_categories")+1;
 				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_categories (name, photo, position, status) values (
 				'".	$wpdb->escape($_POST['wpClassified_data']['name']).	"',
 				'". $wpdb->escape($_POST['wpClassified_data']['photo'])."', 
@@ -250,68 +250,75 @@ function adm_structure_process(){
 			} else {
 				$wpdb->query("
 					UPDATE {$table_prefix}wpClassified_categories 
-					SET name = '".$wpdb->escape($_POST['wpClassified_data']['name'])."',
-						photo = '".$wpdb->escape($_POST['wpClassified_data']['photo'])."' WHERE categories_id = '".($_GET['categories_id']*1)."'");
+					SET name='".$wpdb->escape($_POST['wpClassified_data']['name'])."',
+						photo='".$wpdb->escape($_POST['wpClassified_data']['photo'])."' WHERE categories_id='".($_GET['categories_id']*1)."'");
 			}
-			$msg = "Classifieds Category Saved!";
+			$msg="Classifieds Category Saved!";
 		break;
 		case "saveList":
-			if ($_GET['lid']==0){
-				$position = $wpdb->get_var("SELECT MAX(position) FROM {$table_prefix}wpClassified_lists")+1;
-				$wpdb->query("INSERT INTO {$table_prefix}wpClassified_lists (wpClassified_lists_id, name, description, position, status) values ('".($_POST['wpClassified_data']['lists_id']*1)."', '".$wpdb->escape($_POST['wpClassified_data']['name'])."', '".$wpdb->escape($_POST['wpClassified_data']['description'])."', '".$position."', '".$wpdb->escape($_POST['wpClassified_data']['status'])."')");
-			} else {
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET status = '".$wpdb->escape($_POST['wpClassified_data']['status'])."', wpClassified_lists_id = '".($_POST['wpClassified_data']['lists_id']*1)."', name = '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['name']))."', description = '".$wpdb->escape(stripslashes($_POST['wpClassified_data']['description']))."' WHERE lists_id = '".($_GET['lid']*1)."'");
+			$position=$wpdb->get_var("SELECT MAX(position) FROM {$table_prefix}wpClassified_lists")+1;
+         $nameValue=$wpdb->escape($_POST['wpClassified_data']['name']);
+         $descriptionValue = $wpdb->escape(stripslashes($_POST['wpClassified_data']['description']));
+         $list_id = $_POST['wpClassified_data']['wpClassified_lists_id'];
+         if ($_GET['lid']==0){
+           if (strlen($nameValue) > 3)
+             $wpdb->query("INSERT INTO {$table_prefix}wpClassified_lists (wpClassified_lists_id, name, description, position, status)
+              values ('".$list_id."', '".$nameValue."', '".$descriptionValue."', '".$position."', '".$wpdb->escape($_POST['wpClassified_data']['status'])."')");
+         } else {
+           if (strlen($nameValue) > 3 && $list_id > 0)
+             $wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET status='".$wpdb->escape($_POST['wpClassified_data']['status'])."',
+              wpClassified_lists_id='".$list_id."', name='".$nameValue."', description='".$descriptionValue."' WHERE lists_id=".$_GET['lid']*1);
 			}
-			$msg = "List Saved!";
+			$msg="List Saved!";
 		break;
 		case "deleteCategory":			
-			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_categories WHERE categories_id='".($_GET['categories_id']*1)."'");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id NOT IN (SELECT categories_id FROM {$table_prefix}wpClassified_categories)");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_ads_subjects_id NOT IN (SELECT lists_id FROM {$table_prefix}wpClassified_lists)");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 		break;
 		case "deleteList":
-			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'");
+			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_lists WHERE lists_id='".($_GET['lid']*1)."'");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE wpClassified_lists_id NOT IN (SELECT lists_id FROM {$table_prefix}wpClassified_lists)");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 			$wpdb->query("DELETE FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id NOT IN (SELECT ads_subjects_id FROM {$table_prefix}wpClassified_ads_subjects)");
 		break;
 		case "moveupCategory":
-			$ginfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'", ARRAY_A);
-			$above = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE position < '".$ginfo['position']."' ORDER BY position DESC", ARRAY_A);
+			$ginfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id='".($_GET['categories_id']*1)."'", ARRAY_A);
+			$above=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE position < '".$ginfo['position']."' ORDER BY position DESC", ARRAY_A);
 			if ($above['categories_id']>0){
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position = '".$above['position']."' WHERE categories_id = '".($_GET['categories_id']*1)."'");
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position = '".$ginfo['position']."' WHERE categories_id = '".$above['categories_id']."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position='".$above['position']."' WHERE categories_id='".($_GET['categories_id']*1)."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position='".$ginfo['position']."' WHERE categories_id='".$above['categories_id']."'");
 			}
-			$msg = "Category Moved Up";
+			$msg="Category Moved Up";
 		break;
 		case "moveupList":
-			$ginfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
-			$above = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id = '".$ginfo['lists_id']."' && position < '".$ginfo['position']."' ORDER BY position DESC", ARRAY_A);
+			$ginfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id='".($_GET['lid']*1)."'", ARRAY_A);
+			$above=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id='".$ginfo['lists_id']."' && position < '".$ginfo['position']."' ORDER BY position DESC", ARRAY_A);
 			if ($above['lists_id']>0){
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position = '".$above['position']."' WHERE lists_id = '".($_GET['lid']*1)."'");
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position = '".$ginfo['position']."' WHERE lists_id = '".$above['lists_id']."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position='".$above['position']."' WHERE lists_id='".($_GET['lid']*1)."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position='".$ginfo['position']."' WHERE lists_id='".$above['lists_id']."'");
 			}
-			$msg = "List Moved Up";
+			$msg="List Moved Up";
 		break;
 		case "movedownCategory":
-			$ginfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'", ARRAY_A);
-			$above = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE position > '".$ginfo['position']."' ORDER BY position ASC", ARRAY_A);
+			$ginfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id='".($_GET['categories_id']*1)."'", ARRAY_A);
+			$above=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE position > '".$ginfo['position']."' ORDER BY position ASC", ARRAY_A);
 			if ($above['categories_id']>0){
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position = '".$above['position']."' WHERE categories_id = '".($_GET['categories_id']*1)."'");
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position = '".$ginfo['position']."' WHERE categories_id = '".$above['categories_id']."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position='".$above['position']."' WHERE categories_id='".($_GET['categories_id']*1)."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_categories SET position='".$ginfo['position']."' WHERE categories_id='".$above['categories_id']."'");
 			}
-			$msg = "Category Moved Down";
+			$msg="Category Moved Down";
 		break;
 		case "movedownList":
-			$ginfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
-			$above = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id = '".$ginfo['lists_id']."' && position > '".$ginfo['position']."' ORDER BY position ASC", ARRAY_A);
+			$ginfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id='".($_GET['lid']*1)."'", ARRAY_A);
+			$above=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id='".$ginfo['lists_id']."' && position > '".$ginfo['position']."' ORDER BY position ASC", ARRAY_A);
 			if ($above['lists_id']>0){
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position = '".$above['position']."' WHERE lists_id = '".($_GET['lid']*1)."'");
-				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position = '".$ginfo['position']."' WHERE lists_id = '".$above['lists_id']."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position='".$above['position']."' WHERE lists_id='".($_GET['lid']*1)."'");
+				$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET position='".$ginfo['position']."' WHERE lists_id='".$above['lists_id']."'");
 			}
-			$msg = "List Moved Down";
+			$msg="List Moved Down";
 		break;
 	}
 	if ($msg!=''){
@@ -321,9 +328,9 @@ function adm_structure_process(){
 		</p>
 		<?php
 	}
-	$wpcSettings = get_option('wpClassified_data');
+	$wpcSettings=get_option('wpClassified_data');
 	if ($_GET['adm_action']=='editCategory'){
-		$categoryinfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id = '".($_GET['categories_id']*1)."'", ARRAY_A);
+		$categoryinfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_categories WHERE categories_id='".($_GET['categories_id']*1)."'", ARRAY_A);
 	?>
 	<p>
 	<form method="post" id="admCatStructure" name="admCatStructure" action="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveCategory&categories_id=<?php echo $_GET['categories_id'];?>">
@@ -338,13 +345,13 @@ function adm_structure_process(){
 	<?php
 
 	echo "\n<select name=\"topImage\" onChange=\"showCatimage()\">";
-	$rep = $wpClassified->plugin_dir . '/images/';
+	$rep=$wpClassified->plugin_dir . '/images/';
 	$handle=opendir($rep);
-	while ($file = readdir($handle)) {
-		$filelist[] = $file;
+	while ($file=readdir($handle)) {
+		$filelist[]=$file;
 	}
 	asort($filelist);
-	while (list ($key, $file) = each ($filelist)) {
+	while (list ($key, $file)=each ($filelist)) {
 		
 		if (!ereg(".gif|.jpg|.png",$file)) {
 			if ($file == "." || $file == "..") $a=1;
@@ -371,8 +378,8 @@ function adm_structure_process(){
 	</p>
 	<?php
 	} elseif ($_GET['adm_action']=='editList'){
-		$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
-		$classifiedinfo = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id = '".($_GET['lid']*1)."'", ARRAY_A);
+		$categories=$wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
+		$classifiedinfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE lists_id='".($_GET['lid']*1)."'", ARRAY_A);
 	?>
 	<p>
 	<form method="post" id="admLstStructure" name="admLstStructure" action="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=saveList&lid=<?php echo $_GET['lid'];?>">
@@ -386,16 +393,16 @@ function adm_structure_process(){
 				<td><textarea name="wpClassified_data[description]" rows="3" cols="80"><?php echo $classifiedinfo['description'];?></textarea></td>
 			</tr>
 			<tr>
-				<th align="right">Parent Category"</th>
-				<td><select name="wpClassified_data[lists_id]">
+				<th align="right">Parent Category</th>
+				<td><select name="wpClassified_data[wpClassified_lists_id]">
 					<?php
-			for ($x=0; $x<count($categories); $x++){
-				$category = $categories[$x];
-				$sel = ($category->categories_id==$classifiedinfo['lists_id'])?" selected":"";
-				echo "<option value=\"".$category->categories_id."\"$sel>".$category->name."</option>\n";
-			}
-			?>
-			</select></td>
+                for ($x=0; $x<count($categories); $x++){
+                    $category=$categories[$x];
+                    $sel=($category->categories_id==$classifiedinfo['wpClassified_lists_id'])?" selected":"";
+                    echo "<option value=\"".$category->categories_id."\"$sel>".$category->name."</option>\n";
+                }
+              ?>
+            </select></td>
 			</tr>
 			<tr>
 				<th align="right">List Status</th>
@@ -414,25 +421,25 @@ function adm_structure_process(){
 	</p>
 	<?php
 	} else {
-		$liststatuses = array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
-		$categories = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
-		$tlists = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists ORDER BY position ASC");
+		$liststatuses=array(active=>'Open',inactive=>'Closed',readonly=>'Read-Only');
+		$categories=$wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_categories ORDER BY position ASC");
+		$tlists=$wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_lists ORDER BY position ASC");
 		?>
 		<script language=javascript>
 		<!--
 		function deleteCategory(x, y){
 			if (confirm("Are you sure you wish to delete the category:\n"+x)){
-				document.location.href = y;
+				document.location.href=y;
 			}
 		}
 		function deleteList(x, y){
 			if (confirm("Are you sure you wish to delete the list:\n"+x)){
-				document.location.href = y;
+				document.location.href=y;
 			}
 		}
 		function deleteclassified(x, y){
 			if (confirm("Are you sure you wish to delete the classified:\n"+x)){
-				document.location.href = y;
+				document.location.href=y;
 			}
 		}
 		-->
@@ -443,7 +450,7 @@ function adm_structure_process(){
 		 <input<?php echo (count($categories)<1)?" disabled":"";?> type=button value="Add List" onclick="document.location.href='<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editList&lid=0';">
 		<?php
 		for ($i=0; $i<count($tlists); $i++){
-			$lists[$tlists[$i]->wpClassified_lists_id][] = $tlists[$i];
+			$lists[$tlists[$i]->wpClassified_lists_id][]=$tlists[$i];
 		}
   ?>
   <hr>
@@ -459,7 +466,7 @@ function adm_structure_process(){
 	</tr>
   <?php
 	for ($x=0; $x<count($categories); $x++){
-		$category = $categories[$x];
+		$category=$categories[$x];
 	?>
 		<tr>
 		<td style="border:1px #C0C0C0 solid; padding-left:2px"><a style="text-decoration: none;" href="javascript:deleteCategory('<?php echo rawurlencode($category->name);?>', '<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=deleteCategory&categories_id=<?php echo $category->categories_id;?>');"><img border=0 src="<?php echo $wpClassified->plugin_url; ?>/images/delete.png"></a></td>
@@ -467,7 +474,7 @@ function adm_structure_process(){
 		<td colspan=4 style="border:1px #C0C0C0 solid; padding-left:2px"><a href="<?php echo $PHP_SELF;?>?page=wpcStructure&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=editCategory&categories_id=<?php echo $category->categories_id;?>"><?php echo $category->name;?></a></td>
 		</tr>
 		<?php
-		$tfs = $lists[$category->categories_id];
+		$tfs=$lists[$category->categories_id];
 		for ($i=0; $i<count($tfs); $i++){
 			?>
 			<tr>
@@ -498,14 +505,14 @@ function wpcSearchHighlight($keywords,$post,$bgcolors='yellow'){
 	}
 	$word_no=0;
 	foreach($keywords as $keyword){
-		$regex1 = ">[^<]*(";
-		$regex2 = ")[^<]*<";
+		$regex1=">[^<]*(";
+		$regex2=")[^<]*<";
 		preg_match_all("/".$regex1.$keyword.$regex2."/i", $post, $matches, PREG_PATTERN_ORDER);
 		foreach($matches[0] as $match){
 			preg_match("/$keyword/i", $match, $out);
-			$search_word = $out[0];
-			$newtext = str_replace($search_word,"<span style=\"background-color:".$bgcolors[($word_no % $no_colors)].";\">$search_word</span>", $match);
-			$post = str_replace($match, $newtext, $post);
+			$search_word=$out[0];
+			$newtext=str_replace($search_word,"<span style=\"background-color:".$bgcolors[($word_no % $no_colors)].";\">$search_word</span>", $match);
+			$post=str_replace($match, $newtext, $post);
 		}
 		$word_no++;
 	}
@@ -514,23 +521,23 @@ function wpcSearchHighlight($keywords,$post,$bgcolors='yellow'){
 
 function wpcPostHtml($post){
 	global $_GET, $_POST, $user_login, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $table_prefix, $wpdb;
-	$wpcSettings = get_option('wpClassified_data');
+	$wpcSettings=get_option('wpClassified_data');
 	get_currentuserinfo();
 	switch ($wpcSettings["edit_style"]){
 		case "plain":
 		default:
-			$post->post = nl2br(str_replace("<", "&lt;", $post->post));
+			$post->post=nl2br(str_replace("<", "&lt;", $post->post));
 			break;
 		case "tinymce":
-			$post->post = nl2br($post->post);
+			$post->post=nl2br($post->post);
 			break;
 	}
 	if ($wpcSettings['filter_posts']=='y'){
-		$post->post = apply_filters('comment_text', nl2br($post->post));
+		$post->post=apply_filters('comment_text', nl2br($post->post));
 	}
 	if (isset($_GET['search_words'])){
-		$keyword = explode(" ", $_GET['search_words']);
-	} else $keyword = '';
+		$keyword=explode(" ", $_GET['search_words']);
+	} else $keyword='';
 	return $post->post;
 }
 
@@ -538,24 +545,24 @@ function wpcPostHtml($post){
 //mohamm
 function adm_users_process(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $wpmuBaseTablePrefix, $wpClassified;
-	$wpcSettings = get_option('wpClassified_data');
+	$wpcSettings=get_option('wpClassified_data');
 	print wpcAdminMenu();
 	if ($_GET["adm_action"]=="saveuser"){
-		$id = (int)$_GET["id"];
-		$update = array();
+		$id=(int)$_GET["id"];
+		$update=array();
 		foreach ($_POST["user_info"] as $k=>$v){
-			$update[] = "$k = '".$wpdb->escape($v)."'";
+			$update[]="$k='".$wpdb->escape($v)."'";
 		}
-		$wpdb->query("update {$table_prefix}wpClassified_user_info set ".implode(", ", $update)." where user_info_user_ID = '".$id."'", ARRAY_A);
+		$wpdb->query("update {$table_prefix}wpClassified_user_info set ".implode(", ", $update)." where user_info_user_ID='".$id."'", ARRAY_A);
 	}
 
 	switch ($_GET["adm_action"]){
 		default:
 		case "saveuser":
 		case "list":
-			$start = (int)$_GET["start"];
-			$perpage = ((int)$_GET["perpage"])?(int)$_GET["perpage"]:20;
-			$searchfields = array(
+			$start=(int)$_GET["start"];
+			$perpage=((int)$_GET["perpage"])?(int)$_GET["perpage"]:20;
+			$searchfields=array(
 				($namefield= $wpClassified->get_user_field()),
 				"user_login",
 				"user_nicename",
@@ -563,7 +570,7 @@ function adm_users_process(){
 				"user_url",
 			);
 			if ($_GET["term"]){
-				$where = " WHERE ";
+				$where=" WHERE ";
 				foreach ($searchfields as $field){
 					if ($where!=" WHERE "){
 						$where .= " || ";
@@ -571,20 +578,20 @@ function adm_users_process(){
 					$where .= "{$wpmuBaseTablePrefix}users.".$field." like '%".$wpdb->escape($_GET["term"])."%'";
 				}
 			} else {
-				$where = "";
+				$where="";
 			}
 		  //TODO
-			$sql = "select * from {$wpmuBaseTablePrefix}users
+			$sql="select * from {$wpmuBaseTablePrefix}users
 								LEFT JOIN {$table_prefix}wpClassified_user_info
-								ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID
+								ON {$table_prefix}wpClassified_user_info.user_info_user_ID={$wpmuBaseTablePrefix}users.ID
 								$where
 								ORDER BY {$wpmuBaseTablePrefix}users.".$searchfields[0]." ASC
 								LIMIT $start, $perpage";
-			$all_users = $wpdb->get_results($sql, ARRAY_A);
+			$all_users=$wpdb->get_results($sql, ARRAY_A);
 		  
 
-			$numusers = $wpdb->get_results("select count(*) as numusers from {$wpmuBaseTablePrefix}users $where ", ARRAY_A);
-			$numusers = $numusers[0]["numusers"];
+			$numusers=$wpdb->get_results("select count(*) as numusers from {$wpmuBaseTablePrefix}users $where ", ARRAY_A);
+			$numusers=$numusers[0]["numusers"];
 			?>
 			<div class="wrap">
 			<h2>Users Admin</h2>
@@ -594,7 +601,7 @@ function adm_users_process(){
 				<table width="100%">
 					<tr>
 						<td>Pages: <?php
-						$query_string = "perpage=$perpage&adm_arg=".$_GET["adm_arg"]."&page=wpClassified&term=".urlencode($_GET["term"]);
+						$query_string="perpage=$perpage&adm_arg=".$_GET["adm_arg"]."&page=wpClassified&term=".urlencode($_GET["term"]);
 
 						for ($i=0; $i<($numusers/$perpage); $i++){
 							if ($i*$perpage==$start){
@@ -619,7 +626,7 @@ function adm_users_process(){
 				</tr>
 				<?php		
 				foreach ($all_users as $user){
-				  $bgcolor = ($bgcolor=="#CCCCCC")?"#DDDDDD":"#CCCCCC";
+				  $bgcolor=($bgcolor=="#CCCCCC")?"#DDDDDD":"#CCCCCC";
 				  ?>
 				  <tr bgcolor="<?php echo $bgcolor;?>">
 				  <td align="left"><a href="<?php echo $PHP_SELF;?>?page=wpcUsers&adm_arg=<?php echo $_GET['adm_arg'];?>&adm_action=edit&id=<?php echo $user["ID"];?>&start=<?php echo $start;?>&perpage=<?php echo $perpage;?>&term=<?php echo urlencode($_GET["term"]);?>">Edit</a></td>
@@ -642,15 +649,15 @@ function adm_users_process(){
 			<?php
 		break;
 		case "edit":
-			$user = $wpdb->get_results("select * from {$wpmuBaseTablePrefix}users
+			$user=$wpdb->get_results("select * from {$wpmuBaseTablePrefix}users
 							LEFT JOIN {$table_prefix}wpClassified_user_info
-							ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID
-							WHERE {$wpmuBaseTablePrefix}users.ID = '".(int)$_GET['id']."'", ARRAY_A);
+							ON {$table_prefix}wpClassified_user_info.user_info_user_ID={$wpmuBaseTablePrefix}users.ID
+							WHERE {$wpmuBaseTablePrefix}users.ID='".(int)$_GET['id']."'", ARRAY_A);
 
-			$user = $user[0];
-			$namefield = $wpClassified->get_user_field();
+			$user=$user[0];
+			$namefield=$wpClassified->get_user_field();
 
-			$permissions = array("none"=>"User", "moderator"=>"Moderator", "administrator"=>"Administrator");
+			$permissions=array("none"=>"User", "moderator"=>"Moderator", "administrator"=>"Administrator");
 
 			?>
 			<form method="post" id="admUser" name="admUser" enctype="multipart/form-data"
@@ -673,7 +680,7 @@ function adm_users_process(){
 				<td><select name="wpClassified_user_info[user_info_permission]">
 				<?php
 				foreach ($permissions as $perm=>$name){
-					$sel = ($perm==$user["permission"])?" selected=\"selected\"":"";
+					$sel=($perm==$user["permission"])?" selected=\"selected\"":"";
 					echo "<option value=\"$perm\"$sel>$name</option>\n";
 				}
 				?>
@@ -699,10 +706,10 @@ function adm_users_process(){
 
 function adm_utilities_process(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
-	$t = $table_prefix.'wpClassified';
-	$wpcSettings = get_option('wpClassified_data');
+	$t=$table_prefix.'wpClassified';
+	$wpcSettings=get_option('wpClassified_data');
    print wpcAdminMenu();
-	$exit = FALSE;
+	$exit=FALSE;
 	switch ($_GET["adm_action"]){
 		default:
 		case "list":
@@ -711,7 +718,7 @@ function adm_utilities_process(){
 			$msg .= '<div class="wrap">';
 			$msg .= '<h2>Uninstall wpClassified</h2>';
 			delete_option('wpClassified_data');
-			if($_tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+			if($_tables=$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
 				foreach ($_tables as $table){
 					$wpdb->query("DROP TABLE $table");
 					$msg .= '<font style="color:green;">';
@@ -720,18 +727,18 @@ function adm_utilities_process(){
 				}
 			}
 			$msg .= '</p><p>';
-			$wpdb->query("DELETE FROM {$table_prefix}posts WHERE post_title = '[[WP_CLASSIFIED]]'");
-			$wpdb->query("DELETE FROM {$table_prefix}options WHERE option_name = 'wpClassified_data'");
-			$_table = "";
+			$wpdb->query("DELETE FROM {$table_prefix}posts WHERE post_title='[[WP_CLASSIFIED]]'");
+			$wpdb->query("DELETE FROM {$table_prefix}options WHERE option_name='wpClassified_data'");
+			$_table="";
 			
 
-			$deactivate_url = 'plugins.php?action=deactivate&plugin=wp-classified/wpClassified.php';
+			$deactivate_url='plugins.php?action=deactivate&plugin=wp-classified/wpClassified.php';
 			if(function_exists('wp_nonce_url')) {
-				$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_wp-classified/wpClassified.php');
+				$deactivate_url=wp_nonce_url($deactivate_url, 'deactivate-plugin_wp-classified/wpClassified.php');
 			}
 			$msg .= '<h3><strong><a href='.$deactivate_url.'>Click Here</a> To Finish The Uninstallation And wpClassified Will Be Deactivated Automatically.</strong></h3>';
 			$msg .= '</div>';
-			$exit = TRUE;
+			$exit=TRUE;
 		break;
 	}
 
@@ -760,7 +767,7 @@ function adm_utilities_process(){
 		<td valign="top" style="background-color:#eee;">
 			<ol>
 			<?php
-			if($tables = $wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+			if($tables=$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
 				foreach ($tables as $table){
 					echo '<li>'.$table.'</li>'."\n";
 				}
