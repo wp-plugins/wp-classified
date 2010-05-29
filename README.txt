@@ -11,10 +11,10 @@ Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-cla
 
 This plugin allows you to add a simple classified page in to your wordpress blog.
 
-The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
-default and unchanged Permalink structure. It may work with earlier versions too I have not tested.
+The plugin has been created and successfully tested on Wordpress version 2.8.5 with 
+default and unchanged Permalink structure. It may work with earlier versions too, but I have not tested yet.
 
-Please test the plugin with your theme on a develop machine or a local machine, if the test is successful install it on the production machine.
+Please test the plugin with your theme on a test or a local machine, if the test is successful, then install it on the production machine.
 
 Demo link: http://www.forgani.com/classified/
 
@@ -22,16 +22,15 @@ Demo link: http://www.forgani.com/classified/
 
 == Installation ==
 
-Please made a backup of files and database and test once before using in production.
-Using a local environment and test the plugin before install it on your production environment.
+Please make a backup of files and database and test this plugin before using it in production.
+Please test the plugin on your local machine before you install it in your production environment.
+
 Once again, I take no responsibility...
 
+The below section describes how to install the plugin and get it to work.
 
-This section describes how to install the plugin and get it working.
-Please test the plugin with your theme on a develop machine or a local machine, 
+Please test the plugin with your theme on a test machine or a local machine,
 if the test is successful then install it on the production machine.
-
-e.g.
 
 1. Extract files
 2. Upload 'wp-classified/' folder to your './wp-content/plugins/' directory
@@ -48,7 +47,6 @@ wp-content/plugins/wp-classified/cache
 
 
 == Upgrade Instructions  ==
-
 
    1. Deactivate the plugin from your Wordpress admin panel.
    2. Backup Database tables *_wpClassified_* and files
