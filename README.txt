@@ -34,15 +34,22 @@ if the test is successful then install it on the production machine.
 
 1. Extract files
 2. Upload 'wp-classified/' folder to your './wp-content/plugins/' directory
+
+You also have to create a public directory under wp-content as followed:
+
+wp-content/public/wp-classified/
+
+and chmod the public and cache directories to 777 (writable by the webserver.)
+e.g. 
+chmod -R 777 wp-content/public
+
+wp-content/public/wp-classified/
+wp-content/plugins/wp-classified/cache
+
 3. Login to the administration and go to "admin panel/plugins" and activate the plugin
 4. Go to the "Manage" tab of your WP. 
 You have now there a new tab called "wpClassified" to configure the plugin.
 
-Add the public directory (the public folder must have write permission)
-and make the following folders writeable (chmod 777) :
-
-wp-content/public/wp-classified/
-wp-content/plugins/wp-classified/cache
 
 
 
