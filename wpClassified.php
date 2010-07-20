@@ -326,7 +326,7 @@ class WP_Classified {
 		<table width="99%"><tr><td>
 		<?php
 		//for upgrade versions
-		if (!$wpcSettings['googleID']) $wpcSettings['googleID'] = 'pub-2844370112691023';
+		if (!$wpcSettings['googleID']) $wpcSettings['googleID'] = 'pub-xx4437011269xxxx';
 		if (!$wpcSettings['inform_user_subject']) 
 			 $wpcSettings['inform_user_subject'] = "!sitename reminder:classified ads expiring soon!";
 		if (!$wpcSettings['inform_user_body']) 
