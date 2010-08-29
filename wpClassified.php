@@ -397,12 +397,12 @@ class WP_Classified {
 		if (!$wpcSettings[GADcolor_url]) $wpcSettings[GADcolor_url]= 'FF0000';
 		if (!$wpcSettings[GADposition]) $wpcSettings[GADposition]= 'btn';
 		if (!$wpcSettings[GADproduct]) $wpcSettings[GADproduct]= 'link';
-		if (!$wpcSettings[googleID]) $wpcSettings[googleID] = 'pub-2844370112691023';
+		if (!$wpcSettings[googleID]) $wpcSettings[googleID] = 'pub-xxxxxx';
 		$GADpos = array ('top' => 'top','btn' => 'bottom', 'bth' => 'both','no' => 'none');
 		?>
 		<table width="99%"><tr>
 			<th align="right" valign="top"><a href='https://www.google.com/adsense/' target='google'>Google AdSense Account ID:</a></label></th>
-			<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> example: no, pub-2844370112691023 or ...
+			<td><input type='text' name='wpClassified_data[googleID]' id='wpClassified_data[googleID]' value="<?php echo ($wpcSettings['googleID']);?>" size='22' /><br><span class="smallTxt"> example: no, pub-xxxxx or ...
 			</span></td></tr>
 			
 			<tr>
@@ -620,7 +620,7 @@ class WP_Classified {
 		$wpcSettings['image_width'] = 640;
 		$wpcSettings['image_height'] = 480;
 		$wpcSettings['date_format'] = 'm-d-Y g:i a';
-		$wpcSettings['googleID'] = 'pub-2844370112691023';
+		$wpcSettings['googleID'] = 'pub-xxxxx';
 		$wpcSettings['GADproduct'] = 'link';
 		$wpcSettings['GADformat'] = '468x60';
 		$wpcSettings['GADLformat'] = '468x15';

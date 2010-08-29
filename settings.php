@@ -550,10 +550,13 @@ function adm_users_process(){
 	if ($_GET["adm_action"]=="saveuser"){
 		$id=(int)$_GET["id"];
 		$update=array();
-		foreach ($_POST["user_info"] as $k=>$v){
-			$update[]="$k='".$wpdb->escape($v)."'";
+		// FIXME .. hove to check with the new wp version
+		if (isset($_POST["user_info"])){
+			foreach ($_POST["user_info"] as $k=>$v){
+				$update[]="$k='".$wpdb->escape($v)."'";
+			}
+			$wpdb->query("update {$table_prefix}wpClassified_user_info set ".implode(", ", $update)." where user_info_user_ID='".$id."'", ARRAY_A);
 		}
-		$wpdb->query("update {$table_prefix}wpClassified_user_info set ".implode(", ", $update)." where user_info_user_ID='".$id."'", ARRAY_A);
 	}
 
 	switch ($_GET["adm_action"]){
