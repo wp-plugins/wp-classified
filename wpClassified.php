@@ -64,7 +64,7 @@ add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpCla
 
 class WP_Classified {
   // Sets the version number.
-  var $version = "1.4.1";
+  var $version = "1.4.1-b";
   var $menu_name = 'wpClassified';
   var $plugin_name = 'wp-classified';
   var $plugin_home_url;
@@ -668,10 +668,9 @@ class WP_Classified {
 	}
 
 	function page_handle_content($content){
-		$wpcSettings = get_option('wpClassified_data');
-		$content = preg_replace( "/\[\[WP_CLASSIFIED\]\]/ise", "wpClassified_process()", $content); 
-		return $content;
-	}
+      return preg_replace( "/\[\[WP_CLASSIFIED\]\]/ise", "wpClassified_process()", $content); 
+   }
+
 
 	function page_handle_titlechange($title){
 		$wpcSettings = get_option('wpClassified_data');

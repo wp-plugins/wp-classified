@@ -52,10 +52,12 @@ if($posts) {
 $fp = fopen($filename, 'w');
 ob_start();
 
+/*
 if (empty($wp)) {
 	require_once('wp-config.php');
 	wp('feed=rss2');
 }
+*/
 
 ?>
 <?php echo '<?xml version="1.0" encoding="' . get_settings('blog_charset') . '"?'.'>'; ?>
