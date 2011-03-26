@@ -46,13 +46,9 @@ Changes 1.3.0-b - Sep 13/10/2008
 - Modify to show the last post in footer
 - fix the URL faking bug
 
-
-
 */
 
 // Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
-
-
 
 require_once(dirname(__FILE__).'/settings.php');
 
@@ -722,8 +718,7 @@ class WP_Classified {
 
 	// Widget stuff
 	function widget_init() {
-		if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') )
-		return;
+		if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') ) return;
 		function widget($args) {
 			extract($args);
 			$wpcSettings = get_option('wpClassified_data');	
@@ -733,11 +728,8 @@ class WP_Classified {
 			$fieldsPre="wpc_";
 			$before_tag=stripslashes(get_option($fieldsPre.'before_Tag'));
 			$after_tag=stripslashes(get_option($fieldsPre.'after_Tag'));
-
-			//echo $before_tag . _widget_display($wpcSettings['widget_format']) . $after_tag;
-			echo '<p><ul>' . $this->widget_display($wpcSettings['widget_format']) . '</ul></p>'; 
+			echo '<p><ul>' . widget_display($wpcSettings['widget_format']) . '</ul></p>'; 
 		}
-
 
 		function widget_control() {
 			$wpcSettings = $newoptions = get_option('wpClassified_data');
@@ -761,19 +753,18 @@ class WP_Classified {
 			<input type="hidden" id="wpClassified-submit" name="wpClassified-submit" value="1" />
 			<?php
 		}
-		// TODO
+		
+		function widget_display() {
+		  $wpcSettings = get_option('wpClassified_data');
+		  $out = wpcLastAds($wpcSettings['widget_format']);
+		  return $out;
+		}
+		
 		register_sidebar_widget('wpClassified', 'widget', null, 'wpClassified');
-		// TODO
 		register_widget_control('wpClassified', 'widget_control');
 	}
 
-
-	function widget_display() {
-		$wpcSettings = get_option('wpClassified_data');
-		$out = get_last_ads($wpcSettings['widget_format']);
-		return $out;
-	}
-
+	
 
   function add_admin_head(){
 		$wpcSettings = get_option('wpClassified_data');

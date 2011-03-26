@@ -9,7 +9,7 @@
 * @version 1.3.1-a
 */
 
-if (!isset($_SESSION)) session_start();
+if (!isset($_SESSION)) @session_start();
 
 
 function wpcHeader(){
