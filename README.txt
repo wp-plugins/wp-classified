@@ -107,6 +107,11 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 == Changelog ==
 
+= version 1.4 =
+Jan 27/03/2011
+- fixed the Fixed Widget Sidebar Menu
+- fixed for WP version 3.1
+
 
 = version 1.4 =
 Jan 22/01/2010
