@@ -7,6 +7,7 @@ Tested up to: 2.8.x
 Stable tag: 1.2
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
 
+
 == Description ==
 
 This plugin allows you to add a simple classified page in to your wordpress blog.
@@ -17,7 +18,6 @@ default and unchanged Permalink structure. It may work with earlier versions too
 Please test the plugin with your theme on a test or a local machine, if the test is successful, then install it on the production machine.
 
 Demo link: http://www.forgani.com/classified/
-
 
 
 == Installation ==
@@ -51,8 +51,6 @@ wp-content/plugins/wp-classified/cache
 You have now there a new tab called "wpClassified" to configure the plugin.
 
 
-
-
 == Upgrade Instructions  ==
 
    1. Deactivate the plugin from your Wordpress admin panel.
@@ -62,8 +60,8 @@ You have now there a new tab called "wpClassified" to configure the plugin.
    4. Please Note: in 'Classified Options' page in admin interface please check that all the required fields are filled in and save!
 
 
-== Upgrade Notice ==
 
+== Upgrade Notice ==
 
 Manual Process
 
@@ -74,7 +72,6 @@ You will have to:
 * Deactivate the plugin you currently have on your website (Admin Dashboard->Plugins->Deactivate)
 * Upload/Replace the plugin in your wp-content->plugins
 * Reactivate the plugin
-
 
 
 
@@ -107,11 +104,10 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 == Changelog ==
 
-= version 1.4 =
+= last changes =
 Jan 27/03/2011
 - fixed the Fixed Widget Sidebar Menu
 - fixed for WP version 3.1
-
 
 = version 1.4 =
 Jan 22/01/2010
@@ -123,7 +119,6 @@ fixed for plugin auto-upgrade
 Note: This bugfix release hove to install Manually.
 - fixed for the plugin auto-upgrade. (must test with the next coming version)
 - moved directories public resources to wp-content
-
 
 = version 1.3 =
 
@@ -144,7 +139,6 @@ Changes 1.3.1-a - Jan 20/01/2009
 - add Google AdSense for Classifieds
 - fixed language
 
-
 = version 1.2 =
 
 Changes 1.2.0-e - August 10/2008
@@ -159,7 +153,6 @@ User Side
 - expiration notice reminders to users (The work is Not Finished!) 
 - implement the maximum character limit
 
-
 = version 1.1 =
 
 Changes in 1.1.1 - June 20/2008
@@ -167,11 +160,9 @@ Changes in 1.1.1 - June 20/2008
 - implement RSS Feeds
 - admin email notification
 
-
 Changes in 1.1.0-b - May 15/2008
 - add remove ads that are over x days old 
 - fix some bugs
-
 
 Changes in 1.1.0-a - May 12/2008
 - update delete/modify ads function .
@@ -179,12 +170,10 @@ Changes in 1.1.0-a - May 12/2008
 - fixed some issue which are posted to me.
 - using Permalinks. Example to update .htaccess Rewrite Rules.
 
-
 Changes in 1.0.0 - April 01/2008
 - fix bugs
 - implement a new structure
 - update to display the links to ads at the top of page 
-
 
 
 To support Permalink structure:
@@ -219,9 +208,7 @@ RewriteRule ^classified/([^/\(\)]*)/?  /index.php?pagename=classified [QSA,L,R,N
 </IfModule>
 # END WordPress
 
-
-
 have fun
 
 Mohammad Forgani, Oh Jung Su
-October 25/2009
+March 25/2011
