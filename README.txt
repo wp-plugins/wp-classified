@@ -195,6 +195,10 @@ You can edit the .htaccess file by FTP.
 You use the default .htaccess file and modify the file as follow:
 The redirect should look something like this
 
+####
+#### DO NOT touch your .htaccess file. 						  ####
+#### By default, you do not need to touch the .htaccess file. ####
+####				
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
