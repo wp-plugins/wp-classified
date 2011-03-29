@@ -25,6 +25,14 @@ if (($i+1)==$hm){
 ?>
 
 <div class="wpc_container">
+	<div class="list_ads_top">
+      <?php 
+      $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
+	  echo $addtopicImg;
+	  echo "<span sytle=\"font-size:13px\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
+      ?>
+    </div><!--list_ads_top-->
+    
 	<div class="show_ad">
 		<div class="show_ad_header">
 			<?php
@@ -35,13 +43,10 @@ if (($i+1)==$hm){
 			$file = $wpClassified->public_dir ."/". $array[0];
 			if ( !empty($array[0]) && file_exists($file) ){
 				include (dirname(__FILE__).'/js/viewer.js.php');
-				echo "<div class=\"show_ad_img1\"><a href=\"" . $wpClassified->public_url ."/" . $array[0] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url. "/" . $array[0] . "\" style=\"width: ". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
+				echo "<div class=\"show_ad_img1\"><a href=\"" . $wpClassified->public_url ."/" . $array[0] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url. "/" . $array[0] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"]."px; height:". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
 			}
 			?>
 
-			<div class="show_ad_title">
-			<?php echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a>
-			</div>
 			<div class="show_ad_info">
           Posted By<img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?php echo wpcPostAuthor($post);?> on <img src="<?php echo $wpClassified->plugin_url; ?>/images/cal.gif">
           <?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
@@ -63,12 +68,12 @@ if (($i+1)==$hm){
 		$file = $wpClassified->public_dir ."/". $array[1];
 		if ( !empty($array[1]) && file_exists($file) ){
 			include (dirname(__FILE__).'/js/viewer.js.php');
-			echo "<div class=\"show_ad_img12\"><a href=\"". $wpClassified->public_url . "/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[1] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[1] . "
+			echo "<div class=\"show_ad_img12\"><a href=\"". $wpClassified->public_url . "/" . $array[1] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[1] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px; height:". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>"; //<br>" .$array[1] . "
 		} 
 		$file = $wpClassified->public_dir ."/". $array[2];
 		if ( !empty($array[2]) && file_exists($file) ){
 			include (dirname(__FILE__).'/js/viewer.js.php');
-			echo "<div class=\"show_ad_img12\"><a href=\"". $wpClassified->public_url . "/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[2] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px;\"></a></div>"; //<br>" .$array[2] . "
+			echo "<div class=\"show_ad_img12\"><a href=\"". $wpClassified->public_url . "/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[2] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px; height:". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>"; //<br>" .$array[2] . "
 		} 
 		?>
 

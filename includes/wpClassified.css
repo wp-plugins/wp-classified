@@ -21,27 +21,35 @@
 .wpc_colaps{display:inline;clear:both;background-color:#f4f1ee;padding:2px;margin:0px 5px 0 0;border:1px solid #aaa;}
 .list-content h2{text-align:left;padding-left:130px;}
 .list-content dt{color:#444;text-align:left;font-weight:bold;padding-left:100px;}
+
 .list_ads {/*border:1px solid #C5B2B3;*/padding:1px;margin-bottom:10px;}
 .list_ads_top{padding:10px 5px;margin-bottom:10px;border:1px solid #ccc;background-color:#f9f9f9;text-align:right;}
-.list_ads_top a{font-weight:bold;clear:both;}
-.list_ads_top img{vertical-align:middle;padding:0 2px;border:none;}
+.list_ads_top a{font-weight:bold;font-size:14pt;clear:both;}
+.list_ads_top img{vertical-align:top;}
+
 .list_ads hr {clear:both;margin:3px;}
-.list_ads_sub {border-spacing:0px;clear:both;font-weight:bold;}
+.list_ads_sub {padding:15px 0;border-spacing:5px;clear:both;font-weight:bold;}
+.list_ads_sub img{border:0;vertical-align:middle;}
+
+
 .wpc_main {/*border:1px solid #C5B2B3;*/background-color:#f4f1ee;padding:1px;padding-left:130px;margin-right:10px;/*clear:both;*/border-spacing:0px;}
 .main_desc{padding-left:.5em;}
 #main_col_title{border-bottom:1px solid #ccc;border-top:1px solid #ccc;background-color:#fcfcfc;font-weight:bold;line-height:16px;}
 .main_col_left {float:left;width:45%;}
 .main_col_middle  {float:left;width:25%;margin:0 4px 10px 4px;}
+.main_col_middle img{border:0;vertical-align:middle;}
 .main_col_right #main_col_title {float:right;width:28%;}
-.main_col_left_btn{font-size:9px;float:left;height:1.6em;border-bottom:1px solid #ddd;width:45%;}
-.main_col_middle_btn{float:left;width:25%;height:1.6em;border-bottom:1px solid #ddd;font-size:9px;}
-.main_col_middle_btn img{padding:0;margin:0;}
-.main_col_right_btn{float:right;width:28%;height:1.6em;border-bottom:1px solid #ddd;font-size:9px;}
+
+.main_col_left_btn {float:left; height:1.8em;border-bottom:1px solid #ddd;width:50%;font-size:9px;}
+.main_col_right_btn{float:right;height:1.8em;border-bottom:1px solid #ddd;width:25%;font-size:9px;}
+.main_col_middle_btn{float:left;height:1.8em;border-bottom:1px solid #ddd;width:25%;font-size:9px;}
+.main_col_middle_btn img{border:0;vertical-align:middle;padding-top:-10px}
+
 .show_ad {padding:1px;}
 .show_ad p {margin-top:0 0 1em 0;line-height:1.5em;}
 .show_ad p.justify {text-align:justify;padding:10px;}
 .show_ad_header {background-color:#eee;border-bottom:1px solid #c5b2b3;padding:2px 5px;margin-bottom:2px;}
-.show_ad_img1 {float:left;margin:0 8px 1px 0;border:1px solid rgb(150,150,150);}
+.show_ad_img1 {float:left;margin:0 8px 1px 0;border:1px solid rgb(150,150,150);background-color:#fff;}
 .show_ad_img12 {margin:10px 5px 10px 10px; border:1px solid rgb(150,150,150);clear:both;float:right;}
 .show_ad_title{font-weight:bold;padding:4px 5px;}
 .show_ad_info{font-size:9px;padding:2px 5px;}
@@ -67,16 +75,11 @@ div.info div.left{float:left}
 .wpc_footer_hr {margin:20px 0 5px 0;}
 .wpc_footer p {margin-top:5px;}
 .wpc_footer h3 {border-bottom:1px solid #ddd;}
-.rssIcon {border:none;margin-left:5px;padding-left:17px;
-background:url(/wp-content/plugins/wp-classified/images/rss.png) no-repeat;} 
+.rssIcon {border:none;margin-left:5px;padding-left:17px;background:url(/wp-content/plugins/wp-classified/images/rss.png) no-repeat;} 
 .smallRed{color:red;font-size:8pt;}
-.delete{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/delete.jpg) no-repeat;
-vertical-align:middle;padding:0 2px 4px 20px;float:right;border:none;}
-.edit{background-color:transparent;
-background:url(/wp-content/plugins/wp-classified/images/edit.jpg) no-repeat;
-padding:0 2px 4px 20px;float:left;vertical-align:middle;border:none;}
-.print{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/print.jpg) no-repeat;
-vertical-align:middle;padding-left:20px;float:right;border:none;}
+.delete{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/delete.jpg) no-repeat;vertical-align:middle;padding:0 2px 4px 20px;float:right;border:none;}
+.edit{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/edit.jpg) no-repeat;padding:0 2px 4px 20px;float:left;vertical-align:middle;border:none;}
+.print{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/print.jpg) no-repeat;vertical-align:middle;padding-left:20px;float:right;border:none;}
 .imgMiddle{vertical-align:middle;padding:0 2px 0 2px;border:none;}
 .rightCell{margin-top:4px;padding:8px 5px 2px 0;float:right;text-align:right;vertical-align:middle;font-weight:bold;}
 .leftCell{margin-top:4px;padding:8px 5px 2px 0;vertical-align:middle;float:left;}
@@ -93,3 +96,35 @@ vertical-align:middle;padding-left:20px;float:right;border:none;}
 #thumbBox #thumbImage{background-color:white;}
 #thumbLoading{ /*DIV for showing "loading" status while thumbbox is being generated*/
 position:absolute;visibility:hidden;border:1px solid black;background-color:#EFEFEF;padding:5px;z-index:5;}
+
+
+
+
+/* Main Table
+ * This class handles the appearence of the
+ * the main tables used with 68classifieds
+ *
+ */
+table.main {
+  border:none;
+  background-color:#FFFFFF;
+  border-collapse:collapse;
+}
+table.main tr td{
+  line-height:16px;
+}
+.main tr.odd td { background-color: #cfdce5; }
+.main tr td a   { text-transform: capitalize; font-size:16px; font-weight: bold; text-decoration:none; }
+.main tr td a:hover {text-decoration:underline}
+
+th {border-bottom:2px solid #ddd;padding:0;}
+th a:link, th a:visited {color:#4e4e4e;text-decoration:none;}
+th a:hover {color:#aaaaaa;text-decoration:underline;}
+th {
+      color:#4e4e4e;
+      font-weight:bold;
+      font-size:12px;
+      text-align:left;
+      line-height:1.4em;
+}
+.main tr.odd td{background-color: #eee;border-bottom:2px solid #fff;}
