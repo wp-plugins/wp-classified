@@ -170,7 +170,7 @@ function wpcHeaderLink(){
 
 			return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified",
 				array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], 
-				"lid"=>$adsInfo['lists_id']))." <br> ".$adsInfo['subject'];
+				"lid"=>$adsInfo['lists_id']));
 		break;
 	}
 }

@@ -110,9 +110,7 @@ function wpcAddAd(){
 			if ($addPost==true){
 				$displayform = false;
 				$isSpam = wpcSpamFilter(stripslashes($author_name),'',$subject, $description, $user_ID);
-				if ($wpcSettings['approve']=='y'){
-					$status = 'inactive';
-				} else {$status = 'active';}
+				if ($wpcSettings['approve']=='y'){ $status = 'inactive';} else {$status = 'active';}
 				$sql = "SELECT count(*) as count FROM {$table_prefix}wpClassified_ads WHERE author_ip = '" . 
 						getenv('REMOTE_ADDR') . "' AND subject = '" . $wpdb->escape($subject)."'";
 				$checkPost = $wpdb->get_results($sql);
@@ -326,7 +324,7 @@ function wpcPublicLink($action,$vars){
 	$action = ($action=="lastAd")?"ads_subject":$action;
 	switch ($action){
 		case "index":
-			return "<a href=\"".$main_link."_action=classified\">" . $lang['_MAIN'] . "</a><img src=\"" . $wpClassified->plugin_url . "/images/arrow.gif\" class=\"imgMiddle\">";
+			return "<a href=\"".$main_link."_action=classified\">".$lang['_MAIN']."</a><img class=\"imgMiddle\" border=0 src=\"".$wpClassified->plugin_url."/images/arrow.gif\">";
 		break;
 		case "classified":
 			return "<a href=\"".$main_link."_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
@@ -620,22 +618,22 @@ function wpcLastAdSubject(){
 function wpcAdInput($content=""){
 	global $wpdb, $table_prefix, $wp_filesystem;
 	$wpcSettings = get_option('wpClassified_data');
-	echo '<script type="text/javascript" src="' . get_bloginfo('wpurl'). '/wp-content/plugins/wp-classified/includes/js/jquery.limit.js"></script>';
+	echo '<script type="text/javascript" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/includes/js/jquery.limit.js"></script>';
 	?>
-	<script type='text/javascript'>
-		/* <![CDATA[ */
-		var intMaxLength="<?php echo $wpcSettings['maxchars_limit'] ?>";
-		$(document).ready(function() {
-		$('#description').keyup(function() {
-			var len = this.value.length;
-			if (len >= intMaxLength) {
-			this.value = this.value.substring(0, intMaxLength);
-			}
-			$('#charLeft').text(intMaxLength - len);
-		});
+<script type='text/javascript'>
+/* <![CDATA[ */
+var intMaxLength="<?php echo $wpcSettings['maxchars_limit'] ?>";
+$(document).ready(function() {
+	$('#description').keyup(function() {
+		var len = this.value.length;
+		if (len >= intMaxLength) {
+		this.value = this.value.substring(0, intMaxLength);
+		}
+		$('#charLeft').text(intMaxLength - len);
 	});
-	/* ]]> */
-	</script>
+});
+/* ]]> */
+</script>
 	<?php
 	switch ($wpcSettings['edit_style']){
 		case "plain":

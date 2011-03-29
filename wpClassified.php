@@ -60,7 +60,7 @@ add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpCla
 
 class WP_Classified {
   // Sets the version number.
-  var $version = "1.4.1-b";
+  var $version = "1.4.2-a";
   var $menu_name = 'wpClassified';
   var $plugin_name = 'wp-classified';
   var $plugin_home_url;
