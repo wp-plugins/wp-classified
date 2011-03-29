@@ -44,8 +44,8 @@
 .show_ad_img1 {float:left;margin:0 8px 1px 0;border:1px solid rgb(150,150,150);}
 .show_ad_img12 {margin:10px 5px 10px 10px; border:1px solid rgb(150,150,150);clear:both;float:right;}
 .show_ad_title{font-weight:bold;padding:4px 5px;}
-.show_ad_info{font-size:9px;padding:0px 5px;}
-.show_ad_info img{vertical-align:middle;padding:0px 3px;border:none;}
+.show_ad_info{font-size:9px;padding:2px 5px;}
+.show_ad_info img{vertical-align:middle;padding:0px 3px;margin-bottom:5px;border:none;}
 div.info{text-align:right;margin:1em 0;padding:0}
 div.info div{display:inline;white-space:nowrap}
 div.info div.left{float:left} 
@@ -62,7 +62,7 @@ div.info div.left{float:left}
 .editform table td, .border {padding:2px;margin:0px;border-top:1px solid #efefef;}
 .wpc_label_right{text-align:right;vertical-align:top;}
 .editform textarea{border-top:1px solid #efefef;}
-.wpc_footer{clear:both;padding:4px 5px 5px 0;font-size:9pt;}
+.wpc_footer{clear:both;padding:4px 5px 5px 0;font-size:9pt;margin-top:10px;}
 .wpc_footer img{padding:0;margin:-2px;}
 .wpc_footer_hr {margin:20px 0 5px 0;}
 .wpc_footer p {margin-top:5px;}
