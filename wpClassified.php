@@ -718,7 +718,7 @@ class WP_Classified {
 
 	// Widget stuff
 	function widget_init() {
-		if ( !function_exists('register_sidebar_widget') || !function_exists('register_widget_control') ) return;
+		if ( !function_exists('wp_register_sidebar_widget') || !function_exists('register_widget_control') ) return;
 		function widget($args) {
 			extract($args);
 			$wpcSettings = get_option('wpClassified_data');	
@@ -760,7 +760,7 @@ class WP_Classified {
 		  return $out;
 		}
 		
-		register_sidebar_widget('wpClassified', 'widget', null, 'wpClassified');
+		wp_register_sidebar_widget('wpClassified', 'widget', null, 'wpClassified');
 		register_widget_control('wpClassified', 'widget_control');
 	}
 
