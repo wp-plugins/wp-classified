@@ -24,7 +24,9 @@
 
 .list_ads {/*border:1px solid #C5B2B3;*/padding:1px;margin-bottom:10px;}
 .list_ads_top{padding:10px 5px;margin-bottom:10px;border:1px solid #ccc;background-color:#f9f9f9;text-align:right;}
-.list_ads_top a{font-weight:bold;clear:both;}
+.list_ads_top a{font-weight:bold;font-size:13pt;clear:both;}
+.list_ads_top img{vertical-align:top;}
+
 .list_ads hr {clear:both;margin:3px;}
 .list_ads_sub {padding:15px 0;border-spacing:5px;clear:both;font-weight:bold;}
 .list_ads_sub img{border:0;vertical-align:middle;}

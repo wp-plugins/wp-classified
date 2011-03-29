@@ -52,7 +52,6 @@ wpcHeader();
       ?>
     </div><!--list_ads_top-->
     
-    <h1><?php echo $lists["name"]; ?> Ads </h1>
     <table class="main" width="100%">
       <tr>
         <th scope="col" width="120"><?php echo $lang['_VIEWS']?></th>
