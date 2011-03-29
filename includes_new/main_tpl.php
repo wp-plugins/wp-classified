@@ -17,7 +17,7 @@ $wpcSettings = get_option('wpClassified_data');
 /*
 <center>
 <script type="text/javascript"><!--
-google_ad_client = "pub-2844370112691023";
+google_ad_client = "pub-xxxxx";
 google_ad_slot = "4149874500";
 google_ad_width = 468;
 google_ad_height = 60;
