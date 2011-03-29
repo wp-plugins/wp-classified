@@ -51,7 +51,6 @@ function wpcHeader(){
 	$wpClassified->cleanUp();
 	include_once (dirname(__FILE__).'/_rss.php');
 
-
 	$today = time();
 	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
 	$rmRecords = $wpdb->get_results($sql);
@@ -468,7 +467,6 @@ function wpcDisplayAd(){
 	$wpcSettings = get_option('wpClassified_data');
 	$userfield = $wpClassified->get_user_field();
 	
-	
 	if ($wpClassified->is_usr_loggedin()){
 		$readposts = $wpdb->get_col("SELECT read_ads_id FROM {$table_prefix}wpClassified_read_ads WHERE read_ads_ads_subjects_id = '".(int)$_GET['asid']."' && read_ads_user_id = '".(int)$user_ID."'");
 	} else {
@@ -482,7 +480,6 @@ function wpcDisplayAd(){
 		 LEFT JOIN {$table_prefix}wpClassified_categories
 		 ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
 		 WHERE {$table_prefix}wpClassified_lists.lists_id = '".(int)$_GET['lid']."'", ARRAY_A);
-
 
 	$sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'";
 
