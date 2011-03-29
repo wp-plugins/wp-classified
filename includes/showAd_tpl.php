@@ -43,14 +43,19 @@ if (($i+1)==$hm){
 			<?php echo "<a href='".$_SERVER['SCRIPT_URI']."#$post->ads_id'>";?><?php echo str_replace("<", "&lt;", $post->subject);?></a>
 			</div>
 			<div class="show_ad_info">
-			Posted By<img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?php echo wpcPostAuthor($post);?> on <img src="<?php echo $wpClassified->plugin_url; ?>/images/cal.gif"><?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
-			</div>
-			<?php if ($editlink){
-				echo '<p class="smallTxt"><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</span></p>';
-				if ($wpcSettings['display_titles']=='y'){
-					echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
-				}
-			} ?>
+          Posted By<img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?php echo wpcPostAuthor($post);?> on <img src="<?php echo $wpClassified->plugin_url; ?>/images/cal.gif">
+          <?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
+
+          <?php if ($editlink){
+              echo '<BR />';
+              echo '<small><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</small>';
+              if ($wpcSettings['display_titles']=='y'){
+                echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
+              }
+              echo '<BR />';
+          } 
+          ?>
+         </div>
 		</div><!-- show_ad_header -->
 
 		<?php
