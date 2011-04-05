@@ -284,7 +284,7 @@ function wpcDeleteImg() {
 		if (!file_exists(ABSPATH . "wp-content/plugins/wp-classified/includes/modifyImg_tpl.php")){ 
 			include(dirname(__FILE__)."wp-content/plugins/wp-classified/includes/modifyImg_tpl.php");
 		} else {
-			include(ABSPATH . "wp-content/plugins/wp-classified//includes/modifyImg_tpl.php");
+			include(ABSPATH . "wp-content/plugins/wp-classified/includes/modifyImg_tpl.php");
 		}
 	} else {
 	?>
@@ -422,7 +422,8 @@ function wpcCommmentQuote($post){
 	$txt = addslashes(htmlspecialchars($txt,ENT_COMPAT,$wpClassified_ads_charset));		
 	$txt = str_replace(chr(13),"",$txt);
 	$txt = str_replace(chr(10),"",$txt);
-	$txt = str_replace("&lt;br /&gt;","\n",$txt);
+	$txt = str_replace("&lt;br /&gt;","",$txt);
+	$txt = str_replace("&lt;br&gt;","",$txt);
 	$txt = str_replace("&lt;","<",$txt);
 	$txt = str_replace("&lt;","<",$txt);
 	$txt = str_replace("&gt;",">",$txt);
@@ -453,7 +454,6 @@ function wpcCommmentQuote($post){
 }
 
 
-
 # EMAIL ROUTINE 
 function wpcSendEmail($mailto,$mailsubject,$mailtext) {
 	global $lang;
@@ -468,7 +468,6 @@ function wpcSendEmail($mailto,$mailsubject,$mailtext) {
 	}
 	return $email_sent;
 }
-
 
 
 # NOTIFICATION EMAILS 
@@ -616,7 +615,7 @@ function wpcLastAdSubject(){
 // echo htmlentities($content,ENT_NOQUOTES,get_bloginfo('charset'));
 // function that echo's the textarea/whatever for post input 
 function wpcAdInput($content=""){
-	global $wpdb, $table_prefix, $wp_filesystem;
+	global $wpdb, $table_prefix, $wp_filesystem, $lang;
 	$wpcSettings = get_option('wpClassified_data');
 	echo '<script type="text/javascript" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/wp-classified/includes/js/jquery.limit.js"></script>';
 	?>
@@ -633,75 +632,49 @@ $(document).ready(function() {
 	});
 });
 /* ]]> */
+
 </script>
 	<?php
 	switch ($wpcSettings['edit_style']){
 		case "plain":
 			default:
+         echo "<tr><td class='wpc_label_right'>" . $lang['_DESC'] . "</td><td>";
 			echo "<textarea name='description' id='description' cols='50' rows='20'>".str_replace("<", "&lt;", $content)."</textarea><br />";
-			echo '<span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
+			echo '<span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/></td></tr>';
 		break;
 		case "tinymce":
+			//echo '<textarea class="theEditor" name="description" id="description" rows="8" cols="50">'. htmlentities($content) .'</textarea><br />';
+			//echo '<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';    
 			?>
-			<script type="text/javascript">
-			/* <![CDATA[ */
-			tinyMCE.init({
-				mode: "exact",
-				theme: "advanced",
-				elements : "description",
-				width : "500",
-				height : "200",
-				theme_advanced_buttons1: "bold,italic,underline,|,strikethrough,|,bullist,numlist,|,undo,redo,|,removeformat,|, formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,outdent,indent,|,undo,redo",
-				theme_advanced_buttons2:"",
-				theme_advanced_buttons3: "",
-				theme_advanced_toolbar_location: "top",
-				theme_advanced_toolbar_align: "left",
-				theme_advanced_statusbar_location: "none",
-				theme_advanced_resizing: false,
-				onchange_callback	 : "tinyMceOnChange",
-				handle_event_callback : "tinyMceEventHandler"
-			});
-			var _form = "<?php echo $form ?>";
-			var intMaxLength="<?php echo $wpcSettings['maxchars_limit'] ?>";
-			var tinyMceBuffers = new Object();
-			var tinyMceCharCounts = new Object();
-			function tinyMceOnChange(inst){ tinyMceCheckContentLength(inst.id,intMaxLength); }
-			function tinyMceEventHandler(e){
-				switch (e.type) {
-					case 'keyup': tinyMceOnChange(tinyMCE.activeEditor); break;
-				}
-				return true;
-			}
-			// Strips all html tags from a given string, leaving only plain text
-			function stripHtmlTags(strContent) { return strContent.replace(/(<([^>]+)>)/ig, ""); }
-			function tinyMceCheckContentLength(strEditorId, intMaxLength) {
-				var editorInstance = tinyMCE.get(strEditorId);
-				if (editorInstance == null || editorInstance	== undefined) { alert('NO EDITOR'); }
-				var contentContainer = editorInstance.getBody();
-				if (contentContainer == null || contentContainer == undefined) { alert('NO CONTENT CONTAINER'); }
-				var strContent = contentContainer.innerHTML;
-				var intContentLength = strContent.length;
-				var intCharCount = stripHtmlTags(strContent).length;
-				if (intContentLength <= intMaxLength) {
-					tinyMceBuffers[strEditorId] = strContent;
-					tinyMceCharCounts[strEditorId] = intCharCount;
-				} else {
-					var bm = editorInstance.selection.getBookmark(); // Stores a bookmark of the current selection
-					editorInstance.setContent((tinyMceBuffers[strEditorId]) ? tinyMceBuffers[strEditorId] : strContent.substring(0, intMaxLength - 10));
-					var intDelta = intCharCount - tinyMceCharCounts[strEditorId];
-					if (bm['start'] && bm['start'] > intDelta) {
-						bm['start'] -= intDelta;
-						bm['end'] = bm['start'];
-					}
-					editorInstance.selection.moveToBookmark(bm); // Restore the selection bookmark
-					alert('You have exceeded the maximum size for this text and we have undone your last change.');
-				}
-			}
-			/* ]]> */
-			</script>
+         <tr>
+			<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
+			<td><textarea id="description" name="description" style="width:500px; height: 200px;"><?php echo htmlentities($content); ?></textarea>
+         <span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of <?php echo $wpcSettings['maxchars_limit']; ?> characters allowed</SPAN><BR/>
+         </td>
+         </tr>
+         <tr>
+         <td class="wpc_label_right">Preview:</td>
+         <td><div id="preview" style="width: 500px; height: 200px; border:#c7ceeb 1px solid; padding: 3px"></div></td>
+         </tr>
+         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script>
+         <script src='<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/js/jquery.bbcode.js' type='text/javascript'></script>
+         <script type="text/javascript">
+            $(document).ready(function(){
+            $("#description").bbcode(
+            {tag_bold:true,tag_italic:true,tag_underline:true,tag_h3:true,button_image:true,image_url:'<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/js/bbimage/'}
+            );
+            process();
+            });
+            var bbcode="";
+            function process(){
+            if (bbcode != $("#description").val()){
+            bbcode = $("#description").val();
+            $.get('<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/js/bbParser.php',{bbcode: bbcode},
+            function(txt){$("#preview").html(txt);})}
+            setTimeout("process()", 2000);
+            }
+         </script>
 			<?php
-			echo '<textarea name="description" id="description" rows="8" cols="50">'. htmlentities($content) .'</textarea><br />';
-			echo '<SPAN class="smallTxt" id="msgCounter">Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/>';
 		break;
 	}
 }
