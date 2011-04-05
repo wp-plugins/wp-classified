@@ -3,7 +3,7 @@
 /*
 Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
-Description:  Note: This bugfix release hove to install Manually.
+Description: wpClassified - This plugin allows you to add a simple classified page into your wordpress blog.
 Author:Mohammad Forgani
 Version: 1.4.1
 Requires at least:2.8.x
@@ -98,7 +98,7 @@ class WP_Classified {
 		global $wpcAdminPages;
 		// TODO Welcome
 		add_menu_page($this->menu_name , $this->menu_name ,'administrator', __FILE__, array(&$this, 'welcome'), $this->plugin_url . '/images/wpc.gif');
-		add_submenu_page(__FILE__, 'wpclassified_settings', 'wpclassified_settings', 'administrator', 'wpcSettings', array(&$this, 'wpcSettings'));
+		add_submenu_page(__FILE__, 'Settings', 'Settings', 'administrator', 'wpcSettings', array(&$this, 'wpcSettings'));
 		for ($i=0; $i<count($wpcAdminPages); $i++){
 			$link = $wpcAdminPages[$i];
 			add_submenu_page(__FILE__, $link['name'], $link['name'], 'administrator', $link['arg'], $link['prg']);
@@ -112,32 +112,35 @@ class WP_Classified {
 		<div style="float:left;width:70%;">
 		<div class="wrap">
 		<h2>Welcome to Wordpress Classifieds</h2>
-		<p>This plugin allows you to add a<b>simple classified page</b> into your wordpress blog.</p>
+      <p>You are using version <?php echo $this->version; ?></p>
+		<p>This plugin allows you to add a <b>simple classified page</b> into your wordpress blog.</p>
 
-		<p>The plugin has been create and successfully tested on Wordpress version 2.8.5 with 
-		default and unchanged Permalink structure. It may work with earlier versions too I have not tested.<br />
-		<p>Demo link:<a href="http://www.forgani.com/classified/" target=_blank>www.forgani.com/classified/</a></p>
+		<p>Thank you for using Wordpress Classifieds Plugin.<br />
+      The plugin has been create and successfully tested on Wordpress version 3.1 with default and unchanged Permalink structure. It may work with earlier versions too I have not tested.<br />
+		<p>Demo link: <a href="http://www.forgani.com/classified/" target=_blank>www.forgani.com/classified/</a></p>
 		<?php
-  }
+	}
+
 
 	// wpClassified settings 
 	function wpcSettings(){
 		global $_GET, $_POST, $PHP_SELF, $wpdb, $table_prefix, $lang;
 		print wpcAdminMenu();
-
+      $error = false;
+      $t = "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
+      $t .= "<p><b>Directory permissions problem. <br />Please check the write permission for the directories:</b></p><ul>";
 		$cache_dir = $this->plugin_dir . '/cache/';
 		if( ! is_writable( $cache_dir ) || ! is_readable( $cache_dir ) ) {
-			echo "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
-			echo "<font color='#FF0000'>Check Directory Permission ! =>".$cache_dir."</font><br />\n" ;
-			echo "</fieldset>"; 
+			$t .= "<li><code><font color='#900'>".$cache_dir."</code></font></li>\n";
+         $error = true;
 		}
 		$public_dir = $this->public_dir;
 		if( ! is_writable( $public_dir ) || ! is_readable( $public_dir ) ) {
-			echo "<BR /><BR /><fieldset><legend style='font-weight: bold; color: #900;'>Directory Checker</legend>";
-			echo "<font color='#FF0000'>Check Directory Permission ! =>".$public_dir."</font><br />\n" ;
-			echo "</fieldset>";
+			$t .= "<li><code><font color='#900'>".$public_dir."</font></code><p>You also have to create an a public directory under wp-content (writable by the webserver.)</p><code>wp-content/public/wp-classified/</code><li>" ;
+			
+         $error = true;
 		}
-
+      if ($error) { $t .= "</ul></fieldset>"; echo $t;}
 		$this->showCategoryImg();
 		$page = $this->get_pageinfo();
 		if ( empty($page['post_title']) ) {
@@ -328,7 +331,7 @@ class WP_Classified {
 		if (!$wpcSettings['inform_user_body']) 
 			 $wpcSettings['inform_user_body'] = "One or more of your classified ads on !sitename (!siteurl) are expiring soon. Please sign in and visit !user_ads_url to check your ads.";
 		if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = "180";
-		$textarea=array ('tinymce' => 'HTML with TinyMCE (inline wysiwyg)','plain' => 'No HTML, No BBCode');	
+		$textarea=array ('tinymce' => 'Allow BBCode in ad text','plain' => 'No HTML, No BBCode');	
 		?>
 		<tr>
 			<th align="right"><label>Posting Style:</label></th>
@@ -543,7 +546,7 @@ class WP_Classified {
 		</table>
 		</fieldset>
 		</td></tr></table></div>
-		<p><input type=submit value="Update wpClassifieds Settings"></p>
+		<p><input type=submit value="Save Settings"></p>
 		</form>
 		</p>
 		<?php
@@ -782,9 +785,11 @@ class WP_Classified {
 			// nothing
 		} elseif($wpcSettings['edit_style']=='tinymce') {
 			// activate these includes if the user chooses tinyMCE on the settings page
+         /*
 			$mce_path = get_option('siteurl');
 			$mce_path .= '/wp-includes/js/tinymce/tiny_mce.js';
 			echo '<script type="text/javascript" src="' . $mce_path . '"></script>';
+         */
 		}
 	}
 

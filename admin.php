@@ -11,7 +11,7 @@
 	//array('name'=>'Classified Options','arg'=>'process_settings'),
 function wpcAdminMenu(){
   global $wpcAdminMenu, $PHP_SELF;
-  $head='<div class="wrap"><h2>Wordpress Classified</h2><p>';
+  $head='<div class="wrap"><h2>wpClassified Settings Configuration</h2><p>';
   $head.= '<div style="text-align: right;"><a href="http://www.forgani.com/">Support this software</a><br>Read my opinion</div>';
   $menu='<a href='.$PHP_SELF.'?page='.'wpcSettings'.'>Settings & Options</a> | ';
   for ($i=0; $i<count($wpcAdminMenu); $i++){
