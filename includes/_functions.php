@@ -18,20 +18,24 @@ function wpcHeader(){
 	if ($wpcSettings['count_ads_per_page'] < 1) {
 		$wpcSettings['count_ads_per_page'] = 10;
 	}
-	echo '<div class="wpc_head">';
-	if (!isset($lnks)) $lnks = '';
-	if ($lnks == ''){$lnks = wpcHeaderLink();}
-	echo '<h3>' . $lnks. '</h3>';
-	echo "<table width=90% border=0 cellspacing=0 cellpadding=8><tr>";
+   ?>
+
+	<table width=90% border=0 cellspacing=0 cellpadding=8><tr>
+   <?php
 	if ($wpcSettings['top_image']!=''){
-		
 		$img=preg_replace('/\s+/','',$wpcSettings['top_image']);
-		echo '<td><img src="'. $wpClassified->plugin_url .'/images/' .$img. '"></td>';
+		echo '<td valign="top"><img src="'. $wpClassified->plugin_url .'/images/' .$img. '"></td>';
 	}
 	if ($wpcSettings['description']!=''){
 		echo '<td valign=middle>'.$wpcSettings['description'] . "</td>";
 	}
-	echo "</tr></table>";
+   ?>
+	</tr></table>
+   <div class="wpc_head">
+   <?php
+   if (!isset($lnks)) $lnks = '';
+   if ($lnks == ''){$lnks = wpcHeaderLink();}
+   echo '<h3>' . $lnks. '</h3>';
 	?>
 	<div class="wpc_search">
 		<form action="<?php echo wpcPublicLink("searchform", array());?>" method="post">

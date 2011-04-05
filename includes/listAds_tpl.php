@@ -1,5 +1,4 @@
 <?php
-
 /*
 * listAds_tpl template
 * This file is part of wp-classified
@@ -8,20 +7,12 @@
 * @version 1.2.1
 * list all ads already exist under a defined category
 */
-
 global $wpClassified;
-//$wpcSettings = get_option('wpClassified_data');
-
-
 wpcHeader();
-
-
 ?>
-
 <div class="wpc_container">
   <?php
   if ($msg!='') echo "<p class=\"message\">" . $msg . "</p>";
-
   if ($numAds>$wpcSettings['count_ads_per_page']){
     echo "<div align=\"left;\">";
     echo "Pages: ";
@@ -40,18 +31,18 @@ wpcHeader();
       <?php 
       $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
   	  echo $addtopicImg;
-	  echo "<span sytle=\"font-size:13px\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
+	  echo "<span sytle=\"font-size:13px;color:#380B61\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
       ?>
-    </div><!--list_ads_top-->
-    
     <table class="main" width="100%">
-      <tr>
-        <th scope="col" width="120"><?php echo $lang['_VIEWS']?></th>
-        <th style="text-align: left;" scope="col"><?php echo $lang['_SUBJECT'];?></th>
-        <th style="text-align: right;" scope="col"><?php echo $lang['_POSTON'];?></th>
+      <tr class="col">
+        <th width="120" class="col"><?php echo $lang['_VIEWS']?></th>
+        <th style="text-align: left;" class="col"><?php echo $lang['_SUBJECT'];?></th>
+        <th style="text-align: right;" class="col"><?php echo $lang['_POSTON'];?></th>
       </tr>
-    </table>
+    </table>  
+    </div><!--list_ads_top-->
     <table class="main" width="100%">
+      <tr><th colspan="3" class="col"><hr /></th></tr>
       <?php
       for ($x=0; $x<count($ads); $x++){
         $ad = $ads[$x];
@@ -64,38 +55,50 @@ wpcHeader();
         $array = preg_split('/\#\#\#/', $rec->image_file);
         $img = $array[0];
         if ($img !='') {
-            include (dirname(__FILE__).'/js/viewer.js.php');
-            echo "<div class=\"show_ad_img1\"><a href=\"" . $wpClassified->public_url ."/" . $img . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url. "/" . $array[0] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"]."px; height:". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
+           include (dirname(__FILE__).'/js/viewer.js.php');
+           echo "<div class=\"show_ad_img1\"><a href=\"" . $wpClassified->public_url ."/" . $img . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url. "/" . $array[0] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"]."px; height:". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>";
         } else { echo "<img src=\"". $wpClassified->plugin_url . "/images/nophoto.gif\">";}
         ?>
-        </td><td valign="top">
+        </td>
+        <td valign="top" style="text-align: left;"><BR />
           <?php
           echo wpcPublicLink("ads_subject", array("name"=>$ad->subject, "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
           ?>
           <br />
           <?php 
-          echo $lang['_FROM'];
-          echo wpcAdAuthor($ad);
+          echo '<small>' . $lang['_FROM'] . ' ' . wpcAdAuthor($ad) . '</small>';
+          ?>
+          <P>
+          <?php 
+          $txt = wpcCommmentQuote($rec);
+          $string = substr($txt, 0, 120); 
+          echo wordwrap($string, 55, "\n", true);
+          //echo substr($txt, 0, 60); 
+          //echo '<br />'. substr($txt, 60, 60); 
           ?>
         </td>
-        <td nowrap="nowrap" align="right" valign="top">
+        <td nowrap="nowrap" align="right" valign="top" width="100">
         <?php
         if (!@in_array($ad->ads_subjects_id, $read) && $wpClassified->is_usr_loggedin()){
-            $rour = "<img border=0 src=\"". $wpClassified->plugin_url . "/images/unread.gif\" class=\"imgMiddle\"> ";
+           $rour = "<img border=0 src=\"". $wpClassified->plugin_url . "/images/unread.gif\" class=\"imgMiddle\"> ";
         } else {$rour = "";} // fix me
         if ($ad->sticky=='y'){
-            $sticky = "<img border=0 src=\"". $wpClassified->plugin_url . "/images/sticky.gif\" alt=\"".__("Sticky")."\"> ";
+           $sticky = "<img border=0 src=\"". $wpClassified->plugin_url . "/images/sticky.gif\" alt=\"".__("Sticky")."\"> ";
         }
         ?>
         <?php echo @date($wpcSettings['date_format'], $ad->date);?><br />
-        <?php echo $rour; ?>&nbsp;<?php echo $sticky; ?>&nbsp;(<?php echo $lang['_VIEWS']?>: <?php echo $ad->views;?>)
+        <?php echo $rour; ?>&nbsp;<?php echo $sticky; ?>&nbsp;<small>(<?php echo $lang['_VIEWS']?>: <?php echo $ad->views;?>)</small>
         </td></tr>
+        <tr><th colspan="3" class="col"><hr /></th></tr>
         <?php
       }
       ?>
     </table>
+
   </div>
 </div>
 <?php
+
+
 wpcFooter();
 ?>

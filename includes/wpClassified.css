@@ -23,8 +23,8 @@
 .list-content dt{color:#444;text-align:left;font-weight:bold;padding-left:100px;}
 
 .list_ads {/*border:1px solid #C5B2B3;*/padding:1px;margin-bottom:10px;}
-.list_ads_top{padding:10px 5px;margin-bottom:10px;border:1px solid #ccc;background-color:#f9f9f9;text-align:right;}
-.list_ads_top a{font-weight:bold;font-size:14pt;clear:both;}
+.list_ads_top{padding:5px 5px;margin-bottom:10px;border:1px solid #ccc;background-color:#f9f9f9;text-align:right;}
+.list_ads_top a{font-weight:bold;clear:both;color:#380B61}
 .list_ads_top img{vertical-align:top;}
 
 .list_ads hr {clear:both;margin:3px;}
@@ -76,7 +76,7 @@ div.info div.left{float:left}
 .wpc_footer p {margin-top:5px;}
 .wpc_footer h3 {border-bottom:1px solid #ddd;}
 .rssIcon {border:none;margin-left:5px;padding-left:17px;background:url(/wp-content/plugins/wp-classified/images/rss.png) no-repeat;} 
-.smallRed{color:red;font-size:8pt;}
+.smallRed{color:red;font-size:9pt;}
 .delete{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/delete.jpg) no-repeat;vertical-align:middle;padding:0 2px 4px 20px;float:right;border:none;}
 .edit{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/edit.jpg) no-repeat;padding:0 2px 4px 20px;float:left;vertical-align:middle;border:none;}
 .print{background-color:transparent;background:url(/wp-content/plugins/wp-classified/images/print.jpg) no-repeat;vertical-align:middle;padding-left:20px;float:right;border:none;}
@@ -88,7 +88,7 @@ div.info div.left{float:left}
 .message{margin:0;padding:0 0 10px 0;color:green;font-weight:bold;}
 .sendInput{width:258px;}
 .sendTd{background-color:#fff;text-align:right;vertical-align:top;}
-.smallTxt{font-size:8px;padding-top:2px;color:#444;}
+.smallTxt{font-size:9px;padding-top:2px;color:#444;}
 .legend  {padding:10px;color:blue;} 
 .fieldset {margin-bottom:1em;padding:.5em;border:1px solid #aaa;} 
 #thumbBox{position:absolute;left:0;top:0;width:auto;padding:10px;padding-bottom:0;background:#313131;visibility:hidden;z-index:10;cursor:hand;cursor:pointer;}
@@ -113,18 +113,18 @@ table.main {
 table.main tr td{
   line-height:16px;
 }
-.main tr.odd td { background-color: #cfdce5; }
+.main tr.odd td { background-color: #cfcfcf; }
 .main tr td a   { text-transform: capitalize; font-size:16px; font-weight: bold; text-decoration:none; }
 .main tr td a:hover {text-decoration:underline}
 
-th {border-bottom:2px solid #ddd;padding:0;}
-th a:link, th a:visited {color:#4e4e4e;text-decoration:none;}
-th a:hover {color:#aaaaaa;text-decoration:underline;}
-th {
-      color:#4e4e4e;
+.col th {
+      color:#333;
+      border:1px solid #fff;
+      padding:2px;
+      background-color: #eee;
       font-weight:bold;
       font-size:12px;
       text-align:left;
       line-height:1.4em;
 }
-.main tr.odd td{background-color: #eee;border-bottom:2px solid #fff;}
+.main tr.odd td{background-color: #eee;border:1px solid #fff;padding:2px;}

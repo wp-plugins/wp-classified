@@ -28,8 +28,8 @@ if (($i+1)==$hm){
 	<div class="list_ads_top">
       <?php 
       $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
-	  echo $addtopicImg;
-	  echo "<span sytle=\"font-size:13px\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
+      echo $addtopicImg;
+      echo "<span sytle=\"font-size:14px\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
       ?>
     </div><!--list_ads_top-->
     
@@ -97,7 +97,7 @@ if (($i+1)==$hm){
 		<p class="justify"><?php echo wpcPostHtml($post);?></p>
 		<?php
 		list ($adExpire, $contactBy) = preg_split('/###/', $adsInfo['txt']);
-		echo "<hr><div class=\"info\"><div class=\"left\">";
+		echo "<hr><div class=\"info\"><div style=\"float:right;color:#380B61\">";
 		if (isset($adsInfo['email']) && $contactBy==$lang['_YES_CONTACT']) {
 			echo '<img src="' . $wpClassified->plugin_url. '/images/email.jpg" class="imgMiddle"><a href="mailto:' . $adsInfo['email'] . '">'.$lang['_REPLY'].'</a>&nbsp;&nbsp;&nbsp;';
 		}

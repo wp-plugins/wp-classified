@@ -75,15 +75,9 @@ if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin
 			<td><input type="file" name="image_file" size="20"><br /><span class="smallTxt">
 			<?php echo $lang['_OPTIONAL'].$lang['_INVALIDMSG4']." (".(int)$wpcSettings["image_width"]."x".(int)$wpcSettings["image_height"] . " pixel )"; ?></span></td>
 		</tr>
-		<tr>
-			<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
-			<td>
-			<?php
-			if (!isset($_POST['description'])) $_POST['description']='';
-			wpcAdInput($_POST['description']); ?>
-			</td>
-		</tr>
-		<?php 
+      <?php
+		if (!isset($_POST['description'])) $_POST['description']='';
+      wpcAdInput($_POST['description']); 
 		if ( $wpcSettings['ad_expiration'] && $wpcSettings['ad_expiration'] > 0 ) {
 			echo '<tr><td class="wpc_label_right">'. $lang['_HOW_LONG'] .'</td>';
 			echo '<td><input type="text" name="wpClassified_data[ad_expiration]" size="3" maxlength="3" value="'.(int)$wpcSettings["ad_expiration"].'"/><br>';

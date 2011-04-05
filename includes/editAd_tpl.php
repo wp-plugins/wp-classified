@@ -75,10 +75,7 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		<tr><td colspan=2 align="center">
 			<?php echo wpcPublicLink("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
 		</td></tr>
-		<tr>
-			<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
-			<td><?php wpcAdInput($postinfo->post);?></td>
-		</tr>
+      <?php wpcAdInput($postinfo->post);?>
 		<?php 
 		if ( isset($wpcSettings['ad_expiration']) && $wpcSettings['ad_expiration'] > 0 ) {
 			echo '<tr><td class="wpc_label_right">'.$lang['_HOW_LONG']. '</td>';
