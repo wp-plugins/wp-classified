@@ -208,7 +208,7 @@ function wpClassified_adm_page(){
 }
 
 function wpClassified_process(){
-	global $_GET, $_POST, $table_prefix, $wpdb, $user_ID, $user_identity;
+	global $_GET, $_POST, $table_prefix, $wpdb;
 	if (!isset($msg)) $msg='';
 	$wpcSettings=get_option('wpClassified_data');
 	if (!isset($_GET['_action'])) $_GET['_action']='';
@@ -519,8 +519,47 @@ function wpcSearchHighlight($keywords,$post,$bgcolors='yellow'){
 	return $post;
 }
 
+
+
+function bb($r) { 
+  $r = trim($r); 
+  $r = preg_replace("/<a[^>]+\>/i", " ", $r); 
+  $r = preg_replace("/<img[^>]+\>/i", " ", $r); 
+  $r = str_replace("\r\n","<br>",$r); 
+  $r = str_replace("[b]","<b>",$r); 
+  $r = str_replace("[/b]","</b>",$r); 
+  $r = str_replace("[h3]","<h3>",$r); 
+  $r = str_replace("[/h3]","</h3>",$r);
+  $r = str_replace("[img]","<img src='",$r); 
+  $r = str_replace("[/img]","'>",$r); 
+  $r = str_replace("[IMG]","<img src='",$r); 
+  $r = str_replace("[/IMG]","'>",$r); 
+  $r = str_replace("[s]","<s>",$r); 
+  $r = str_replace("[/s]","</s>",$r); 
+  $r = str_replace("[ul]","<ul>",$r); 
+  $r = str_replace("[/ul]","</ul>",$r); 
+  $r = str_replace("[li]","<li>",$r); 
+  $r = str_replace("[/li]","</li>",$r); 
+  $r = str_replace("[ol]","<ol>",$r); 
+  $r = str_replace("[/ol]","</ol>",$r); 
+  $r = str_replace("[quote]","<br /><table width='80%' bgcolor='#ffff66' align='center'><tr><td style='border: 1px dotted black'><font color=black><b>Quote:<br></b>",$r); 
+  $r = str_replace("[/quote]","</font></td></tr></table>",$r); 
+  $r = str_replace("[i]","<i>",$r); 
+  $r = str_replace("[/i]","</i>",$r); 
+  $r = str_replace("[u]","<u>",$r); 
+  $r = str_replace("[/u]","</u>",$r); 
+  $r = str_replace("[spoiler]",'[spoiler]<font bgcolor ="#000000" color="#DDDDDD">',$r); 
+  $r = str_replace("[/spoiler]","</font>[/spoiler]",$r); 
+  $r = str_replace("[link\n=","[link=",$r); 
+  $r = preg_replace("/<a[^>]+\>/i", " ", $r); 
+  $r = preg_replace("/<img[^>]+\>/i", " ", $r);
+  $r = trim($r); 
+  return $r; 
+} 
+
+
 function wpcPostHtml($post){
-	global $_GET, $_POST, $user_login, $user_ID, $user_nicename, $user_email, $user_url, $user_pass_md5, $table_prefix, $wpdb;
+	global $_GET;
 	$wpcSettings=get_option('wpClassified_data');
 	get_currentuserinfo();
 	switch ($wpcSettings["edit_style"]){
@@ -529,7 +568,9 @@ function wpcPostHtml($post){
 			$post->post=nl2br(str_replace("<", "&lt;", $post->post));
 			break;
 		case "tinymce":
-			$post->post=nl2br($post->post);
+         $html=bb($post->post);
+			$post->post=nl2br($html);
+         //$post->post=nl2br($post->post);
 			break;
 	}
 	if ($wpcSettings['filter_posts']=='y'){
@@ -591,8 +632,6 @@ function adm_users_process(){
 								ORDER BY {$wpmuBaseTablePrefix}users.".$searchfields[0]." ASC
 								LIMIT $start, $perpage";
 			$all_users=$wpdb->get_results($sql, ARRAY_A);
-		  
-
 			$numusers=$wpdb->get_results("select count(*) as numusers from {$wpmuBaseTablePrefix}users $where ", ARRAY_A);
 			$numusers=$numusers[0]["numusers"];
 			?>
@@ -793,9 +832,6 @@ function adm_utilities_process(){
 		<?php
 	}
 }
-
-
-
 
 
 ?>
