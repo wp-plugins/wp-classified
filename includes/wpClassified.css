@@ -128,3 +128,4 @@ table.main tr td{
       line-height:1.4em;
 }
 .main tr.odd td{background-color: #eee;border:1px solid #fff;padding:2px;}
+.readmore a:link {font-weight:normal;text-decoration:underline;font-size:11px;}

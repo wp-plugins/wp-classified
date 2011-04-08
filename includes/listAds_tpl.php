@@ -72,9 +72,11 @@ wpcHeader();
           <?php 
           $txt = wpcCommmentQuote($rec);
           $string = substr($txt, 0, 120); 
-          echo wordwrap($string, 55, "\n", true);
-          //echo substr($txt, 0, 60); 
-          //echo '<br />'. substr($txt, 60, 60); 
+          $t = wordwrap($string, 55, "\n", true);
+          $t = getTheHtml($t);
+          $l= wpcPublicLink("ads_subject", array("name"=>'Read more', "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
+          $t .= '... ' . '<span class="readmore">' . $l . '</span>';
+          echo $t; 
           ?>
         </td>
         <td nowrap="nowrap" align="right" valign="top" width="100">
@@ -99,6 +101,29 @@ wpcHeader();
 </div>
 <?php
 
+
+// TODO
+function getTheHtml($str){
+  $bb[] = "#\[b\](.*?)\[/b\]#si";
+  $html[] = "<b>\\1</b>";
+  $bb[] = "#\[i\](.*?)\[/i\]#si";
+  $html[] = "<i>\\1</i>";
+  $bb[] = "#\[u\](.*?)\[/u\]#si";
+  $html[] = "<u>\\1</u>";
+  $bb[] = "#\[h3\](.*?)\[/h3\]#si";
+  $html[] = "<h3>\\1</h3>";
+  $bb[] = "#\[hr\]#si";
+  $html[] = "<hr>";
+  $str = preg_replace ($bb, $html, $str);
+  $patern="#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i";
+  $replace=''; // <a href="\\1" target="_blank" rel="nofollow">\\2</a>
+  $str=preg_replace($patern, $replace, $str); 
+  $patern="#\[img\]([^\[]*)\[/img\]#i";
+  $replace=''; // <img src="\\1" alt=""/>
+  $str=preg_replace($patern, $replace, $str);  
+  $str=nl2br($str);
+  return $str;
+}
 
 wpcFooter();
 ?>
