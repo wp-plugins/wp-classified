@@ -50,7 +50,8 @@
 .show_ad p.justify {text-align:justify;padding:10px;}
 .show_ad_header {background-color:#eee;border-bottom:1px solid #c5b2b3;padding:2px 5px;margin-bottom:2px;}
 .show_ad_img1 {float:left;margin:0 8px 1px 0;border:1px solid rgb(150,150,150);background-color:#fff;}
-.show_ad_img12 {margin:10px 5px 10px 10px; border:1px solid rgb(150,150,150);clear:both;float:right;}
+.show_ad_img12 {margin:10px 5px 10px 10px;border:1px solid rgb(150,150,150);float:right;}
+.show_ad_img13 {margin:0 5px 10px 10px; border:1px solid rgb(150,150,150);clear:both;float:right;}
 .show_ad_title{font-weight:bold;padding:4px 5px;}
 .show_ad_info{font-size:9px;padding:2px 5px;}
 .show_ad_info img{vertical-align:middle;padding:0px 3px;margin-bottom:5px;border:none;}
