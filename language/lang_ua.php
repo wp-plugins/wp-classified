@@ -89,6 +89,7 @@ $lang['_DELETE'] = "Видалити";
 $lang['_EDITDESC'] = "Редагувати опис"; 
 $lang['_DELETED'] = "Зображення вилучене"; 
 $lang['_EDIT'] = "Редагувати"; 
+$lang['_EDITADS'] = "Редагувати your advertisement";
 $lang['_SUBMITTER'] = "Ім'я :"; 
 $lang['_ADD_LISTING'] = "Добавити лістинг"; 
 $lang['_SUBMIT'] = "Відправка"; 

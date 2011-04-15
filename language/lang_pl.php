@@ -95,6 +95,7 @@
 	$lang['_EDITDESC'] = "Edytuj opis";
 	$lang['_DELETED'] = "Obraz został usunięty";
 	$lang['_EDIT'] = "Edytuj";
+	$lang['_EDITADS'] = "Edytuj your advertisement";
 	$lang['_SUBMITTER'] = "Imię i nazwisko:";
 	$lang['_ADD_LISTING'] = "Dodaj wpis";
 	$lang['_SUBMIT'] = "Wyślij";

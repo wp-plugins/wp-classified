@@ -96,6 +96,7 @@ Localization by:
 	$lang['_EDITDESC'] = "Editar descrição";
 	$lang['_DELETED'] = "Imagem apagada com sucesso";
 	$lang['_EDIT'] = "Editar";
+	$lang['_EDITADS'] = "Editar your anúncio";
 	$lang['_SUBMITTER'] = "Nome :";
 	$lang['_ADD_LISTING'] = "Adicionar uma listagem";
 	$lang['_SUBMIT'] = "Enviar";

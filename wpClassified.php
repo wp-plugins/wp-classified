@@ -5,7 +5,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: wpClassified - This plugin allows you to add a simple classified page into your wordpress blog.
 Author:Mohammad Forgani
-Version: 1.4.1
+Version: 1.4.2
 Requires at least:2.8.x
 Author URI: http://www.forgani.com
 
@@ -45,6 +45,11 @@ Changes 1.3.0-b - Sep 13/10/2008
 - Modify to expand and collapses the Categories
 - Modify to show the last post in footer
 - fix the URL faking bug
+
+Jan 27/03/2011
+- fixed the Fixed Widget Sidebar Menu
+- fixed for WP version 3.1
+- improved categories & forwards links in main page 
 
 */
 

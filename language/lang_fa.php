@@ -93,6 +93,7 @@
 	$lang['_EDITDESC'] = "ویرایش توضیحات";
 	$lang['_DELETED'] = "حذف تصویر انچام شد";
 	$lang['_EDIT'] = "ویرایش";
+	$lang['_EDITADS'] = " ویرایش اگهي ";
 	$lang['_SUBMITTER'] = "نویسنده:";
 	$lang['_ADD_LISTING'] = "اضافه به فهرست";
 	$lang['_SUBMIT'] = "ارسال";

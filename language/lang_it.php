@@ -93,6 +93,7 @@
         $lang['_EDITDESC'] = "Modifica la descrizione";
         $lang['_DELETED'] = "Immagine cancellata.";
         $lang['_EDIT'] = "modifica";
+        $lang['_EDITADS'] = "modifica your annuncio";
         $lang['_SUBMITTER'] = "Nome :";
         $lang['_ADD_LISTING'] = "Aggiungi un annuncio";
         $lang['_SUBMIT'] = "Invia";

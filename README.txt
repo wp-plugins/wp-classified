@@ -1,16 +1,16 @@
 === wp-classified ===
-name: wpClassified Wordpress plugins Version: 1.4.1
+name: wpClassified Wordpress plugins Version: 1.4.2
 Contributors: Mohammad Forgani
 Donate link: http://www.forgani.com/root/wpclassified-plugins/
 Requires at least: 2.8.x
 Tested up to: 2.8.x
 Stable tag: 1.2
-Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified
+Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified, blackboard
 
 
 == Description ==
 
-This plugin allows you to add a simple classified page in to your wordpress blog.
+This plugin allows you to add a simple information & advertising blackboard or classified page in to your wordpress blog.
 
 The plugin has been created and successfully tested on Wordpress version 2.8.5 with 
 default and unchanged Permalink structure. It may work with earlier versions too, but I have not tested yet.
@@ -108,6 +108,7 @@ http://forgani.com/index.php?pagename=classified (1.3)
 Jan 27/03/2011
 - fixed the Fixed Widget Sidebar Menu
 - fixed for WP version 3.1
+- improved categories & forwards links in main page 
 
 = version 1.4 =
 Jan 22/01/2010

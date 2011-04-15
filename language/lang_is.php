@@ -93,6 +93,7 @@ Localization by: Hákon Orri Ásgeirsson
 	$lang['_EDITDESC'] = "Breyta lýsingu";
 	$lang['_DELETED'] = "Það tókst að eyða myndinni";
 	$lang['_EDIT'] = "Breyta";
+	$lang['_EDITADS'] = "Breyta your advertisement";
 	$lang['_SUBMITTER'] = "Nafn :";
 	$lang['_ADD_LISTING'] = "Bæta inná lista";
 	$lang['_SUBMIT'] = "Senda";

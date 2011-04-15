@@ -90,6 +90,7 @@ fixed by Christoph Zeuch
 
 	$lang['_DELETE'] = "Löschen";
 	$lang['_EDIT'] = "Editieren";
+	$lang['_EDITADS'] = "Edit your advertisement";
 	$lang['_SUBMITTER'] = "Name:";
 	$lang['_ADD_LISTING'] = "Füge einen Eintrag hinzu";
 	$lang['_SUBMIT'] = "Submit";

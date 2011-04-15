@@ -90,6 +90,7 @@
 	$lang['_VIEW_MY_ADS'] = "Oglej si vse male oglase ";	
 
 	$lang['_DELETE'] = "Izbriši";
+	$lang['_EDITADS'] = "Izbriši your advertisement";
 	$lang['_EDITDESC'] = "Uredi opis";
 	$lang['_DELETED'] = "Slika uspešno zbrisana";
 	$lang['_EDIT'] = "Uredi";

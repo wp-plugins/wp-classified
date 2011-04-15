@@ -93,6 +93,7 @@
 	$lang['_EDITDESC'] = "تحرير الوصف";
 	$lang['_DELETED'] = "تم حذف الصورة";
 	$lang['_EDIT'] = "تحرير";
+	$lang['_EDITADS'] = "تحرير الإعلان ";
 	$lang['_SUBMITTER'] = "الاسم :";
 	$lang['_ADD_LISTING'] = "أضف القائمة";
 	$lang['_SUBMIT'] = "ارسال";

@@ -82,6 +82,7 @@
 	$lang['_EDITDESC'] = "Editar descripci&oacute;n";
 	$lang['_DELETED'] = "Imagen eliminada con &eacute;xito";
 	$lang['_EDIT'] = "Editar";
+	$lang['_EDITADS'] = "Editar your anuncio";
 	$lang['_SUBMITTER'] = "Nombre:";
 	$lang['_ADD_LISTING'] = "A&ntilde;adir una lista";
 	$lang['_SUBMIT'] = "Enviar";
