@@ -92,7 +92,7 @@ function wpcTopLink(){
 					 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id='".($_GET['asid']*1)."'", ARRAY_A);
 
 				return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".wpcPublicLink("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], 
-				"lid"=>$adsInfo['lists_id']))." - Edit Ads";
+				"lid"=>$adsInfo['lists_id']))."<br>" . $lang['_EDITADS'];
 			break;
 			case "va":
 				$adsInfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
@@ -146,7 +146,7 @@ function wpcHeaderLink(){
                   {$table_prefix}wpClassified_categories c 
                   WHERE c.categories_id=l.wpClassified_lists_id AND l.lists_id=". $_GET['lid'];
 			$lists=$wpdb->get_row($sql, ARRAY_A);
-			return wpcPublicLink("index", array("name"=>"Classified"))." ". $lists["cName"] ."<br>". $lang['_ADDANNONCE'] . " " . 
+			return wpcPublicLink("index", array("name"=>"Classified"))." ". $lists["cName"] ."<br></h3>". $lang['_ADDANNONCE'] . "<h3>" . 
                 wpcPublicLink("classified", array("name"=>$lists["lName"], "lid"=>$lists['lists_id'])); 
                 
 		break;
