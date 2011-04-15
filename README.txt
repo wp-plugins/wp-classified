@@ -2,8 +2,8 @@
 name: wpClassified Wordpress plugins Version: 1.4.2
 Contributors: Mohammad Forgani
 Donate link: http://www.forgani.com/root/wpclassified-plugins/
-Requires at least: 2.8.x
-Tested up to: 2.8.x
+Requires at least: 3.1.x
+Tested up to: 3.1.x
 Stable tag: 1.2
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified, blackboard
 

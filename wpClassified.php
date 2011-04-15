@@ -6,7 +6,7 @@ Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: This plugin allows you to add a simple information & advertising blackboard or classified page in to your wordpress blog.
 Author:Mohammad Forgani
 Version: 1.4.2
-Requires at least:2.8.x
+Requires at least:3.1.x
 Author URI: http://www.forgani.com
 
 
