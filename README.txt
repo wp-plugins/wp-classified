@@ -12,7 +12,7 @@ Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-cla
 
 This plugin allows you to add a simple information & advertising blackboard or classified page in to your wordpress blog.
 
-The plugin has been created and successfully tested on Wordpress version 2.8.5 with default and unchanged Permalink structure. It may work with earlier versions too, but I have not tested yet.
+The plugin has been successfully tested on Wordpress version 3.1 with default and unchanged Permalink structure. It may work with earlier versions too, but I have not tested yet.
 
 Please test the plugin with your theme on a test or a local machine, if the test is successful, then install it on the production machine.
 
