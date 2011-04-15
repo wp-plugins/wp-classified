@@ -69,7 +69,7 @@
 	$lang['_YOUREMAIL'] = "Your email:";
 	$lang['_SENDFR'] = "Send";
 
-	$lang['_ADDANNONCE'] = "Put your advertisement in this category";
+	$lang['_ADDANNONCE'] = '<span style="text-decoration:none; font-style:normal">Place Your Announcement in this category:</span>';
 	$lang['_YES'] = "Yes";
 	$lang['_NO'] = "No";
 	$lang['_BACK'] = "Back";
@@ -171,6 +171,7 @@
 
 //
    $lang['_DATEADDED'] = "Date Added";
+   $lang['_EDITADS'] = "Edit your advertisement";
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
 	//$lang['_SENDBY'] = "Added by :";

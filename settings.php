@@ -139,33 +139,30 @@ function wpcHeaderLink(){
         $sql = "SELECT c.name as cName, l.name as lName, l.wpClassified_lists_id FROM {$table_prefix}wpClassified_lists l, {$table_prefix}wpClassified_categories c 
                 WHERE c.categories_id=l.wpClassified_lists_id AND l.lists_id=". $_GET['lid'];
         $lists=$wpdb->get_row($sql, ARRAY_A);
-        return wpcPublicLink("index", array("name"=>"Classified"))."  ".
-               wpcPublicLink("classified", array("name"=>$lists["cName"], "lid"=>$lists['wpClassified_lists_id']))   ." - ". $lists['lName'];
+        return wpcPublicLink("index", array("name"=>"Classified"))."  ". $lists["cName"] . " - " . $lists['lName'];
 		break;
 		case "pa":
          $sql = "SELECT c.name as cName, l.name as lName, l.lists_id, l.wpClassified_lists_id FROM {$table_prefix}wpClassified_lists l, 
                   {$table_prefix}wpClassified_categories c 
                   WHERE c.categories_id=l.wpClassified_lists_id AND l.lists_id=". $_GET['lid'];
 			$lists=$wpdb->get_row($sql, ARRAY_A);
-			return wpcPublicLink("index", array("name"=>"Classified"))." ".  
-                wpcPublicLink("classified", array("name"=>$lists["cName"], "lid"=>$lists['wpClassified_lists_id']))   ." - ". 
-                wpcPublicLink("classified", array("name"=>$lists["lName"], "lid"=>$lists['lists_id']))." <br> " . 
-                $lang['_ADDANNONCE'];
+			return wpcPublicLink("index", array("name"=>"Classified"))." ". $lists["cName"] ."<br>". $lang['_ADDANNONCE'] . " " . 
+                wpcPublicLink("classified", array("name"=>$lists["lName"], "lid"=>$lists['lists_id'])); 
+                
 		break;
 		case "ea":
-			$adsInfo=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects
-			 LEFT JOIN {$table_prefix}wpClassified_lists
-			 ON {$table_prefix}wpClassified_lists.lists_id={$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id
-			 LEFT JOIN {$wpmuBaseTablePrefix}users
-			 ON {$wpmuBaseTablePrefix}users.ID={$table_prefix}wpClassified_ads_subjects.author
-			 WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id='".($_GET['asid']*1)."'", ARRAY_A);
-			return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified" , array("name"=>$adsInfo["name"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." <br> ".wpcPublicLink("ads_subject", array("name"=>$adsInfo["subject"], "asid"=>$adsInfo["ads_subjects_id"], "name"=>$adsInfo["name"], "lid"=>$adsInfo['lists_id']))." - Edit Ads";
+         $sql = "SELECT l.name as lName, c.name as cName, l.lists_id FROM {$table_prefix}wpClassified_ads_subjects a, {$table_prefix}wpClassified_lists l, {$table_prefix}wpClassified_categories c
+                WHERE l.lists_id=a.ads_subjects_list_id AND c.categories_id=l.wpClassified_lists_id AND a.ads_subjects_id=". $_GET['asid'];
+         $adsInfo=$wpdb->get_row($sql, ARRAY_A);
+			return wpcPublicLink("index", array("name"=>"Classified"))." ". $adsInfo["cName"] ." - ". 
+                wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']))."<BR>". $lang['_EDITADS'];
 		break;
 		case "va":
-         $sql = "SELECT l.name as lName, l.lists_id FROM {$table_prefix}wpClassified_ads_subjects a, {$table_prefix}wpClassified_lists l
-                WHERE l.lists_id=a.ads_subjects_list_id AND a.ads_subjects_id=". $_GET['asid'];
+         $sql = "SELECT l.name as lName, c.name as cName, l.lists_id FROM {$table_prefix}wpClassified_ads_subjects a, {$table_prefix}wpClassified_lists l, {$table_prefix}wpClassified_categories c
+                WHERE l.lists_id=a.ads_subjects_list_id AND c.categories_id=l.wpClassified_lists_id AND a.ads_subjects_id=". $_GET['asid'];
          $adsInfo=$wpdb->get_row($sql, ARRAY_A);
-			return wpcPublicLink("index", array("name"=>"Classified"))." ".wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']));
+			return wpcPublicLink("index", array("name"=>"Classified"))." ". $adsInfo["cName"] ." - ". 
+          wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']));
 		break;
 	}
 }
