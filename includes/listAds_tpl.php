@@ -79,7 +79,7 @@ wpcHeader();
           echo $t; 
           ?>
         </td>
-        <td nowrap="nowrap" align="right" valign="top" width="100">
+        <td nowrap="nowrap" align="right" valign="top" width="120">
         <?php
         if (!@in_array($ad->ads_subjects_id, $read) && $wpClassified->is_usr_loggedin()){
            $rour = "<img border=0 src=\"". $wpClassified->plugin_url . "/images/unread.gif\" class=\"imgMiddle\"> ";
@@ -89,7 +89,7 @@ wpcHeader();
         }
         ?>
         <?php echo @date($wpcSettings['date_format'], $ad->date);?><br />
-        <?php echo $rour; ?>&nbsp;<?php echo $sticky; ?>&nbsp;<small>(<?php echo $lang['_VIEWS']?>: <?php echo $ad->views;?>)</small>
+        <?php echo $rour; ?>&nbsp;<?php echo $sticky; ?>&nbsp;<small>(<?php echo $lang['_DATE']?>: <?php echo $ad->views;?>)</small>
         </td></tr>
         <tr><th colspan="3" class="col"><hr /></th></tr>
         <?php

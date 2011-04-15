@@ -12,7 +12,6 @@
 global $lang, $wpClassified;
 $wpcSettings = get_option('wpClassified_data');
 
-
 wpcHeader();
 $catCnt = count($categories);
 
@@ -60,8 +59,17 @@ if ($catCnt!="0"){
 	for ($x=0; $x<$catCnt; $x++){
 		echo "<div class=\"list-content\">\n";
 		$category = $categories[$x];
-		if ($category->photo)
-		echo "<img class=\"catphoto\" src=\"" . $wpClassified->plugin_url . "/" . $category->photo . "\">\n";
+		if ($category->photo) {
+        $img = "<img class=\"catphoto\" src=\"" . $wpClassified->plugin_url . "/" . $category->photo . "\">\n";
+        if ($lists[$category->categories_id][0]->lists_id) {
+          $firstLid = $lists[$category->categories_id][0]->lists_id;
+          $firstName = $lists[$category->categories_id][0]->name;
+          $url = wpcPublicLink("paform",  array("lid"=>$firstLid, "name"=>$firstName));
+          echo '<a href="'.$url.'">'.$img.'</a>';
+        } else {
+          echo $img;
+        }
+      }
 		?>
 		<dl id="group">
 		<dt><img src="<?php echo $wpClassified->plugin_url; ?>/images/colapse.gif" border="0">&nbsp;<?php echo $category->name;?></dt>

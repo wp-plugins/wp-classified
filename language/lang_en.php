@@ -69,7 +69,7 @@
 	$lang['_YOUREMAIL'] = "Your email:";
 	$lang['_SENDFR'] = "Send";
 
-	$lang['_ADDANNONCE'] = "Add a new Ad in this category";
+	$lang['_ADDANNONCE'] = "Put your advertisement in this category";
 	$lang['_YES'] = "Yes";
 	$lang['_NO'] = "No";
 	$lang['_BACK'] = "Back";
@@ -168,6 +168,9 @@
 	$lang['_APPROVE'] = "Thank You for using our Classified Ads.<br>Your classified ad has been sucessfully submitted for review!<br>Feel free to submit another ad.";
 	$lang['_APPROVEREPLY'] = "This ad was already submitted. We will check it as soon as possible.";
 
+
+//
+   $lang['_DATEADDED'] = "Date Added";
 	//$lang['_RETURNANN'] = "Return classified ads listing";
 	//$lang['_DU'] = "added on";   
 	//$lang['_SENDBY'] = "Added by :";
