@@ -55,6 +55,9 @@ Jan 27/03/2011
 
 // Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
 require_once(dirname(__FILE__).'/settings.php');
 
 define('WPC_PLUGIN_DIR', ABSPATH . 'wp-content/plugins/wp-classified');
@@ -238,6 +241,12 @@ class WP_Classified {
 		<span class="smallTxt">images from plugins/wp-classified/images directory</span></td>
 		</tr>
 		<tr>
+		<?php
+			  if (!$wpcSettings['description']) $wpcSettings['description'] = '<h2>Free Information & Advertising Blackboard</h2><b>Feel free to submit announcement, event or report any issues on this blackboard.</b><br />
+You do not have to pay any thing, it is totally FREE and your post will stay for 365 days<br /><br /><h3><span style="font-weight:bold; color:#380B61">choose a topics and SUBMIT your classified ad.</span></h3><br />';
+			  if (!$wpcSettings['slug']) $wpcSettings['slug'] = 'classified';
+			  if (!$wpcSettings['show_credits']) $wpcSettings['show_credits'] = 'y';
+		 ?>
 			<th align="right" valign="top"><label>Classifieds Description:</label></th>
 			<td><textarea cols=80 rows=3 name="wpClassified_data[description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?></textarea></td>
 		</tr>
@@ -263,6 +272,13 @@ class WP_Classified {
 			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
 		</tr>
 		<th><label></label></th>
+		<?php
+		if (!$wpcSettings['image_alignment']) $wpcSettings['image_alignment'] = 'left';
+		if (!$wpcSettings['display_unregistered_ip']) $wpcSettings['display_unregistered_ip'] = 'y';
+		if (!$wpcSettings['approve']) $wpcSettings['approve'] = 'y';
+		if (!$wpcSettings['display_titles']) $wpcSettings['display_titles'] = 'y';
+		if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = '5';
+		?>
 		<td><input type=checkbox name="wpClassified_data[approve]" value="y"<?php echo ($wpcSettings['approve']=='y')?" checked":"";?>>posts must be pre-approved before being published.</td>
 		</tr>
 
@@ -283,6 +299,11 @@ class WP_Classified {
 			</td>
 		</tr>
 		<tr>
+		<?php
+		if (!$wpcSettings['image_width']) $wpcSettings['image_width'] = '640';
+		if (!$wpcSettings['image_height']) $wpcSettings['image_height'] = '480';
+		if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = '120';
+		?>
 			<th align="right" valign="top"><label>Max. Ad image size:</label></th>
 			<td>Width:<input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height:<input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
 		</tr>
@@ -319,6 +340,11 @@ class WP_Classified {
 			<td><input type="text" size="3" name="wpClassified_data[count_last_ads]" value="<?php echo $wpcSettings['count_last_ads'];?>"><br /><span class="smallTxt">example: 5</span></td>
 		</tr>
 		<tr>
+		<?php
+		if (!$wpcSettings['banner_code']) $wpcSettings['banner_code'] = 'y';
+		if (!$wpcSettings['maxchars_limit']) $wpcSettings['maxchars_limit'] = '700';
+		if (!$wpcSettings['editor_toolbar_basic']) $wpcSettings['editor_toolbar_basic'] = 'y';
+		?>
 			<th align="right" valign="top"><label>Banner Code:</label></th>
 			<td><textarea cols=80 rows=3 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
 		</tr>			
@@ -362,6 +388,10 @@ class WP_Classified {
 			<td><input type=checkbox name="wpClassified_data[editor_toolbar_basic]" value="y"<?php echo ($wpcSettings['editor_toolbar_basic']=='y')?" checked":"";?>> Use basic toolbars in editor.</td>
 		</tr>
 		<tr>
+		<?php
+		if (!$wpcSettings['notify']) $wpcSettings['notify'] = 'y';
+		if (!$wpcSettings['date_format']) $wpcSettings['date_format'] = 'm-d-Y g:i a';
+		?>
 			<th><label></label></th>
 			<td><input type=checkbox name="wpClassified_data[notify]" value="y"<?php echo ($wpcSettings['notify']=='y')?" checked":"";?>> Notify Admin (email) on new Topic/Post</td>
 		</tr>
@@ -531,6 +561,9 @@ class WP_Classified {
 		<table width="99%"><tr><td>
 			<tr>
 			<th align="right" valign="top"><label><?php echo $lang['_NEWADDEFAULT'];?></label></th>
+			<?php
+			  if (!$wpcSettings['ad_expiration']) $wpcSettings['ad_expiration'] = '365';
+			?>
 			<td><input type=text size=4 name="wpClassified_data[ad_expiration]" value="<?php echo ($wpcSettings['ad_expiration']);?>"><br><span class="smallTxt">Ads will be auto-removed after these
 				number of days since creation. default:365 days<br />
 				The expiration will be disabled if you set this value to 0.
