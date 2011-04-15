@@ -12,8 +12,7 @@ Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-cla
 
 This plugin allows you to add a simple information & advertising blackboard or classified page in to your wordpress blog.
 
-The plugin has been created and successfully tested on Wordpress version 2.8.5 with 
-default and unchanged Permalink structure. It may work with earlier versions too, but I have not tested yet.
+The plugin has been created and successfully tested on Wordpress version 2.8.5 with default and unchanged Permalink structure. It may work with earlier versions too, but I have not tested yet.
 
 Please test the plugin with your theme on a test or a local machine, if the test is successful, then install it on the production machine.
 
@@ -72,7 +71,6 @@ You will have to:
 * Deactivate the plugin you currently have on your website (Admin Dashboard->Plugins->Deactivate)
 * Upload/Replace the plugin in your wp-content->plugins
 * Reactivate the plugin
-
 
 
 == Database Upgrade ==
@@ -190,10 +188,8 @@ You can edit the .htaccess file by FTP.
 You use the default .htaccess file and modify the file as follow:
 The redirect should look something like this
 
-####
-#### DO NOT touch your .htaccess file. 						  ####
-#### By default, you do not need to touch the .htaccess file. ####
-####				
+### DO NOT touch your .htaccess file. ###
+### By default, you do not need to touch the .htaccess file. ####
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
@@ -201,9 +197,9 @@ RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-##########
+###
 #RewriteRule . /index.php [L]
-##########
+###
 RewriteRule !classified/ /index.php [L]
 RewriteRule ^classified/([^/\(\)]*)/?  /index.php?pagename=classified [QSA,L,R,NS]
 </IfModule>
