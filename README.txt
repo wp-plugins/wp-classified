@@ -104,8 +104,8 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 = last changes =
 Jan 27/03/2011
-- fixed the Fixed Widget Sidebar Menu
 - fixed for WP version 3.1
+- update the Widget Sidebar Menu
 - improved categories & forwards links in main page 
 
 = version 1.4 =
