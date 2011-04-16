@@ -156,24 +156,21 @@ class WP_Classified {
 			$sql = "INSERT INTO {$table_prefix}posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_password, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, guid, menu_order, post_type) VALUES ('1', '$dt', '$dt', '[[WP_CLASSIFIED]]', '[[WP_CLASSIFIED]]',  '[[WP_CLASSIFIED]]', 'publish', 'closed', 'closed', '', 'wpcareers', '', '', '$dt', '$dt', '[[WP_CLASSIFIED]]', '0', '', '0', 'page')";
 			$wpdb->query($sql);
 		}
-			switch ($_GET['adm_action']){
-				case "saveSettings":
-		
-					foreach ($_POST["wpClassified_data"] as $k=>$v){
-						$_POST["wpClassified_data"][$k] = stripslashes($v);
-					}
+		switch ($_GET['adm_action']){
+			case "saveSettings":
+				foreach ($_POST["wpClassified_data"] as $k=>$v){
+					$_POST["wpClassified_data"][$k] = stripslashes($v);
+				}
+				$null_values = array('must_registered_user', 'display_titles', 'filter_posts', 'view_must_register', 'approve');
+				foreach ( $null_values as $v) {
+					if (!isset($_POST['wpClassified_data'][$v])) $_POST['wpClassified_data'][$v]='n';
+				}
 				
-					$null_values = array('must_registered_user', 'display_titles', 'filter_posts', 'view_must_register', 'approve');
-					foreach ( $null_values as $v) {
-						if (!isset($_POST['wpClassified_data'][$v]))
-							$_POST['wpClassified_data'][$v]='n';
-					}
-					
-					$_POST['wpClassified_data']['userfield'] =  $this->get_user_field();
-					$_POST['wpClassified_data']['installed'] = 'y';
-					update_option('wpClassified_data', $_POST['wpClassified_data']);
-					$msg = "Settings Updated!";
-				break;
+				$_POST['wpClassified_data']['userfield'] =  $this->get_user_field();
+				$_POST['wpClassified_data']['installed'] = 'y';
+				update_option('wpClassified_data', $_POST['wpClassified_data']);
+				$msg = "Settings Updated!";
+			break;
 			case "install":
 				include("wpClassified_db.php");
 				wpClassified_db();
@@ -182,18 +179,18 @@ class WP_Classified {
 
 		if ($msg!=''){
 			?>
-			<p>
-			<div id="message" class="updated fade"><?php echo $msg; ?></div>
-			</p>
+			<p><div id="message" class="updated fade"><?php echo $msg; ?></div></p>
 			<?php
 		}
 
 		$wpcSettings = get_option('wpClassified_data');
 		$t = $table_prefix.'wpClassified';
-		if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'")) {
+		if(!$wpdb->get_col("SHOW TABLES LIKE '" . $t . "%'") ||
+          !isset ($wpcSettings['slug'])) {
 			// TODO
 			$this->set_default_option();
 		}
+		
 
 		$url = "<a href=\"".get_bloginfo('wpurl')."/index.php?pagename=classified\">".get_bloginfo('wpurl')."/index.php?pagename=classified</a>";
 		?>
@@ -259,26 +256,12 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 		<td><input type="text" name="wpClassified_data[slug]" value="<?php echo $wpcSettings['slug'];?>"></td>
 		</tr>	
 
-		<?php
-		if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = "120";
-		if (!$wpcSettings['number_of_image']) $wpcSettings['number_of_image'] = "3";
-		if (!$wpcSettings['image_position']) $wpcSettings['image_position'] = "1";
-		if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
-		$imgPosition=array ('1' => 'Images on right');	
-		?>
-
+		<?php $imgPosition=array ('1' => 'Images on right'); ?>
 		<tr>
 			<th align="right" valign="top"><label>Number of image columns:</label></th>
 			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
 		</tr>
 		<th><label></label></th>
-		<?php
-		if (!$wpcSettings['image_alignment']) $wpcSettings['image_alignment'] = 'left';
-		if (!$wpcSettings['display_unregistered_ip']) $wpcSettings['display_unregistered_ip'] = 'y';
-		if (!$wpcSettings['approve']) $wpcSettings['approve'] = 'y';
-		if (!$wpcSettings['display_titles']) $wpcSettings['display_titles'] = 'y';
-		if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = '5';
-		?>
 		<td><input type=checkbox name="wpClassified_data[approve]" value="y"<?php echo ($wpcSettings['approve']=='y')?" checked":"";?>>posts must be pre-approved before being published.</td>
 		</tr>
 
@@ -299,11 +282,6 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 			</td>
 		</tr>
 		<tr>
-		<?php
-		if (!$wpcSettings['image_width']) $wpcSettings['image_width'] = '640';
-		if (!$wpcSettings['image_height']) $wpcSettings['image_height'] = '480';
-		if (!$wpcSettings['thumbnail_image_width']) $wpcSettings['thumbnail_image_width'] = '120';
-		?>
 			<th align="right" valign="top"><label>Max. Ad image size:</label></th>
 			<td>Width:<input type="text" size="5" name="wpClassified_data[image_width]" value="<?php echo $wpcSettings['image_width'];?>"> X Height:<input type="text" size="5" name="wpClassified_data[image_height]" value="<?php echo $wpcSettings['image_height'];?>"><br /><span class="smallTxt">example: 640x480</span></td>
 		</tr>
@@ -340,11 +318,6 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 			<td><input type="text" size="3" name="wpClassified_data[count_last_ads]" value="<?php echo $wpcSettings['count_last_ads'];?>"><br /><span class="smallTxt">example: 5</span></td>
 		</tr>
 		<tr>
-		<?php
-		if (!$wpcSettings['banner_code']) $wpcSettings['banner_code'] = 'y';
-		if (!$wpcSettings['maxchars_limit']) $wpcSettings['maxchars_limit'] = '700';
-		if (!$wpcSettings['editor_toolbar_basic']) $wpcSettings['editor_toolbar_basic'] = 'y';
-		?>
 			<th align="right" valign="top"><label>Banner Code:</label></th>
 			<td><textarea cols=80 rows=3 name="wpClassified_data[banner_code]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['banner_code']));?></textarea></td>
 		</tr>			
@@ -490,7 +463,7 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 			<td><select name="wpClassified_data[GADformat]">
 				<optgroup label='Horizontal'>
 				<?php
-				foreach($formats as $key=>$value)	{
+				foreach($formats as $key=>$value) {
 					if ($key == $wpcSettings[GADformat]) {
 						echo "\n<option value='$key' selected='selected'>$value</option>\n";
 					} else {
@@ -637,7 +610,8 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 		$wpcSettings['show_credits'] = 'y';
 		$wpcSettings['approve]'] = 'y';
 		$wpcSettings['slug'] = 'Classifieds';
-		$wpcSettings['description'] = "Feel free to<b>submit your classified ads</b>, Promote your Business or website by posting free ads.<br>You don't have to pay anything, it's totally free, your ads stay 365 days here for free";
+		$wpcSettings['description'] = "<h2>Free Information & Advertising Blackboard</h2><b>Feel free to submit announcement, event or report any issues on this blackboard.</b><br />
+You do not have to pay any thing, it is totally FREE and your post will stay for 365 days<br /><br /><h3><span style=\"font-weight:bold; color:#380B61\">choose a topics and SUBMIT your classified ad.</span></h3><br />";
 		$wpcSettings['must_registered_user'] = 'n';
 		$wpcSettings['view_must_register'] = 'n';
 		$wpcSettings['display_unregistered_ip'] = 'y';
@@ -649,7 +623,7 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 		$wpcSettings['rss_feed_num'] = 15;
 		$wpcSettings['confirmation_code'] = 'y';
 		$wpcSettings['count_ads_per_page'] = 10;
-		$wpcSettings['maxchars_limit'] = 400;
+		$wpcSettings['maxchars_limit'] = 540;
 		$wpcSettings['number_of_image'] = 3;
 		$wpcSettings['image_position'] = 1;
 		$wpcSettings['thumbnail_image_width'] = 120;
