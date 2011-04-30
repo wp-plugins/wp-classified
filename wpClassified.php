@@ -51,6 +51,9 @@ Jan 27/03/2011
 - fixed for WP version 3.1
 - improved categories & forwards links in main page 
 
+Jan 30/04/2011
+- added the facebook link button
+
 */
 
 // Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
@@ -262,7 +265,7 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 			<td><input type="text" size="3" name="wpClassified_data[number_of_image]" value="<?php echo $wpcSettings['number_of_image'];?>"><br /><span class="smallTxt">example: 3</span></td>
 		</tr>
 		<th><label></label></th>
-		<td><input type=checkbox name="wpClassified_data[approve]" value="y"<?php echo ($wpcSettings['approve']=='y')?" checked":"";?>>posts must be pre-approved before being published.</td>
+		<td><input type=checkbox name="wpClassified_data[approve]" value="y"<?php echo ($wpcSettings['approve']=='y')?" checked":"";?>> Posts must be pre-approved before being published.</td>
 		</tr>
 
 		<tr>
@@ -378,8 +381,12 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 		</tr>
 		<tr>
 			<th><label></label></th>
-			<td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>><?php echo $lang['_ALLOWRSS'];?></td>
+			<td><input type=checkbox name="wpClassified_data[rss_feed]" value="y"<?php echo ($wpcSettings['rss_feed']=='y')?" checked":"";?>> <?php echo $lang['_ALLOWRSS'];?></td>
 		</tr>
+		<tr>
+         <th><label></label></th>
+         <td><input type=checkbox name="wpClassified_data[fb_link]" value="y"<?php echo ($wpcSettings['fb_link']=='y')?" checked":"";?>> Show Facebook Link.</td>
+      </tr>
 		<tr>
 			<th align="right" valign="top"><label><?php echo $lang['_NOPOSTS'];?></label></th>
 			<td><input type=text size=4 name="wpClassified_data[rss_feed_num]" value="<?php echo ($wpcSettings['rss_feed_num']);?>"><br>
@@ -387,7 +394,7 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 		</tr>
 		<tr>
 			<th><label></label></th>	
-			<td><input type=checkbox name="wpClassified_data[confirmation_code]" value="y"<?php echo ($wpcSettings['confirmation_code']=='y')?" checked":"";?>><?php echo $lang['_COMFCODE'];?></td>
+			<td><input type=checkbox name="wpClassified_data[confirmation_code]" value="y"<?php echo ($wpcSettings['confirmation_code']=='y')?" checked":"";?>> <?php echo $lang['_COMFCODE'];?></td>
 		</tr>
 		</table>
 		</fieldset>
@@ -620,6 +627,7 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
 		$wpcSettings['editor_toolbar_basic'] = 'y';
 		$wpcSettings['filter_posts'] = 'y';
 		$wpcSettings['rss_feed'] = 'y';
+		$wpcSettings['fb_like'] = 'y';
 		$wpcSettings['rss_feed_num'] = 15;
 		$wpcSettings['confirmation_code'] = 'y';
 		$wpcSettings['count_ads_per_page'] = 10;

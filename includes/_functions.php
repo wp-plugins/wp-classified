@@ -142,19 +142,19 @@ function wpcFooter(){
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
 	echo "<div class=\"wpc_footer\">";
-	echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
-	echo wpcLastAds(false);
-	echo '<HR class="wpc_footer_hr">';
-	if($wpcSettings['rss_feed']=='y'){
+    echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
+    echo wpcLastAds(false);
+    echo '<HR class="wpc_footer_hr">';
+    if($wpcSettings['rss_feed']=='y'){
 		$filename = $wpClassified->plugin_url . '/cache/wpclassified.xml';
 		?>
 		<div class="rssIcon">
 		<a href="<?php echo $filename; ?>" target="_blank" onclick="return pop('<?php echo $filename; ?>','<?php echo $wpcSettings['slug'] ?>');"><?php echo $wpcSettings['slug'] ?> RSS</a></div>
 		<?php
-	}
-	if ($wpcSettings['show_credits']=='y'){
-		echo "<div class=\"smallTxt\">&nbsp;&nbsp;" .stripslashes($wpcSettings['credit_line']) . "</div>";
-	}
+    }
+    if ($wpcSettings['show_credits']=='y') echo "<div class=\"smallTxt\">" .stripslashes($wpcSettings['credit_line']) . "</div>";
+    if($wpcSettings['fb_link']=='y') echo wpcFbLike('');
+        
 	echo "</div>";
 }
 
@@ -187,9 +187,7 @@ function wpcDeleteAd(){
 		$permission=true;
 	}
 	
-	if (!$permission) {
-		if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
-	}	
+	if (!$permission) if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
 	if (!$permission) {
 		wpcPermissionDenied();
 		return;
@@ -253,9 +251,7 @@ function wpcEditAd(){
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$postinfo['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
 		$permission=true;
    }
-	if (!$permission) {
-		if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
-	}
+	if (!$permission) if (getenv('REMOTE_ADDR')==$postinfo['author_ip']) $permission=true;
 	if (!$permission) {
 		wpcPermissionDenied();
 		return;
@@ -656,5 +652,23 @@ function wpcValidatePhone($phone){
 	return $phonevalid;
 }
 
+
+
+function wpcFbLike($id) {
+  global $wpClassified;
+  $layout = 'standard'; // button_count standard
+  $show_faces = 'false'; // TODO
+  $font = 'arial';
+  $colorscheme = 'light'; // dark
+  $action = 'like'; //  recommend
+  $width = '450';
+  $height = '';
+  $pageinfo = $wpClassified->get_pageinfo();
+  $url = get_bloginfo('wpurl').'/?page_id=' . $pageinfo["ID"];
+  $permalink = urlencode($url);
+  $output = '<div style="margin:5px 0">';
+  $output .= '<iframe src="http://www.facebook.com/plugins/like.php?href='.str_replace('&', '&amp;', $url).'&amp;layout='.$layout.'&amp;show_faces='.$show_faces.'&amp;width='.$width.'&amp;action='.$action.'&amp;font='.$font.'&amp;colorscheme='.$colorscheme.'" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:'.$width.'px; height:'.$height.'px"></iframe>';
+  return $output . '</div>';
+}
 
 ?>
