@@ -243,7 +243,7 @@ class WP_Classified {
 		<tr>
 		<?php
 			  if (!$wpcSettings['description']) $wpcSettings['description'] = '<h2>Free Information & Advertising Blackboard</h2><b>Feel free to submit announcement, event or report any issues on this blackboard.</b><br />
-You do not have to pay any thing, it is totally FREE and your post will stay for 365 days<br /><br /><h3><span style="font-weight:bold; color:#380B61">choose a topics and SUBMIT your classified ad.</span></h3><br />';
+You do not have to pay any thing, it is totally FREE and your post will stay for 365 days<br /><br /><h3><span style="font-weight:bold; color:#380B61">Choose a topic and SUBMIT your classified ad.</span></h3><br />';
 			  if (!$wpcSettings['slug']) $wpcSettings['slug'] = 'classified';
 			  if (!$wpcSettings['show_credits']) $wpcSettings['show_credits'] = 'y';
 		 ?>
