@@ -640,7 +640,7 @@ $(document).ready(function() {
 			default:
          echo "<tr><td class='wpc_label_right'>" . $lang['_DESC'] . "</td><td>";
 			echo "<textarea name='description' id='description' cols='50' rows='20'>".str_replace("<", "&lt;", $content)."</textarea><br />";
-			echo '<span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of ' . $wpcSettings['maxchars_limit'] . ' characters allowed</SPAN><BR/></td></tr>';
+			echo '<span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;' . $lang['_CHARS_LEFT'] . '). ' . $lang['_CHAR_MAX_OF'] . $wpcSettings['maxchars_limit'] . ' ' . $lang['CHAR_MAX_ALLOWED'];'</SPAN><BR/></td></tr>'; 
 		break;
 		case "tinymce":
 			//echo '<textarea class="theEditor" name="description" id="description" rows="8" cols="50">'. htmlentities($content) .'</textarea><br />';
@@ -648,13 +648,13 @@ $(document).ready(function() {
 			?>
          <tr>
 			<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
-			<td><textarea id="description" name="description" style="width:500px; height: 200px;"><?php echo htmlentities($content); ?></textarea>
-         <span class ="smallTxt" id="msgCounter">(<span id="charLeft"> </span>&nbsp;chars left.) Maximum of <?php echo $wpcSettings['maxchars_limit']; ?> characters allowed</SPAN><BR/>
+			<td class="wpc_label_left"><textarea id="description" name="description" style="width:320px; height: 200px;"><?php echo htmlentities($content); ?></textarea>
+         <span class ="smallTxt" id="msgCounter">(<span id="charLeft"></span>&nbsp; <?php echo $lang['_CHARS_LEFT'] . '). ' . $lang['_CHAR_MAX_OF'] . $wpcSettings['maxchars_limit'] . ' ' . $lang['CHAR_MAX_ALLOWED'];?></SPAN><BR/>
          </td>
          </tr>
          <tr>
-         <td class="wpc_label_right">Preview:</td>
-         <td><div id="preview" style="width: 500px; height: 200px; border:#c7ceeb 1px solid; padding: 3px"></div></td>
+         <td class="wpc_label_right"><?php echo $lang['_PREVIEW'];?>: </td>
+         <td class="wpc_label_left"><div id="preview" style="width: 320px; height: 200px; border:#c7ceeb 1px solid; padding: 3px"></div></td>
          </tr>
          <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script>
          <script src='<?php echo get_bloginfo('wpurl'); ?>/wp-content/plugins/wp-classified/includes/js/jquery.bbcode.js' type='text/javascript'></script>

@@ -26,7 +26,7 @@
 <div class="wpc_container">
 	<table width="650" border=0>
 		<tr>
-			<td><?php echo $lang['_CLASSIFIED_AD']; ?> (No. <?php echo  $aid; ?>)<br /><?php echo $lang['_FROM']; ?><br /><br />
+			<td><?php echo $lang['_CLASSIFIED_AD']; ?> ( <?php echo $lang['_AD_ID'] . $aid; ?> )<br /><?php echo $lang['_FROM'] . ': ' . wpcPostAuthor($post); ?><br /><br />
 			<b><?php echo $lang['_TITLE']; ?></b> <i><?php echo $subject; ?></i></td></tr>
 			<?php
 			echo "<tr><td>";

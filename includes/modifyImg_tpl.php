@@ -12,9 +12,9 @@ wpcHeader();
 echo "<div class=\"wpc_container\">";
 if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()){
 	?>
-	<br><br><?php echo __("Sorry, you must be registered and logged in to post in these classifieds.");?><br><br>
-	<a href="<?php echo get_bloginfo('wpurl');?>/wp-register.php"><?php echo __("Register Here");?></a><br><br>- <?php echo __("OR");?> -<br><br>
-	<a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo __("Login Here");?></a>
+	<br><br><?php echo $lang['_MUST_LOGIN'];?><br><br>
+	<a href="<?php echo get_bloginfo('wpurl');?>/wp-register.php"><?php echo $lang['_MAY_REGISTER'];?></a><br><br>- <?php echo $lang['_OR'];?> -<br><br>
+	<a href="<?php echo get_bloginfo('wpurl');?>/wp-login.php"><?php echo $lang['_LOGIN'];?></a>
 	<?php
 } else {	
 	echo $quicktags;

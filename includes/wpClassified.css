@@ -69,7 +69,11 @@ div.info div.left{float:left}
 .editform h3{margin:10px 0 0 10px;}
 .editform table {width:99%;margin-top:20px;}
 .editform table td, .border {padding:2px;margin:0px;border-top:1px solid #efefef;}
+
 .wpc_label_right{text-align:right;vertical-align:top;}
+.wpc_label_left{text-align:left;vertical-align:top;}
+
+
 .editform textarea{border-top:1px solid #efefef;}
 .wpc_footer{clear:both;padding:4px 5px 5px 0;font-size:9pt;margin-top:10px;}
 .wpc_footer img{padding:0;margin:-2px;}

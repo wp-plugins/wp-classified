@@ -35,7 +35,7 @@ wpcHeader();
       ?>
     <table class="main" width="100%">
       <tr class="col">
-        <th width="120" class="col"><?php echo $lang['_VIEWS']?></th>
+        <th width="120" class="col"><?php echo $lang['_PIC']?></th>
         <th style="text-align: left;" class="col"><?php echo $lang['_SUBJECT'];?></th>
         <th style="text-align: right;" class="col"><?php echo $lang['_POSTON'];?></th>
       </tr>
@@ -74,7 +74,7 @@ wpcHeader();
           $string = substr($txt, 0, 120); 
           $t = wordwrap($string, 55, "\n", true);
           $t = getTheHtml($t);
-          $l= wpcPublicLink("ads_subject", array("name"=>'Read more', "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
+          $l= wpcPublicLink("ads_subject", array("name"=>  $lang['_READ_MORE'], "lid"=>$_GET['lid'], "asid"=>$ad->ads_subjects_id));
           $t .= '... ' . '<span class="readmore">' . $l . '</span>';
           echo $t; 
           ?>
@@ -89,7 +89,7 @@ wpcHeader();
         }
         ?>
         <?php echo @date($wpcSettings['date_format'], $ad->date);?><br />
-        <?php echo $rour; ?>&nbsp;<?php echo $sticky; ?>&nbsp;<small>(<?php echo $lang['_DATE']?>: <?php echo $ad->views;?>)</small>
+        <?php echo $rour; ?>&nbsp;<?php echo $sticky; ?>&nbsp;<small>(<?php echo $lang['_VIEWS']?>: <?php echo $ad->views;?>)</small>
         </td></tr>
         <tr><th colspan="3" class="col"><hr /></th></tr>
         <?php

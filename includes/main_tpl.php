@@ -7,6 +7,7 @@
 * Author Website : http://www.forgani.com
 * @version 1.3.1
 * show the Main page
+* fixed by Jes Saxe MAJ 2011
 */
 
 global $lang, $wpClassified;
@@ -48,9 +49,8 @@ function showAll() {
 		aDD[i].style.display='';
 	}
 }
-
 </script>
-<p><div class="wpc_colaps"><a href="javascript:showAll()">Expand All</a></div><div class="wpc_colaps"><a href="javascript:hideAll()">Collapse All</a></div></p>
+<p><div class="wpc_colaps"><a href="javascript:showAll()"><?php echo $lang['_EXPAND_ALL'];?></a></div><div class="wpc_colaps"><a href="javascript:hideAll()"><?php echo $lang['_COLLAPSE_ALL'];?></a></div></p>
 <div class="wpc_container">
 <div class="main-content">
 

@@ -48,9 +48,9 @@ if (($i+1)==$hm){
 			?>
 
 			<div class="show_ad_info">
-          Posted By<img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?php echo wpcPostAuthor($post);?> on <img src="<?php echo $wpClassified->plugin_url; ?>/images/cal.gif">
-          <?php echo @date($wpcSettings['date_format'], $post->date); echo " (User Ad:" .($post->user_info_post_count*1). ")" ?>
-
+          <?php echo $lang['_FROM'];?><img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?php echo wpcPostAuthor($post);?> <?php echo $lang['_POSTON'];?> <img src="<?php echo $wpClassified->plugin_url; ?>/images/cal.gif">
+          <?php echo @date($wpcSettings['date_format'], $post->date) . '<br>' . $lang['_USER_ADS'] . ': ' . ($post->user_info_post_count*1);?> 
+	 
           <?php if ($editlink){
               echo '<BR />';
               echo '<small><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</small>';

@@ -129,7 +129,7 @@ function wpcHeaderLink(){
 	switch ($_GET['_action']){
 		default:
 		case "classified":
-			return "<a href=\"".$main_link."_action=classified\">Main</a>";
+			return "<a href=\"".$main_link."_action=classified\">".$lang['_MAIN']."</a>";
 		break;
 		case "search":
 			$search_title="Searching for: ".$_POST['search_terms'];

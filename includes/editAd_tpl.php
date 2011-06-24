@@ -6,6 +6,7 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * @version 1.3.1-a
+* fixed by Jes Saxe MAJ 2011
 * 
 */
 
@@ -23,16 +24,16 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		<input type="hidden" name="edit_ad" value="yes">
 		<table>
 		<tr><td class="wpc_label_right"><?php echo $lang['_AUTHOR']; ?></td>
-			<td><?php echo wpcPostAuthor($postinfo); ?>
+			<td class="wpc_label_left"><?php echo wpcPostAuthor($postinfo); ?>
 			<input type="hidden" name="wpClassified_data[author_name]" value="<?php echo wpcPostAuthor($postinfo); ?>">
 		</td>
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_EMAIL']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo $postinfo->email; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
+			<td class="wpc_label_left"><input type=text size=30 name="wpClassified_data[email]" id="wpClassified_data_email" value="<?php echo $postinfo->email; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td></tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_CONTACTBY']; ?></td>
-			<td>
+			<td class="wpc_label_left">
 			<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_YES_CONTACT']; ?>" 
 			<?php if ($contactBy==$lang['_YES_CONTACT']) { echo " checked"; } ?>/><?php echo $lang['_YES_CONTACT']; ?></option>
 			<input type="radio" name="wpClassified_data[contactBy]" value="<?php echo $lang['_NO_CONTACT']; ?>" 
@@ -40,18 +41,18 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_WEB']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo $postinfo->web; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td>
+			<td class="wpc_label_left"><input type=text size=30 name="wpClassified_data[web]" id="wpClassified_data_web" value="<?php echo $postinfo->web; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?></span></td>
 		</tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_TEL']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo $postinfo->phone; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?><br />e.g.+98(231)12345</span></td>
+			<td class="wpc_label_left"><input type=text size=30 name="wpClassified_data[phone]" id="wpClassified_data_phone" value="<?php echo $postinfo->phone; ?>"><span class ="smallTxt"><?php echo $lang['_OPTIONAL']; ?><br />e.g.+98(231)12345</span></td>
 		</tr>
 		<tr><td></td><td><hr></td></tr>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_TITLE']; ?></td>
-			<td><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo $postinfo->subject; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td>
+			<td class="wpc_label_left"><input type=text size=30 name="wpClassified_data[subject]" id="wpClassified_data_subject" value="<?php echo $postinfo->subject; ?>"><span class="smallRed"><?php echo $lang['_REQUIRED'] ?></span></td>
 		</tr>
-		<tr><td colspan=2><p>Images:</p></td></tr>
+		<tr><td colspan=2><p><?php echo $lang['_PIC']; ?></p></td></tr>
 		<tr><td colspan=2>
 			<table width=90%>
 				<tr>
@@ -73,13 +74,13 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 			</table>
 		</td></tr>
 		<tr><td colspan=2 align="center">
-			<?php echo wpcPublicLink("mi", array("name"=>"Add/Modify Image", "aid"=>$postinfo->ads_id)); ?>
+			<?php echo wpcPublicLink("mi", array("name"=> $lang['_ADDMODDIMAGE'], "aid"=>$postinfo->ads_id)); ?>
 		</td></tr>
       <?php wpcAdInput($postinfo->post);?>
 		<?php 
 		if ( isset($wpcSettings['ad_expiration']) && $wpcSettings['ad_expiration'] > 0 ) {
 			echo '<tr><td class="wpc_label_right">'.$lang['_HOW_LONG']. '</td>';
-			echo '<td><input type="text" name="wpClassified_data[ad_expiration]" size="3" maxlength="3" value="';
+			echo '<td class="wpc_label_left"><input type="text" name="wpClassified_data[ad_expiration]" size="3" maxlength="3" value="';
 			if ($adExpire) {
 				echo $adExpire;
 			} else {
@@ -94,13 +95,13 @@ if ($msg){echo "<p class=\"error\">".$msg."</p>";}
 		?>
 		<tr>
 			<td class="wpc_label_right"><?php echo $lang['_CONFIRM']; ?></td>
-			<td><img src="<?php echo $wpClassified->cache_url. "/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
+			<td  class="wpc_label_left"><img src="<?php echo $wpClassified->cache_url. "/" .$captcha ?>" alt="ConfirmCode" align="middle"/><br>
 			<input type="text" name="wpClassified_data[confirmCode]" id="wpClassified_data_confirmCode" size="10"></td>
 		</tr>
 		<?php
 		} ?>
 		<tr>
-			<td></td><td><br><input type="submit" name="submit" value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset"  id="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td>
+			<td></td><td class="wpc_label_left"><br><input type="submit" name="submit" value="<?php echo $lang['_SAVEAD']; ?>" id="submit">&nbsp;&nbsp;<input type="reset"  id="reset" name="reset" value="<?php echo $lang['_CANCEL']; ?>" /></td>
 		</tr>
 		
 		</table>

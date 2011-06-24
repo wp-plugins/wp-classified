@@ -1,8 +1,8 @@
 <?php
 /*
-wpClassified V1.2
-RSS Feeds
+* wpClassified V1.2 RSS Feeds
 * Author Website : http://www.forgani.com
+* fixed by Jes Saxe MAJ 2011
 */
 
 /*
@@ -61,6 +61,8 @@ $contents .= "<description>$rssDescription</description>\n";
 $contents .= "<generator>$rssGenerator</generator>\n";
 $contents .= "<language>" . get_option('rss_language') . "</language>\n";
 $contents .= "<pubDate>" . date("r") . "</pubDate>\n";
+
+
 
 
 $filename = WPC_PLUGIN_DIR . '/cache/wpclassified.xml';

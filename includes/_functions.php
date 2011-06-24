@@ -7,6 +7,7 @@
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
 * @version 1.3.1-a
+* fixed by Jes Saxe MAJ 2011
 */
 
 if (!isset($_SESSION)) @session_start();
@@ -53,7 +54,7 @@ function wpcHeader(){
 	<?php
 	//
 	$wpClassified->cleanUp();
-	include_once (dirname(__FILE__).'/_rss.php');
+	//include_once (dirname(__FILE__).'/_rss.php');
 
 	$today = time();
 	$sql = "SELECT ads_subjects_id, txt, date FROM {$table_prefix}wpClassified_ads_subjects";
@@ -142,7 +143,7 @@ function wpcFooter(){
 		echo '<div class="wpc_googleAd">' . $gAd . '</div>';
 	}
 	echo "<div class=\"wpc_footer\">";
-    echo "<h3>Last " . $wpcSettings['count_last_ads'] . " Ads posted...</h3>";
+    echo "<h3>" . $lang['_LAST'] . ' ' . $wpcSettings['count_last_ads'] . ' ' . $lang['_ADS'] . "...</h3>";
     echo wpcLastAds(false);
     echo '<HR class="wpc_footer_hr">';
     if($wpcSettings['rss_feed']=='y'){
@@ -510,9 +511,9 @@ function wpcDisplayAd(){
 		}	
 		
 		if ($permission){
-			$editlink = " ".wpcPublicLink("ea", array("name"=>"EDIT AD", "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>"Edit Your Ad", "aid"=>$post->ads_id))." ";
+			$editlink = " ".wpcPublicLink("ea", array("name"=>$lang['_EDITDESC'], "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$lang['_EDITDESC'], "aid"=>$post->ads_id))." ";
 
-			$deletelink = " ".wpcPublicLink("da", array("name"=>"DELETE AD", "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>"Delete", "aid"=>$post->ads_id))." ";
+			$deletelink = " ".wpcPublicLink("da", array("name"=>  $lang['_DELETE'], "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$lang['_DELETE'], "aid"=>$post->ads_id))." ";
 		} else {
 			$editlink = "";
 		}
