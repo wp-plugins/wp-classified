@@ -86,8 +86,10 @@ class WP_Classified {
   function WP_Classified() {
 		// initialize all the variables
 		$this->plugin_home_url = 'http://www.forgani.com/wp-classified';
-		$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
-		$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.plugin_basename(dirname(__FILE__));
+		$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.$this->plugin_name;
+		$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.$this->plugin_name;
+		//$this->plugin_dir = WP_CONTENT_DIR.'/plugins/'.plugin_basename(dirname(__FILE__));
+		//$this->plugin_url = get_option("siteurl").'/wp-content/plugins/'.plugin_basename(dirname(__FILE__));
 		$this->public_dir = WP_CONTENT_DIR.'/public/wp-classified/';
 		$this->public_url = get_option("siteurl").'/wp-content/public/wp-classified';
 		$this->cache_dir = $this->plugin_dir . '/cache/';
