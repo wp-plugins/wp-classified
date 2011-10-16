@@ -77,9 +77,10 @@ if (($i+1)==$hm){
 			include (dirname(__FILE__).'/js/viewer.js.php');
 			echo "<div class=\"show_ad_img13\"><a href=\"". $wpClassified->public_url . "/" . $array[2] . "\" rel=\"thumbnail\"><img src=\"". $wpClassified->public_url . "/" . $array[2] . "\" style=\"width:". $wpcSettings["thumbnail_image_width"] ."px; height:". $wpcSettings["thumbnail_image_width"]."px;\"></a></div>"; //<br>" .$array[2] . "
 		} 
-		$txt = wpcCommmentQuote($post);
 		?>
-		<p class="justify"><?php echo getTheHtml($txt);?></p>
+
+		<p class="justify"><?php echo getTheHtml($post->post);?></p>
+		
 		<script language="javascript" type="text/javascript">
 			function addtext_<?php echo $post->ads_id;?>() {
 			<?php 
