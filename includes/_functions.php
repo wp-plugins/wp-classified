@@ -239,15 +239,15 @@ function wpcEditAd(){
 
 	$postinfos = $wpdb->get_results($sql, ARRAY_A);
 	$postinfo = $postinfos[0];
-
-	$web = stripslashes(trim($_POST['wpClassified_data']['web']));
-   $email = stripslashes(trim($_POST['wpClassified_data']['email']));
-	$email = strtolower($email);
-	$phone = stripslashes(trim($_POST['wpClassified_data']['phone']));
-	$subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
-	$description = $_POST['description'];
-	$author_name = $_POST['wpClassified_data']['author_name'];
-
+	if (isset($_POST['wpClassified_data'])) {
+		$web = stripslashes(trim($_POST['wpClassified_data']['web']));
+		$email = stripslashes(trim($_POST['wpClassified_data']['email']));
+		$email = strtolower($email);
+		$phone = stripslashes(trim($_POST['wpClassified_data']['phone']));
+		$subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
+		$description = $_POST['description'];
+		$author_name = $_POST['wpClassified_data']['author_name'];
+	}
 	$permission=false;
 	if (($wpClassified->is_usr_loggedin() && $user_ID==$postinfo['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
 		$permission=true;
@@ -259,7 +259,8 @@ function wpcEditAd(){
 	}
 	if (isset( $adsInfo["txt"])) list($adExpire, $contactBy)=preg_split('/###/', $adsInfo["txt"]);
 	$displayform = true;
-	if ($_POST['edit_ad']=='yes'){
+	
+	if (isset($_POST['edit_ad']) and $_POST['edit_ad']=='yes'){
 		$addPost = true;
 		if (str_replace(" ", "", $author_name)=='' && !$wpClassified->is_usr_loggedin()){
 			$msg .= $lang['_INVALIDNAME'];
