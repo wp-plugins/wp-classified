@@ -116,7 +116,7 @@ function wpcList($msg){
 	//update_views($_GET['lid']);
 	$liststatuses = array('active'=>'Open','inactive'=>'Closed','readonly'=>'Read-Only');
 	$lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
-		LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id	 WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
+		LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
 	
 	$read = ($wpClassified->is_usr_loggedin())?$wpdb->get_col("SELECT read_ads_subjects_id FROM {$table_prefix}wpClassified_read WHERE read_user_id = ".$user_ID):array();
 
@@ -609,15 +609,16 @@ function wpcFilterContent($content, $searchvalue) {
 }
 
 function wpcLastAds($format) {
-	global $table_prefix, $wpdb, $lang, $wpClassified;
+	global $table_prefix, $wpdb, $lang, $wpClassified, $wp_rewrite;
 	$wpcSettings = get_option('wpClassified_data');
 	if (!$wpcSettings['count_last_ads']) $wpcSettings['count_last_ads'] = 5;
 
 	$start = 0;
 	$out ='';
 
-	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_ads AD, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id=L.wpClassified_lists_id AND AD.ads_ads_subjects_id=ADS.ads_subjects_id AND AD.status='active' ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
-
+	$sql ="SELECT ADS.*, L.name as l_name, C.name as c_name, L.lists_id as lists_id FROM {$table_prefix}wpClassified_ads_subjects ADS, 
+	 {$table_prefix}wpClassified_ads AD, {$table_prefix}wpClassified_lists L, 
+	 {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id=L.wpClassified_lists_id AND AD.ads_ads_subjects_id=ADS.ads_subjects_id AND AD.status='active' ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
 
  	$lastAds = $wpdb->get_results($sql);
 
@@ -637,7 +638,17 @@ function wpcLastAds($format) {
 				include (dirname(__FILE__).'/js/viewer.js.php');
 				$out .= "&nbsp;<a href=\"". $wpClassified->public_url ."/" . $img . "\" rel=\"thumbnail\"><img  src=\"". $wpClassified->plugin_url."/images/camera.gif"."\"></a>";
 			}
-			$out .= "&nbsp;-<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>, (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
+			$out .= "&nbsp;-<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>";
+			//$out .= " (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
+			$pageinfo = $wpClassified->get_pageinfo();
+	
+			 $page_id = $pageinfo['ID'];
+			 if($wp_rewrite->using_permalinks()) $delim = "?";
+			 else $delim = "&amp;";
+			 $perm = get_permalink($page_id);
+			 $main_link = $perm . $delim;
+			 
+			$out .= " (". $lastAd->c_name . " - <a href=\"".$main_link."_action=vl&lid=".$lastAd->lists_id."\">". $lastAd->l_name . "</a>)</span>";
 		}
 		$out .= "</li>\n";
 	}	

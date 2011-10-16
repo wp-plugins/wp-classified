@@ -143,11 +143,11 @@ function wpcHeaderLink(){
 		break;
 		case "pa":
          $sql = "SELECT c.name as cName, l.name as lName, l.lists_id, l.wpClassified_lists_id FROM {$table_prefix}wpClassified_lists l, 
-                  {$table_prefix}wpClassified_categories c 
-                  WHERE c.categories_id=l.wpClassified_lists_id AND l.lists_id=". $_GET['lid'];
+					 {$table_prefix}wpClassified_categories c 
+					 WHERE c.categories_id=l.wpClassified_lists_id AND l.lists_id=". $_GET['lid'];
 			$lists=$wpdb->get_row($sql, ARRAY_A);
 			return wpcPublicLink("index", array("name"=>"Classified"))." ". $lists["cName"] ."<br></h3>". $lang['_ADDANNONCE'] . "<h3>" . 
-                wpcPublicLink("classified", array("name"=>$lists["lName"], "lid"=>$lists['lists_id'])); 
+				wpcPublicLink("classified", array("name"=>$lists["lName"], "lid"=>$lists['lists_id'])); 
                 
 		break;
 		case "ea":
@@ -155,14 +155,14 @@ function wpcHeaderLink(){
                 WHERE l.lists_id=a.ads_subjects_list_id AND c.categories_id=l.wpClassified_lists_id AND a.ads_subjects_id=". $_GET['asid'];
          $adsInfo=$wpdb->get_row($sql, ARRAY_A);
 			return wpcPublicLink("index", array("name"=>"Classified"))." ". $adsInfo["cName"] ." - ". 
-                wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']))."<BR>". $lang['_EDITADS'];
+				wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']))."<BR>". $lang['_EDITADS'];
 		break;
 		case "va":
          $sql = "SELECT l.name as lName, c.name as cName, l.lists_id FROM {$table_prefix}wpClassified_ads_subjects a, {$table_prefix}wpClassified_lists l, {$table_prefix}wpClassified_categories c
                 WHERE l.lists_id=a.ads_subjects_list_id AND c.categories_id=l.wpClassified_lists_id AND a.ads_subjects_id=". $_GET['asid'];
          $adsInfo=$wpdb->get_row($sql, ARRAY_A);
 			return wpcPublicLink("index", array("name"=>"Classified"))." ". $adsInfo["cName"] ." - ". 
-          wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']));
+				wpcPublicLink("classified", array("name"=>$adsInfo["lName"], "name"=>$adsInfo["lName"], "lid"=>$adsInfo['lists_id']));
 		break;
 	}
 }
