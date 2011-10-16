@@ -648,7 +648,7 @@ $(document).ready(function() {
 			?>
          <tr>
 			<td class="wpc_label_right"><?php echo $lang['_DESC']; ?></td>
-			<td class="wpc_label_left"><textarea id="description" name="description" style="width:320px; height: 200px;"><?php echo htmlentities($content); ?></textarea>
+			<td class="wpc_label_left"><textarea id="description" name="description" style="width:320px; height: 200px;"><?php echo $content; // htmlentities($content) ?></textarea>
          <span class ="smallTxt" id="msgCounter">(<span id="charLeft"></span>&nbsp; <?php echo $lang['_CHARS_LEFT'] . '). ' . $lang['_CHAR_MAX_OF'] . $wpcSettings['maxchars_limit'] . ' ' . $lang['_CHAR_MAX_ALLOWED'];?></SPAN><BR/>
          </td>
          </tr>
