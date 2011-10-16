@@ -151,8 +151,7 @@
         $lang['_DELETESURE'] = "Sei sicuro di volere cancellare questo?";
 
 // from 1.3.0-c
-        $lang['_TOCONTACTBY'] = "Contattaci dal form nell'annuncio che trovi
-a qeusto indirizzo:";
+        $lang['_TOCONTACTBY'] = "Contattaci dal form nell'annuncio che trovi a qeusto indirizzo:";
         $lang['_ADLINKINFO'] = "Questo annuncio è della bacheca di annunci del sito ";
         $lang['_ADDIMAGE'] = "Aggiungi immagine";
         $lang['_DELIMAGE'] = "Cancella immagine";
@@ -163,28 +162,39 @@ a qeusto indirizzo:";
         $lang['_INVALIDPHONE'] = "Inserire un numero di telefono valido!";
 
 // from 1.3.1-b
-        $lang['_INVALIDTITLE'] = "Il titolo deve contenere massimo 30
-caratteri (lettere e numeri).";
+        $lang['_INVALIDTITLE'] = "Il titolo deve contenere massimo 30 caratteri (lettere e numeri).";
         $lang['_MAIN'] = "Bacheca";
 
 // from 1.3.1-b
-        $lang['_APPROVE'] = "Grazie per aver usato la nostra bacheca
-annunci.<br>Il tuo annuncio è in fase di revisione!<br>Se vuoi puoi
-inserire un altro annuncio.";
-        $lang['_APPROVEREPLY'] = "Questo annuncio è già stato inviato, lo
-revisioneremo appena possibile.";
+        $lang['_APPROVE'] = "Grazie per aver usato la nostra bacheca annunci.<br>Il tuo annuncio è in fase di revisione!<br>Se vuoi puoi inserire un altro annuncio.";
+        $lang['_APPROVEREPLY'] = "Questo annuncio è già stato inviato, lo revisioneremo appena possibile.";
 
         //$lang['_RETURNANN'] = "Lista Annuncio";
         //$lang['_DU'] = "aggiunto il";
         //$lang['_SENDBY'] = "Aggiunto da :";
         //$lang['_NUMANNN'] = "Annuncio Num. :";        
-        //$lang['_MESSAGE'] = "pensa che ti possa interessare è ti ha inviato
-il link.";
+        //$lang['_MESSAGE'] = "pensa che ti possa interessare è ti ha inviato il link.";
         //$lang['_INTERESS'] = "Altri annunci possono essere visionati qui ";
         //$lang['_BYMAIL'] = "E-mail :";
         //$lang['_DISPO'] = "scadenza";
-        //$lang['_NOMAIL'] = "Gli indirizzi e-mail non sono in chiaro, per
-contattre gli inserzionisti utilizza il form nell'annuncio che puoi
-trovare qui: ";
+        //$lang['_NOMAIL'] = "Gli indirizzi e-mail non sono in chiaro, per contattre gli inserzionisti utilizza il form nell'annuncio che puoi trovare qui: ";
+        
+        $lang['_DETAILS'] = "Details";
+	$lang['_READ_MORE'] = "Read more";
+	$lang['_CHARS_LEFT'] = "chars left";
+	$lang['_CHAR_MAX_OF'] = "maximum ";
+	$lang['_CHAR_MAX_ALLOWED'] = "maximum number of character allow.";
+	$lang['_ADDMODDIMAGE'] = "Add / edit image";
+	$lang['_EXPAND_ALL'] = "expand all";
+	$lang['_COLLAPSE_ALL'] = "Collapse all";
+	$lang['_MUST_LOGIN'] = "Sorry, but you must be registered and logged in to post a classified ad on this noticeboard.";
+	$lang['_LOGIN'] = "Sorry, Login here";
+	$lang['_MAY_REGISTER'] = "Sign up here";
+	$lang['_AD_ID'] = "ads.";
+	$lang['_HERE'] = "here";
+	$lang['_TO_LOGIN'] = "to login ";
+	$lang['_USER_ADS'] = "Ads by this user";
+	$lang['_PREVIEW'] = "Preview";
+	$lang['_PHONENO_EX'] = "Example: +45 1235-5678";
 
 ?>

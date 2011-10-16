@@ -179,6 +179,24 @@ $lang['_FRIENDBTN1'] = "Aby zobaczyć zdjęcie i więcej szczegółów, kliknij 
 	//$lang['_INTERESS'] = "Inne ogłoszenia można zobaczyć w ";
 	//$lang['_BYMAIL'] = "Email :";
 	//$lang['_DISPO'] = "wygasa";
-	//$lang['_NOMAIL'] = "Nie dajemy adresów e-mail użytkowników, do kontaktu z nimi przez e-mail skorzystaj z formularza kontaktowego na naszej stronie klikając na link e-mail w ogłoszeniu. Możesz wyświetlić ogłoszenia na stronie internetowej.";
+	//$lang['_NOMAIL'] = "Nie dajemy adresów e-mail użytkowników, do kontaktu z nimi przez e-mail skorzystaj z formularza kontaktowego na naszej strone klikając na link e-mail w ogłoszeniu. Możesz wyświetlić ogłoszenia na stronie internetowej.";
+	
+	$lang['_DETAILS'] = "Details";
+	$lang['_READ_MORE'] = "Read more";
+	$lang['_CHARS_LEFT'] = "chars left";
+	$lang['_CHAR_MAX_OF'] = "maximum ";
+	$lang['_CHAR_MAX_ALLOWED'] = "maximum number of character allow.";
+	$lang['_ADDMODDIMAGE'] = "Add / edit image";
+	$lang['_EXPAND_ALL'] = "expand all";
+	$lang['_COLLAPSE_ALL'] = "Collapse all";
+	$lang['_MUST_LOGIN'] = "Sorry, but you must be registered and logged in to post a classified ad on this noticeboard.";
+	$lang['_LOGIN'] = "Sorry, Login here";
+	$lang['_MAY_REGISTER'] = "Sign up here";
+	$lang['_AD_ID'] = "ads.";
+	$lang['_HERE'] = "here";
+	$lang['_TO_LOGIN'] = "to login ";
+	$lang['_USER_ADS'] = "Ads by this user";
+	$lang['_PREVIEW'] = "Preview";
+	$lang['_PHONENO_EX'] = "Example: +45 1235-5678";
 
 ?>

@@ -171,5 +171,22 @@
 	//$lang['_BYMAIL'] = "Email :";
 	//$lang['_DISPO'] = "expires on";
 	//$lang['_NOMAIL'] = "We do not give out users email addresses, to contact them by e-mail please use the contact form on our site by clicking on the e-mail link in the ad, you can view the ad at the following web address. ";
+	$lang['_DETAILS'] = "Details";
+	$lang['_READ_MORE'] = "Read more";
+	$lang['_CHARS_LEFT'] = "chars left";
+	$lang['_CHAR_MAX_OF'] = "maximum ";
+	$lang['_CHAR_MAX_ALLOWED'] = "maximum number of character allow.";
+	$lang['_ADDMODDIMAGE'] = "Add / edit image";
+	$lang['_EXPAND_ALL'] = "expand all";
+	$lang['_COLLAPSE_ALL'] = "Collapse all";
+	$lang['_MUST_LOGIN'] = "Sorry, but you must be registered and logged in to post a classified ad on this noticeboard.";
+	$lang['_LOGIN'] = "Sorry, Login here";
+	$lang['_MAY_REGISTER'] = "Sign up here";
+	$lang['_AD_ID'] = "ads.";
+	$lang['_HERE'] = "here";
+	$lang['_TO_LOGIN'] = "to login ";
+	$lang['_USER_ADS'] = "Ads by this user";
+	$lang['_PREVIEW'] = "Preview";
+	$lang['_PHONENO_EX'] = "Example: +45 1235-5678";
 
 ?>
