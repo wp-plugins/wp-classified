@@ -7,17 +7,17 @@
 * @version 1.2.1
 * list all ads already exist under a defined category
 */
-global $wpClassified;
+global $wpClassified, $start;
 wpcHeader();
 ?>
 <div class="wpc_container">
   <?php
-  if ($msg!='') echo "<p class=\"message\">" . $msg . "</p>";
+  if (isset($msg) and $msg !='') echo "<p class=\"message\">" . $msg . "</p>";
   if ($numAds>$wpcSettings['count_ads_per_page']){
     echo "<div align=\"left;\">";
     echo "Pages: ";
     for ($i=0; $i<$numAds/$wpcSettings['count_ads_per_page']; $i++){
-        if ($i*$wpcSettings['count_ads_per_page']==$start){
+        if ( ($i*$wpcSettings['count_ads_per_page']) == $start){
           echo " <b>".($i+1)."</b> ";
         } else {
           echo " ".wpcPublicLink("classified", array("name"=>($i+1), "lid"=>$lists["lists_id"], "name"=>$lists["name"], "start"=>($i*$wpcSettings['count_ads_per_page'])))." ";
@@ -81,6 +81,7 @@ wpcHeader();
         </td>
         <td nowrap="nowrap" align="right" valign="top" width="120">
         <?php
+        $sticky = '';
         if (!@in_array($ad->ads_subjects_id, $read) && $wpClassified->is_usr_loggedin()){
            $rour = "<img border=0 src=\"". $wpClassified->plugin_url . "/images/unread.gif\" class=\"imgMiddle\"> ";
         } else {$rour = "";} // fix me
@@ -100,30 +101,6 @@ wpcHeader();
   </div>
 </div>
 <?php
-
-
-// TODO
-function getTheHtml($str){
-  $bb[] = "#\[b\](.*?)\[/b\]#si";
-  $html[] = "<b>\\1</b>";
-  $bb[] = "#\[i\](.*?)\[/i\]#si";
-  $html[] = "<i>\\1</i>";
-  $bb[] = "#\[u\](.*?)\[/u\]#si";
-  $html[] = "<u>\\1</u>";
-  $bb[] = "#\[h3\](.*?)\[/h3\]#si";
-  $html[] = "<h3>\\1</h3>";
-  $bb[] = "#\[hr\]#si";
-  $html[] = "<hr>";
-  $str = preg_replace ($bb, $html, $str);
-  $patern="#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i";
-  $replace=''; // <a href="\\1" target="_blank" rel="nofollow">\\2</a>
-  $str=preg_replace($patern, $replace, $str); 
-  $patern="#\[img\]([^\[]*)\[/img\]#i";
-  $replace=''; // <img src="\\1" alt=""/>
-  $str=preg_replace($patern, $replace, $str);  
-  $str=nl2br($str);
-  return $str;
-}
 
 wpcFooter();
 ?>
