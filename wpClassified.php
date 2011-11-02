@@ -104,7 +104,7 @@ class WP_Classified {
     add_filter("the_title", array(&$this,"page_handle_title"));
     add_filter("wp_list_pages", array(&$this,"page_handle_titlechange"));
     add_filter("single_post_title", array(&$this,"page_handle_pagetitle"));
-    add_filter('wp_mail_content_type',create_function('', 'return "text/html";'));
+    //add_filter('wp_mail_content_type',create_function('', 'return "text/html";'));
     // todo
   }
   
