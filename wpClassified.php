@@ -5,7 +5,7 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: This plugin allows you to add a simple information & advertising blackboard or classified page in to your wordpress blog.
 Author:Mohammad Forgani
-Version: 1.4.2-a
+Version: 1.4.2-b
 Requires at least:3.1.x
 Author URI: http://www.forgani.com
 
@@ -71,7 +71,7 @@ add_action('plugins_loaded', create_function('$a', 'global $wpClassified; $wpCla
 
 class WP_Classified {
   // Sets the version number.
-  var $version = "1.4.2-a";
+  var $version = "1.4.2-b";
   var $menu_name = 'wpClassified';
   var $plugin_name = 'wp-classified';
   var $plugin_home_url;
@@ -248,7 +248,6 @@ class WP_Classified {
         if (!$wpcSettings['description']) $wpcSettings['description'] = '<h2>Free Information & Advertising Blackboard</h2><b>Feel free to submit announcement, event or report any issues on this blackboard.</b><br />
 You do not have to pay any thing, it is totally FREE and your post will stay for 365 days<br /><br /><h3><span style="font-weight:bold; color:#380B61">Choose a topic and SUBMIT your classified ad.</span></h3><br />';
         if (!$wpcSettings['slug']) $wpcSettings['slug'] = 'classified';
-        if (!$wpcSettings['show_credits']) $wpcSettings['show_credits'] = 'y';
      ?>
       <th align="right" valign="top"><label>Classifieds Description:</label></th>
       <td><textarea cols=80 rows=3 name="wpClassified_data[description]"><?php echo str_replace("<", "&lt;", stripslashes($wpcSettings['description']));?></textarea></td>
@@ -617,7 +616,7 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
     $this->check_db();
     $wpcSettings['installed'] = 'y';
     $wpcSettings['userfield'] = $this->get_user_field();
-    $wpcSettings['show_credits'] = 'y';
+    $wpcSettings['show_credits'] = 'n';
     $wpcSettings['approve]'] = 'y';
     $wpcSettings['slug'] = 'Classifieds';
     $wpcSettings['description'] = "<h2>Free Information & Advertising Blackboard</h2><b>Feel free to submit announcement, event or report any issues on this blackboard.</b><br />

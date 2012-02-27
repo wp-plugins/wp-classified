@@ -1,5 +1,5 @@
 === wp-classified ===
-name: wpClassified Wordpress plugins Version: 1.4.2-a
+name: wpClassified Wordpress plugins Version: 1.4.2-b
 Contributors: Mohammad Forgani
 Donate link: http://www.forgani.com/root/wpclassified-plugins/
 Requires at least: 3.1.x
