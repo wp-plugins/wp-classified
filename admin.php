@@ -104,27 +104,27 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&lid=<?php echo $ad->lis
 		"<a href=\"".$url."adm_action=editAd&aid=".$ad->ads_id."\">".__("Edit")."</a>",
 		"<a href=\"".$url."adm_action=deleteAd&aid=".$ad->ads_id."\">".__("Delete")."</a>",
 		"<a href=\"".$url."adm_action=activateAd&status=active&aid=".$ad->ads_id."\">Activate</a>",
-      "<a href=\"".$url."adm_action=activateAd&status=inactive&aid=".$ad->ads_id."\">De-Activate</a>",
+		"<a href=\"".$url."adm_action=activateAd&status=inactive&aid=".$ad->ads_id."\">De-Activate</a>",
 		"<a href=\"".$url."adm_action=move&aid=".$ad->ads_id."\">".__("Move")."</a>");
-	   ?>
-		<div style="border: 1px solid #bbb; padding:8px; background-color: #fafafa;">
-			<strong><?php echo @implode(" | ", $links);	?></strong>
-			<div class="post-bottom">
-				<div class="entry" id="post-<?php echo $i;?>-entry">
-					<div class="title" id="post-<?php echo $i;?>-title">
-						<h2><?php echo str_replace("<", "&lt;", $ad->subject);?></h2>
-						<small><?php echo __("Posted By:");?> <strong><?php echo wpcPostAuthor($ad);?></strong> on <?php echo __(@date($wpcSettings['date_format'], $ad->date));?></small>
-					</div>
-					<p id="post-<?php echo $i;?>-content"><?php echo nl2br(str_replace("<", "&lt;", $ad->post));?></p>
+	?>
+	<div style="border: 1px solid #bbb; padding:8px; background-color: #fafafa;">
+		<strong><?php echo @implode(" | ", $links);	?></strong>
+		<div class="post-bottom">
+			<div class="entry" id="post-<?php echo $i;?>-entry">
+				<div class="title" id="post-<?php echo $i;?>-title">
+					<h2><?php echo str_replace("<", "&lt;", $ad->subject);?></h2>
+					<small><?php echo __("Posted By:");?> <strong><?php echo wpcPostAuthor($ad);?></strong> on <?php echo __(@date($wpcSettings['date_format'], $ad->date));?></small>
 				</div>
+				<p id="post-<?php echo $i;?>-content"><?php echo nl2br(str_replace("<", "&lt;", $ad->post));?></p>
 			</div>
 		</div>
-   <?php
+	</div>
+  <?php
 
 	$postinfo=$wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id =".$ad->ads_id);
 	$post=$postinfo[0];
 	$array=split('###', $post->image_file);
-		if ($array[0]) {
+	if ($array[0]) {
 		?>
 		<h3>Images:</h3>
 		<center>
@@ -202,12 +202,12 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&lid=<?php echo $ad->lis
 		$url=$PHP_SELF."?page=wpcModify&";
 		$slab=($ad->sticky!='y')?"Sticky":"Unsticky";
 		$links=array(
-		"<a href=\"".$url."&adm_action=editAd&aid=".$ad->ads_id."\">".__("Edit")."</a>",
-		"<a href=\"".$url."&adm_action=stickyAd&aid=".$ad->ads_id."\">".$slab."</a>",
-      "<a href=\"".$url."adm_action=activateAd&status=active&aid=".$ad->ads_id."\">Activate</a>",
-      "<a href=\"".$url."adm_action=activateAd&status=inactive&aid=".$ad->ads_id."\">De-Activate</a>",
-		"<a href=\"".$url."&adm_action=deleteAd&aid=".$ad->ads_id."\">".__("Delete")."</a>",
-		"<a href=\"".$url."&adm_action=move&aid=".$ad->ads_id."\">".__("Move")."</a>");
+		"<a href=\"".$url."adm_action=editAd&aid=".$ad->ads_id."\">".__("Edit")."</a>",
+		"<a href=\"".$url."adm_action=stickyAd&aid=".$ad->ads_id."\">".$slab."</a>",
+		"<a href=\"".$url."adm_action=activateAd&status=active&aid=".$ad->ads_id."\">Activate</a>",
+		"<a href=\"".$url."adm_action=activateAd&status=inactive&aid=".$ad->ads_id."\">De-Activate</a>",
+		"<a href=\"".$url."adm_action=deleteAd&aid=".$ad->ads_id."\">".__("Delete")."</a>",
+		"<a href=\"".$url."adm_action=move&aid=".$ad->ads_id."\">".__("Move")."</a>");
 		if ($ad->adstatus=='inactive') $color='#F5D0A9';
 		else $color ='#fff';
 		?>
@@ -237,8 +237,8 @@ In List: <a href="<?php echo $PHP_SELF;?>?page=wpcModify&lid=<?php echo $ad->lis
 		$sql ="SELECT ADS.*, A.status as adstatus, A.ads_id, L.name as l_name, C.name as c_name
         FROM {$table_prefix}wpClassified_ads_subjects ADS, {$table_prefix}wpClassified_lists L, {$table_prefix}wpClassified_ads A,
              {$table_prefix}wpClassified_categories C
-            WHERE ADS.ads_subjects_list_id=L.lists_id AND C.categories_id=L.wpClassified_lists_id AND ADS.ads_subjects_id=A.ads_ads_subjects_id
-            ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+        WHERE ADS.ads_subjects_list_id=L.lists_id AND C.categories_id=L.wpClassified_lists_id AND ADS.ads_subjects_id=A.ads_ads_subjects_id
+        ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
 		$lastAds=$wpdb->get_results($sql);
 		foreach ($lastAds as $lastAd) {
 			if ($lastAd->adstatus=='inactive') $color='#DF0101';
@@ -430,10 +430,9 @@ function wpcAdmEditAdSubject(){
 function wpcAdmEditAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
 	$rec=$wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads
-			LEFT JOIN {$table_prefix}users
-			ON {$table_prefix}users.ID={$table_prefix}wpClassified_ads.author
-			WHERE ads_id='".(int)$_GET['aid']."'");
-
+		LEFT JOIN {$table_prefix}users
+		ON {$table_prefix}users.ID={$table_prefix}wpClassified_ads.author
+		WHERE ads_id='".(int)$_GET['aid']."'");
 	$rec=$rec[0];
 	?>
 
@@ -480,19 +479,14 @@ function wpcAdmSaveAd(){
 
 function wpcAdmMoveAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix;
+	
 	list($olst, $ocat)=split(' -> ', $_POST['lstCatNames']);
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads_subjects SET ads_subjects_list_id=
-		'".$_POST['adLid']."' WHERE ads_subjects_id='".$_GET['asid']."'");
-	/*
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET ads_ads_subjects_id=
-		'".$_POST['adLid']."' WHERE ads_ads_subjects_id='".$_GET['asid']."'");
-	*/
-	$asid=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id =
-		'".$_GET['asid']."'");
-	$lids=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id =
-		'".$_GET['lid']."'");
-	$newLids=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id =
-		'".$_POST['adLid']."'");
+	$sql = "UPDATE {$table_prefix}wpClassified_ads_subjects SET ads_subjects_list_id=".$_POST['adLid']." WHERE ads_subjects_id=".$_GET['asid'];
+	echo $sql;
+	$wpdb->query($sql);
+	$asid=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ".$_GET['asid']);
+	$lids=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id = ".$_GET['lid']);
+	$newLids=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id = '".$_POST['adLid']);
 
 	if($lids->ads_status!='0'){
 		$oldStatus=$lids->ads_status-1;
@@ -502,15 +496,14 @@ function wpcAdmMoveAd(){
 
 	$oldAd=$lids->ads-$asids->ads;
 	$old_views_count=$lids->ads_views-$asids->views;
-
 	$newLidStatus=$newLids->ads_status+1;
 	$newAd=$newLids->ads+$asids->ads;
 	$newadView=$newLids->ads_views+$asids->views;
 
-	$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET ads_status='".$oldStatus."', ads='".$oldAd."', ads_views='".$old_views_count."' WHERE wpClassified_lists_id='".$_GET['lid']."'");
+	$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET ads_status='".$oldStatus."', ads='".$oldAd."', ads_views='".$old_views_count."' WHERE wpClassified_lists_id=".$_GET['lid']);
 	$wpdb->query("UPDATE {$table_prefix}wpClassified_lists SET ads_status=
 		'".$newLidStatus."', ads='".$newAd."',
-		ads_views='".$newadView."' WHERE wpClassified_lists_id='".$_POST['adLid']."'");
+		ads_views='".$newadView."' WHERE wpClassified_lists_id=".$_POST['adLid']);
 
 	$msg="Ad moved to: ".$_POST['lstCatNames'];
 
@@ -521,21 +514,21 @@ function wpcAdmMoveAd(){
 
 function wpcAdmMove(){
 	global $_GET, $_POST, $wpdb, $table_prefix, $PHP_SELF;
-    ?>
+  ?>
 	<p><a href="javascript:javascript:history.go(-1)">back to previous page</a>&nbsp;&nbsp;<a href="<?php echo $PHP_SELF;?>?page=wpcModify">back to main page</a></p>
-
 	<h3>Move Ad</h3>
-	
-    <?php
-	$lst_cat_org=$wpdb->get_row("SELECT l.name lst, c.name cat FROM {$table_prefix}wpClassified_lists l, {$table_prefix}wpClassified_categories c WHERE l.lists_id='".$_GET['lid']."' AND l.wpClassified_lists_id=c.categories_id");
+	<?php
+  $sql = "SELECT l.name lst, c.name cat, a.ads_subjects_id FROM {$table_prefix}wpClassified_lists l, 
+  {$table_prefix}wpClassified_categories c, 
+  {$table_prefix}wpClassified_ads_subjects a, {$table_prefix}wpClassified_ads ad
+  WHERE ad.ads_id=".$_GET['aid']." AND l.lists_id=a.ads_subjects_list_id AND l.wpClassified_lists_id=c.categories_id AND a.ads_subjects_id=ad.ads_ads_subjects_id";
+	$lst_cat_org=$wpdb->get_row($sql);
 	$lst_cat=$wpdb->get_results("SELECT l.lists_id, l.name lst, c.name cat FROM {$table_prefix}wpClassified_lists l, {$table_prefix}wpClassified_categories c WHERE l.wpClassified_lists_id=c.categories_id ORDER BY lst ASC");
-	$asid=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id='".$_GET['asid']."'");
-	echo "<br /><br /><br /><strong>Ad to move:</strong>".$asid->subject."<br />";
-	echo "<strong>Actual List:</strong>".$lst_cat_org->lst."<br ><strong>Category:</strong>".$lst_cat_org->cat."<br />";
+	$asid=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id=".$lst_cat_org->ads_subjects_id);
+	echo "<br /><br /><br /><strong>Ad Title:</strong> ".$asid->subject."<br />";
+	echo "<strong>Actual List:</strong> ".$lst_cat_org->lst."<br ><strong>Category:</strong> ".$lst_cat_org->cat."<br />";
 	echo "<br />";
-
-	$url=$PHP_SELF."?page=wpcModify&adm_action=moveAd&aid=".$_GET['aid']."&lst=".$_GET['lid']."&asid=".$_GET['asid'];
-
+	$url=$PHP_SELF."?page=wpcModify&adm_action=moveAd&aid=".$_GET['aid']."&lst=".$_GET['lid']."&asid=".$lst_cat_org->ads_subjects_id; 
 	?>
 	<form method="post" id="ead_form" name="ead_form" onsubmit="this.sub.disabled=true;this.sub.value='Moving Ad...';" action="<?php echo $url;?>" >
 		<table width="100%" class="editform" border="0">
@@ -553,11 +546,7 @@ function wpcAdmMove(){
 				?>
 				</td>
 			</tr>
-			<tr>
-				<td valign="top" align="left">
-					&nbsp;
-				</td>
-			</tr>
+			<tr><td valign="top" align="left">&nbsp;</td></tr>
 			<tr>
 				<td valign="top" align="left">
 					<input type="submit" value="Move Ad" id="sub" />&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);">
@@ -565,7 +554,6 @@ function wpcAdmMove(){
 			</tr>
 		</table>
 	</form>
-
 	<?php
 }
 
