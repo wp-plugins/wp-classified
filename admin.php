@@ -479,10 +479,8 @@ function wpcAdmSaveAd(){
 
 function wpcAdmMoveAd(){
 	global $_GET, $_POST, $wpdb, $table_prefix;
-	
 	list($olst, $ocat)=split(' -> ', $_POST['lstCatNames']);
 	$sql = "UPDATE {$table_prefix}wpClassified_ads_subjects SET ads_subjects_list_id=".$_POST['adLid']." WHERE ads_subjects_id=".$_GET['asid'];
-	echo $sql;
 	$wpdb->query($sql);
 	$asid=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ".$_GET['asid']);
 	$lids=$wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists WHERE wpClassified_lists_id = ".$_GET['lid']);
