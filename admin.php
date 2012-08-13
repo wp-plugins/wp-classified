@@ -73,7 +73,7 @@ function adm_modify_process(){
 			$loadpage=false;
 		break;
 	}
-	if ($msg!=''){
+	if (isset($msg) && $msg!=''){
 		?>
 		<p>
 		<b><?php echo $msg; ?></b>
@@ -449,9 +449,9 @@ function wpcAdmEditAd(){
 	<br>
 	<table width="100%" class="editform" border="0">
 			<tr>
-				<td valign="top" align="left">Subject: </td><td><input type="text" size="60" name="ad_subject" id="ad_subject" value="<?php echo $rec->subject;?>" /></td></tr>
-				<tr><td valign="top" align="left">Description: </td><td><input type="hidden" name="ads_subjects_id" id="ads_subjects_id" value="<?php echo $rec->ads_ads_subjects_id;?>" /><br>
-				<?php echo "<textarea name='ad_content_data' id='ad_content_data' cols='80' rows='10'>".str_replace("<", "&lt;", $rec->post)."</textarea>" ?>	
+			<td valign="top" align="left">Subject: </td><td><input type="text" size="60" name="ad_subject" id="ad_subject" value="<?php echo $rec->subject;?>" /></td></tr>
+			<tr><td valign="top" align="left">Description: </td><td><input type="hidden" name="ads_subjects_id" id="ads_subjects_id" value="<?php echo $rec->ads_ads_subjects_id;?>" /><br>
+			<?php echo "<textarea name='ad_content_data' id='ad_content_data' cols='80' rows='10'>".str_replace("<", "&lt;", $rec->post)."</textarea>" ?>	
 			</td></tr>
 			<tr><td valign="top" align="left"></td><td><BR><input type="submit" value="Save">&nbsp;&nbsp;<input type=button value="Cancel" onclick="history.go(-1);"></td></tr>
 	</table>
@@ -468,8 +468,11 @@ function wpcAdmSaveAd(){
 	if ($mod=="true"){
 		$html=stripslashes($_POST['ad_content_data']); 
 		$sbj=$_POST['ad_subject'];
-		$wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET post='".$html."', subject='".$sbj."' WHERE ads_id='".(int)$_GET['aid']."'");
-		$sql="UPDATE {$table_prefix}wpClassified_ads_subjects SET subject='".$sbj."' WHERE ads_subjects_id=".$_POST['ads_subjects_id'];
+		$thtml = preg_replace("#'#is", "\'", $html);
+		$sql = "UPDATE {$table_prefix}wpClassified_ads SET post='".$thtml."', subject='".$sbj."' WHERE ads_id='".(int)$_GET['aid']."'";
+		$wpdb->query($sql);
+		$tsbj = preg_replace("#'#is", "\'", $sbj);
+		$sql="UPDATE {$table_prefix}wpClassified_ads_subjects SET subject='".$tsbj."' WHERE ads_subjects_id=".$_POST['ads_subjects_id'];
 		$wpdb->query($sql);		
 	}
 	$msg="Ad Saved";
