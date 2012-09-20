@@ -858,10 +858,9 @@ You do not have to pay any thing, it is totally FREE and your post will stay for
     $result = true;
     while ( $file = readdir($dh) ) {
       if ( ($file != '.') && ($file != '..') ) {
-        $file2 = $this->cache_dir . $file;
-        if (isset($file2) && is_file($file2)) {
-          $diff = mktime() - @filemtime($file2);
-          if ($diff > $deleteTimeDiff) @unlink( $file2 );
+        $f = $this->cache_dir . $file;
+        if ( isset($f) &&  filemtime($f) <= time()-$deleteTimeDiff ) {
+          @unlink( $f );
         }
       }
     }
