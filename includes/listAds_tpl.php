@@ -30,16 +30,15 @@ wpcHeader();
     <div class="list_ads_top">
       <?php 
       $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
-  	  echo $addtopicImg;
-	  echo "<span sytle=\"font-size:13px;color:#380B61\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
+      echo "<h3>" . $addtopicImg . "<span sytle=\"font-size:13px;color:#380B61\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span></h3><BR />";
       ?>
-    <table class="main" width="100%">
+      <table class="main" width="100%">
       <tr class="col">
         <th width="120" class="col"><?php echo $lang['_PIC']?></th>
         <th style="text-align: left;" class="col"><?php echo $lang['_SUBJECT'];?></th>
         <th style="text-align: right;" class="col"><?php echo $lang['_POSTON'];?></th>
       </tr>
-    </table>  
+      </table>  
     </div><!--list_ads_top-->
     <table class="main" width="100%">
       <tr><th colspan="3" class="col"><hr /></th></tr>
@@ -97,7 +96,6 @@ wpcHeader();
       }
       ?>
     </table>
-
   </div>
 </div>
 <?php

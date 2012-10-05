@@ -69,7 +69,7 @@
 	$lang['_YOUREMAIL'] = "Your email:";
 	$lang['_SENDFR'] = "Send";
 
-	$lang['_ADDANNONCE'] = '<span style="text-decoration:none; font-style:normal">Place Your Announcement in this category:</span>';
+	$lang['_ADDANNONCE'] = '<span style="text-decoration:none; font-style:normal">Place Your Announcement in this topic</span>';
 	$lang['_YES'] = "Yes";
 	$lang['_NO'] = "No";
 	$lang['_BACK'] = "Back";
