@@ -54,9 +54,12 @@ Jan 27/03/2011
 Jan 30/04/2011
 - added the facebook link button
 
+
+Oct 05/10/2012
+- bugfix: update the search function
+
 */
 
-// Description: The wpClassified plugin allows you to add a simple classifieds page in to your wordpress blog
 
 //error_reporting(E_ALL);
 //ini_set('display_errors', '1');
