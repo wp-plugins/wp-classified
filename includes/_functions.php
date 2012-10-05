@@ -8,6 +8,7 @@
 * Licence Type   : GPL
 * @version 1.3.1-a
 * fixed by Jes Saxe MAJ 2011
+* update local
 */
 
 if (!isset($_SESSION)) @session_start();
@@ -542,12 +543,18 @@ function wpcSearch($term){
   $userfield = $wpClassified->get_user_field();
 
   #
-  # fixed 07-Apr-2008
+  # fixed 05-OCT-2012
   #
-  $sql = "SELECT {$table_prefix}wpClassified_lists.lists_id,{$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.subject, {$table_prefix}wpClassified_ads.post,{$table_prefix}wpClassified_ads_subjects.ads_subjects_id, {$wpmuBaseTablePrefix}users.display_name, {$table_prefix}wpClassified_ads.date, {$table_prefix}wpClassified_ads.ads_id, {$table_prefix}wpClassified_ads.ads_ads_subjects_id FROM {$table_prefix}wpClassified_lists, {$table_prefix}wpClassified_ads_subjects, {$table_prefix}wpClassified_ads,{$wpmuBaseTablePrefix}users WHERE {$table_prefix}wpClassified_lists.lists_id = {$table_prefix}wpClassified_ads_subjects.ads_subjects_list_id AND {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = {$table_prefix}wpClassified_ads.ads_ads_subjects_id  AND {$wpmuBaseTablePrefix}users.id = {$table_prefix}wpClassified_ads.author AND ({$table_prefix}wpClassified_ads_subjects.subject like '%".$wpdb->escape($term)."%' OR ${table_prefix}wpClassified_ads.post like '%".$wpdb->escape($term)."%') ORDER BY {$table_prefix}wpClassified_lists.name, {$table_prefix}wpClassified_ads.date DESC";
+  $term = strtolower($term);
+  $sql="SELECT L.lists_id,L.name, A.subject, A.post,S.ads_subjects_id, U.display_name, A.date, A.ads_id, A.ads_ads_subjects_id, S.views 
+        FROM {$table_prefix}wpClassified_lists as L, {$table_prefix}wpClassified_ads_subjects as S, {$table_prefix}wpClassified_ads as A
+        LEFT JOIN {$table_prefix}users as U ON U.id = A.author
+        WHERE L.lists_id = S.ads_subjects_list_id AND 
+        S.ads_subjects_id = A.ads_ads_subjects_id AND 
+        (lower(S.subject) like '%".$wpdb->escape($term)."%' OR lower(A.post) like '%".$wpdb->escape($term)."%') 
+        ORDER BY L.name, A.date DESC";
 
   $results = $wpdb->get_results($sql);
-
   include(dirname(__FILE__)."/searchRes_tpl.php");
 }
 
