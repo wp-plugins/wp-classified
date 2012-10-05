@@ -28,8 +28,7 @@ if (($i+1)==$hm){
 	<div class="list_ads_top">
       <?php 
       $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
-      echo $addtopicImg;
-      echo "<span sytle=\"font-size:14px\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
+      echo "<h3>" . $addtopicImg . "<span sytle=\"font-size:13px;color:#380B61\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span></h3><BR />";
       ?>
     </div><!--list_ads_top-->
     
