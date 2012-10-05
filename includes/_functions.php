@@ -3,10 +3,10 @@
 /*
 * _function.php
 * This file is part of wp-classified
-* @author Mohammad Forgani 2008
+* @author Mohammad Forgani 2012
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.1-a
+* @version 1.4.2-c
 * fixed by Jes Saxe MAJ 2011
 * update local
 */
@@ -15,8 +15,13 @@ if (!isset($_SESSION)) @session_start();
 
 
 function wpcHeader(){
-  global $_GET, $_POST, $table_prefix, $wpdb, $lang, $wpClassified;
+  global $_GET, $_POST, $table_prefix, $wpdb, $lang, $wpClassified, $wp_rewrite;
   $wpcSettings = get_option('wpClassified_data');
+
+  if($wp_rewrite->using_permalinks()) $delim="?";
+  else $delim="&amp;";
+  $main_link=get_permalink($wpClassified->get_pageinfo->ID) . $delim;
+
   if ($wpcSettings['count_ads_per_page'] < 1) {
     $wpcSettings['count_ads_per_page'] = 10;
   }
@@ -26,7 +31,7 @@ function wpcHeader(){
   <?php
   if ($wpcSettings['top_image']!=''){
     $img=preg_replace('/\s+/','',$wpcSettings['top_image']);
-    echo '<td valign="top"><img src="'. $wpClassified->plugin_url .'/images/' .$img. '"></td>';
+    echo '<td valign="top"><a href="'.$main_link.'_action=classified"><img src="'. $wpClassified->plugin_url .'/images/' .$img. '"></a></td>';
   }
   if ($wpcSettings['description']!=''){
     echo '<td valign=middle>'.$wpcSettings['description'] . "</td>";

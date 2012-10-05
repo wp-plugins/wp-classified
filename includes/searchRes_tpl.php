@@ -31,11 +31,6 @@ wpcHeader();
     echo '</div>';
   } else {
     ?>
-    <?php 
-      $addtopicImg = '<img src="' . $wpClassified->plugin_url . '/images/addtopic.jpg">';
-      echo $addtopicImg;
-      echo "<span sytle=\"font-size:13px;color:#380B61\">".wpcPublicLink("pa", array("name"=>"Post New Ad", "lid"=>$_GET['lid'], "name"=>$lang['_ADDANNONCE'])) ."</span>";
-      ?>
       <table class="main" width="100%">
       <tr class="col">
         <th width="120" class="col"><?php echo $lang['_PIC']?></th>
