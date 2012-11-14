@@ -73,8 +73,8 @@ function wpcHeader(){
       $l = $today-$second;
       if ($rmRecord->date < $l) {
         $asid = $rmRecord->ads_subjects_id;
-        //$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
-        //$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+        $wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+        $wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
       }
     }
   }  
