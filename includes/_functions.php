@@ -73,8 +73,8 @@ function wpcHeader(){
       $l = $today-$second;
       if ($rmRecord->date < $l) {
         $asid = $rmRecord->ads_subjects_id;
-        $wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
-        $wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+        //$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+        //$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
       }
     }
   }  
@@ -639,6 +639,7 @@ function wpcLastAds($format) {
     $out .= '<li>'.$link;
     $sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE status='active' and ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
     $post = $wpdb->get_row($sql);
+    $img = false;
     preg_replace(array('/\s/'), '', $post->image_file);
     if ( !empty($post->image_file) ) {
       $array = preg_split('/\#\#\#/', $post->image_file);
