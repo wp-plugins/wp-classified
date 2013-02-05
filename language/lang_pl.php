@@ -1,6 +1,5 @@
 ﻿<?php
 
-
   // Translated 
   // Web site:  
   // create by: Mariusz Patalan
