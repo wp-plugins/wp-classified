@@ -51,11 +51,11 @@ if (($i+1)==$hm){
           <?php echo @date($wpcSettings['date_format'], $post->date) . '<p>' . $lang['_USER_ADS'] . ': ' . ($post->user_info_post_count*1);?> 
            <BR />
           <?php if ($editlink){
-              echo '<small><span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '</small>';
+              echo '<span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '';
               if ($wpcSettings['display_titles']=='y'){
                 echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
               }
-              echo '<BR />';
+              echo '</span><BR />';
           } 
           ?>
           <h3><?php echo getTheHtml($post->subject);?></h3>
