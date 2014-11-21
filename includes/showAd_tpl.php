@@ -120,7 +120,10 @@ if (($i+1)==$hm){
 
       <?php
       echo "</div><div class=\"right\">";
-      $sendAd = '<img src="' . $wpClassified->plugin_url . '/images/send.jpg" class="imgMiddle"><a href="'.get_bloginfo('wpurl').'/?page_id=' . $pageinfo["ID"].'&_action=sndad&aid=' . $post->ads_id.'">' . $lang['_SENDTOF'].'</a>'; 
+      $_link = "&_action=sndad";
+      if (isset($post->ads_id))
+        $_link .= "&aid=" . (int)$post->ads_id;
+      $sendAd = '<img src="' . $wpClassified->plugin_url . '/images/send.jpg" class="imgMiddle"><a href="'.get_bloginfo('wpurl').'/?page_id=' . $pageinfo["ID"]. $_link . '">' . $lang['_SENDTOF'].'</a>'; 
       echo $sendAd . "</div>";
       ?>
    </div><!-- show_ad -->

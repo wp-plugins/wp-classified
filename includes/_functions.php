@@ -25,6 +25,7 @@ function wpcHeader(){
   if ($wpcSettings['count_ads_per_page'] < 1) {
     $wpcSettings['count_ads_per_page'] = 10;
   }
+
    ?>
 
   <table width=90% border=0 cellspacing=0 cellpadding=8><tr>
@@ -82,7 +83,7 @@ function wpcHeader(){
 
 
 // function to show the Main page
-function wpcIndex(){
+function wpcIndex($id){
   global $_GET, $user_ID, $table_prefix, $wpdb;
   get_currentuserinfo();
   $liststatuses = array('active'=>'Open','inactive'=>'Closed','readonly'=>'Read-Only');
@@ -104,6 +105,10 @@ function wpcIndex(){
       $rlists[$readtest[$i]->ads_subjects_list_id] = 'y';
     } 
   }
+
+  if ($id = 404)
+    echo "<h1>Oops,</h1><h2>404: Page not found</h2>";
+
   include(dirname(__FILE__)."/main_tpl.php");
 }
 
@@ -111,7 +116,6 @@ function wpcIndex(){
 // function to list all ads already exist under a defined category
 function wpcList($msg){
   global $_GET, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $lang, $user_ID, $wpClassified;
-  //$listId = get_query_var("lists_id");
   $listId = get_query_var("lid");
   get_currentuserinfo();
   $wpcSettings = get_option('wpClassified_data');
@@ -119,7 +123,6 @@ function wpcList($msg){
     $wpcSettings['count_ads_per_page'] = 10;
   }
   $userfield = $wpClassified->get_user_field();
-  //update_views($_GET['lid']);
   $liststatuses = array('active'=>'Open','inactive'=>'Closed','readonly'=>'Read-Only');
   $lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
     LEFT JOIN {$table_prefix}wpClassified_categories ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id WHERE {$table_prefix}wpClassified_lists.lists_id = '".($listId)."'", ARRAY_A);
@@ -149,10 +152,10 @@ function wpcFooter(){
     echo '<div class="wpc_googleAd">' . $gAd . '</div>';
   }
   echo "<div class=\"wpc_footer\">";
-    echo "<h3>" . $lang['_LAST'] . ' ' . $wpcSettings['count_last_ads'] . ' ' . $lang['_ADS'] . "...</h3>";
-    echo wpcLastAds(false);
-    echo '<HR class="wpc_footer_hr">';
-    if($wpcSettings['rss_feed']=='y'){
+  echo "<h3>" . $lang['_LAST'] . ' ' . $wpcSettings['count_last_ads'] . ' ' . $lang['_ADS'] . "...</h3>";
+  echo wpcLastAds(false);
+  echo '<HR class="wpc_footer_hr">';
+  if($wpcSettings['rss_feed']=='y'){
     $filename = $wpClassified->plugin_url . '/cache/wpclassified.xml';
     ?>
     <div class="rssIcon">
@@ -160,8 +163,7 @@ function wpcFooter(){
     <?php
     }
     if ($wpcSettings['show_credits']=='y') echo "<div class=\"smallTxt\">" .stripslashes($wpcSettings['credit_line']) . "</div>";
-    if($wpcSettings['fb_link']=='y') echo wpcFbLike('');
-        
+    if($wpcSettings['fb_link']=='y') echo wpcFbLike(''); 
   echo "</div>";
 }
 
@@ -177,7 +179,13 @@ function wpcRssLink($vars) {
   else $delim = "&amp;";
   $perm = get_permalink($page_id);
   $main_link = $perm . $delim;
-  return $main_link . "_action=va&amp;lid=" . $vars['lid'] . "&amp;asid=" . $vars['asid'];
+  
+  $mail_link .= "_action=va";
+  if (isset($vars['lid']))
+    $mail_link .= "&amp;lid=" . (int)$vars['lid'];
+  if (isset($vars['asid']))
+    $mail_link .= "&amp;asid=" . (int)$vars['asid'];
+  return $main_link;
 }
 
 function wpcDeleteAd(){
@@ -201,7 +209,13 @@ function wpcDeleteAd(){
   }
 
   $pageinfo = $wpClassified->get_pageinfo();
-  $link_del = get_bloginfo('wpurl')."?page_id=".$pageinfo["ID"]."&_action=da&lid=".$_GET['lid']."&asid=".$_GET['asid'];
+  $_link = "?page_id=".$pageinfo["ID"]."&_action=da";
+  if (isset($_GET['lid']))
+    $_link .= "&amp;lid=" . (int)$_GET['lid'];
+  if (isset($_GET['asid']))
+    $_link .= "&amp;asid=" . (int)$_GET['asid'];
+	
+  $link_del = get_bloginfo('wpurl'). $_link;
 
   if ($_POST['YesOrNo']>0){
     $sql = "DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id = '".((int)$_GET['asid'])."'";
@@ -212,12 +226,12 @@ function wpcDeleteAd(){
     return true;
   } else {
   ?>
-  <h3><?php echo $lang['_CONFDEL'];?></h3>
+  <h3 style= "margin:20px 0"><?php echo $lang['_CONFDEL'];?></h3>
   <form method="post" id="delete_ad_conform" name="delete_ad_conform" action="<?php echo $link_del;?>">
   <strong>
     <input type="hidden" name="YesOrNo" value="<?php echo $_GET['aid'];?>">
     <?php echo $lang['_SURDELANN'];?><br />
-    <input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
+    <p><input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);"></p>
   </strong>
   </form>
   <?php
@@ -655,13 +669,15 @@ function wpcLastAds($format) {
       //$out .= " (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
       $pageinfo = $wpClassified->get_pageinfo();
   
-       $page_id = $pageinfo['ID'];
-       if($wp_rewrite->using_permalinks()) $delim = "?";
-       else $delim = "&amp;";
-       $perm = get_permalink($page_id);
-       $main_link = $perm . $delim;
-       
-      $out .= " (". $lastAd->c_name . " - <a href=\"".$main_link."_action=vl&lid=".$lastAd->lists_id."\">". $lastAd->l_name . "</a>)</span>";
+      $page_id = $pageinfo['ID'];
+      if($wp_rewrite->using_permalinks()) $delim = "?";
+      else $delim = "&amp;";
+      $perm = get_permalink($page_id);
+      $main_link = $perm . $delim;
+	    $main_link .= "_action=vl";
+      if (isset($lastAd->lists_id))
+        $main_link .= "&amp;lid=" . (int)$lastAd->lists_id;
+      $out .= " (". $lastAd->c_name . " - <a href=\"". $main_link . "\">". $lastAd->l_name . "</a>)</span>";
     }
     $out .= "</li>\n";
   }  

@@ -52,8 +52,9 @@ function showAll() {
 <p><div class="wpc_colaps"><a href="javascript:showAll()"><?php echo $lang['_EXPAND_ALL'];?></a></div><div class="wpc_colaps"><a href="javascript:hideAll()"><?php echo $lang['_COLLAPSE_ALL'];?></a></div></p>
 <div class="wpc_container">
 <div class="main-content">
-
+   
 <?php
+
 if ($catCnt!="0"){
   for ($x=0; $x<$catCnt; $x++){
     echo "<div class=\"list-content\">\n";
