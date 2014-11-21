@@ -262,7 +262,12 @@ function wpcDeleteImg() {
     return;
   }
 
-  $link_del = get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]."&_action=di&aid=".$_GET['aid']. "&file=".$_GET[file];
+  $_link .= "&_action=di";
+  if (isset($_GET['aid']))
+    $_link .= "&amp;lid=" . (int)$_GET['aid'];
+  if (isset($_GET[file]))
+    $_link .= "&amp;file=" . $_GET[file];
+  $link_del = get_bloginfo('wpurl')."/?page_id=".$pageinfo["ID"]. $_link;
   if ($_POST['YesOrNo']>0){
     $postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
     $rec = $postinfo[0];
@@ -288,12 +293,12 @@ function wpcDeleteImg() {
     }
   } else {
   ?>
-  <h3><?php echo $lang['_CONFDEL'];?></h3>
+  <h3 style= "margin:20px 0"><?php echo $lang['_CONFDEL'];?></h3>
   <form method="post" id="delete_img_conform" name="delete_img_conform" action="<?php echo $link_del;?>">
   <strong>
     <input type="hidden" name="YesOrNo" value="<?php echo $_GET['aid'];?>">
     <?php echo $lang['_DELETESURE']; ?><br />
-    <input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);">
+    <p><input type=submit value="<?php echo $lang['_YES'];?>"> <input type=button value="<?php echo $lang['_NO'];?>" onclick="history.go(-1);"></p>
   </strong>
   </form>
   <?php
@@ -327,40 +332,87 @@ function wpcPublicLink($action,$vars){
       return "<a href=\"".$main_link."_action=classified\">".$lang['_MAIN']."</a><img class=\"imgMiddle\" border=0 src=\"".$wpClassified->plugin_url."/images/arrow.gif\">";
     break;
     case "classified":
-      return "<a href=\"".$main_link."_action=vl&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+      $main_link .= "_action=vl";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      return "<a href=\"".$main_link. "\">".$vars["name"]."</a> ";
     break;
     case "pa":
-      return "<a href=\"".$main_link."_action=pa&lid=".$vars['lid']."\">".$vars["name"]."</a> ";
+      $main_link .= "_action=pa";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      return "<a href=\"".$main_link."\">".$vars["name"]."</a> ";
     break;
     case "paform":
-      return $main_link."_action=pa&lid=".$vars['lid'];
+      $main_link .= "_action=pa";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      return $main_link;
     break;
     case "ads_subject":
-      return "<a href=\"".$main_link."_action=va&lid=".$vars['lid']."&asid=".$vars['asid'].$lastAd."\">".$vars['name']."</a>";
+      $main_link .= "_action=va";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      if (isset($vars['asid']))
+        $main_link .= "&amp;asid=" . (int)$vars['asid'];
+      return "<a href=\"".$main_link.$lastAd."\">".$vars['name']."</a>";
     break;
     case "ea":
-      return "<a href=\"".$main_link."_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+      $main_link .= "_action=ea";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      if (isset($vars['asid']))
+        $main_link .= "&amp;asid=" . (int)$vars['asid'];
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      return "<a href=\"".$main_link."\">".$vars['name']."</a> ";
     break;
     case "da":
-      return "<a href=\"".$main_link."_action=da&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid'])."\">".$vars['name']."</a> ";
+      $main_link .= "_action=da";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      if (isset($vars['asid']))
+        $main_link .= "&amp;asid=" . (int)$vars['asid'];
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      return "<a href=\"".$main_link."\">".$vars['name']."</a> ";
     break;
     case "eaform":
-      return $main_link."_action=ea&lid=".$vars['lid']."&asid=".$vars['asid']."&aid=".((int)$vars['aid']);
+      $main_link .= "_action=ea";
+      if (isset($vars['lid']))
+        $main_link .= "&amp;lid=" . (int)$vars['lid'];
+      if (isset($vars['asid']))
+        $main_link .= "&amp;asid=" . (int)$vars['asid'];
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      return $main_link;
     break;
     case "sndform":
-      return $main_link."_action=sndad&aid=".((int)$vars['aid']);
+      $main_link .= "_action=sndad";
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      return $main_link;
     break;
     case "searchform":
       return $main_link."_action=search";
     break;
     case "mi": //modify Images
-      return "<a href=\"".$main_link."_action=mi&aid=".$vars['aid']."\">".$vars["name"]."</a> ";
+      $main_link .= "_action=mi";
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      return "<a href=\"".$main_link."\">".$vars["name"]."</a> ";
     break;
     case "miform":
-      return $main_link."_action=mi&aid=".((int)$vars['aid']);
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      return $main_link;
     break;
     case "di": //delete Images
-      return "<a href=\"".$main_link."_action=di&aid=".$vars['aid']."&file=".$vars["file"]."\">".$vars["name"]."</a> ";
+      if (isset($vars['aid']))
+        $main_link .= "&amp;aid=" . (int)$vars['aid'];
+      if (isset($vars['file']))
+        $main_link .= "&amp;file=" . $vars['file'];
+      return "<a href=\"".$main_link."\">".$vars["name"]."</a> ";
     break;
   }
 }
