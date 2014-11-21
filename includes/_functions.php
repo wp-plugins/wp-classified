@@ -6,8 +6,8 @@
 * @author Mohammad Forgani 2012
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.4.2-c
-* fixed by Jes Saxe MAJ 2011
+* @version 1.4.3
+* fixed some security issues 
 * update local
 */
 
@@ -106,8 +106,8 @@ function wpcIndex($id){
     } 
   }
 
-  if ($id = 404)
-    echo "<h1>Oops,</h1><h2>404: Page not found</h2>";
+  if ($id == 404)
+    echo "<div style=\"margin:20px 0\"><h1>Oops,</h1><h2>404: Page not found</h2></div>";
 
   include(dirname(__FILE__)."/main_tpl.php");
 }

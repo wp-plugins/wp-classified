@@ -1,9 +1,9 @@
 === wp-classified ===
-name: wpClassified Wordpress plugins Version: 1.4.2-b
+name: wpClassified Wordpress plugins Version: 1.4.3
 Contributors: Mohammad Forgani
 Donate link: http://www.forgani.com/root/wpclassified-plugins/
 Requires at least: 3.1.x
-Tested up to: 3.1.x
+Tested up to: 4.0.x
 Stable tag: 1.2
 Tags: ads, adsense, classifieds, classified, wpclassifieds, wpclassified, wp-classified, blackboard
 
@@ -103,6 +103,9 @@ http://forgani.com/index.php?pagename=classified (1.3)
 == Changelog ==
 
 = last changes =
+Nov 18/11/2014
+- fixed some security issues 
+
 Jan 27/03/2011
 - fixed for WP version 3.1
 - update the Widget Sidebar Menu

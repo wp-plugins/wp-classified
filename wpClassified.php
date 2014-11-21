@@ -5,51 +5,11 @@ Plugin Name: wpClassified
 Plugin URI: http://forgani.com/index.php/tools/wpclassified-plugins/
 Description: This plugin allows you to add a simple information & advertising blackboard or classified page in to your wordpress blog.
 Author:Mohammad Forgani
-Version: 1.4.2-b
+Version: 1.4.3
 Requires at least:3.1.x
 Author URI: http://www.forgani.com
 
 
-Release Notes:
-
-fixed for plugin auto-upgrade 
-Note: This bugfix release hove to install Manually.
-- fixed for the plugin auto-upgrade. (must test with the next coming version)
-- moved directories public resources to wp-content
-
-
-release 1.2.0-e - Augst 20/08/2008
-
-User Side
-- added language file (The work is Not Finished!) 
-- Fixed search problem
-- Fixed to image showing by editing and setting.
-- added the default value for expire
-
-Admin Side
-- implement the maximum character limit
-- added two directory within the “/images” directory cpcc and topic. 
-You will need to make the folders writable (chmod 777).
-- option to deactivate the confirmation code
-- added google AdSense
-
-release 1.3.0 - Sep 10/09/2008
-
-- Update to  display-style classified ads in one column
-- Added the ad images viewer
-- Allowed more images per ad
-- All the pages using templates
-- Added style sheet for page layout 
-
-Changes 1.3.0-b - Sep 13/10/2008
-- Modify to expand and collapses the Categories
-- Modify to show the last post in footer
-- fix the URL faking bug
-
-Jan 27/03/2011
-- fixed the Fixed Widget Sidebar Menu
-- fixed for WP version 3.1
-- improved categories & forwards links in main page 
 
 Jan 30/04/2011
 - added the facebook link button
@@ -57,6 +17,10 @@ Jan 30/04/2011
 
 Oct 05/10/2012
 - bugfix: update the search function
+
+
+Nov 18/11/2014
+- fixed some security issues 
 
 */
 

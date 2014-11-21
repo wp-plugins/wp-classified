@@ -8,7 +8,8 @@
 * @author Mohammad Forgani 2008
 * Author Website : http://www.forgani.com
 * Licence Type   : GPL
-* @version 1.3.1-a
+* @version 1.4.3
+* fixed some security issues 
 */
 
 // require_once('captcha_class.php');
