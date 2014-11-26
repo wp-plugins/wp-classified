@@ -74,8 +74,8 @@ function wpcHeader(){
       $l = $today-$second;
       if ($rmRecord->date < $l) {
         $asid = $rmRecord->ads_subjects_id;
-        $wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
-        $wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
+        //$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads WHERE ads_ads_subjects_id =" . $asid);
+        //$wpdb->query("DELETE FROM {$table_prefix}wpClassified_ads_subjects WHERE ads_subjects_id = ". $asid);
       }
     }
   }  
@@ -107,7 +107,7 @@ function wpcIndex($id){
   }
 
   if ($id == 404)
-    echo "<div style=\"margin:20px 0\"><h1>Oops,</h1><h2>404: Page not found</h2></div>";
+    echo "<div style=\"margin:20px 0;\"><h2 style=\"color:red;\">Oops, 404: Page not found</h2></div>";
 
   include(dirname(__FILE__)."/main_tpl.php");
 }
