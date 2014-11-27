@@ -245,19 +245,21 @@ function wpcEditAd(){
   global $_GET, $_POST, $user_ID, $table_prefix, $wpmuBaseTablePrefix, $wpdb, $quicktags, $lang, $wpClassified;
   $wpcSettings = get_option('wpClassified_data');
   get_currentuserinfo();
-
+  /*
   $lists = $wpdb->get_row("SELECT * FROM {$table_prefix}wpClassified_lists
    LEFT JOIN {$table_prefix}wpClassified_categories
    ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
    WHERE {$table_prefix}wpClassified_lists.lists_id = '".(int)$_GET['lid']."'", ARRAY_A);
-
+  */
   $sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'";
-
   $adsInfo = $wpdb->get_row($sql, ARRAY_A);
-
+  
   $sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id = '".(int)$_GET['aid']."'";
-
   $postinfos = $wpdb->get_results($sql, ARRAY_A);
+  // asid, aid, lid
+  if ($adsInfo == null || $postinfos=0) 
+    wpcIndex(404);
+
   $postinfo = $postinfos[0];
   if (isset($_POST['wpClassified_data'])) {
     $web = stripslashes(trim($_POST['wpClassified_data']['web']));
@@ -502,14 +504,16 @@ function wpcDisplayAd(){
      LEFT JOIN {$table_prefix}wpClassified_categories
      ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
      WHERE {$table_prefix}wpClassified_lists.lists_id = '".(int)$_GET['lid']."'", ARRAY_A);
-
+  
+  if ($lists== null || !is_numeric($_GET['lid']))
+    wpcIndex(404);
+	
   $sql = "SELECT * FROM {$table_prefix}wpClassified_ads_subjects LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads_subjects.author WHERE {$table_prefix}wpClassified_ads_subjects.ads_subjects_id = '".(int)$_GET['asid']."'";
-
   $adsInfo = $wpdb->get_row($sql, ARRAY_A);
 
   $sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author LEFT JOIN {$table_prefix}wpClassified_user_info ON {$table_prefix}wpClassified_user_info.user_info_user_ID = {$wpmuBaseTablePrefix}users.ID WHERE {$table_prefix}wpClassified_ads.ads_ads_subjects_id = '".(int)$_GET['asid']."' && {$table_prefix}wpClassified_ads.status = 'active' ORDER BY {$table_prefix}wpClassified_ads.date ASC";
-  
   $posts = $wpdb->get_results($sql);
+
   
   if (count($posts)>$wpcSettings['count_ads_per_page']){
     $hm = $wpcSettings['count_ads_per_page'];
@@ -533,7 +537,6 @@ function wpcDisplayAd(){
     
     if ($permission){
       $editlink = " ".wpcPublicLink("ea", array("name"=>$lang['_EDITDESC'], "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$lang['_EDITDESC'], "aid"=>$post->ads_id))." ";
-
       $deletelink = " ".wpcPublicLink("da", array("name"=>  $lang['_DELETE'], "lid"=>$_GET['lid'], "name"=>$lists["name"], 'asid'=>$adsInfo['ads_subjects_id'], "name"=>$lang['_DELETE'], "aid"=>$post->ads_id))." ";
     } else {
       $editlink = "";
@@ -643,13 +646,13 @@ function wpcLastAds($format) {
   $out ='';
 
   $sql ="SELECT ADS.*, L.name as l_name, C.name as c_name, L.lists_id as lists_id FROM {$table_prefix}wpClassified_ads_subjects ADS, 
-   {$table_prefix}wpClassified_ads AD, {$table_prefix}wpClassified_lists L, 
-   {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id=L.wpClassified_lists_id AND AD.ads_ads_subjects_id=ADS.ads_subjects_id AND AD.status='active' ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
+         {$table_prefix}wpClassified_ads AD, {$table_prefix}wpClassified_lists L, 
+         {$table_prefix}wpClassified_categories C WHERE ADS.ads_subjects_list_id = L.lists_id  AND C.categories_id=L.wpClassified_lists_id AND AD.ads_ads_subjects_id=ADS.ads_subjects_id AND AD.status='active' ORDER BY ADS.ads_subjects_id DESC, ADS.date DESC LIMIT ".($start).", ".($wpcSettings['count_last_ads']);
 
    $lastAds = $wpdb->get_results($sql);
 
   foreach ($lastAds as $lastAd) {
-    $link= wpcPublicLink("ads_subject", array("name"=>$lastAd->subject, "lid"=>'', "asid"=>$lastAd->ads_subjects_id));
+    $link= wpcPublicLink("ads_subject", array("name"=>$lastAd->subject, "lid"=>$lastAd->ads_subjects_list_id, "asid"=>$lastAd->ads_subjects_id));
     $out .= '<li>'.$link;
     $sql = "SELECT * FROM {$table_prefix}wpClassified_ads WHERE status='active' and ads_ads_subjects_id=" .$lastAd->ads_subjects_id;
     $post = $wpdb->get_row($sql);
@@ -665,10 +668,7 @@ function wpcLastAds($format) {
         include (dirname(__FILE__).'/js/viewer.js.php');
         $out .= "&nbsp;<a href=\"". $wpClassified->public_url ."/" . $img . "\" rel=\"thumbnail\"><img  src=\"". $wpClassified->plugin_url."/images/camera.gif"."\"></a>";
       }
-      $out .= "&nbsp;-<span class=\"smallTxt\"> " . $lastAd->author_name ." <i>". @date($wpcSettings['date_format'],$lastAd->date)."</i>";
-      //$out .= " (".$lastAd->c_name. " - ".$lastAd->l_name. ")</span>";
       $pageinfo = $wpClassified->get_pageinfo();
-  
       $page_id = $pageinfo['ID'];
       if($wp_rewrite->using_permalinks()) $delim = "?";
       else $delim = "&amp;";
@@ -677,7 +677,8 @@ function wpcLastAds($format) {
 	    $main_link .= "_action=vl";
       if (isset($lastAd->lists_id))
         $main_link .= "&amp;lid=" . (int)$lastAd->lists_id;
-      $out .= " (". $lastAd->c_name . " - <a href=\"". $main_link . "\">". $lastAd->l_name . "</a>)</span>";
+      $out .= " (". $lastAd->c_name . " - <a href=\"". $main_link . "\">". $lastAd->l_name . "</a>)";
+	  $out .= "<span style='color:#777'>&nbsp;- @" . $lastAd->author_name ." ". @date($wpcSettings['date_format'],$lastAd->date)."<span>";
     }
     $out .= "</li>\n";
   }  

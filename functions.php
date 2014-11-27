@@ -26,10 +26,13 @@ function wpcAddAd(){
          LEFT JOIN {$table_prefix}wpClassified_categories
          ON {$table_prefix}wpClassified_categories.categories_id = {$table_prefix}wpClassified_lists.wpClassified_lists_id
          WHERE {$table_prefix}wpClassified_lists.lists_id = '".((int)$_GET['lid'])."'",ARRAY_A);
+  if ($lists == null || !is_numeric($_GET['lid'])) 
+    wpcIndex(404);
+
   $displayform = true;
 
   $web = stripslashes(trim($_POST['wpClassified_data']['web']));
-   $email = stripslashes(trim($_POST['wpClassified_data']['email']));
+  $email = stripslashes(trim($_POST['wpClassified_data']['email']));
   $email = strtolower($email);
   $phone = stripslashes(trim($_POST['wpClassified_data']['phone']));
   $subject = stripslashes(trim($_POST['wpClassified_data']['subject']));
@@ -173,6 +176,8 @@ function wpcModifyImg() {
   get_currentuserinfo();
   
   $postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
+  if ($postinfo->num_rows == 0)
+    wpcIndex(404);
   $post = $postinfo[0];
   $displayform = true;
   if ($_POST['add_img']=='yes'){
@@ -240,8 +245,7 @@ function wpcModifyImg() {
 
 
 function wpcDeleteImg() {
-  global $_GET,$_POST,$userdata,$user_ID,$table_prefix, 
-    $wpmuBaseTablePrefix, $wpdb, $wpClassified, $lang;
+  global $_GET,$_POST,$userdata,$user_ID,$table_prefix, $wpmuBaseTablePrefix, $wpdb, $wpClassified, $lang;
   $wpcSettings = get_option('wpClassified_data');
   $pageinfo = $wpClassified->get_pageinfo();
   $userfield = $wpClassified->get_user_field();
@@ -249,7 +253,8 @@ function wpcDeleteImg() {
 
   $sql = "SELECT * FROM {$table_prefix}wpClassified_ads LEFT JOIN {$wpmuBaseTablePrefix}users ON {$wpmuBaseTablePrefix}users.ID = {$table_prefix}wpClassified_ads.author WHERE ads_id =" .(int)$_GET['aid'];
   $postinfo = $wpdb->get_results($sql,ARRAY_A);
-
+  if ($postinfo->num_rows == 0) 
+    wpcIndex(404);
   $post = $postinfo[0];
   $permission=false;
   if (($wpClassified->is_usr_loggedin() && $user_ID==$post['author']) || $wpClassified->is_usr_admin() || $wpClassified->is_usr_mod()){
@@ -321,7 +326,6 @@ function wpcPublicLink($action,$vars){
   
   $main_link = $perm . $delim;
   
-  
   if (!isset($vars['post_jump'])) {
     $lastAd = ($action=="lastAd")?"#lastpost":"";
   } else {
@@ -334,25 +338,25 @@ function wpcPublicLink($action,$vars){
     break;
     case "classified":
       $main_link .= "_action=vl";
-      if (isset($vars['lid']))
+      if (isset($vars['lid']) && (int)$vars['lid'] > 0)
         $main_link .= "&amp;lid=" . (int)$vars['lid'];
       return "<a href=\"".$main_link. "\">".$vars["name"]."</a> ";
     break;
     case "pa":
       $main_link .= "_action=pa";
-      if (isset($vars['lid']))
+      if (isset($vars['lid']) && (int)$vars['lid'] > 0)
         $main_link .= "&amp;lid=" . (int)$vars['lid'];
       return "<a href=\"".$main_link."\">".$vars["name"]."</a> ";
     break;
     case "paform":
       $main_link .= "_action=pa";
-      if (isset($vars['lid']))
+      if (isset($vars['lid']) && (int)$vars['lid'] > 0)
         $main_link .= "&amp;lid=" . (int)$vars['lid'];
       return $main_link;
     break;
     case "ads_subject":
       $main_link .= "_action=va";
-      if (isset($vars['lid']))
+      if (isset($vars['lid']) && (int)$vars['lid'] > 0)
         $main_link .= "&amp;lid=" . (int)$vars['lid'];
       if (isset($vars['asid']))
         $main_link .= "&amp;asid=" . (int)$vars['asid'];
@@ -380,7 +384,7 @@ function wpcPublicLink($action,$vars){
     break;
     case "eaform":
       $main_link .= "_action=ea";
-      if (isset($vars['lid']))
+      if (isset($vars['lid']) && (int)$vars['lid'] > 0)
         $main_link .= "&amp;lid=" . (int)$vars['lid'];
       if (isset($vars['asid']))
         $main_link .= "&amp;asid=" . (int)$vars['asid'];
@@ -390,7 +394,7 @@ function wpcPublicLink($action,$vars){
     break;
     case "sndform":
       $main_link .= "_action=sndad";
-      if (isset($vars['aid']))
+      if (isset($vars['aid']) && (int)$vars['lid'] > 0)
         $main_link .= "&amp;aid=" . (int)$vars['aid'];
       return $main_link;
     break;

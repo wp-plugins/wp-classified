@@ -169,8 +169,6 @@ function wpClassified_process(){
       if (!empty($_GET['lid']) && is_numeric($_GET['lid'])) {
         wpcList(); 
       } else {
-        //add_query_arg( array('_action' => 'classified', 'lid' => false);
-        $arr_params = array( 'lid', 'asid', 'aid');
         wpcIndex(404);
       } 
       break;

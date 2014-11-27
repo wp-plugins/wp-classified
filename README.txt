@@ -104,7 +104,7 @@ http://forgani.com/index.php?pagename=classified (1.3)
 
 = last changes =
 Nov 18/11/2014
-- fixed some security issues 
+- Fixed Security Vulnerabilities
 
 Jan 27/03/2011
 - fixed for WP version 3.1
