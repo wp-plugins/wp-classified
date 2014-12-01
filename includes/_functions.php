@@ -20,7 +20,9 @@ function wpcHeader(){
 
   if($wp_rewrite->using_permalinks()) $delim="?";
   else $delim="&amp;";
-  $main_link=get_permalink($wpClassified->get_pageinfo->ID) . $delim;
+  $pageinfo = $wpClassified->get_pageinfo();
+  $page_id = $pageinfo['ID'];
+  $main_link=get_permalink($page_id) . $delim;
 
   if ($wpcSettings['count_ads_per_page'] < 1) {
     $wpcSettings['count_ads_per_page'] = 10;
@@ -106,7 +108,7 @@ function wpcIndex($id){
     } 
   }
 
-  if ($id == 404)
+  if (isset($id) && $id == 404)
     echo "<div style=\"margin:20px 0;\"><h2 style=\"color:red;\">Oops, 404: Page not found</h2></div>";
 
   include(dirname(__FILE__)."/main_tpl.php");
@@ -155,7 +157,7 @@ function wpcFooter(){
   echo "<h3>" . $lang['_LAST'] . ' ' . $wpcSettings['count_last_ads'] . ' ' . $lang['_ADS'] . "...</h3>";
   echo wpcLastAds(false);
   echo '<HR class="wpc_footer_hr">';
-  if($wpcSettings['rss_feed']=='y'){
+  if(isset($wpcSettings['rss_feed']) && $wpcSettings['rss_feed']=='y'){
     $filename = $wpClassified->plugin_url . '/cache/wpclassified.xml';
     ?>
     <div class="rssIcon">

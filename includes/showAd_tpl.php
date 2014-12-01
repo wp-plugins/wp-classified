@@ -36,9 +36,8 @@ if (($i+1)==$hm){
       <div class="show_ad_header">
          <?php
          preg_replace(array('/\s/'), '', $post->image_file);
-         if (!empty($post->image_file) ) {
+         if (!empty($post->image_file) )
             $array = preg_split('/###/', $post->image_file);
-         }
          $file = $wpClassified->public_dir ."/". $array[0];
          if ( !empty($array[0]) && file_exists($file) ){
             include (dirname(__FILE__).'/js/viewer.js.php');
@@ -48,13 +47,12 @@ if (($i+1)==$hm){
 
          <div class="show_ad_info">
           <?php echo $lang['_FROM'];?><img src="<?php echo $wpClassified->plugin_url; ?>/images/user.gif"><?php echo wpcPostAuthor($post);?> <?php echo $lang['_POSTON'];?> <img src="<?php echo $wpClassified->plugin_url; ?>/images/cal.gif">
-          <?php echo @date($wpcSettings['date_format'], $post->date) . '<p>' . $lang['_USER_ADS'] . ': ' . ($post->user_info_post_count*1);?> 
+          <?php echo '<span class="smallTxt">'.@date($wpcSettings['date_format'], $post->date) . '<p>' . $lang['_USER_ADS'] . ': ' . ($post->user_info_post_count*1) . '</span>' ?> 
            <BR />
           <?php if ($editlink){
               echo '<span class="edit">'.$editlink.'</span><span class="delete">'. $deletelink . '';
-              if ($wpcSettings['display_titles']=='y'){
+              if ($wpcSettings['display_titles']=='y')
                 echo "<small id=\"wpClassified-usertitle\">&nbsp;&nbsp;".$post->user_info_title."</small>";
-              }
               echo '</span><BR />';
           } 
           ?>
