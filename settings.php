@@ -6,9 +6,10 @@
 * @author Mohammad Forgani 2008
 */
 
+// unread_color
+// rss_feed
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL|E_STRICT);
-//error_reporting(E_ALL);
 
 // include 
 $locale=get_locale();
@@ -163,7 +164,7 @@ function wpClassified_process(){
   }
   switch ($_GET['_action']){
     default:
-    case "classified": wpcIndex();  break;
+    case "classified": wpcIndex('');  break;
     case "search": wpcSearch($_POST['search_terms']); break;
     case "vl": 
       if (!empty($_GET['lid']) && is_numeric($_GET['lid'])) {

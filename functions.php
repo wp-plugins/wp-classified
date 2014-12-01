@@ -176,11 +176,11 @@ function wpcModifyImg() {
   get_currentuserinfo();
   
   $postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
-  if ($postinfo->num_rows == 0)
-    wpcIndex(404);
+  //if ($postinfo->num_rows == 0)
+  //  wpcIndex(404);
   $post = $postinfo[0];
   $displayform = true;
-  if ($_POST['add_img']=='yes'){
+  if (isset($_POST['add_img']) && $_POST['add_img']=='yes') {
     if ($wpcSettings['must_registered_user']=='y' && !$wpClassified->is_usr_loggedin()){
       die($lang['_MUSTLOGIN']);
     } else {
@@ -210,7 +210,7 @@ function wpcModifyImg() {
       } else {
         $addPost==false;
       }
-      if ($addPost==true){
+      if ($addPost==true) {
         $displayform = false;
         $isSpam = wpcSpamFilter(stripslashes($_POST['wpClassified_data'][author_name]),'',
             stripslashes($_POST['wpClassified_data'][subject]),
@@ -220,13 +220,13 @@ function wpcModifyImg() {
           $array = preg_split('/###/', $post->image_file);
           $curcount = count ($array);
         }
-        if ( $setImage !='' && $curcount < $wpcSettings['number_of_image']) {
-          if  ($post->image_file !=''){
+        if ($setImage !='' && $curcount < $wpcSettings['number_of_image']) {
+          if ($post->image_file !=''){
             $wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file = '". $post->image_file . "###" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
           } else {
             $wpdb->query("UPDATE {$table_prefix}wpClassified_ads SET image_file ='" . $wpdb->escape(stripslashes($setImage)) . "' WHERE ads_id=$post->ads_id ");
           }
-        } 
+        }
         $addPost = false;
         $postinfo = $wpdb->get_results("SELECT * FROM {$table_prefix}wpClassified_ads WHERE ads_id = '".(int)$_GET['aid']."'");
         $post = $postinfo[0];
@@ -237,7 +237,7 @@ function wpcModifyImg() {
       }
     }
   }
-  if ($addPost==true){
+  if (isset($addPost) && $addPost==true){
     $displayform = false;
   }
   if ($displayform==true) include(dirname(__FILE__)."/includes/modifyImg_tpl.php");
@@ -408,6 +408,7 @@ function wpcPublicLink($action,$vars){
       return "<a href=\"".$main_link."\">".$vars["name"]."</a> ";
     break;
     case "miform":
+      $main_link .= "_action=mi";
       if (isset($vars['aid']))
         $main_link .= "&amp;aid=" . (int)$vars['aid'];
       return $main_link;
@@ -587,19 +588,6 @@ function wpcCheckInput($input){
   return false;
 }
 
-/*
-function checkUrl($url)  {
-  if (!checkLength($url,30)) return false;
-  $res = (($ftest = @fopen($url,‘r’)) === false) ? false : @fclose($ftest);
-  return ($res == TRUE) ? 1:0 ;
-  $online = exec("ping $url -c 1");  
-  if (eregi("unbekannter host",$online) || eregi("unknown host",$online)) {
-    $res == FLASE
-  } else {
-    $res == TRUE
-     }
-}
-*/
 
 function wpcPregtrim($str) {
    return preg_replace("/[^\x20-\xFF]/","",@strval($str));
