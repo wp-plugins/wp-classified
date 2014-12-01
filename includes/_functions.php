@@ -680,7 +680,7 @@ function wpcLastAds($format) {
       if (isset($lastAd->lists_id))
         $main_link .= "&amp;lid=" . (int)$lastAd->lists_id;
       $out .= " (". $lastAd->c_name . " - <a href=\"". $main_link . "\">". $lastAd->l_name . "</a>)";
-	  $out .= "<span style='color:#777'>&nbsp;- @" . $lastAd->author_name ." ". @date($wpcSettings['date_format'],$lastAd->date)."<span>";
+	  $out .= "<span class='smallTxt'>&nbsp;- @" . $lastAd->author_name ." ". @date($wpcSettings['date_format'],$lastAd->date)."<span>";
     }
     $out .= "</li>\n";
   }  
