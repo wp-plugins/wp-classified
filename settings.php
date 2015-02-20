@@ -168,7 +168,7 @@ function wpClassified_process(){
     case "search": wpcSearch($_POST['search_terms']); break;
     case "vl": 
       if (!empty($_GET['lid']) && is_numeric($_GET['lid'])) {
-        wpcList(); 
+        wpcList($msg);
       } else {
         wpcIndex(404);
       } 
